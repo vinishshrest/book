@@ -1,5 +1,5 @@
-book_filename: "book"
-output_dir: "docs"
+book_filename: "book" # figures will be in book_files
+output_dir: "docs" # all html output will be in doc dir
 rmd_files: 
   delete_merged_file: true
   html: ["index.Rmd", "01-intro.Rmd", "ipw_aipw.Rmd", 
