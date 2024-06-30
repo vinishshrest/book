@@ -1,0 +1,270 @@
+# Causal Forest
+```{r, echo = FALSE, include = FALSE}
+# Load required packages
+
+# Helper packages
+library(dplyr) # for data wrangling 
+library(ggplot2) # for graphics
+
+# Modeling packages 
+library(grf)
+
+set.seed(123)
+```
+## Introduction
+The generalized random forest is a method that is quite flexible in estimating the quantity of interest. The theory of it is built using the moment criterion: 
+
+$E[\psi_{\theta_i, \; \upsilon_i} (O_i) | X_i] = 0, \; for \; all \; x \; in \; \chi$ 
+
+Getting down to the nuts and bolts of the theory is beyond the scope of this write-up. Rather, we would want to take a closer look at causal forests -- a component of GRF framework.
+
+## Summary of GRF
+
+It seeks a generalized way to conduct causal inference under a non-parametric framework. GRF relies on random forest. 
+
+Methods developed to aid causal inference such as: $i)$ randomized controlled trial, $ii)$ comparison between treatment and control units under unconfoundedness assumption, $iii)$ difference-in-differences, and $iv)$ panel data methods; can fit into GRF framework. To do so, one needs to feed in the method-specific encoding into the GRF framework (to guide the splitting process). 
+
+## Motivation for Causal Forests
+
+Let's expand on estimating the average treatment effect of a treatment intervention $W$. The specifics are listed as:
+
+- $W_i \in \{0, \; 1\}$: treatment intervention 
+- $X_i$: covariates 
+- $Y_i$: response/outcome
+
+In the parametric framework $\tau$, the treatment effect, is estimated using the following specification:
+
+$Y_i = \tau W_i + \beta_1 X_i + \epsilon_i$ 
+
+The validity of $\hat{\tau}$ as a causal estimand is justified under the following three assumptions. 
+
+1. Unconfoundedness: $Y^{(0)}_i, \; Y^{(1)}_i \perp W_i | X_i$. Treatment assignment is independent of the potential outcome once conditioned on the covariates. In other words, controling for covariates makes the treatment assignment as good as random. 
+2. $X_i$s influence $Y_i$s in a linear way. 
+3. The treatment effect is homogeneous. 
+
+**Assumption 1** is the identification assumption. In the traditional sense, one can control for $X_i$s in the regression framework and argue that this assumption is met. Even if all $X$s that influence the treatment assignment are observed (this is the assumption that we make throughout), we are unsure how $X$s affect the treatment. Often $X$s can affect treatment in a non-linear way. **Assumptions 2 and 3** can be questioned and relaxed. One can let data determine the way $X$ needs to be incorporated in the model specification (relaxing assumption 2). Moreover, treatment effects can vary across some covariates (relaxing assumption 3). 
+
+First, lets relax assumption 2. This leads to the following partially linear model: 
+
+$Y_i = \tau W_i + f(X_i) + \epsilon_i \;............. equation 1$ 
+
+where, $f$ is a function that maps out how $X$ affects $Y$. However, we don't know $f$ in practice. So, how do we go about estimating $\tau$? 
+
+The causal forest framework under GRF connects the old-school literature of causal inference with ML methods. Robinson (1988) shows that if two intermediate (nuiscance) objects, $e(X_i)$ and $m(X_i)$ are known, one can estimate $\tau$. The causal forest framework under GRF utilizes this result. Here: 
+
+- $e(X_i)$ is the propensity score; the probability of being treated. $E[W_i| X_i = x]$
+- $m(X_i)$ is the conditional mean of $Y$. $E[Y_i | X_i = x] = f(x) + \tau e(x)$
+
+Demeaning equation 1 (substracting $m(x)$) gives the following residual-on-residual regression: 
+
+$Y_i - m(x) = \tau (W_i - e(x)) + \epsilon \; .............. equation 2$ 
+
+Intuition for equation (2) proceeds as follow. Note that $m(x)$ is the conditional mean of Y given $X_i = x$.^[We can also think of $m(x)$ as the case when we ignore $W$, although we know that treatment took place. This way, $m(x) = \mu_{0}(x) + e(x)\tau$, where $\mu_{0}(x)$ is the baseline conditional expectation without the treatment. This makes it easy to see that units with similar features will have similar estimates of $m(x)$.] This means that units with similar $X$s will have similar estimates for $m(x)$ in $W=\{0, \; 1\}$, which would mean that estimates on $e(x)$ would also be similar for these units across both treatment and control group. Now, consider that the treatment is positive; this will show up in $Y_i$. $Y_i - m(x)$ will be higher for $W=1$ compared to $W=0$ for similar estimates of $m(x)$. On the other side, $W_i - e(x)$ is positive for $W=1$ and negative for $W=0$ for similar estimates of $e(x)$. Such variations in the left and right hand side quantities will allow to capture postive estimates on $\tau$.    
+
+To gain ML methods are used to estimate $m(x)$ and $e(x)$ and residual-on-residual regression is used estimate $\tau$. It turns out that even noisy estimates of $e(x)$ and $m(x)$ can give ``ok" estimate of $\tau$.   
+
+
+How to estimate $m(x)$ and $e(x)$? 
+
+- Use ML methods (boosting; random forest) 
+- Use cross-fitting for prediction. prediction of observation $i's$ outcome & treatment assignment is obtained without using the observation ``$i$". \textcolor{red}{Does OOB prediction meets the criteria of cross-fitting?}
+
+Lets take a look at residual-on-residual in the case of homogeneous treatment effect. 
+
+```{r}
+# generate data
+n <- 2000
+p <- 10
+X <- matrix(rnorm(n * p), n, p)
+X.test <- matrix(0, 101, p)
+X.test[, 1] <- seq(-2, 2, length.out = 101)
+
+# Generate W and Y 
+W <- rbinom(n, 1, 0.4 + 0.2 * (X[, 1] > 0))
+prob  <- 0.4 + 0.2 * (X[, 1] > 0)
+Y <- 2.5 * W + X[, 2] + pmin(X[, 3], 0) + rnorm(n)
+
+# Train regression forests
+mx  <-  regression_forest(X, Y, tune.parameters = "all")
+ex  <-  regression_forest(X, W, tune.parameters = "all") 
+
+Wcen  <- W - ex$predictions
+Ycen  <- Y - mx$predictions 
+
+reg  <-  summary(lm(Ycen ~ Wcen))
+reg
+print(paste0("The treatment effect estimate based on residual-on-residual regression is: ", coefficients(reg)[2])) 
+print(paste0("The true treatment effect is: ", 2.5))
+```
+
+## Causal Forest
+
+Both regression and causal forests consist of: 1) Building phase; and 2) estimation phase. 
+
+The intuition regarding the regression/causal forest can be gleaned using the following figure. 
+
+```{r echo=FALSE, fig3, out.width="60%", fig.cap="Figure 1. Adaptive weights"}
+knitr::include_graphics("./output/causal_forest_fig1.pdf")
+```
+In this simple case, the sample is partitioned into $N_1$ and $N_2$ neighborhoods accorinng to the splitting rule that the squared difference in sub-sample specific treatment effect is the maximum, i.e., $n_{N_1}n_{N_2}(\tau_{N_1} - \tau_{N_2})^2$ is the maximum. This by construction leads to constant treatment effect in the neighborhood, while the effects may vary across the neighborhoods. This intuition allows us to relax assumption 3, 
+and re-write the partially linear estimation framework as:
+$Y_i = \tau(x) W_i + f(X_i) + \epsilon_i$. 
+
+Here the estimate of the treatment effect $\tau$ is allowed to vary with the test point $x$.
+
+In reference to Figure 1 above, $N_1$ and $N_2$ are neighborhoods where treatment effects are constant. To estimate the treatment effect of the test 
+point $x$, $\tau(x)$, we would run a weighted residual-on-residual regression of the form. 
+
+$\tau(x) := lm(Y_i - m(X_i)^{-i} \sim  \tau(W_i - e(X_i)^{-i}), \; weights = 1\{X_i \in N(x)\}$
+
+where $m(X_i)^{-i}$ and $e(X_i)^{-i}$ are obtained from cross-fitting. The weights play a pivotal role here and takes a value 1 if $X_i$ belongs to 
+the same neighborhoods as $x$. In the above figure, examples in $N_2$ receive non-zero weight while those in $N_1$ receive zero weight. However, this example only pertains to a tree. But we'd want to build a forest and apply the same analogy. 
+
+**Adaptive weights.** The forest consists of $B$ trees, so the weights for each $X_i$ pertaining to the test point $x$ is based off of all $B$ trees. The causal forest utilizes *adaptive weights* using random forests. 
+
+The tree specific weight for an example $i$ at the $b^{th}$ tree is given as:
+$\alpha_{ib}(x) = \frac{1(X_i \in L_{b}(x))}{|L_{b}(x)|}$, where $L(x)$ is the leaf (neighborhood) that consist of the test sample $x$.
+
+The forest specific weight for an example $i$ is given as: 
+$\alpha_{i}(x) = \frac{1}{B} \sum_{b = 1}^{B} \frac{1(X_i \in L(x))}{|L(x)|}$
+
+It tracks the fraction of times an obsevation $i$ falls on the same leaf as $x$ in the course of the forest. Simply, it shows how similar $i$ is to $x$. 
+
+**Regression Forest.** It utilizes the adaptive weights given to an example $i$ ($i = \{1, \; 2, \; ..., N\}$) and constructs a weighted average to form the prediction of $x$. The prediction for $x$ based on the regression forest is:
+
+$\hat{\mu}(x) = \frac{1}{B}\sum_{i = 1}^{N} \sum_{b=1}^{B} Y_{i} \frac{1(X_i \in L_{b}(x)}{|L_b(x)|}$ 
+
+$= \sum_{i = 1}^{N} Y_{i} \alpha_{i}$
+
+Note that this is different from the traditional prediction from the random forest that averages predictions from each tree. 
+
+$\hat{\mu}(x.trad) = \sum_{b = 1}^{B} \frac{\hat{Y}_b}{B}$
+
+**Causal Forest.** Causal forest is analogous to the regression forest in a sense that the target is $\tau(x)$ rather than $\mu(x)$. Conceptually the difference is encoded in the splitting criteria. While splitting, regression forest is based on the criterion: $\max n_{N_1} n_{N_2}(\mu_{N_1} - \mu_{N_2})^2$, whereas the causal forest is based on $\max n_{N_1} n_{N_2}(\tau_{N_1} - \tau_{N_2})^2$. 
+
+In a world with infinite computing power, for each potential axis aligned split that extends from the parent node, one would estimate treatment effects at two of the child nodes ($\tau_{L}$ and $\tau_{R}$) and go for the split that maximizes the squared difference between child specific treatment effects. However, in practice this is highly computationally demanding and infeasible. The application of causal forest estimates $\tau_{P}$ at the parent node and uses the gradient based function to guide the split. At each (parent) node the treatment effect is estimated only once. 
+
+
+Once the vector of weights are determined for $i$s, the following residual-on-residual is ran: 
+
+$\tau(x) := lm(Y_i - m(X_i^{-i}) \sim \tau(x)(W_i - e(X_i)^{-i}), \; weights = \alpha_i(x)$ 
+
+This can be broken down as: 
+
+1. Estimate $m^{-i}(X_i)$ and $e^{-i}(X_i)$ using random forest. 
+2. Then estimate $\alpha_i(x)$. For each new sample point $x$, a vector of weight will be determined based on adaptive weighting scheme of the random forest. Note that the weights will change for each new test point. 
+3. Run a weighted residual-on-residual regression given by the equation above. 
+
+
+## An example of causal forest 
+
+```{r}
+rm(list = ls())
+library(devtools)
+#devtools::install_github("grf-labs/grf", subdir = "r-package/grf")
+library(grf)
+library(ggplot2)
+
+
+# generate data
+n <- 2000
+p <- 10
+X <- matrix(rnorm(n * p), n, p)
+X.test <- matrix(0, 101, p)
+X.test[, 1] <- seq(-2, 2, length.out = 101)
+
+# Train a causal forest.
+W <- rbinom(n, 1, 0.4 + 0.2 * (X[, 1] > 0))
+Y <- pmax(X[, 1], 0) * W + X[, 2] + pmin(X[, 3], 0) + rnorm(n)
+
+# Train a causal forest 
+
+c.forest  <-  causal_forest(X, Y, W)
+
+# predict using the training data using out-of-bag prediction
+tau.hat.oob  <- predict(c.forest)
+hist(tau.hat.oob$predictions)
+
+# Estimate treatment effects for the test sample 
+tau.hat  <- predict(c.forest, X.test)
+plot(X.test[, 1], tau.hat$predictions, ylim = range(tau.hat$predictions, 0, 2), xlab = "x", ylab = "tau", type = "l")
+lines(X.test[, 1], pmax(0, X.test[, 1]), col = 2, lty = 2)
+
+
+# estimate conditional average treatment effect (CATE) on the full sample 
+cate  <- average_treatment_effect(c.forest, target.sample = "all")
+print(paste("Conditinal Average Treatment Effect (CATE) is: ", cate[[1]]))
+# estimate conditional average treatment effect on treated 
+catt  <- average_treatment_effect(c.forest, target.sample = "treated")
+paste("Conditional Average Treatment Effect on the Treated (CATT)", catt[[1]])
+
+# Add confidence intervals for heterogeneous treatment effects; growing more trees recommended 
+
+tau.forest  <- causal_forest(X, Y, W, num.trees = 4000)
+tau.hat  <- predict(tau.forest, X.test, estimate.variance = TRUE) # for the test sample 
+
+ul  <- tau.hat$predictions + 1.96 * sqrt(tau.hat$variance.estimates)
+ll  <- tau.hat$predictions - 1.96 * sqrt(tau.hat$variance.estimates)
+
+tau.hat$ul  <-  ul 
+tau.hat$ll  <- ll 
+tau.hat$X.test  <- X.test[,1]
+
+ggplot(data = tau.hat, aes(x = X.test, y = predictions)) + 
+geom_ribbon(aes(ymin = ll, ymax = ul), fill = "grey70") + geom_line(aes(y = predictions)) + 
+theme_bw()
+
+
+######################################################
+#
+#
+# In some cases prefitting Y and W separately may 
+# be helpful. Say they use different covariates.
+#
+######################################################
+
+# Generate a new data
+n <- 4000
+p <- 20
+X <- matrix(rnorm(n * p), n, p)
+TAU <- 1 / (1 + exp(-X[, 3]))
+W <- rbinom(n, 1, 1 / (1 + exp(-X[, 1] - X[, 2]))) # X[, 1] and X[, 2] influence W
+Y <- pmax(X[, 2] + X[, 3], 0) + rowMeans(X[, 4:6]) / 2 + W * TAU + rnorm(n) # X[, 2], X[, 3], X[, 4:6] influence Y. So different set of Xs influence Y
+
+
+
+# Build a separate forest for Y and W 
+forest.W  <-  regression_forest(X, W, tune.parameters = "all")
+W.hat  <- predict(forest.W)$predictions # this gives us the estimated propensity score (probability of treated)
+#plot(W.hat, X[, 1], col = as.factor(W))
+#plot(W.hat, X[, 2], col = as.factor(W))
+
+forest.Y  <- regression_forest(X, Y, tune.parameters = "all") # note that W is not used here 
+Y.hat  <- predict(forest.Y)$predictions # this gives the conditional mean of Y or m(x)
+#plot(Y, Y.hat)
+
+forest.Y.varimp  <- variable_importance(forest.Y)
+forest.Y.varimp
+
+# selects the important variables
+selected.vars  <- which(forest.Y.varimp / mean(forest.Y.varimp) > 0.2)
+selected.vars
+
+# Trains a causal forest
+tau.forest  <- causal_forest(X[, selected.vars], Y, W, 
+                    W.hat = W.hat, Y.hat = Y.hat, # specify e(x) and m(x)
+                    tune.parameters = "all")
+
+
+# See if a causal forest succeeded in capturing heterogeneity by plotting
+# the TOC and calculating a 95% CI for the AUTOC.
+train <- sample(1:n, n / 2)
+train.forest <- causal_forest(X[train, ], Y[train], W[train])
+eval.forest <- causal_forest(X[-train, ], Y[-train], W[-train])
+rate <- rank_average_treatment_effect(eval.forest,
+                                      predict(train.forest, X[-train, ])$predictions)
+rate                                      
+plot(rate)
+paste("AUTOC:", round(rate$estimate, 2), "+/", round(1.96 * rate$std.err, 2))
+
+```

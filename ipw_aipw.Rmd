@@ -1,0 +1,421 @@
+---
+title: "IPW and AIPW"
+output:
+  html_document:
+    css: custom.css
+    includes:
+      in_header: header.html
+---
+
+
+# IPW and AIPW
+
+```{r, echo = FALSE, include = FALSE}
+#################################
+#
+# Author: VS
+# Last Revised: Jan 18, 2024
+# Keywords: Heterogeneous Treatment Effects
+# using Lasso, GRF
+#
+#################################
+
+rm(list = ls())
+
+# making table
+library("kableExtra")
+
+# Helper packages
+library(dplyr) # for data wrangling
+library(ggplot2) # for graphics
+library(splines)
+
+# Modeling packages 
+library(ranger)
+library(caret) # for automating the tuning process
+library(grf)
+library(glmnet) # for implementing regularized regression
+```
+
+## Motivation
+
+In a randomized controlled experiment the treatment assignment is random by construction. In other words, treated individuals have equal probability of being untreated: $P(W_i = 1) = P(W_i = 0)$. This leads to: $W_i \perp \{Y_i(0), \; Y_i(1)\}$. Here, $W_i = \{0, \; 1\}$ is the treatment assignment; $Y_i(0)$ and $Y_i(1)$ are potential outcomes without and with treatment. 
+
+**ATE.** The target is to estimate the average treatment effect: 
+
+$ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)$  
+
+The two assumptions: i) $W_i \perp \{Y_i(0), \; Y_i(1)\}$ (random assignment); and ii) $Y_i(W) = Y_i$ (SUTVA); the ATE estimate $\hat{tau}$ can be written as: 
+
+$\hat{\tau} = \frac{1}{n_T} \sum_{W_i = 1} Y_i - \frac{1}{n_C} \sum_{i \in W_i = 0} Y_i ......... equation (2)$, 
+
+where $n_T$ and $n_C$ are the number of treated and control units, respectively. When assumption $i)$ fails, we can no longer estimate ATE using equation (2). However, we can invoke unconfoundedness to estimate ATE. 
+
+**Unconfoundedness**: The treatment assignment is as good as random once we control for $X$s. $\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi $.   
+
+Mostly in observational settings the assumption that treatment assignment is independent of the potential outcomes is false. However, if all $X$s (features) that influence the treatment are observed, then we can use unconfoundedness for causal inference.
+
+## A simple example 
+
+Say, you are interested in evaluating the effect of tutoring program initiated following the first exam on grades at an introductory level course. For simplicity, the possible grades are **A** and **B**. However, students who received B on their first exam are more likely to attend the tutoring session. In other words, $P(W_i = 1 | Y_{iFE} = A) < P(W_i = 1 | Y_{iFE} = B)$. In this case, the treatment assignment is correlated with the past grade, which can predict the grade on the second exam. Hence, using equation (2) to estimate effects of the tutoring program will result in biased estimate. 
+
+Since we know that the probability of treatment is influenced by the grade on the first exam, we can estimate the conditional average treatment effect (CATE) and average them using weights to form an estimate of ATE. Let's take a look at the data. 
+
+```{r}
+
+
+grade_mat  <- function(grade_vec){
+    grade  <- matrix(0, nrow =2, ncol = 3)
+    grade[, 1]  <- c("Treat", "Control")
+    grade[ ,2]  <- c(grade_vec[1], grade_vec[2])
+    grade[ ,3]  <- c(grade_vec[3], grade_vec[4])
+    return(grade)
+}
+
+# Y_iFS == A
+grade  <- grade_mat(c(5, 9, 2, 4))
+colnames(grade)  <- c("1st Exam = A", "A (2nd Exam)", "B (2nd Exam)")
+
+grade  %>% kable()  %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+grade  <- grade_mat(c(15, 1, 5, 4))
+colnames(grade)  <- c("1st Exam = B", "A (2nd Exam)", "B (2nd Exam)")
+
+grade  %>% kable()  %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+
+$\hat{\tau}_{FE=A} = \frac{5}{7} - {9}{13} = 2.1 \; pp$
+
+$\hat{\tau}_{FE=B} = \frac{15}{20} - {1}{5} = 55 \; pp$
+
+$\hat{\tau}_{AGG} = \frac{20}{45} \hat{\tau}_{FE=A} - \frac{25}{45} \hat{\tau}_{FE=B} = 31.48 \; pp$. 
+
+The first two are CATEs, which is then averaged to form ATE using appropriate weights on the third line. This simple example using the discreate feature space provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).^[In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.]
+
+## Continuous features and propensity score 
+
+Previously we discussed the case of a discrete feature. In this case we estimates group-wise ATE and used the weighted average to obtain ATE. When there are many features, this approach is prone to the curse of dimensionality. Moreover, if features are continuous, we won't be able to estimate ATE at each value of $x \in \chi$ due to lack of enough sample size. Instead of estimating group-wise ATE and averaging them, we would want to use a more indirect approach. This is when propensity score comes in. 
+
+The assumption is that we have collected enough features (discrete, continuous, interactions, higher degree polynomials) to back unconfoundedness. This again means that the treatment assignment is as good as random after controlling for $X_i$. More formally, 
+
+$W_i \perp \{Y_i(0), \; Y_i(1)\} | \; X_i \; ............. equation(3)$ 
+
+Intuitively, after accounting for the features that influence who receives treatment, the treatment assignment is as good as random among the sub-group with similar features. But in actuality we are not interested in splitting groups to estimate group-wise treatment effects.   
+
+**Propensity score $e(x)$.** The probability of being treated conditional on features $X$s. 
+
+$e(x) = P(W_i = 1 | X_i = x) \; ............. equation(4)$. 
+
+The key property of the propensity score is that it balances units in the treatment and control groups. If equation (3) holds, we can write the following: 
+
+$W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) \; ............. equation(5)$ 
+
+What equation (5) says is that instead of controlling for $X$ one can control for the probability of treatment $(e(X))$ to establish the desired property that the treatment is as good as random. The implication of equation (5) is that if we partition observations in groups with similar propensity score then we can estimate group-wise treatment effects and aggregate to form an estimate for ATE. This can be done using the propensity score stratification. 
+
+## Propensity score stratification
+
+1. Order observations according to their estimated propensity score. 
+
+$\hat{e}(X)_{i1}, \; \hat{e}(X)_{i2}, ... \; \hat{e}(X)_{iN}$
+
+2. Form $J$ strata of equal size and take the simple difference in mean between the treated and control units within each strata. These are $\hat{\tau}_j$ for $j = \{1, \; 2, \; ..., \; N\}$.  
+
+3. Form the ATE, 
+
+$\hat{\tau}_{Strat} = \frac{1}{J} \sum_{j = 1}^{J} \hat{\tau}_j$
+
+Here, $\hat{\tau}_{Strat}$ is consistent for $\tau$, meaning that $\hat{\tau}_{Strat} \rightarrow_p \tau$ given that $\hat{e}(x)$ is consistent for $e(x)$ and the number of strata grows appropriately with $N$. However, one needs to set the number of strata, which can be a bit ad-hoc.  
+
+## IPW and Estimation
+
+A more natural way to exploit the condition of unconfoundedness is to weight observations by their propensity score, which is known as the inverse probability weighting. As before $\hat{e}(x)$ is defined as an estimated propensity score. 
+
+$\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} (\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}) \; ....equation(6)$
+
+Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in features across the treatment and control groups. Note that the validity of $\hat{\tau}$ still hinges on the unconfoundedness assumption. 
+
+**Limitation of IPW Estimate.** One way to analyze the accuracy of $\hat{\tau}_{IPW}$ is to compare it with the oracle IPW estimate, $\hat{\tau}_{IPW}^{*}$. The oracle estimate is obtained from the known propensity score. Readers are referred to Wager (2018) lecture notes regarding the details of the comparison. Briefly, comparison between $\hat{\tau}_{IPW}^{*}$ and $\hat{\tau}_{AGG}$ suggests that the oracle IPW under-performs $\hat{\tau}_{AGG}$. In other words, the variance of the oracle estimate is larger than that of $\hat{\tau}_{AGG}$. 
+
+Algorithmically, we can form *score* as:
+
+$(\frac{Y_i \times W_i}{\hat{e}(X_i)} - \frac{Y_i \times (1-W_i)}{1 - \hat{e}(X_i)})$
+
+The mean of it results to $\hat{\tau}$ and the standard error of the estimate is simply $\frac{\hat{\sigma}_{score}}{\sqrt{N}}$.
+
+**Estimation**
+
+```{r}
+#################################
+# Author: VS
+# Last Revised: Jan 16, 2024
+# Keywords: IPW, AIPW, GRF
+#
+#
+#
+#################################
+
+
+set.seed(194)
+
+# Generate Data 
+n <- 2000
+p <- 10
+X <- matrix(rnorm(n * p), n, p)
+X.test <- matrix(0, 101, p)
+X.test[, 1] <- seq(-2, 2, length.out = 101)
+W <- rbinom(n, 1, 0.4 + 0.2 * (X[, 1] > 0))
+prob  <- 0.4 + 0.2 * (X[, 1] > 0)
+Y <- 2.56 * W + X[, 2] + pmax(X[, 1], 0) + rnorm(n)
+plot(X[, 1], X[, 2], col = as.factor(W))
+
+#paste0("average treatment effect is: ", round(mean(pmax(X[, 1], 0)), 3))
+
+
+#################################
+#################################
+#
+# Inverse Probability Weighting
+#
+#################################
+#################################
+
+# use the random forest to get the propensity score 
+dat  <- data.frame(W, X)
+n_features  <- length(setdiff(names(dat), "W"))
+
+# A. ranger (probability tree)
+rf1_ranger  <- ranger(
+    W ~ ., 
+    data = dat, 
+    mtry = min(ceiling(sqrt(n_features) + 20), n_features),  
+    num.trees = 2000, 
+    probability =  TRUE
+)
+# OOB predictions from ranger
+p.ranger  <- rf1_ranger$predictions[, 1]  
+
+# B. probability tree using GRF
+
+# cross-fitting index 
+K  <- 10
+ind  <- sample(1:length(W), replace = FALSE, size = length(W))
+folds  <- cut(1:length(W), breaks = K, labels = FALSE)
+index  <- matrix(0, nrow = length(ind) / K, ncol = K)
+for(f in 1:K){
+    index[, f]  <- ind[which(folds == f)]
+}
+
+# Build RF using GRF P(W = 1 | X)
+fun.rf.grf  <- function(X, W, predictkfold){
+    rf_grf  <- regression_forest(X, W, tune.parameters = "all")
+    p.grf  <- predict(rf_grf, predictkfold)$predictions
+    return(p.grf)
+}
+
+# storing 
+predict.mat  <- matrix(0, nrow = nrow(index), ncol = K)
+tauk  <- rep(0, K)
+tauk_oracle  <- rep(0, K)
+weighttau  <- rep(0, K)
+score  <-  list()
+score_oracle  <- list()
+
+# for each fold i use other folds for estimation 
+for(i in seq(1:K)){
+    predict.mat[, i]  <- fun.rf.grf(X = X[c(index[, -i]), ], W = W[index[, -i]], predictkfold = X[c(index[, i]), ])
+    # fold-specific treatment effect
+    score[[i]]  <- ((W[index[, i]] * Y[index[, i]]) / (predict.mat[, i])) - 
+                (((1 - W[index[, i]]) * Y[index[, i]]) / (1 - predict.mat[, i]))
+    score_oracle[[i]]  <- ((W[index[, i]] * Y[index[, i]]) / (prob[i])) - 
+                (((1 - W[index[, i]]) * Y[index[, i]]) / (1 - prob[i]))
+
+    tauk[i]  <- mean(score[[i]])
+    tauk_oracle[i]  <- mean(score_oracle[[i]])
+}
+
+# ipw using oracle propensity score and propensity score estimated from grf 
+alpha  <-  0.05 # 5 percent level of significance
+#ipw.ranger  <- mean(((W * Y) / (p.ranger)) - (((1 - W) * Y) / (1 - p.ranger))) 
+ipw.grf  <- weighted.mean(tauk, weights = weighttau)
+ipw.oracle  <- weighted.mean(tauk_oracle, weights = weighttau)
+
+sd.ipw  <-  sd(unlist(score))
+sd.oracle  <-  sd(unlist(score_oracle))
+ll  <- ipw.grf - (sd.ipw / sqrt(length(unlist(score)))) * qnorm(1 - alpha/2)
+ul  <- ipw.grf + (sd.ipw / sqrt(length(unlist(score)))) * qnorm(1 - alpha/2)
+ll_oracle  <- ipw.oracle - (sd.oracle / sqrt(length(unlist(score_oracle)))) * qnorm(1 - alpha/2)
+ul_oracle  <- ipw.oracle + (sd.oracle / sqrt(length(unlist(score_oracle)))) * qnorm(1 - alpha/2)
+
+result.ipw  <- c("IPW estimate" = round(ipw.grf, 3), "se" = round(sd.ipw / (sqrt(length(W))), 3),
+                 "lower bound" = round(ll, 3), "upper bound" = round(ul, 3))
+
+result.oracle.ipw  <- c("IPW Oracle estimate" = round(ipw.oracle, 3), "se" = round(sd.oracle / (sqrt(length(W))), 3),
+                 "lower bound" = round(ll_oracle, 3), "upper bound" = round(ul_oracle, 3))                 
+
+print(result.ipw)
+print(result.oracle.ipw)
+```
+
+Note that $e(x)$ is estimated via cross-fitting.
+1. The data is divided into $K$-folds. 
+2. For each fold $k$, model building is administered using $-k$ folds. 
+3. Using Step 2, predictions are generated for units in the $k^{th}$ fold.  
+
+## AIPW and Estimation
+
+Augmented Inverse Probability Weighting (AIPW) provides a robust way to estimate ATE by alleviating the limitation of IPW estimate. 
+
+Following the IPW approach, estimation of ATE is given in equation (6). The other approach to estimate $\tau$ is to think of it from the conditional response approach. Write $\mu_{w}(x) = E[Y_i| \; X_i = x, W_i = w]$. Then: 
+
+$\tau(x) = E[Y_i| \; X_i = x, W_i = 1] - E[Y_i| \; X_i = x, W_i = 0]$
+
+
+This is the regression outcome approach, where $\tau = E[\mu_{1}(x) - \mu_{0}(x)]$. The consistent estimator can be formed by using: $\hat{\tau}(x) = N^{-1} \sum_{i = 1}^{N} \mu_{1}(X_i) - \mu_{0}(X_i)$. 
+
+AIPW approach combines both IPW approach as well as regression outcome approach to estimate $\tau$. 
+
+$\hat{\tau}_{AIPW} = \frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}(X_i) - \mu_{0}(X_i) + 
+\frac{(Y_i - \hat{\mu}_1(X_i)). W_i}{\hat{e}(X_i)} - \frac{(Y_i - \hat{\mu}_0(X_i)). (1-W_i)}{1 - \hat{e}(X_i)})$
+
+
+ML approach using cross-fitting is used to estimate both $\hat{e}(x)$ and $\hat{\mu}_{w}(x)$. Following the cross-fitting structure, we can formally write the estimate for $\tau$ as: 
+
+$\hat{\tau}_{AIPW} = \lowerbracket{\frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}^{-k(i)}(X_i) - \mu_{0}^{-k(i)}(X_i)}_{consistent \; estimate \; of \; \tau} + 
+\frac{(Y_i - \hat{\mu}_1^{-k(i)}(X_i)). W_i}{\hat{e}^{-k(i)}(X_i)} - \frac{(Y_i - \hat{\mu}_0^{-k(i)}(X_i)). (1-W_i)}{1 - \hat{e}^{-k(i)}(X_i)})$
+
+The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights  given by the propensity score. There are two attractive features of AIPW estimate. First, $\hat{\tau}_{AIPW} is consistent as long as $\hat{e}(x)$ or $\hat{\mu}_{w}(x)$ is consistent. This is because $E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0$. Second, $\hat{\tau}_{AIPW}$ is a good approximation to oracle $\hat{\tau}_{AIPW}^{*}$ as long as $\hat{\mu}(.)$ and $\hat{e}(.)$ are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both $\hat{\mu}(.)$ and $\hat{e}(.)$ are $\sqrt{n}$-consistent^[This means that $\hat{\mu}(.)$ converges to $\hat{\mu}$ at the ], then the following holds. 
+
+$\sqrt{n}(\hat{\tau}_{AIPW} - \hat{\tau}_{AIPW}^{*}) \rightarrow_p 0$.
+
+```{r}
+
+#######################
+#
+# Augmented IPW (aipw)
+#
+#######################
+
+#n_features2  <- length(setdiff(names(dat2), "Y"))
+# ranger
+#funrf_ranger  <- function(dat){
+#    rf2  <- ranger(
+#        Y ~ ., 
+#        data = dat, 
+#        mtry = min(ceiling(sqrt(n_features) + 20), n_features),  
+#        respect.unordered.factors = "order", 
+#        seed = 123, 
+#        num.trees = 2000
+#    )
+#    return(rf2)
+#}
+
+# storing
+predict.mat2a  <- matrix(0, nrow = nrow(index), ncol = K)
+predict.mat2b  <- predict.mat2a
+aipwK  <- rep(0, K)
+weightaipK  <- rep(nrow(index) / length(index), K)
+
+for(i in seq(1:K)){
+    # E(Y | X, W = 1) using cross-fitting
+    predict.mat2a[, i]  <- fun.rf.grf(X = cbind(X[c(index[, -i]), ], W[index[, -i]]), W = Y[index[, -i]], 
+                                    predictkfold = cbind(X[c(index[, i]), ], 1))
+    # E(Y | X, W = 0) using cross-fitting
+    predict.mat2b[, i]  <- fun.rf.grf(X = cbind(X[c(index[, -i]), ], W[index[, -i]]), W = Y[index[, -i]], 
+                                    predictkfold = cbind(X[c(index[, i]), ], 0))                                
+    noise  <-  ((W[index[, i]] * (Y[index[, i]] - predict.mat2a[, i])) / (predict.mat[, i])) 
+                - 
+                (((1 - W[index[, i]]) * (Y[index[, i]] - predict.mat2b)) / (1 - predict.mat[, i]))
+    score[[i]]  <-  predict.mat2a[, i] - predict.mat2b[, i] + noise
+    aipwK[i]  <- mean(score[[i]])
+}
+
+aipw.grf  <- weighted.mean(aipwK, weights = weightaipK)
+sd.aipw  <- sd(unlist(score)) 
+ll  <-  aipw.grf - (sd.aipw / sqrt(length(unlist(score)))) * qnorm(1 - alpha/2)
+ul  <-  aipw.grf + (sd.aipw / sqrt(length(unlist(score)))) * qnorm(1 - alpha/2)
+
+result.aipw  <- c("AIPW Est." = round(aipw.grf, 3), "se" = round(sd.aipw/(sqrt(length(W))), 3), 
+                    "lower bound" = round(ll, 3), "upper bound" = round(ul, 3))
+
+######################
+# grf
+######################
+
+# Train a causal forest 
+tau.forest  <-  causal_forest(X, Y, W)
+
+# Estimate the conditional average treatment effect on the full sample (CATE).
+grf_ate  <- average_treatment_effect(tau.forest, target.sample = "all")
+grf_att  <- average_treatment_effect(tau.forest, target.sample = "treated")
+
+
+##  PRINT ALL
+
+#print(paste0("average treatment effect is: ", round(mean(pmax(X[, 1], 0)), 3)))
+print(paste("treatment effects according to naive estimator:", round(mean(Y[which(W == 1)]) - mean(Y[which( W == 0)]), 3), sep = " "))
+print(paste("treatment effects according to IPW using", K, "fold cross-fittin:", round(ipw.grf, 3), sep = " "))
+print(paste("treatment effects according to IPW oracle:", round(ipw.oracle, 3), sep = " "))
+print(paste("treatment effects according to AIPW using", K, "fold cross-fitting:", round(aipw.grf, 3), sep = " "))
+print(paste("treatment effects according to GRF:", round(grf_ate[[1]], 3), sep = " "))
+
+print(result.ipw)
+print(result.aipw)
+print(grf_ate)
+
+
+```
+
+## Assessing Balance
+```{r}
+
+##########################################
+#
+#
+# Assessing Balance
+#
+#
+##########################################
+XX  <- X[c(index), ]
+YY  <- Y[c(index)]
+WW  <- W[c(index)]
+e.hat  <- c(predict.mat)
+
+# unadjusted
+means.treat  <- apply(XX[WW == 1, ], 2, mean)
+means.control  <- apply(XX[WW == 0, ], 2, mean)
+abs.mean.diff  <- abs(means.treat - means.control)
+
+var.treat  <- apply(XX[WW == 1, ], 2, var)
+var.control  <- apply(XX[WW == 0, ], 2, var)
+std  <- sqrt(var.treat + var.control)
+
+# adjusted
+
+means.treat.adj  <- apply(XX*WW / e.hat, 2, mean)
+means.control.adj  <- apply(XX*(1 - WW) / (1 - e.hat), 2, mean)
+abs.mean.diff.adj  <- abs(means.treat.adj - means.control.adj)
+
+var.treat.adj  <- apply(XX * WW / e.hat, 2, var)
+var.control.adj  <- apply(XX * (1 - WW) / (1 - e.hat), 2, var)
+std.adj  <- sqrt(var.treat.adj + var.control.adj)
+
+# plot unadjusted and adjusted differences
+par(oma=c(0,4,0,0))
+plot(-2, xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(-.01, 1.01), ylim=c(0, ncol(XX)+1), main="")
+axis(side=1, at=c(-1, 0, 1), las=1)
+lines(abs.mean.diff / std, seq(1, ncol(XX)), type="p", col="blue", pch=19)
+lines(abs.mean.diff.adj / std.adj, seq(1, ncol(XX)), type="p", col="orange", pch=19)
+legend("topright", c("Unadjusted", "Adjusted"), col=c("blue", "orange"), pch=19)
+abline(v = seq(0, 1, by=.25), lty = 2, col = "grey", lwd=.5)
+abline(h = 1:ncol(XX),  lty = 2, col = "grey", lwd=.5)
+mtext(paste0("X", seq(1, ncol(XX))), side=2, cex=0.7, at=1:ncol(XX), padj=.4, adj=1, col="black", las=1, line=.3)
+abline(v = 0)
+
+hist(e.hat, breaks = 100, freq = FALSE)
+
+```
+
+

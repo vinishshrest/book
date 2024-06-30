@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.3 Motivation for Causal Forests | IPW and AIPW</title>
+  <meta name="description" content="4.3 Motivation for Causal Forests | IPW and AIPW" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.3 Motivation for Causal Forests | IPW and AIPW" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.3 Motivation for Causal Forests | IPW and AIPW" />
+  
+  
+  
+
+<meta name="author" content="Vinish Shrestha" />
+
+
+<meta name="date" content="2024-06-29" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="summary-of-grf.html"/>
+<link rel="next" href="causal-forest-1.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Work in Progress</a></li>
+<li class="chapter" data-level="2" data-path="causal-inference-an-introduction.html"><a href="causal-inference-an-introduction.html"><i class="fa fa-check"></i><b>2</b> Causal Inference: An Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
+<li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
+<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
+<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
+<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
+<li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.5" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> IPW and Estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.6</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.7" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.7</b> Assessing Balance</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>4.2</b> Summary of GRF</a></li>
+<li class="chapter" data-level="4.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>4.3</b> Motivation for Causal Forests</a></li>
+<li class="chapter" data-level="4.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>4.4</b> Causal Forest</a></li>
+<li class="chapter" data-level="4.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>4.5</b> An example of causal forest</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>5</b> Heterogeneous Treatment Effects</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>5.1</b> Some ways to estimate CATE</a></li>
+<li class="chapter" data-level="5.2" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>5.3</b> Some Remarks and Questions</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="motivation-for-causal-forests" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Motivation for Causal Forests<a href="motivation-for-causal-forests.html#motivation-for-causal-forests" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s expand on estimating the average treatment effect of a treatment intervention <span class="math inline">\(W\)</span>. The specifics are listed as:</p>
+<ul>
+<li><span class="math inline">\(W_i \in \{0, \; 1\}\)</span>: treatment intervention</li>
+<li><span class="math inline">\(X_i\)</span>: covariates</li>
+<li><span class="math inline">\(Y_i\)</span>: response/outcome</li>
+</ul>
+<p>In the parametric framework <span class="math inline">\(\tau\)</span>, the treatment effect, is estimated using the following specification:</p>
+<p><span class="math inline">\(Y_i = \tau W_i + \beta_1 X_i + \epsilon_i\)</span></p>
+<p>The validity of <span class="math inline">\(\hat{\tau}\)</span> as a causal estimand is justified under the following three assumptions.</p>
+<ol style="list-style-type: decimal">
+<li>Unconfoundedness: <span class="math inline">\(Y^{(0)}_i, \; Y^{(1)}_i \perp W_i | X_i\)</span>. Treatment assignment is independent of the potential outcome once conditioned on the covariates. In other words, controling for covariates makes the treatment assignment as good as random.</li>
+<li><span class="math inline">\(X_i\)</span>s influence <span class="math inline">\(Y_i\)</span>s in a linear way.</li>
+<li>The treatment effect is homogeneous.</li>
+</ol>
+<p><strong>Assumption 1</strong> is the identification assumption. In the traditional sense, one can control for <span class="math inline">\(X_i\)</span>s in the regression framework and argue that this assumption is met. Even if all <span class="math inline">\(X\)</span>s that influence the treatment assignment are observed (this is the assumption that we make throughout), we are unsure how <span class="math inline">\(X\)</span>s affect the treatment. Often <span class="math inline">\(X\)</span>s can affect treatment in a non-linear way. <strong>Assumptions 2 and 3</strong> can be questioned and relaxed. One can let data determine the way <span class="math inline">\(X\)</span> needs to be incorporated in the model specification (relaxing assumption 2). Moreover, treatment effects can vary across some covariates (relaxing assumption 3).</p>
+<p>First, lets relax assumption 2. This leads to the following partially linear model:</p>
+<p><span class="math inline">\(Y_i = \tau W_i + f(X_i) + \epsilon_i \;............. equation 1\)</span></p>
+<p>where, <span class="math inline">\(f\)</span> is a function that maps out how <span class="math inline">\(X\)</span> affects <span class="math inline">\(Y\)</span>. However, we don’t know <span class="math inline">\(f\)</span> in practice. So, how do we go about estimating <span class="math inline">\(\tau\)</span>?</p>
+<p>The causal forest framework under GRF connects the old-school literature of causal inference with ML methods. Robinson (1988) shows that if two intermediate (nuiscance) objects, <span class="math inline">\(e(X_i)\)</span> and <span class="math inline">\(m(X_i)\)</span> are known, one can estimate <span class="math inline">\(\tau\)</span>. The causal forest framework under GRF utilizes this result. Here:</p>
+<ul>
+<li><span class="math inline">\(e(X_i)\)</span> is the propensity score; the probability of being treated. <span class="math inline">\(E[W_i| X_i = x]\)</span></li>
+<li><span class="math inline">\(m(X_i)\)</span> is the conditional mean of <span class="math inline">\(Y\)</span>. <span class="math inline">\(E[Y_i | X_i = x] = f(x) + \tau e(x)\)</span></li>
+</ul>
+<p>Demeaning equation 1 (substracting <span class="math inline">\(m(x)\)</span>) gives the following residual-on-residual regression:</p>
+<p><span class="math inline">\(Y_i - m(x) = \tau (W_i - e(x)) + \epsilon \; .............. equation 2\)</span></p>
+<p>Intuition for equation (2) proceeds as follow. Note that <span class="math inline">\(m(x)\)</span> is the conditional mean of Y given <span class="math inline">\(X_i = x\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> This means that units with similar <span class="math inline">\(X\)</span>s will have similar estimates for <span class="math inline">\(m(x)\)</span> in <span class="math inline">\(W=\{0, \; 1\}\)</span>, which would mean that estimates on <span class="math inline">\(e(x)\)</span> would also be similar for these units across both treatment and control group. Now, consider that the treatment is positive; this will show up in <span class="math inline">\(Y_i\)</span>. <span class="math inline">\(Y_i - m(x)\)</span> will be higher for <span class="math inline">\(W=1\)</span> compared to <span class="math inline">\(W=0\)</span> for similar estimates of <span class="math inline">\(m(x)\)</span>. On the other side, <span class="math inline">\(W_i - e(x)\)</span> is positive for <span class="math inline">\(W=1\)</span> and negative for <span class="math inline">\(W=0\)</span> for similar estimates of <span class="math inline">\(e(x)\)</span>. Such variations in the left and right hand side quantities will allow to capture postive estimates on <span class="math inline">\(\tau\)</span>.</p>
+<p>To gain ML methods are used to estimate <span class="math inline">\(m(x)\)</span> and <span class="math inline">\(e(x)\)</span> and residual-on-residual regression is used estimate <span class="math inline">\(\tau\)</span>. It turns out that even noisy estimates of <span class="math inline">\(e(x)\)</span> and <span class="math inline">\(m(x)\)</span> can give ``ok” estimate of <span class="math inline">\(\tau\)</span>.</p>
+<p>How to estimate <span class="math inline">\(m(x)\)</span> and <span class="math inline">\(e(x)\)</span>?</p>
+<ul>
+<li>Use ML methods (boosting; random forest)</li>
+<li>Use cross-fitting for prediction. prediction of observation <span class="math inline">\(i&#39;s\)</span> outcome &amp; treatment assignment is obtained without using the observation ``<span class="math inline">\(i\)</span>“. </li>
+</ul>
+<p>Lets take a look at residual-on-residual in the case of homogeneous treatment effect.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="motivation-for-causal-forests.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate data</span></span>
+<span id="cb50-2"><a href="motivation-for-causal-forests.html#cb50-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb50-3"><a href="motivation-for-causal-forests.html#cb50-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb50-4"><a href="motivation-for-causal-forests.html#cb50-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb50-5"><a href="motivation-for-causal-forests.html#cb50-5" aria-hidden="true" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb50-6"><a href="motivation-for-causal-forests.html#cb50-6" aria-hidden="true" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb50-7"><a href="motivation-for-causal-forests.html#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="motivation-for-causal-forests.html#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate W and Y </span></span>
+<span id="cb50-9"><a href="motivation-for-causal-forests.html#cb50-9" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb50-10"><a href="motivation-for-causal-forests.html#cb50-10" aria-hidden="true" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb50-11"><a href="motivation-for-causal-forests.html#cb50-11" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fl">2.5</span> <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb50-12"><a href="motivation-for-causal-forests.html#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="motivation-for-causal-forests.html#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Train regression forests</span></span>
+<span id="cb50-14"><a href="motivation-for-causal-forests.html#cb50-14" aria-hidden="true" tabindex="-1"></a>mx  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb50-15"><a href="motivation-for-causal-forests.html#cb50-15" aria-hidden="true" tabindex="-1"></a>ex  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) </span>
+<span id="cb50-16"><a href="motivation-for-causal-forests.html#cb50-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-17"><a href="motivation-for-causal-forests.html#cb50-17" aria-hidden="true" tabindex="-1"></a>Wcen  <span class="ot">&lt;-</span> W <span class="sc">-</span> ex<span class="sc">$</span>predictions</span>
+<span id="cb50-18"><a href="motivation-for-causal-forests.html#cb50-18" aria-hidden="true" tabindex="-1"></a>Ycen  <span class="ot">&lt;-</span> Y <span class="sc">-</span> mx<span class="sc">$</span>predictions </span>
+<span id="cb50-19"><a href="motivation-for-causal-forests.html#cb50-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-20"><a href="motivation-for-causal-forests.html#cb50-20" aria-hidden="true" tabindex="-1"></a>reg  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(<span class="fu">lm</span>(Ycen <span class="sc">~</span> Wcen))</span>
+<span id="cb50-21"><a href="motivation-for-causal-forests.html#cb50-21" aria-hidden="true" tabindex="-1"></a>reg</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Ycen ~ Wcen)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.7014 -0.7096 -0.0075  0.6923  4.0184 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.003044   0.023651  -0.129    0.898    
+## Wcen         2.457639   0.048010  51.190   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.058 on 1998 degrees of freedom
+## Multiple R-squared:  0.5674, Adjusted R-squared:  0.5672 
+## F-statistic:  2620 on 1 and 1998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="motivation-for-causal-forests.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The treatment effect estimate based on residual-on-residual regression is: &quot;</span>, <span class="fu">coefficients</span>(reg)[<span class="dv">2</span>])) </span></code></pre></div>
+<pre><code>## [1] &quot;The treatment effect estimate based on residual-on-residual regression is: 2.45763901261754&quot;</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="motivation-for-causal-forests.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The true treatment effect is: &quot;</span>, <span class="fl">2.5</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;The true treatment effect is: 2.5&quot;</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p>We can also think of <span class="math inline">\(m(x)\)</span> as the case when we ignore <span class="math inline">\(W\)</span>, although we know that treatment took place. This way, <span class="math inline">\(m(x) = \mu_{0}(x) + e(x)\tau\)</span>, where <span class="math inline">\(\mu_{0}(x)\)</span> is the baseline conditional expectation without the treatment. This makes it easy to see that units with similar features will have similar estimates of <span class="math inline">\(m(x)\)</span>.<a href="motivation-for-causal-forests.html#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="summary-of-grf.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="causal-forest-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

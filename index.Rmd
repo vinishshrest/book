@@ -1,0 +1,20 @@
+---
+title: "Causal Inference"
+author: "Vinish Shrestha"
+date: "`r Sys.Date()`"
+#site: "bookdown::bookdown_site"
+output:
+  html_document:
+    css: custom.css
+    includes:
+      in_header: header.html
+documentclass: book
+bibliography: ML.bib
+biblio-style: apalike
+link-citations: yes
+---
+
+
+# Work in Progress
+
+This is a work in progress.

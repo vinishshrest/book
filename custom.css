@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2E86C1;
+}
+
+.code {
+    background-color: #F3F3F3;
+    border-left: 3px solid #2E86C1;
+    padding: 10px;
+    margin: 10px 0;
+}

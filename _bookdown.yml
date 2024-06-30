@@ -1,0 +1,9 @@
+book_filename: "book"
+output_dir: "docs"
+rmd_files: 
+  delete_merged_file: true
+  html: ["index.Rmd", "01-intro.Rmd", "ipw_aipw.Rmd", 
+        "grf_causal_forest.Rmd", "01heterogenous_treatment.Rmd"]
+  
+
+  

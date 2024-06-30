@@ -1,0 +1,234 @@
+---
+title: "Causal Inference"
+output:
+  html_document:
+    css: custom.css
+    includes:
+      in_header: header.html
+biblio-style: apalike
+link-citations: yes
+bibliography: ML.bib
+---
+
+# Causal Inference: An Introduction
+
+"Correlation is not causality" is one of the most frequently used lines in social science. In a lab experiment, a researcher can perform controlled experiments to determine whether A causes B by controlling for confounders. However, the complexities and interrelations of human behavior create a setting starkly different from the controlled environment of a lab, making things much more convoluted. Causal inference, therefore, can be seen as a process to determine whether A causes B in both lab settings and out-of-lab scenarios. 
+
+**A simple example.** 
+Say, you are interested in evaluating the effects of a tutoring program on exam scores for an introductory course. 
+
+
+To begin, in this simple example, we assume that the treatment is randomly assigned. The class is randomly divided into two groups: one group receives the treatment **(treatment group)** and the other group does not receive the treatment **(control group)**. Proper randomization means that each individual has an equal probability of receiving the treatment or not receiving it. This with an arbitrarily high probability ensures balance in both observed and unobserved factors as the sample size grows such that any differences in outcomes between the treatment and control groups can be attributed to the treatment itself, rather than to pre-existing differences between the groups. Of course, balance is not guranteed and in such cases one should think hard whether differences in covariates matter, and if they do, adjustment should be applied. *Balance* here is defined as an instance when all pre-treatment covariates between the treatment and control groups are similar. If this is attained then it increases confidence that the effect estimated is causal. 
+
+**Set up.** We use $W$ to denote the treatment status such that 
+$W_i \in \{0, \; 1\}$, $Y_i$ is the exam score following the treatment assignment, and $X_i$ are the covariates (e.g., gender, race). The subscript $i$ 
+indicates an individual or unit of observation.
+
+
+
+## Potential Outcome Framework: Neyman-Rubin Causal Model 
+
+We are going to use the potential outcome framework to describe the impacts of the treatment following the Neyman-Rubin causal model [@splawa1990; @rubin1974]. Define $Y_i(0)$ and $Y_i(1)$ as the potential outcomes for an individual $i$ in the case of treatment and without treatment, respectively. The observed variable, $Y_i$, can be written as a function 
+of the potential outcomes as follows:
+
+\begin{equation}
+Y_i = W \times Y_i(1) + (1-W)\times Y_i(0)
+\end{equation} 
+
+The problem arises as one cannot observe both $Y_i(0)$ and $Y_i(1)$ at the same time, an issue that needs to be dealt with. As such, the causal inference through the lens of Neyman-Rubin causal framework can be seen as the missing data problem. If one has the data for $Y_i(1)$ then the $Y_i(0)$ counterpart is missing and vice-versa. 
+
+The **independence assumption** allows us to proceed further with causality. 
+Formally, a complete random assignment of treatment means: $W_i \perp Y_i(0), Y_i(1)$. This states that the treatment assignment is independent of potential outcomes. Quite literally, this means that the potential outcome of an individual $i$ in the state of treatment, $Y_i(1)$, would be equal to the potential outcome $Y_i(0)$ in the state without treatment, whereas the potential outcome of an individual $i$ without treatment, $Y_i(0)$, would be equal to the potential outcome $Y_i(1)$ in the state with treatment. In other words, the treatment assignment is completely random.  
+
+The independence assumption states that the treatment assignment is independent of any covariates $X_i$ In our particular example, this means that the probability of receiving the treatment is the same for different groups defined by these covariates, such as gender and race. Specifically, females are equally likely to get treated compared to males, and Blacks are equally likely to be treated compared to Whites. Within both the treatment and control groups, it is highly likely that the proportion of Blacks and Whites, as well as males and females, will be similar -- an attribute known as balance.
+
+The **independence assumption** is one of the necessary assumptions to proceed further but it is not sufficient. Additional two assumptions are needed to proceed ahead: **overlap** and **Stable Unit Treatment Value Assumption (SUTVA)**. The overlap assumption states that observations in both the treatment and control groups fall within the common support. For instance, this assumption is violated if the treatment group consist of all females and the control group consist of all males as one would not be able to attain balance in covariates. The independence and overlap assumption together constitute a property known as **stong ignorability** of assignment, which is necessary for the identification of the treatment effect. The SUTVA assumption is the *no interference assumption* defining that the treatment status of one unit should not affect the potential outcome for other units. In our example, tutoring treatment for a unit in the treatment group should not change the potential outcome for other units. This assumption breaks down if there is a spillover effect, for example, if the a student in the treatment group helps her friend in the control group. 
+
+
+## Average treatment effect (ATE) 
+
+Now the **average treatment effect (ATE)** is defined as: 
+
+\begin{equation} 
+ATE = E(Y_i(1)) - E(Y_i(0))
+\end{equation}
+
+$Y_i(1)$ denotes the outcome for an unit $i$ in presence of treatment, whereas $Y_i(0)$ is the realization for the same unit $i$ in absence of the treatment. As we know, it is impossible to measure the unit $i$ in two different states (with and without treatment).
+
+For a brief moment, let's assume the presence of a parallel universe that includes Alia, Ryan, Shrey, Samaira, and Rakshya in the course. In one universe (actual universe) the treatment for these individuals are randomly allocated: $W_{Alia} = 1$, $W_{Ryan} = 0$, $W_{Shrey} = 0$, $W_{Samaira} = 1$,  $W_{Rakshya} = 0$. In the other (parallel) universe, everything is similar to the actual universe except that the treatment 
+status is exactly opposite. In this case, individual specific treatment effect can be estimated by taking the difference in individual specific outcomes across two universes. For example, the treatment effect for Alia is $Y_{Alia}(1) - Y_{Alia}(0).$ The average of such individual treatment effect gives the average treatment effect, ATE. This is feasible since a perfect counterfactual is available for all the units given the assumption of a parallel universe.
+
+A major difficulty is that one cannot observe units simultaneously with and without treatment in reality. This means that the perfect counterfactual does not really exist.
+In other words, both $Y_i(1)$ and $Y_i(0)$ cannot be observed at the same time as the parallel universe does not actually exist, at least to our understanding. So in a sense, causal inference can be thought as a missing data problem -- when estimating ATE, $Y_i(0)$ is not observed if $Y_i(1)$ is. This unfortunately does not allow us to estimate individualized treatment effect. The best we can do (as of yet) is use the **independence assumption** as well as **overlap** assumption together and evalute ATE. 
+
+The independence condition that $Y_i(0), \; Y_i(1) \perp W_i$ gives: $E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)$. The term, $E(Y_i(0))$, in ATE equation is replaced by $E(Y_i|W_i = 0)$.  
+
+
+In the case of a convincingly constructed randomized experiment, the ATE is given as: 
+
+\begin{equation}
+ATE = E(Y_i | W_i = 1) - E(Y_i | W_i = 0)
+\end{equation}
+
+ 
+Note that ATE evaluates treatment effect for the whole population by comparing the treated units to the control units.
+
+## Average treatment effect on the treated (ATT)
+The **average treatment effect on the treated** is concerned with the evaluation of treatment effects for only those units that are treated. Formally, it is defined as: 
+
+\begin{equation}
+ATT = E(Y_i(1) - Y_i(0) | W_i = 1)
+\end{equation}
+
+Note that ATE is only concerned with a subset of the population who received the treatment, $E[.|W_i = 1]$. Here, ATT is comparing outcomes among the treated units in presence of the treatment versus what the outcomes would have been in absence of the treatment only for units receiving the treatment. Hence, only one segment of the counterfactual (potential outcome) is required. In our example, the counterfactual for Alia and Samaira would allow estimation of ATT, whereas ATE requires counterfactual for everyone.
+
+The independence condition states that on average the potential outcomes for the treated group in absence of the treatment would be similar to the average outcome for the control group, i.e. $E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)$. This allows re-writing ATT as the following: 
+
+\begin{align}
+ATT = E\{E(Y_i | W_i = 1) - E(Y_i | W_i = 0) | W_i = 1\} \\
+ATT = E(Y_i | W_i = 1) - E(Y_i | W_i = 0) 
+\end{align}
+
+The second line follows from the independence assumption which allows this: $E\{E(Y_i | W_i = 0) | W_i = 1\} = E(Y_i | W_i = 0).$ Under the **independence assumption** this means that we can estimate ATT by substrating the averages of exam score across the treated and control units. In purely randomized experiments, if there is a perfect case of compliance, then the ATT will be similar to ATE.
+
+## An estimation example 
+
+```{r}
+# create a function to estimate the treatment effects
+fun_ATE  <- function(tau, N){
+# @arg tau: true treatment effect
+# @arg N:   sample size
+# Return tau_hat: estimate of the treatment effect      
+    gender  <- rbinom(N, size = 1, p = 0.5)
+    race  <- rbinom(N, size = 1, p = 0.5)
+    W  <- rbinom(N, size = 1, p = 0.5)    
+    Y  <- 50 + tau * W  + gender * 5 + race * 10 + rnorm(n = N, mean = 5, sd = 5)
+
+    tau_hat  <-  mean(Y[which(W == 1)]) - mean(Y[which(W == 0)]) 
+    return(tau_hat)
+}
+
+# print treatment effect
+print(paste("the ATE estimate is: ", fun_ATE(tau = 10, N = 2000)))
+
+
+# run 2000 replications to get a distribution of tau_hats
+reps  <-  2000
+tau.hats  <- rep(0, reps)
+
+for(i in 1:reps){
+    tau.hats[i]  <- fun_ATE(tau = 10, N = 2000)
+}
+
+# histogram of tau hats
+hist(tau.hats, breaks = 30)
+
+# obtaining the standard error
+print(paste("the mean of tau hats : ", mean(tau.hats)))
+print(paste("the standard error of tau hats : ", sd(tau.hats)))
+
+```
+
+## Conditional Unconfoundedness assumption 
+
+Most of the time the treatment assignment may not be fully random but can be driven by some selective covariates. Referring to the tutoring example, it may be unethical to disallow someone in the control group who wants to attend the tutoring sessions. As such, tutoring sessions may be voluntarily held, where students systematically select whether to attend the sessions. 
+
+
+Say, females and Blacks are more likely to attend the tutoring session and both of these variables are also likely to yield higher potential outcome. This means that females and Blacks are more likely to have higher exam score in absence of the treatment compared to males and Whites. It is easy to see that the treatment assignment is correlated with the potential outcomes and the **independence assumption** is violated. This is true in many cases of observational settings and even in randomized experiments. We require some adjustments before being able to estimate treatment effects in such cases.  
+
+If we know the treatment mechanism fairly well then we can still proceed further to estimate the treatment effects. For example, treatment assignment is (voluntarily)
+more tilted towards females than males or Blacks than Whites. In this case, we would want to invoke **conditional independence** assumption. Formally, this states that $Y_i(0), \; Y_i(1) \perp W_i  | X_i$. This means that conditional upon the covariates, the treatment assignment will be more or less random. Here, one would want to estimate ATT within each strata: $i)$ female-Black, $ii)$ female-White, $iii)$ male-Black, and $iv)$ male-White, and take a weighted average of the strata-specific ATEs by using the proportion of the sample in the given strata as weights. The conditional independence assumption means that within each strata treatment assignment is random. The following example illustrates this concept. Note that the true treatment effect is 10.
+
+```{r}
+ fun_ATE2  <- function(N, tau){
+
+# @arg tau: true treatment effect
+# @arg N:   sample size
+# Return tau_hat: estimate of the treatment effect using conditional randomness assumption   
+# Return tau_hat2: estimate of the treatment effect wrongly using unconditional independence assumption
+# Return reg_tau: estimate from conditioning using regression but from a misspecified model
+
+    # create pseudo data
+    gender  <- rbinom(N, size = 1, p = 0.5)
+    race  <- rbinom(N, size = 1, p = 0.5)
+    W  <- rbinom(N, size = 1, p = 0.2 + 0.4 * (gender > 0) + 0.2 * (race > 0))    
+    Y  <- 40 + 10 * W  + gender * 2 + race * 5 + 25 * race * gender + rnorm(n = N, mean = 5, sd = 5)
+
+
+    # female-Blacks
+    tau_hat1  <-  mean(Y[which(W == 1 & gender == 1 & race == 1)]) - mean(Y[which(W == 0 & gender == 1 & race == 1)]) 
+    w1  <- sum(gender == 1 & race == 1) / N
+
+    # female-Whites
+    tau_hat2  <-  mean(Y[which(W == 1 & gender == 1 & race == 0)]) - mean(Y[which(W == 0 & gender == 1 & race == 0)]) 
+    w2  <- sum(gender == 1 & race == 0) / N
+
+    # male-Blacks
+    tau_hat3  <-  mean(Y[which(W == 1 & gender == 0 & race == 1)]) - mean(Y[which(W == 0 & gender == 0 & race == 1)]) 
+    w3  <- sum(gender == 0 & race == 1) / N
+
+    # male-Whites
+    tau_hat4  <-  mean(Y[which(W == 1 & gender == 0 & race == 0)]) - mean(Y[which(W == 0 & gender == 0 & race == 0)]) 
+    w4  <- sum(gender == 0 & race == 0) / N
+
+    tau_hat  <- tau_hat1 * w1 + tau_hat2 * w2 + tau_hat3 * w3 + tau_hat4 * w4
+    tau_hat2  <- mean(Y[W == 1]) - mean(Y[W == 0])
+
+    # a mis-specified regression model
+    reg  <- lm(Y ~ W + gender)
+    reg_tau  <- coefficients(reg)[[2]]
+
+    return(list(table(gender[W == 1]), table(race[W == 1]), tau_hat, tau_hat2, reg_tau))
+}
+
+ATE2_results  <- fun_ATE2(N = 20000, tau = 10)
+print(paste(c("treated males: ", "treated females: ") , ATE2_results[[1]]))
+print(paste(c("treated Whites: ", "treated Blacks: ") , ATE2_results[[2]])) 
+
+print(paste("ATE conditioned on Xs is :", ATE2_results[[3]]))
+print(paste("ATE not conditioned on Xs is :", ATE2_results[[4]]))
+
+
+# get tau_hats from replications 
+
+store  <- rep(0, reps) 
+store2  <- store 
+store.reg  <- store
+
+for(i in 1:reps){
+    ATE.results  <- fun_ATE2(N = 20000, tau = 10)
+    store[i] <- ATE.results[[3]]
+    store2[i]  <- ATE.results[[4]]
+    store.reg[i]  <- ATE.results[[5]]
+}
+
+# histogram of tau_hat conditioned 
+hist(store, main = "tau hats conditioned")
+print(paste("The standard error from the conditioned approach is:", sd(store)))
+hist(store2, main = "tau hats not conditioned")
+
+```
+
+The estimate of ATT is much closer to the true parameter, 10, when conditioned upon the covariates as compared to an unconditional approach (ATT estimate = 19).
+This example highlights the importance of conditioning on $X$s when evaluating the treatment effects if the treatment assignment is correlated with the potential outcomes. In this case, Blacks and females are more likely to have higher scores in general even without the treatment and both of these subgroups are also more likely to be treated. Treatment is not only non-random but is systematically correlated with the outcomes. 
+
+Since we have full information on the treatment assignment mechanism, after conditioning for the covariates the treatment assignment is random. In other words, within Black vs. White race groups, for example, the treatment assignment is randomly allocated, which means that $E(Y_i(0)| W_i = 1, X_i = x) = E(Y_i | W_i = 0, X_i = x)$. This allows estimation of ATE for each subgroup or strata. After estimating ATE for each strata, the ATEs are averaged using the sample size of the strata as weights.
+
+One problem with the approach highlighted above is that in complex settings, with many determinants (multi-dimensionality) of treatment or in presence of continuous covariates, the sub-space required for the analyses highlighted above will be thinned out too soon. As an alternative, regression has been rigorously used as a tool-kit to control for covariates. While there are benefits of using a regression framework, it is noway a panacea. This is specifically true if the regression models are misspecified. Below we will use a misspecified version of the regression model to see if we can recover the treatment estimate close to the true value.
+
+```{r}
+print(paste("ATE estimated from misspecified regression model:", ATE2_results[[5]]))
+print(paste("The standard error is:", sd(store.reg)))
+hist(store.reg, main = "Treatment effects using regression")
+```
+
+## Discussion 
+
+We discussed the causal effect using the potential outcome framework and the assumptions governing its identification. Mainly, we focused on the independence assumption and conditional independence assumption, following the SUTVA (Stable Unit Treatment Value Assumption) and overlap assumption. While the conditional independence assumption can often help us identify causal effects in randomized experiments, it can be quite stringent in observational studies. Therefore, it is important to explore methods that can help us identify causal effects in observational settings.
+
+
+## Reference
+
+
+
+

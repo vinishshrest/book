@@ -1,0 +1,259 @@
+# Heterogeneous Treatment Effects
+
+```{r, echo = FALSE, include = FALSE}
+#################################
+#
+# Author: VS
+# Last Revised: Jan 18, 2024
+# Keywords: Heterogeneous Treatment Effects
+# using Lasso, GRF
+#
+#################################
+
+rm(list = ls())
+
+# making table
+library("kableExtra")
+
+# Helper packages
+library(dplyr) # for data wrangling 
+library(ggplot2) # for graphics
+library(splines)
+
+# Modeling packages 
+library(ranger)
+library(caret) # for automating the tuning process
+library(grf)
+library(glmnet) # for implementing regularized regression
+
+```
+
+
+
+This article summarizes heterogeneous treatment effects using ML. 
+
+Simply put, its defined as the variation in response to treatment across several subgroups. For example, the impacts of Medicaid expansion on labor market outcomes can vary depending on uninsured rate prior to the expansion; the effects of discussion intervention program aimed to normalize disscussion regarding menstruation can increase demand for menstrual health products at a higher rate among those with high psychological cost in the baseline; in personalized medical treatment, we would want to identify the sub-group with higher response to a particular type of treatment. 
+
+It is different from average treatment effect (ATE) such that the ATE focuses on the whole group, while heterogeneous treatment effect pertains to the specific sub-group characterized by features ($X$s). In this sense, one can think of ATE as the weighted average of subgroup specific ATEs. 
+
+Using the potential outcome framework, ATE is given by: $E[Y_i^{1} - Y_i^{0}]$. 
+
+The heterogeneous treatment is: $E[Y_i^{1} - Y_i^{0} | X_i = x ]$. Its the treatment conditional on $X_i$, which is determined prior to observing the data. Hence, its also termed as the conditional average treatment effect (CATE). 
+
+One simple example borrowed from Wager's lecture notes to illustrate the concept is that of smoking in Geneva and Palo Alto. Say, two RCTs are conducted in Palo Alto and Geneva to evaluate whether cash incentives among teenagers can reduce the prevalence of smoking. 
+
+```{r}
+
+# Palo-Alto
+
+smoke_mat  <- function(smoke_vec){
+    smoke  <- matrix(0, nrow =2, ncol = 3)
+    smoke[, 1]  <- c("Treat", "Control")
+    smoke[ ,2]  <- c(smoke_vec[1], smoke_vec[2])
+    smoke[ ,3]  <- c(smoke_vec[3], smoke_vec[4])
+    return(smoke)
+}
+
+smoke  <- smoke_mat(c(152, 2362, 5, 122))
+colnames(smoke)  <- c("Palo Alto", "Non-S.", "Smoker")
+
+data.frame(smoke)  %>% kable()  %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+smoke  <- smoke_mat(c(581, 2278, 350, 1979))
+colnames(smoke)  <- c("Geneva", "Non-S.", "Smoker")
+
+data.frame(smoke)  %>% kable()  %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+$\hat{\tau}_{PA} = \frac{5}{152+5} - \frac{122}{2362 + 122} \approx -1.7 pp$
+
+$\hat{\tau}_{GVA} = \frac{350}{581+350} - \frac{1979}{2278 + 1979} \approx -8.9 pp$
+
+$\hat{\tau} = \frac{2641}{2641 + 5188}\tau_{PA} + \frac{5188}{2641 + 5188}\tau_{GVA}$. 
+
+Here, $\hat{\tau}_{PA}$ is an estimate of $E[smoke \;prevalence | \; W = 1, \; X = PA] \; - \; E[smoke \;prevalence | \; W = 0, \; X = PA]$, and its the treatment effect particular to Palo Alto. The average treatment effect $\hat{\tau}$ is the weighted average of the two treatment effects.
+
+
+## Some ways to estimate CATE
+
+Robinson's partially linear model for homogeneous treatment effect is written as: 
+
+$Y_i = \tau W_i + f(X_i) + \epsilon_i \; ........(equation \; 1)$ 
+
+Here, $\tau$ is assumed constant across sub-spaces of $X$. We can expand to write Robinson's partially linear model as: 
+
+$Y_i = \tau(X_i) W_i + f(X_i) + \epsilon_i \; ........(equation \; 2)$ 
+
+where, $\tau(.)$ varies with $x$. 
+
+Equation 2 can be expressed as residual-on-residual regression format of:
+
+$Y_i - m(X_i) = \tau(X_i) (W_i - e(X_i)) + \epsilon_i \; ........(equation \; 3)$
+
+where, $m(x)$ is the conditional expectation of $Y$ given $X$. 
+
+$m(x) = E[Y_i | \; X_i = x] = \mu_{W = 0}(X_i) + \tau(X_i) e(X_i)$, 
+where $\mu_{0}(X_i)$ is the baseline conditional response (in absense of treatment) and $e(x) = P(W_i = 1 | \; X_i = x)$.^[The distinction between 
+$m(x)$ and $m(X_i)$ is such that the former is estimation performed at the new data point $x$.] 
+
+$\tau(X)$ is parameterized as $\tau(x) = \psi(x).\beta$, where $\psi$ is some pre-determined set of basis functions: $\chi \rightarrow R^k$.
+
+A feasible loss function can be devised using equation 3 and using estimates of $m(x)$ and $e(x)$ from cross-fitting. 
+
+$L = \frac{1}{n} \sum_{i = 1}^n((Y_i - \hat{m}(X_i)^{-k(i)}) - (W_i - \hat{e}(X_i)^{-k(i)}) \; \psi(X_i).\beta)^2$. Note that the parameter of interest is $\beta$. 
+
+LASSO can be used to estimate $\hat{\beta}$, where:
+
+$\hat{\beta} = argmin_{\beta}\{L + \lambda \; ||\beta||_{1}\}$, where $\lambda$ is the regularizer on the complexity of $\tau(.)$.^[One can build a highly complex model and improve the in-sample fit. However, this model may perform badly while predicting out-of-sample cases. As such, the complexity of the model should be penalized while training the model.]  
+
+**Note: The other approach is to use random forest to measure out weight of an observation $i$ in relation to the test point $x$. This approach is done using causal forest in the Generalized Random Forest framework.** 
+
+## Estimation 
+
+```{r}
+
+set.seed(194)
+
+# Generate Data 
+n <- 2000
+p <- 10
+X <- matrix(rnorm(n * p), n, p)
+X.test <- matrix(0, 101, p)
+X.test[, 1] <- seq(-2, 2, length.out = 101)
+
+W <- rbinom(n, 1, 0.4 + 0.2 * (X[, 1] > 0))
+prob  <- 0.4 + 0.2 * (X[, 1] > 0)
+Y <- pmax(X[, 1], 0) * W + X[, 2] + pmax(X[, 3], 0) + rnorm(n)
+
+###################################
+###################################
+#
+#
+# 1. estimate m(X) and e(X)
+#    using cross-fitting
+#
+###################################
+###################################
+
+# cross-fitting index 
+K  <- 10 # total folds
+ind  <- sample(1:length(W), replace = FALSE, size = length(W))
+folds  <- cut(1:length(W), breaks = K, labels = FALSE)
+index  <- matrix(0, nrow = length(ind) / K, ncol = K)
+for(f in 1:K){
+    index[, f]  <- ind[which(folds == f)]
+}
+
+# Build a function to estimate conditional means (m(x) and e(x)) using random forest
+fun.rf.grf  <- function(X, Y, predictkfold){
+    rf_grf  <- regression_forest(X, Y, tune.parameters = "all")
+    p.grf  <- predict(rf_grf, predictkfold)$predictions
+    return(p.grf)
+}
+
+# storing 
+predict.mat  <- matrix(0, nrow = nrow(index), ncol = K) # to store e(x) 
+predict.mat2  <- predict.mat # to store m(x)
+
+
+# for each fold k use other folds for estimation 
+
+for(k in seq(1:K)){
+    predict.mat[, k]  <- fun.rf.grf(X = X[c(index[, -k]), ], Y = W[index[, -k]], predictkfold = X[c(index[, k]), ])
+    predict.mat2[, k]  <- fun.rf.grf(X = X[c(index[, -k]), ], Y = Y[c(index[, -k])], 
+                        predictkfold = X[c(index[, k]), ])
+}
+
+W.hat  <- c(predict.mat)
+Y.hat  <- c(predict.mat2)
+
+################################
+################################
+#
+# 2. Use LASSO to minimize
+#    the loss function
+################################
+################################
+
+# rearrange features and response according to index 
+XX  <- X[c(index), ]
+YY  <-  Y[c(index)]
+WW  <- W[c(index)]
+
+resid.Y  <-  YY - Y.hat 
+resid.W  <- WW - W.hat 
+
+# Create basis expansion of features
+for(i in seq(1, ncol(XX))) {
+    if(i == 1){
+        XX.basis  <- bs(XX[, i], knots = c(0.25, 0.5, 0.75), degree = 2)
+    }else{
+        XX.basisnew  <- bs(XX[, i], knots = c(0.25, 0.5, 0.75), degree = 2)
+        XX.basis  <- cbind(XX.basis, XX.basisnew)
+    }
+}
+
+resid.W.X  <-  resid.W * XX.basis
+resid.W.X  <- model.matrix(formula( ~ 0 + resid.W.X))
+#plot(XX[ ,1], pmax(XX[ , 1], 0))
+
+# cross validation for lasso to tune lambda
+lasso  <- cv.glmnet(
+    x = resid.W.X,
+    y = resid.Y, 
+    alpha = 1, 
+    intercept = FALSE
+)
+
+#plot(lasso, main = "Lasso penalty \n \n")
+
+# lambda with minimum MSE
+best.lambda  <- lasso$lambda.min
+
+lasso_tuned  <- glmnet(
+    x = resid.W.X,
+    y = resid.Y, 
+    lambda = best.lambda, 
+    intercept = FALSE
+)
+
+#print(paste("The coefficients of lasso tuned are:", coef(lasso_tuned), sep = " "))
+pred.lasso  <-  predict(lasso, newx = XX.basis)
+
+
+#########################
+#
+# Causal Forest
+#
+#########################
+
+X.test  <- matrix(0, nrow = nrow(X), ncol = ncol(X))
+X.test[, 1]  <- seq(-3, 3, length.out = nrow(X))
+
+tau.forest  <- causal_forest(X, Y, W)
+tau.forest
+
+tau.hat  <- predict(tau.forest, X.test)$predictions
+
+
+par(oma=c(0,4,0,0))
+plot(XX[order(XX[ , 1]), 1], pred.lasso[order(XX[, 1])], ylim = c(0, 3), t = "l", xlab = " ", ylab = " ", xlim = c(-3, 3), lwd = 1.5)
+par(new = TRUE)
+plot(XX[order(XX[, 1]), 1], pmax(XX[order(XX[, 1]), 1], 0), col ="red", ylim = c(0, 3), t = "l",  xlab = "X1", ylab = "tao(x)", xlim = c(-3, 3), lwd = 1.5)
+par(new = TRUE)
+plot(X.test[order(X.test[, 1]), 1], tau.hat[order(X.test[, 1])], t = "l", col = "blue", ylim = c(0, 3),  xlab = "X1", ylab = "", xlim = c(-3, 3), lwd = 1.5)
+legend("topleft", c("Loss min Lasso", "True Effect", "Causal Forest"), col = c("black", "red", "blue"), lty = rep(1, 3))
+```
+
+## Some Remarks and Questions
+For LASSO, we are using the basis of polynomial splines of degree 2 with interior knots at 25th, 75th, and 50th percentiles of each feature. We can see that although the effects are picked up, its slightly late and are lower compared to the true effect. A basis for linear splines performs well in this case. 
+
+The causal forest framework on the other hand performs better. 
+
+
+
+
+
+
