@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.2 Average treatment effect (ATE) | Causal Inference</title>
-  <meta name="description" content="2.2 Average treatment effect (ATE) | Causal Inference" />
+  <title>2.2 Average treatment effect (ATE) | IPW and AIPW</title>
+  <meta name="description" content="2.2 Average treatment effect (ATE) | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.2 Average treatment effect (ATE) | Causal Inference" />
+  <meta property="og:title" content="2.2 Average treatment effect (ATE) | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.2 Average treatment effect (ATE) | Causal Inference" />
+  <meta name="twitter:title" content="2.2 Average treatment effect (ATE) | IPW and AIPW" />
   
   
   
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="potential-outcome-framework-neyman-rubin-causal-model.html"/>
-<link rel="next" href="average-treatment-effect-on-the-treated-att.html"/>
+<link rel="next" href="rct.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -52,6 +52,8 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -163,15 +165,16 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
 <li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
-<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
-<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
 <li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
 <li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
@@ -202,7 +205,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
           </h1>
         </div>
 
@@ -212,21 +215,22 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="average-treatment-effect-ate" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Average treatment effect (ATE)<a href="average-treatment-effect-ate.html#average-treatment-effect-ate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Now the <strong>average treatment effect (ATE)</strong> is defined as:</p>
+<p>Our target is to estimate the effects of the treatment.</p>
+<p>For a brief moment, let’s assume the presence of a parallel universe that includes Alia, Ryan, Shrey, Samaira, and Rakshya in the course. In one universe (actual universe) the treatment for these individuals are randomly allocated: <span class="math inline">\(W_{Alia} = 1\)</span>, <span class="math inline">\(W_{Ryan} = 0\)</span>, <span class="math inline">\(W_{Shrey} = 0\)</span>, <span class="math inline">\(W_{Samaira} = 1\)</span>, <span class="math inline">\(W_{Rakshya} = 0\)</span>. In the other (parallel) universe, everything is similar to the actual universe except that the treatment
+status is exactly opposite. In this case, individual specific treatment effect can be estimated by taking the difference in individual specific outcomes across two universes. For example, the treatment effect for Alia is <span class="math inline">\(Y_{Alia}(1) - Y_{Alia}(0).\)</span> This is feasible since a perfect counterfactual is available for all the units given the parallel universe. The average of such individual treatment effect gives the average treatment effect, ATE.</p>
+<p>The target is to estimate <strong>average treatment effect (ATE)</strong>, which is defined as:</p>
 <p><span class="math display">\[\begin{equation}
 ATE = E(Y_i(1)) - E(Y_i(0))
 \end{equation}\]</span></p>
 <p><span class="math inline">\(Y_i(1)\)</span> denotes the outcome for an unit <span class="math inline">\(i\)</span> in presence of treatment, whereas <span class="math inline">\(Y_i(0)\)</span> is the realization for the same unit <span class="math inline">\(i\)</span> in absence of the treatment. As we know, it is impossible to measure the unit <span class="math inline">\(i\)</span> in two different states (with and without treatment).</p>
-<p>For a brief moment, let’s assume the presence of a parallel universe that includes Alia, Ryan, Shrey, Samaira, and Rakshya in the course. In one universe (actual universe) the treatment for these individuals are randomly allocated: <span class="math inline">\(W_{Alia} = 1\)</span>, <span class="math inline">\(W_{Ryan} = 0\)</span>, <span class="math inline">\(W_{Shrey} = 0\)</span>, <span class="math inline">\(W_{Samaira} = 1\)</span>, <span class="math inline">\(W_{Rakshya} = 0\)</span>. In the other (parallel) universe, everything is similar to the actual universe except that the treatment
-status is exactly opposite. In this case, individual specific treatment effect can be estimated by taking the difference in individual specific outcomes across two universes. For example, the treatment effect for Alia is <span class="math inline">\(Y_{Alia}(1) - Y_{Alia}(0).\)</span> The average of such individual treatment effect gives the average treatment effect, ATE. This is feasible since a perfect counterfactual is available for all the units given the assumption of a parallel universe.</p>
 <p>A major difficulty is that one cannot observe units simultaneously with and without treatment in reality. This means that the perfect counterfactual does not really exist.
-In other words, both <span class="math inline">\(Y_i(1)\)</span> and <span class="math inline">\(Y_i(0)\)</span> cannot be observed at the same time as the parallel universe does not actually exist, at least to our understanding. So in a sense, causal inference can be thought as a missing data problem – when estimating ATE, <span class="math inline">\(Y_i(0)\)</span> is not observed if <span class="math inline">\(Y_i(1)\)</span> is. This unfortunately does not allow us to estimate individualized treatment effect. The best we can do (as of yet) is use the <strong>independence assumption</strong> as well as <strong>overlap</strong> assumption together and evalute ATE.</p>
-<p>The independence condition that <span class="math inline">\(Y_i(0), \; Y_i(1) \perp W_i\)</span> gives: <span class="math inline">\(E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)\)</span>. The term, <span class="math inline">\(E(Y_i(0))\)</span>, in ATE equation is replaced by <span class="math inline">\(E(Y_i|W_i = 0)\)</span>.</p>
-<p>In the case of a convincingly constructed randomized experiment, the ATE is given as:</p>
+This again emphasizes causal inference as a missing data problem – when estimating the treatment effect of an unit <span class="math inline">\(i\)</span>, <span class="math inline">\(Y_i(0)\)</span> is not observed if <span class="math inline">\(Y_i(1)\)</span> is and vice-versa. This unfortunately does not allow us to estimate individualized treatment effect. The best we can do (as of yet) is use the <strong>independence assumption</strong> as well as <strong>overlap</strong> assumption together and evalute ATE.</p>
+<p>Note that the independence condition, $ W_i Y_i(0), ; Y_i(1)$, gives: <span class="math inline">\(E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)\)</span>. The term, <span class="math inline">\(E(Y_i(0))\)</span>, in ATE equation is replaced by <span class="math inline">\(E(Y_i|W_i = 0)\)</span>.</p>
+<p>In the case of a pure randomized experiment, the ATE is given as:</p>
 <p><span class="math display">\[\begin{equation}
 ATE = E(Y_i | W_i = 1) - E(Y_i | W_i = 0)
 \end{equation}\]</span></p>
-<p>Note that ATE evaluates treatment effect for the whole population by comparing the treated units to the control units.</p>
+<p>ATE evaluates treatment effect for the whole population by comparing the treated units to the control units.</p>
 </div>
             </section>
 
@@ -234,7 +238,7 @@ ATE = E(Y_i | W_i = 1) - E(Y_i | W_i = 0)
         </div>
       </div>
 <a href="potential-outcome-framework-neyman-rubin-causal-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="average-treatment-effect-on-the-treated-att.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="rct.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

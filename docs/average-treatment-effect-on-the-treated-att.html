@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.3 Average treatment effect on the treated (ATT) | Causal Inference</title>
-  <meta name="description" content="2.3 Average treatment effect on the treated (ATT) | Causal Inference" />
+  <title>2.4 Average treatment effect on the treated (ATT) | IPW and AIPW</title>
+  <meta name="description" content="2.4 Average treatment effect on the treated (ATT) | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.3 Average treatment effect on the treated (ATT) | Causal Inference" />
+  <meta property="og:title" content="2.4 Average treatment effect on the treated (ATT) | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.3 Average treatment effect on the treated (ATT) | Causal Inference" />
+  <meta name="twitter:title" content="2.4 Average treatment effect on the treated (ATT) | IPW and AIPW" />
   
   
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="average-treatment-effect-ate.html"/>
+<link rel="prev" href="rct.html"/>
 <link rel="next" href="an-estimation-example.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -52,6 +52,8 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -163,15 +165,16 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
 <li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
-<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
-<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
 <li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
 <li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
@@ -202,7 +205,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
           </h1>
         </div>
 
@@ -210,13 +213,13 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="average-treatment-effect-on-the-treated-att" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Average treatment effect on the treated (ATT)<a href="average-treatment-effect-on-the-treated-att.html#average-treatment-effect-on-the-treated-att" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="average-treatment-effect-on-the-treated-att" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Average treatment effect on the treated (ATT)<a href="average-treatment-effect-on-the-treated-att.html#average-treatment-effect-on-the-treated-att" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The <strong>average treatment effect on the treated</strong> is concerned with the evaluation of treatment effects for only those units that are treated. Formally, it is defined as:</p>
 <p><span class="math display">\[\begin{equation}
 ATT = E(Y_i(1) - Y_i(0) | W_i = 1)
 \end{equation}\]</span></p>
-<p>Note that ATE is only concerned with a subset of the population who received the treatment, <span class="math inline">\(E[.|W_i = 1]\)</span>. Here, ATT is comparing outcomes among the treated units in presence of the treatment versus what the outcomes would have been in absence of the treatment only for units receiving the treatment. Hence, only one segment of the counterfactual (potential outcome) is required. In our example, the counterfactual for Alia and Samaira would allow estimation of ATT, whereas ATE requires counterfactual for everyone.</p>
+<p>ATE is only concerned with a subset of the population who received the treatment, <span class="math inline">\(E[.|W_i = 1]\)</span>. Here, ATT is comparing outcomes among the treated units in presence of the treatment versus what the outcomes would have been in absence of the treatment only for units receiving the treatment. Hence, only one segment of the counterfactual (potential outcome) is required. In our example, the counterfactual for Alia and Samaira would allow estimation of ATT, whereas ATE requires counterfactual for everyone.</p>
 <p>The independence condition states that on average the potential outcomes for the treated group in absence of the treatment would be similar to the average outcome for the control group, i.e. <span class="math inline">\(E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)\)</span>. This allows re-writing ATT as the following:</p>
 <p><span class="math display">\[\begin{align}
 ATT = E\{E(Y_i | W_i = 1) - E(Y_i | W_i = 0) | W_i = 1\} \\
@@ -229,7 +232,7 @@ ATT = E(Y_i | W_i = 1) - E(Y_i | W_i = 0)
           </div>
         </div>
       </div>
-<a href="average-treatment-effect-ate.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rct.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="an-estimation-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

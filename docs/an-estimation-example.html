@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.4 An estimation example | Causal Inference</title>
-  <meta name="description" content="2.4 An estimation example | Causal Inference" />
+  <title>2.5 An estimation example | IPW and AIPW</title>
+  <meta name="description" content="2.5 An estimation example | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.4 An estimation example | Causal Inference" />
+  <meta property="og:title" content="2.5 An estimation example | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.4 An estimation example | Causal Inference" />
+  <meta name="twitter:title" content="2.5 An estimation example | IPW and AIPW" />
   
   
   
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="average-treatment-effect-on-the-treated-att.html"/>
-<link rel="next" href="conditional-unconfoundedness-assumption.html"/>
+<link rel="next" href="unconfoundedness-assumption.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -52,6 +52,8 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -163,15 +165,16 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
 <li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
-<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
-<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
 <li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
 <li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
@@ -202,7 +205,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
           </h1>
         </div>
 
@@ -210,8 +213,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="an-estimation-example" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> An estimation example<a href="an-estimation-example.html#an-estimation-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="an-estimation-example" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> An estimation example<a href="an-estimation-example.html#an-estimation-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="an-estimation-example.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a function to estimate the treatment effects</span></span>
 <span id="cb1-2"><a href="an-estimation-example.html#cb1-2" aria-hidden="true" tabindex="-1"></a>fun_ATE  <span class="ot">&lt;-</span> <span class="cf">function</span>(tau, N){</span>
 <span id="cb1-3"><a href="an-estimation-example.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># @arg tau: true treatment effect</span></span>
@@ -228,7 +231,7 @@ div.csl-indent {
 <span id="cb1-14"><a href="an-estimation-example.html#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="an-estimation-example.html#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># print treatment effect</span></span>
 <span id="cb1-16"><a href="an-estimation-example.html#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the ATE estimate is: &quot;</span>, <span class="fu">fun_ATE</span>(<span class="at">tau =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">2000</span>)))</span></code></pre></div>
-<pre><code>## [1] &quot;the ATE estimate is:  9.73551634512793&quot;</code></pre>
+<pre><code>## [1] &quot;the ATE estimate is:  9.9158463295083&quot;</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="an-estimation-example.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run 2000 replications to get a distribution of tau_hats</span></span>
 <span id="cb3-2"><a href="an-estimation-example.html#cb3-2" aria-hidden="true" tabindex="-1"></a>reps  <span class="ot">&lt;-</span>  <span class="dv">2000</span></span>
 <span id="cb3-3"><a href="an-estimation-example.html#cb3-3" aria-hidden="true" tabindex="-1"></a>tau.hats  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, reps)</span>
@@ -242,9 +245,9 @@ div.csl-indent {
 <p><img src="book_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="an-estimation-example.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obtaining the standard error</span></span>
 <span id="cb4-2"><a href="an-estimation-example.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the mean of tau hats : &quot;</span>, <span class="fu">mean</span>(tau.hats)))</span></code></pre></div>
-<pre><code>## [1] &quot;the mean of tau hats :  9.99499889214229&quot;</code></pre>
+<pre><code>## [1] &quot;the mean of tau hats :  10.0009359399682&quot;</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="an-estimation-example.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the standard error of tau hats : &quot;</span>, <span class="fu">sd</span>(tau.hats)))</span></code></pre></div>
-<pre><code>## [1] &quot;the standard error of tau hats :  0.324762684033365&quot;</code></pre>
+<pre><code>## [1] &quot;the standard error of tau hats :  0.346108277345906&quot;</code></pre>
 </div>
             </section>
 
@@ -252,7 +255,7 @@ div.csl-indent {
         </div>
       </div>
 <a href="average-treatment-effect-on-the-treated-att.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="conditional-unconfoundedness-assumption.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="unconfoundedness-assumption.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

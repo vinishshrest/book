@@ -37,19 +37,19 @@ library(grf)
 library(glmnet) # for implementing regularized regression
 ```
 
-## Motivation
+## Average Treatment Effect -- A Re-cap
 
-In a randomized controlled experiment the treatment assignment is random by construction. In other words, treated individuals have equal probability of being untreated: $P(W_i = 1) = P(W_i = 0)$. This leads to: $W_i \perp \{Y_i(0), \; Y_i(1)\}$. Here, $W_i = \{0, \; 1\}$ is the treatment assignment; $Y_i(0)$ and $Y_i(1)$ are potential outcomes without and with treatment. 
+In a purely randomized controlled experiment the treatment assignment is random by construction. In other words, treated individuals have equal probability of being untreated: $P(W_i = 1) = P(W_i = 0)$. This leads to: $W_i \perp \{Y_i(0), \; Y_i(1)\}$. Here, $W_i = \{0, \; 1\}$ is the treatment assignment; $Y_i(0)$ and $Y_i(1)$ are potential outcomes without and with treatment. 
 
 **ATE.** The target is to estimate the average treatment effect: 
 
 $ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)$  
 
-The two assumptions: i) $W_i \perp \{Y_i(0), \; Y_i(1)\}$ (random assignment); and ii) $Y_i(W) = Y_i$ (SUTVA); the ATE estimate $\hat{tau}$ can be written as: 
+Note that using two assumptions: i) $W_i \perp \{Y_i(0), \; Y_i(1)\}$ (unconfoundedness); and ii) $Y_i(W) = Y_i$ (SUTVA); the ATE estimate $\hat{\tau}$ can be written as: 
 
-$\hat{\tau} = \frac{1}{n_T} \sum_{W_i = 1} Y_i - \frac{1}{n_C} \sum_{i \in W_i = 0} Y_i ......... equation (2)$, 
+$\hat{\tau} = \frac{1}{N_T} \sum_{W_i = 1} Y_i - \frac{1}{N_C} \sum_{i \in W_i = 0} Y_i ......... equation (2)$, 
 
-where $n_T$ and $n_C$ are the number of treated and control units, respectively. When assumption $i)$ fails, we can no longer estimate ATE using equation (2). However, we can invoke unconfoundedness to estimate ATE. 
+where $n_T$ and $n_C$ are the number of treated and control units, respectively. When assumption $i)$ fails, we can no longer estimate ATE using equation (2). However, we can invoke conditional unconfoundedness to estimate ATE. 
 
 **Unconfoundedness**: The treatment assignment is as good as random once we control for $X$s. $\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi $.   
 

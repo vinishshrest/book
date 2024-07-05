@@ -3,13 +3,14 @@ work-in-progress
 causal-inference-an-introduction
 potential-outcome-framework-neyman-rubin-causal-model
 average-treatment-effect-ate
+rct
 average-treatment-effect-on-the-treated-att
 an-estimation-example
-conditional-unconfoundedness-assumption
+unconfoundedness-assumption
 discussion
 reference
 ipw-and-aipw
-motivation
+average-treatment-effect-a-re-cap
 a-simple-example
 continuous-features-and-propensity-score
 propensity-score-stratification

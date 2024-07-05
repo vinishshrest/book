@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | Causal Inference</title>
-  <meta name="description" content="2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | Causal Inference" />
+  <title>2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | IPW and AIPW</title>
+  <meta name="description" content="2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | Causal Inference" />
+  <meta property="og:title" content="2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | Causal Inference" />
+  <meta name="twitter:title" content="2.1 Potential Outcome Framework: Neyman-Rubin Causal Model | IPW and AIPW" />
   
   
   
@@ -52,6 +52,8 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -163,15 +165,16 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
 <li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
-<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
-<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
 <li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
 <li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
@@ -202,7 +205,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
           </h1>
         </div>
 
@@ -212,15 +215,22 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="potential-outcome-framework-neyman-rubin-causal-model" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Potential Outcome Framework: Neyman-Rubin Causal Model<a href="potential-outcome-framework-neyman-rubin-causal-model.html#potential-outcome-framework-neyman-rubin-causal-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We are going to use the potential outcome framework to describe the impacts of the treatment following the Neyman-Rubin causal model <span class="citation">(<a href="#ref-splawa1990" role="doc-biblioref">Splawa-Neyman, Dabrowska, and Speed 1923 [1990]</a>; <a href="#ref-rubin1974" role="doc-biblioref">Rubin 1974</a>)</span>. Define <span class="math inline">\(Y_i(0)\)</span> and <span class="math inline">\(Y_i(1)\)</span> as the potential outcomes for an individual <span class="math inline">\(i\)</span> in the case of treatment and without treatment, respectively. The observed variable, <span class="math inline">\(Y_i\)</span>, can be written as a function
+<p>We are going to use the potential outcome framework to describe the impacts of the treatment following the Neyman-Rubin causal model <span class="citation">(<a href="#ref-splawa1990" role="doc-biblioref">Splawa-Neyman, Dabrowska, and Speed 1923 [1990]</a>; <a href="#ref-rubin1974" role="doc-biblioref">Rubin 1974</a>)</span>. Define <span class="math inline">\(Y_i(0)\)</span> and <span class="math inline">\(Y_i(1)\)</span> as the potential outcomes for an individual <span class="math inline">\(i\)</span> in the case of treatment and without treatment, respectively. The potential outcomes are not realized yet. As such it is wrong to say that <span class="math inline">\(Y_{i}(0) = Y_i\)</span>. Let’s spend some time discussing various formats of the potential outcome in relation to what is observed versus what is not.</p>
+<ol style="list-style-type: lower-roman">
+<li><span class="math inline">\([Y_{i}(0)|W_i = 0].\)</span> Here, the expression in the bracket is read as the outcome of an unit <span class="math inline">\(i\)</span> in the no-treatment state conditional upon <span class="math inline">\(i\)</span> actually not receiving the treatment. This is an observed outcome.<br />
+</li>
+<li><span class="math inline">\([Y_{i}(0)|W_i = 1].\)</span> Here, the expression is asking for what the outcome of an unit <span class="math inline">\(i\)</span> who received the treatment <span class="math inline">\((W_i = 1)\)</span> would be in absence of the treatment. This is not observed and is termed as the counterfactual.</li>
+</ol>
+<p>The same goes with the potential outcome <span class="math inline">\(Y_{i}(1)\)</span> – the outcome if <span class="math inline">\(i\)</span> were to be treated.</p>
+<p>The observed variable, <span class="math inline">\(Y_i\)</span>, can be written as a function
 of the potential outcomes as follows:</p>
 <p><span class="math display">\[\begin{equation}
 Y_i = W \times Y_i(1) + (1-W)\times Y_i(0)
 \end{equation}\]</span></p>
-<p>The problem arises as one cannot observe both <span class="math inline">\(Y_i(0)\)</span> and <span class="math inline">\(Y_i(1)\)</span> at the same time, an issue that needs to be dealt with. As such, the causal inference through the lens of Neyman-Rubin causal framework can be seen as the missing data problem. If one has the data for <span class="math inline">\(Y_i(1)\)</span> then the <span class="math inline">\(Y_i(0)\)</span> counterpart is missing and vice-versa.</p>
+<p>The fundamental problem is that one cannot observe both <span class="math inline">\(Y_i(0)\)</span> and <span class="math inline">\(Y_i(1)\)</span> at the same time. As such, the causal inference through the lens of Neyman-Rubin causal framework can be seen as the missing data problem. If one has the data for <span class="math inline">\(Y_i(1)\)</span> then the <span class="math inline">\(Y_i(0)\)</span> counterpart is missing and vice-versa. Much of causal inference is finding ways to deal with the missing-data problem.</p>
 <p>The <strong>independence assumption</strong> allows us to proceed further with causality.
-Formally, a complete random assignment of treatment means: <span class="math inline">\(W_i \perp Y_i(0), Y_i(1)\)</span>. This states that the treatment assignment is independent of potential outcomes. Quite literally, this means that the potential outcome of an individual <span class="math inline">\(i\)</span> in the state of treatment, <span class="math inline">\(Y_i(1)\)</span>, would be equal to the potential outcome <span class="math inline">\(Y_i(0)\)</span> in the state without treatment, whereas the potential outcome of an individual <span class="math inline">\(i\)</span> without treatment, <span class="math inline">\(Y_i(0)\)</span>, would be equal to the potential outcome <span class="math inline">\(Y_i(1)\)</span> in the state with treatment. In other words, the treatment assignment is completely random.</p>
-<p>The independence assumption states that the treatment assignment is independent of any covariates <span class="math inline">\(X_i\)</span> In our particular example, this means that the probability of receiving the treatment is the same for different groups defined by these covariates, such as gender and race. Specifically, females are equally likely to get treated compared to males, and Blacks are equally likely to be treated compared to Whites. Within both the treatment and control groups, it is highly likely that the proportion of Blacks and Whites, as well as males and females, will be similar – an attribute known as balance.</p>
+Formally, a complete random assignment of treatment means: <span class="math inline">\(W_i \perp Y_i(0), Y_i(1)\)</span>. This states that the treatment assignment is independent of potential outcomes. Quite literally, this means that the treatment assignment is not related to the potential outcome. In other words, the treatment assignment is completely random (probability of being treated is 0.5 in the case of binary treatment).</p>
+<p>The independence assumption also states that the treatment assignment is independent of any covariates <span class="math inline">\(X_i\)</span>. In our particular example, this means that the probability of receiving the treatment is the same for different groups defined by these covariates, such as gender and race. Specifically, females are equally likely to get treated compared to males, and Blacks are equally likely to be treated compared to Whites. Within both the treatment and control groups, it is highly likely that the proportion of Blacks and Whites, as well as males and females, will be similar – an attribute known as balance.</p>
 <p>The <strong>independence assumption</strong> is one of the necessary assumptions to proceed further but it is not sufficient. Additional two assumptions are needed to proceed ahead: <strong>overlap</strong> and <strong>Stable Unit Treatment Value Assumption (SUTVA)</strong>. The overlap assumption states that observations in both the treatment and control groups fall within the common support. For instance, this assumption is violated if the treatment group consist of all females and the control group consist of all males as one would not be able to attain balance in covariates. The independence and overlap assumption together constitute a property known as <strong>stong ignorability</strong> of assignment, which is necessary for the identification of the treatment effect. The SUTVA assumption is the <em>no interference assumption</em> defining that the treatment status of one unit should not affect the potential outcome for other units. In our example, tutoring treatment for a unit in the treatment group should not change the potential outcome for other units. This assumption breaks down if there is a spillover effect, for example, if the a student in the treatment group helps her friend in the control group.</p>
 </div>
 <h3>References</h3>

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Causal Inference: An Introduction | Causal Inference</title>
-  <meta name="description" content="2 Causal Inference: An Introduction | Causal Inference" />
+  <title>2 Causal Inference: An Introduction | IPW and AIPW</title>
+  <meta name="description" content="2 Causal Inference: An Introduction | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Causal Inference: An Introduction | Causal Inference" />
+  <meta property="og:title" content="2 Causal Inference: An Introduction | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Causal Inference: An Introduction | Causal Inference" />
+  <meta name="twitter:title" content="2 Causal Inference: An Introduction | IPW and AIPW" />
   
   
   
@@ -52,6 +52,8 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -163,15 +165,16 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
 <li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
-<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
-<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
 <li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
 <li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
@@ -202,7 +205,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
           </h1>
         </div>
 
@@ -215,10 +218,16 @@ div.csl-indent {
 <p>“Correlation is not causality” is one of the most frequently used lines in social science. In a lab experiment, a researcher can perform controlled experiments to determine whether A causes B by controlling for confounders. However, the complexities and interrelations of human behavior create a setting starkly different from the controlled environment of a lab, making things much more convoluted. Causal inference, therefore, can be seen as a process to determine whether A causes B in both lab settings and out-of-lab scenarios.</p>
 <p><strong>A simple example.</strong>
 Say, you are interested in evaluating the effects of a tutoring program on exam scores for an introductory course.</p>
-<p>To begin, in this simple example, we assume that the treatment is randomly assigned. The class is randomly divided into two groups: one group receives the treatment <strong>(treatment group)</strong> and the other group does not receive the treatment <strong>(control group)</strong>. Proper randomization means that each individual has an equal probability of receiving the treatment or not receiving it. This with an arbitrarily high probability ensures balance in both observed and unobserved factors as the sample size grows such that any differences in outcomes between the treatment and control groups can be attributed to the treatment itself, rather than to pre-existing differences between the groups. Of course, balance is not guranteed and in such cases one should think hard whether differences in covariates matter, and if they do, adjustment should be applied. <em>Balance</em> here is defined as an instance when all pre-treatment covariates between the treatment and control groups are similar. If this is attained then it increases confidence that the effect estimated is causal.</p>
+<p>To begin, in this simple example, we assume that the treatment is (purely) randomly assigned. The class is randomly divided into two groups: one group receives the treatment <strong>(treatment group)</strong> and the other group does not receive the treatment <strong>(control group)</strong>. Proper randomization means that each individual has an equal probability of receiving the treatment or not receiving it. This approach with an arbitrarily high probability ensures balance in both observed and unobserved factors as the sample size grows such that any differences in outcomes between the treatment and control groups can be attributed to the treatment itself, rather than to pre-existing differences between the groups.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <em>Balance</em> here is defined as an instance when all pre-treatment covariates between the treatment and control groups are similar. If this is attained then it increases confidence that the treatment and the control units are comparable.</p>
 <p><strong>Set up.</strong> We use <span class="math inline">\(W\)</span> to denote the treatment status such that
 <span class="math inline">\(W_i \in \{0, \; 1\}\)</span>, <span class="math inline">\(Y_i\)</span> is the exam score following the treatment assignment, and <span class="math inline">\(X_i\)</span> are the covariates (e.g., gender, race). The subscript <span class="math inline">\(i\)</span>
 indicates an individual or unit of observation.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Of course, balance is not guranteed and in such cases one should think hard whether differences in covariates matter, and if they do, adjustment should be applied.<a href="causal-inference-an-introduction.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

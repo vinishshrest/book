@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-06-29" />
+<meta name="date" content="2024-07-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -165,15 +165,16 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
 <li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.3</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.4" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.4</b> An estimation example</a></li>
-<li class="chapter" data-level="2.5" data-path="conditional-unconfoundedness-assumption.html"><a href="conditional-unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.5</b> Conditional Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.6</b> Discussion</a></li>
-<li class="chapter" data-level="2.7" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.7</b> Reference</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="motivation.html"><a href="motivation.html"><i class="fa fa-check"></i><b>3.1</b> Motivation</a></li>
+<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
 <li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
 <li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
@@ -222,7 +223,7 @@ div.csl-indent {
 <p><span class="math inline">\(\hat{\tau}_{AIPW} = \frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}(X_i) - \mu_{0}(X_i) + \frac{(Y_i - \hat{\mu}_1(X_i)). W_i}{\hat{e}(X_i)} - \frac{(Y_i - \hat{\mu}_0(X_i)). (1-W_i)}{1 - \hat{e}(X_i)})\)</span></p>
 <p>ML approach using cross-fitting is used to estimate both <span class="math inline">\(\hat{e}(x)\)</span> and <span class="math inline">\(\hat{\mu}_{w}(x)\)</span>. Following the cross-fitting structure, we can formally write the estimate for <span class="math inline">\(\tau\)</span> as:</p>
 <p><span class="math inline">\(\hat{\tau}_{AIPW} = \lowerbracket{\frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}^{-k(i)}(X_i) - \mu_{0}^{-k(i)}(X_i)}_{consistent \; estimate \; of \; \tau} + \frac{(Y_i - \hat{\mu}_1^{-k(i)}(X_i)). W_i}{\hat{e}^{-k(i)}(X_i)} - \frac{(Y_i - \hat{\mu}_0^{-k(i)}(X_i)). (1-W_i)}{1 - \hat{e}^{-k(i)}(X_i)})\)</span></p>
-<p>The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights given by the propensity score. There are two attractive features of AIPW estimate. First, $_{AIPW} is consistent as long as <span class="math inline">\(\hat{e}(x)\)</span> or <span class="math inline">\(\hat{\mu}_{w}(x)\)</span> is consistent. This is because <span class="math inline">\(E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0\)</span>. Second, <span class="math inline">\(\hat{\tau}_{AIPW}\)</span> is a good approximation to oracle <span class="math inline">\(\hat{\tau}_{AIPW}^{*}\)</span> as long as <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are <span class="math inline">\(\sqrt{n}\)</span>-consistent<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, then the following holds.</p>
+<p>The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights given by the propensity score. There are two attractive features of AIPW estimate. First, $_{AIPW} is consistent as long as <span class="math inline">\(\hat{e}(x)\)</span> or <span class="math inline">\(\hat{\mu}_{w}(x)\)</span> is consistent. This is because <span class="math inline">\(E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0\)</span>. Second, <span class="math inline">\(\hat{\tau}_{AIPW}\)</span> is a good approximation to oracle <span class="math inline">\(\hat{\tau}_{AIPW}^{*}\)</span> as long as <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are <span class="math inline">\(\sqrt{n}\)</span>-consistent<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>, then the following holds.</p>
 <p><span class="math inline">\(\sqrt{n}(\hat{\tau}_{AIPW} - \hat{\tau}_{AIPW}^{*}) \rightarrow_p 0\)</span>.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="aipw-and-estimation.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
 <span id="cb32-2"><a href="aipw-and-estimation.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
@@ -309,8 +310,8 @@ div.csl-indent {
 </div>
 <div class="footnotes">
 <hr />
-<ol start="2">
-<li id="fn2"><p>This means that <span class="math inline">\(\hat{\mu}(.)\)</span> converges to <span class="math inline">\(\hat{\mu}\)</span> at the <a href="aipw-and-estimation.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<ol start="4">
+<li id="fn4"><p>This means that <span class="math inline">\(\hat{\mu}(.)\)</span> converges to <span class="math inline">\(\hat{\mu}\)</span> at the <a href="aipw-and-estimation.html#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
