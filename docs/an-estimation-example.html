@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.4 An estimation example | IPW and AIPW</title>
-  <meta name="description" content="2.4 An estimation example | IPW and AIPW" />
+  <title>2.4 An estimation example | Causal Inference</title>
+  <meta name="description" content="2.4 An estimation example | Causal Inference" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.4 An estimation example | IPW and AIPW" />
+  <meta property="og:title" content="2.4 An estimation example | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.4 An estimation example | IPW and AIPW" />
+  <meta name="twitter:title" content="2.4 An estimation example | Causal Inference" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-06-29" />
+<meta name="date" content="2024-07-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,8 +52,6 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -204,7 +202,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
           </h1>
         </div>
 
@@ -230,7 +228,7 @@ div.csl-indent {
 <span id="cb1-14"><a href="an-estimation-example.html#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="an-estimation-example.html#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># print treatment effect</span></span>
 <span id="cb1-16"><a href="an-estimation-example.html#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the ATE estimate is: &quot;</span>, <span class="fu">fun_ATE</span>(<span class="at">tau =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">2000</span>)))</span></code></pre></div>
-<pre><code>## [1] &quot;the ATE estimate is:  10.3317872215823&quot;</code></pre>
+<pre><code>## [1] &quot;the ATE estimate is:  9.73551634512793&quot;</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="an-estimation-example.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run 2000 replications to get a distribution of tau_hats</span></span>
 <span id="cb3-2"><a href="an-estimation-example.html#cb3-2" aria-hidden="true" tabindex="-1"></a>reps  <span class="ot">&lt;-</span>  <span class="dv">2000</span></span>
 <span id="cb3-3"><a href="an-estimation-example.html#cb3-3" aria-hidden="true" tabindex="-1"></a>tau.hats  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, reps)</span>
@@ -244,9 +242,9 @@ div.csl-indent {
 <p><img src="book_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="an-estimation-example.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obtaining the standard error</span></span>
 <span id="cb4-2"><a href="an-estimation-example.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the mean of tau hats : &quot;</span>, <span class="fu">mean</span>(tau.hats)))</span></code></pre></div>
-<pre><code>## [1] &quot;the mean of tau hats :  10.0105647588406&quot;</code></pre>
+<pre><code>## [1] &quot;the mean of tau hats :  9.99499889214229&quot;</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="an-estimation-example.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the standard error of tau hats : &quot;</span>, <span class="fu">sd</span>(tau.hats)))</span></code></pre></div>
-<pre><code>## [1] &quot;the standard error of tau hats :  0.335335012823368&quot;</code></pre>
+<pre><code>## [1] &quot;the standard error of tau hats :  0.324762684033365&quot;</code></pre>
 </div>
             </section>
 
