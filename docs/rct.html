@@ -217,10 +217,31 @@ div.csl-indent {
 <h2><span class="header-section-number">2.3</span> RCT<a href="rct.html#rct" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Randomized Controlled Trials (RCTs) are the cornerstone of causal inference and are often referred to as the gold standard. The quality of non-experimental studies is frequently assessed by comparing how closely the observational setting approximates an RCT. In an RCT, the Average Treatment Effect (ATE) is identified through the randomization of treatment assignment. This process ensures that the treatment and control groups are comparable, making RCTs a straightforward yet immensely powerful tool for establishing causal relationships.</p>
 <p>In a simple RCT setting the treatment is binary – the units are either assigned to the treatment group <span class="math inline">\((W_i = 0)\)</span> or the control group <span class="math inline">\((W_i = 1)\)</span>. The implicit assumption in this design is that each unit has an equal probability of being treated. The treatment assignment for the RCT setting can be attained using a Bernoulli process, where each unit has an independent probability <span class="math inline">\(\pi\)</span> of receiving treatment. Specifically, each unit is assigned to the treatment group with probability <span class="math inline">\(\pi\)</span> and to the control group with probability <span class="math inline">\(1 - \pi\)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="rct.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a bernoulli process of treatment assignment </span></span>
+<span id="cb1-2"><a href="rct.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="rct.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="rct.html#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="rct.html#cb1-5" aria-hidden="true" tabindex="-1"></a>fun_treat_assign  <span class="ot">&lt;-</span> <span class="cf">function</span>(N, prob, treat.type){</span>
+<span id="cb1-6"><a href="rct.html#cb1-6" aria-hidden="true" tabindex="-1"></a>    treatment  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> prob)</span>
+<span id="cb1-7"><a href="rct.html#cb1-7" aria-hidden="true" tabindex="-1"></a>    dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">treatment =</span> treatment, <span class="at">type =</span> treat.type)</span>
+<span id="cb1-8"><a href="rct.html#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(dat)</span>
+<span id="cb1-9"><a href="rct.html#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-10"><a href="rct.html#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># p = 0.5 for each unit</span></span>
+<span id="cb1-11"><a href="rct.html#cb1-11" aria-hidden="true" tabindex="-1"></a>dat1  <span class="ot">&lt;-</span> <span class="fu">fun_treat_assign</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">prob =</span> <span class="fl">0.5</span>, <span class="at">treat.type =</span> <span class="st">&quot;p = 0.5&quot;</span>)</span>
+<span id="cb1-12"><a href="rct.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># p = 0.3 for each unit</span></span>
+<span id="cb1-13"><a href="rct.html#cb1-13" aria-hidden="true" tabindex="-1"></a>dat2  <span class="ot">&lt;-</span> <span class="fu">fun_treat_assign</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">prob =</span> <span class="fl">0.2</span>, <span class="at">treat.type =</span> <span class="st">&quot;p = 0.2&quot;</span>)</span>
+<span id="cb1-14"><a href="rct.html#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="rct.html#cb1-15" aria-hidden="true" tabindex="-1"></a>dat.assign  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dat1, dat2) </span>
+<span id="cb1-16"><a href="rct.html#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="rct.html#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb1-18"><a href="rct.html#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat.assign, <span class="fu">aes</span>(<span class="at">x =</span> treatment)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">fill=</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb1-19"><a href="rct.html#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span> type) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="book_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>A practical example of this is an unbiased coin toss used to determine treatment assignment. In this case, a head could correspond to the treatment group (e.g., <span class="math inline">\(W_i = 1\)</span>), and a tail to the control group (e.g., <span class="math inline">\(W_i = 0\)</span>). This method exemplifies Bernoulli-randomization, where the assignment is determined by a random process, ensuring that each unit has an equal probability of being assigned to either group.</p>
 <p>In an RCT setting, the difference-in-means estimator is given as:</p>
 <p><span class="math display">\[\begin{equation}
-\hat{tau} = \frac{1}{N_t}\sum_{W_i =1} Y_i - \frac{1}{N_c}\sum_{W_i =0} Y_i
+\hat{\tau} = \frac{1}{N_t}\sum_{W_i =1} Y_i - \frac{1}{N_c}\sum_{W_i =0} Y_i
 \end{equation}\]</span></p>
 <p>The difference-in-mean estimator is unbiased and consistent for the average treatment effect.</p>
 </div>

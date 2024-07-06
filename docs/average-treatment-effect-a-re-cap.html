@@ -220,7 +220,7 @@ div.csl-indent {
 <p><span class="math inline">\(ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)\)</span></p>
 <p>Note that using two assumptions: i) <span class="math inline">\(W_i \perp \{Y_i(0), \; Y_i(1)\}\)</span> (unconfoundedness); and ii) <span class="math inline">\(Y_i(W) = Y_i\)</span> (SUTVA); the ATE estimate <span class="math inline">\(\hat{\tau}\)</span> can be written as:</p>
 <p><span class="math inline">\(\hat{\tau} = \frac{1}{N_T} \sum_{W_i = 1} Y_i - \frac{1}{N_C} \sum_{i \in W_i = 0} Y_i ......... equation (2)\)</span>,</p>
-<p>where <span class="math inline">\(n_T\)</span> and <span class="math inline">\(n_C\)</span> are the number of treated and control units, respectively. When assumption <span class="math inline">\(i)\)</span> fails, we can no longer estimate ATE using equation (2). However, we can invoke unconfoundedness to estimate ATE.</p>
+<p>where <span class="math inline">\(n_T\)</span> and <span class="math inline">\(n_C\)</span> are the number of treated and control units, respectively. When assumption <span class="math inline">\(i)\)</span> fails, we can no longer estimate ATE using equation (2). However, we can invoke conditional unconfoundedness to estimate ATE.</p>
 <p><strong>Unconfoundedness</strong>: The treatment assignment is as good as random once we control for <span class="math inline">\(X\)</span>s. ${W_i {Y_i(0), ; Y_i(1)} | X_i } ; for ; all ; x $.</p>
 <p>Mostly in observational settings the assumption that treatment assignment is independent of the potential outcomes is false. However, if all <span class="math inline">\(X\)</span>s (features) that influence the treatment are observed, then we can use unconfoundedness for causal inference.</p>
 </div>
