@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-05" />
+<meta name="date" content="2024-07-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="reference.html"/>
-<link rel="next" href="average-treatment-effect-a-re-cap.html"/>
+<link rel="next" href="a-simple-example.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -174,13 +174,12 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
-<li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
-<li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.5" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> IPW and Estimation</a></li>
-<li class="chapter" data-level="3.6" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.6</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.7" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.7</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
+<li class="chapter" data-level="3.2" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Continuous features and propensity score</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.4" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.4</b> IPW and Estimation</a></li>
+<li class="chapter" data-level="3.5" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.6</b> Assessing Balance</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -215,6 +214,48 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="ipw-and-aipw" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> IPW and AIPW<a href="ipw-and-aipw.html#ipw-and-aipw" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The target is to estimate the average treatment effect (ATE):</p>
+<p><span class="math display">\[\begin{equation}
+\label{eq:ATE}
+ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)  
+\end{equation}\]</span></p>
+<p>Note that using the following two assumptions:</p>
+<ol style="list-style-type: lower-roman">
+<li><p><span class="math inline">\(W_i \perp \{Y_i(0), \; Y_i(1)\}\)</span> (independence assumption)</p></li>
+<li><p><span class="math inline">\(Y_i(W) = Y_i\)</span> (SUTVA)</p></li>
+</ol>
+<p>the ATE estimate <span class="math inline">\(\hat{\tau}\)</span> can be written as the difference-in-means estimator:</p>
+<p><span class="math display">\[\begin{equation}
+\label{eq:ATE_estimator}
+\hat{\tau} = \frac{1}{N_T} \sum_{W_i = 1} Y_i - \frac{1}{N_C} \sum_{i \in W_i = 0} Y_i
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(N_T\)</span> and <span class="math inline">\(N_C\)</span> are the number of treated and control units, respectively.</p>
+<p>In the previous lecture, we disscussed randomized control trial as an ideal approach to estimate ATE.
+In a randomized controlled trial each unit has an equal probability of receiving the treatment. This means the following:</p>
+<p><span class="math display" id="eq:ptreat">\[\begin{equation}
+P(W_i = 1 \; | \;  Y_i(0), \;  Y_i(1),  \;  n_T) = \frac{n_T}{n}, \; \; i = \{1, ...., n\} \tag{3.1}
+\end{equation}\]</span></p>
+<p>In equation <a href="ipw-and-aipw.html#eq:ptreat">(3.1)</a>, <span class="math inline">\(n_T\)</span> refers to the number of units that should receive the treatment.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+In an easy to understand set-up, if a researcher wants <span class="math inline">\(P(W_i = 1) = 0.5\)</span> (unit is equally likely to be treated or untreated), a coin flip can feasibly be used as a mechanism to assign treatment.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p>Although randomized controlled trials (RCTs) are often considered the gold standard in causal inference, but they cannot always be used due to ethical, moral, and monetary reasons. Returning to the example we used in the previous chapter, it is not ethical to demarcate who can attend the tutoring session versus who cannot. This is precisely what an RCT setting does.</p>
+<p>In real-world scenarios, tutoring sessions are typically voluntary. Students who regularly attend these sessions may have different baseline (pre-treatment) characteristics compared to those who do not attend. These differences can introduce biases that complicate causal inference in observational studies.</p>
+<p>To proceed further, we require more knowledge about the treatment assignment. In other words, we need to understand which variables determine who attends the tutoring sessions. This information is crucial for identifying potential confounders and for applying methods that can help estimate causal effects in observational settings. This brings us to the <strong>unconfoundedness</strong> assumption.</p>
+<p><strong>Unconfoundedness</strong>: The treatment assignment is as good as random once we control for <span class="math inline">\(X\)</span>s. <span class="math inline">\(\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi\)</span>.</p>
+<p>As with the tutoring example, the independence assumption (discussed in the previous chapter) is highly unlikely to hold in observational settings. Let’s consider the following scenarios:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Out of the ten states that are yet to expand Medicaid, eight fall in South.</li>
+<li>Cigarette taxes are higher in states with higher anti-smoking sentiments.</li>
+<li>Infrastructure development, such as construction of roads, schools, hopitals, are demand-driven.</li>
+<li>The list goes on ..</li>
+</ol>
+<p>However, if we manage to observe all the <span class="math inline">\(X\)</span>s (covariates) that influence the treatment, we can invoke unconfoundedness for causal inference—assuming the stars align and and the universe decides to cooperate.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p>Although it is generally recommended to assign half of the sample to the treatment group and the other half to the control group, this is not a strict requirement.<a href="ipw-and-aipw.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Of course, this is quicky going to be inefficient as the sample size increases. In general, treatment assignment is determinted by a statistical process via a software. For example, if a researcher wants about one-third of the sample treated then a bernoulli trial with the probability of success of 0.33 can be used.<a href="ipw-and-aipw.html#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
@@ -222,7 +263,7 @@ div.csl-indent {
         </div>
       </div>
 <a href="reference.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="average-treatment-effect-a-re-cap.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="a-simple-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

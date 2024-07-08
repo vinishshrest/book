@@ -5,7 +5,10 @@ output:
     css: custom.css
     includes:
       in_header: header.html
+header-includes:
+   - \usepackage{amsmath}
 ---
+
 
 
 # IPW and AIPW
@@ -37,23 +40,62 @@ library(grf)
 library(glmnet) # for implementing regularized regression
 ```
 
-## Average Treatment Effect -- A Re-cap
 
-In a purely randomized controlled experiment the treatment assignment is random by construction. In other words, treated individuals have equal probability of being untreated: $P(W_i = 1) = P(W_i = 0)$. This leads to: $W_i \perp \{Y_i(0), \; Y_i(1)\}$. Here, $W_i = \{0, \; 1\}$ is the treatment assignment; $Y_i(0)$ and $Y_i(1)$ are potential outcomes without and with treatment. 
+The target is to estimate the average treatment effect (ATE): 
 
-**ATE.** The target is to estimate the average treatment effect: 
+\begin{equation}
+\label{eq:ATE}
+ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)  
+\end{equation}
 
-$ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)$  
+Note that using the following two assumptions: 
 
-Note that using two assumptions: i) $W_i \perp \{Y_i(0), \; Y_i(1)\}$ (unconfoundedness); and ii) $Y_i(W) = Y_i$ (SUTVA); the ATE estimate $\hat{\tau}$ can be written as: 
+i) $W_i \perp \{Y_i(0), \; Y_i(1)\}$ (independence assumption)
 
-$\hat{\tau} = \frac{1}{N_T} \sum_{W_i = 1} Y_i - \frac{1}{N_C} \sum_{i \in W_i = 0} Y_i ......... equation (2)$, 
+ii) $Y_i(W) = Y_i$ (SUTVA)
 
-where $n_T$ and $n_C$ are the number of treated and control units, respectively. When assumption $i)$ fails, we can no longer estimate ATE using equation (2). However, we can invoke conditional unconfoundedness to estimate ATE. 
+the ATE estimate $\hat{\tau}$ can be written as the difference-in-means estimator: 
 
-**Unconfoundedness**: The treatment assignment is as good as random once we control for $X$s. $\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi $.   
+\begin{equation}
+\label{eq:ATE_estimator}
+\hat{\tau} = \frac{1}{N_T} \sum_{W_i = 1} Y_i - \frac{1}{N_C} \sum_{i \in W_i = 0} Y_i 
+\end{equation}
 
-Mostly in observational settings the assumption that treatment assignment is independent of the potential outcomes is false. However, if all $X$s (features) that influence the treatment are observed, then we can use unconfoundedness for causal inference.
+where $N_T$ and $N_C$ are the number of treated and control units, respectively. 
+
+
+In the previous lecture, we disscussed randomized control trial as an ideal approach to estimate ATE. 
+In a randomized controlled trial each unit has an equal probability of receiving the treatment. This means the following: 
+
+\begin{equation}
+P(W_i = 1 \; | \;  Y_i(0), \;  Y_i(1),  \;  n_T) = \frac{n_T}{n}, \; \; i = \{1, ...., n\} (\#eq:ptreat)
+\end{equation}
+
+
+
+In equation \@ref(eq:ptreat), $n_T$ refers to the number of units that should receive the treatment.^[Although it is generally recommended to assign half of the sample to the treatment group and the other half to the control group, this is not a strict requirement.] 
+In an easy to understand set-up, if a researcher wants $P(W_i = 1) = 0.5$ (unit is equally likely to be treated or untreated), a coin flip can feasibly be used as a mechanism to assign treatment.^[Of course, this is quicky going to be inefficient as the sample size increases. In general, treatment assignment is determinted by a statistical process via a software. For example, if a researcher wants about one-third of the sample treated then a bernoulli trial with the probability of success of 0.33 can be used.] 
+
+
+Although randomized controlled trials (RCTs) are often considered the gold standard in causal inference, but they cannot always be used due to ethical, moral, and monetary reasons. Returning to the example we used in the previous chapter, it is not ethical to demarcate who can attend the tutoring session versus who cannot. This is precisely what an RCT setting does.
+
+In real-world scenarios, tutoring sessions are typically voluntary. Students who regularly attend these sessions may have different baseline (pre-treatment) characteristics compared to those who do not attend. These differences can introduce biases that complicate causal inference in observational studies.
+
+
+To proceed further, we require more knowledge about the treatment assignment. In other words, we need to understand which variables determine who attends the tutoring sessions. This information is crucial for identifying potential confounders and for applying methods that can help estimate causal effects in observational settings. This brings us to the **unconfoundedness** assumption. 
+
+
+**Unconfoundedness**: The treatment assignment is as good as random once we control for $X$s. $\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi$.   
+
+As with the tutoring example, the independence assumption (discussed in the previous chapter) is highly unlikely to hold in observational settings. Let's consider the following scenarios:
+
+a. Out of the ten states that are yet to expand Medicaid, eight fall in South. 
+b. Cigarette taxes are higher in states with higher anti-smoking sentiments. 
+c. Infrastructure development, such as construction of roads, schools, hopitals, are demand-driven. 
+d. The list goes on ..
+
+
+However, if we manage to observe all the $X$s (covariates) that influence the treatment, we can invoke unconfoundedness for causal inference—assuming the stars align and and the universe decides to cooperate.
 
 ## A simple example 
 

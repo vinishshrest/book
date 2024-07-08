@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.5 IPW and Estimation | IPW and AIPW</title>
-  <meta name="description" content="3.5 IPW and Estimation | IPW and AIPW" />
+  <title>3.4 IPW and Estimation | IPW and AIPW</title>
+  <meta name="description" content="3.4 IPW and Estimation | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.5 IPW and Estimation | IPW and AIPW" />
+  <meta property="og:title" content="3.4 IPW and Estimation | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.5 IPW and Estimation | IPW and AIPW" />
+  <meta name="twitter:title" content="3.4 IPW and Estimation | IPW and AIPW" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-05" />
+<meta name="date" content="2024-07-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,13 +174,12 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="average-treatment-effect-a-re-cap.html"><a href="average-treatment-effect-a-re-cap.html"><i class="fa fa-check"></i><b>3.1</b> Average Treatment Effect – A Re-cap</a></li>
-<li class="chapter" data-level="3.2" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.2</b> A simple example</a></li>
-<li class="chapter" data-level="3.3" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Continuous features and propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.4</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.5" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> IPW and Estimation</a></li>
-<li class="chapter" data-level="3.6" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.6</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.7" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.7</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
+<li class="chapter" data-level="3.2" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Continuous features and propensity score</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.4" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.4</b> IPW and Estimation</a></li>
+<li class="chapter" data-level="3.5" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.6</b> Assessing Balance</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -213,8 +212,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="ipw-and-estimation" class="section level2 hasAnchor" number="3.5">
-<h2><span class="header-section-number">3.5</span> IPW and Estimation<a href="ipw-and-estimation.html#ipw-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ipw-and-estimation" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> IPW and Estimation<a href="ipw-and-estimation.html#ipw-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A more natural way to exploit the condition of unconfoundedness is to weight observations by their propensity score, which is known as the inverse probability weighting. As before <span class="math inline">\(\hat{e}(x)\)</span> is defined as an estimated propensity score.</p>
 <p><span class="math inline">\(\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} (\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}) \; ....equation(6)\)</span></p>
 <p>Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in features across the treatment and control groups. Note that the validity of <span class="math inline">\(\hat{\tau}\)</span> still hinges on the unconfoundedness assumption.</p>
