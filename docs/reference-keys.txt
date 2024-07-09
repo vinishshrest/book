@@ -27,3 +27,17 @@ heterogeneous-treatment-effects
 some-ways-to-estimate-cate
 estimation
 some-remarks-and-questions
+eq:ate
+eq:unconfound
+eq:uncon
+eq:prop
+eq:pconf
+eq:pcon
+eq:logit
+propensity-score
+estimation-of-propensity-score
+fig:unnamed-chunk-4
+how-are-the-observations-classified
+using-cross-fitting-to-predict-propensity-score
+inverse-probability-weighting-and-estimation
+eq:IPW

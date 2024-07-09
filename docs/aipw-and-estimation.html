@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.5 AIPW and Estimation | IPW and AIPW</title>
-  <meta name="description" content="3.5 AIPW and Estimation | IPW and AIPW" />
-  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+  <title>3.7 AIPW and Estimation | IPW and AIPW</title>
+  <meta name="description" content="3.7 AIPW and Estimation | IPW and AIPW" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.5 AIPW and Estimation | IPW and AIPW" />
+  <meta property="og:title" content="3.7 AIPW and Estimation | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.5 AIPW and Estimation | IPW and AIPW" />
+  <meta name="twitter:title" content="3.7 AIPW and Estimation | IPW and AIPW" />
   
   
   
@@ -23,14 +23,14 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-06" />
+<meta name="date" content="2024-07-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ipw-and-estimation.html"/>
+<link rel="prev" href="inverse-probability-weighting-and-estimation.html"/>
 <link rel="next" href="assessing-balance.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -49,18 +49,20 @@
 
 
 
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="assets/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="assets/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -94,7 +96,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -107,7 +109,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -124,28 +126,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 </head>
@@ -175,11 +155,13 @@ div.csl-indent {
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Continuous features and propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.4" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.4</b> IPW and Estimation</a></li>
-<li class="chapter" data-level="3.5" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.6" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.6</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
+<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-and-estimation.html"><a href="inverse-probability-weighting-and-estimation.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting and Estimation</a></li>
+<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -212,8 +194,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="aipw-and-estimation" class="section level2 hasAnchor" number="3.5">
-<h2><span class="header-section-number">3.5</span> AIPW and Estimation<a href="aipw-and-estimation.html#aipw-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="aipw-and-estimation" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> AIPW and Estimation<a href="aipw-and-estimation.html#aipw-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Augmented Inverse Probability Weighting (AIPW) provides a robust way to estimate ATE by alleviating the limitation of IPW estimate.</p>
 <p>Following the IPW approach, estimation of ATE is given in equation (6). The other approach to estimate <span class="math inline">\(\tau\)</span> is to think of it from the conditional response approach. Write <span class="math inline">\(\mu_{w}(x) = E[Y_i| \; X_i = x, W_i = w]\)</span>. Then:</p>
 <p><span class="math inline">\(\tau(x) = E[Y_i| \; X_i = x, W_i = 1] - E[Y_i| \; X_i = x, W_i = 0]\)</span></p>
@@ -222,95 +204,95 @@ div.csl-indent {
 <p><span class="math inline">\(\hat{\tau}_{AIPW} = \frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}(X_i) - \mu_{0}(X_i) + \frac{(Y_i - \hat{\mu}_1(X_i)). W_i}{\hat{e}(X_i)} - \frac{(Y_i - \hat{\mu}_0(X_i)). (1-W_i)}{1 - \hat{e}(X_i)})\)</span></p>
 <p>ML approach using cross-fitting is used to estimate both <span class="math inline">\(\hat{e}(x)\)</span> and <span class="math inline">\(\hat{\mu}_{w}(x)\)</span>. Following the cross-fitting structure, we can formally write the estimate for <span class="math inline">\(\tau\)</span> as:</p>
 <p><span class="math inline">\(\hat{\tau}_{AIPW} = \lowerbracket{\frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}^{-k(i)}(X_i) - \mu_{0}^{-k(i)}(X_i)}_{consistent \; estimate \; of \; \tau} + \frac{(Y_i - \hat{\mu}_1^{-k(i)}(X_i)). W_i}{\hat{e}^{-k(i)}(X_i)} - \frac{(Y_i - \hat{\mu}_0^{-k(i)}(X_i)). (1-W_i)}{1 - \hat{e}^{-k(i)}(X_i)})\)</span></p>
-<p>The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights given by the propensity score. There are two attractive features of AIPW estimate. First, $_{AIPW} is consistent as long as <span class="math inline">\(\hat{e}(x)\)</span> or <span class="math inline">\(\hat{\mu}_{w}(x)\)</span> is consistent. This is because <span class="math inline">\(E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0\)</span>. Second, <span class="math inline">\(\hat{\tau}_{AIPW}\)</span> is a good approximation to oracle <span class="math inline">\(\hat{\tau}_{AIPW}^{*}\)</span> as long as <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are <span class="math inline">\(\sqrt{n}\)</span>-consistent<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>, then the following holds.</p>
+<p>The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights given by the propensity score. There are two attractive features of AIPW estimate. First, $_{AIPW} is consistent as long as <span class="math inline">\(\hat{e}(x)\)</span> or <span class="math inline">\(\hat{\mu}_{w}(x)\)</span> is consistent. This is because <span class="math inline">\(E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0\)</span>. Second, <span class="math inline">\(\hat{\tau}_{AIPW}\)</span> is a good approximation to oracle <span class="math inline">\(\hat{\tau}_{AIPW}^{*}\)</span> as long as <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are <span class="math inline">\(\sqrt{n}\)</span>-consistent<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>, then the following holds.</p>
 <p><span class="math inline">\(\sqrt{n}(\hat{\tau}_{AIPW} - \hat{\tau}_{AIPW}^{*}) \rightarrow_p 0\)</span>.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="aipw-and-estimation.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
-<span id="cb34-2"><a href="aipw-and-estimation.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb34-3"><a href="aipw-and-estimation.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Augmented IPW (aipw)</span></span>
-<span id="cb34-4"><a href="aipw-and-estimation.html#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb34-5"><a href="aipw-and-estimation.html#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
-<span id="cb34-6"><a href="aipw-and-estimation.html#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="aipw-and-estimation.html#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">#n_features2  &lt;- length(setdiff(names(dat2), &quot;Y&quot;))</span></span>
-<span id="cb34-8"><a href="aipw-and-estimation.html#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ranger</span></span>
-<span id="cb34-9"><a href="aipw-and-estimation.html#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co">#funrf_ranger  &lt;- function(dat){</span></span>
-<span id="cb34-10"><a href="aipw-and-estimation.html#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co">#    rf2  &lt;- ranger(</span></span>
-<span id="cb34-11"><a href="aipw-and-estimation.html#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co">#        Y ~ ., </span></span>
-<span id="cb34-12"><a href="aipw-and-estimation.html#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co">#        data = dat, </span></span>
-<span id="cb34-13"><a href="aipw-and-estimation.html#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co">#        mtry = min(ceiling(sqrt(n_features) + 20), n_features),  </span></span>
-<span id="cb34-14"><a href="aipw-and-estimation.html#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co">#        respect.unordered.factors = &quot;order&quot;, </span></span>
-<span id="cb34-15"><a href="aipw-and-estimation.html#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="co">#        seed = 123, </span></span>
-<span id="cb34-16"><a href="aipw-and-estimation.html#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="co">#        num.trees = 2000</span></span>
-<span id="cb34-17"><a href="aipw-and-estimation.html#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="co">#    )</span></span>
-<span id="cb34-18"><a href="aipw-and-estimation.html#cb34-18" aria-hidden="true" tabindex="-1"></a><span class="co">#    return(rf2)</span></span>
-<span id="cb34-19"><a href="aipw-and-estimation.html#cb34-19" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb34-20"><a href="aipw-and-estimation.html#cb34-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-21"><a href="aipw-and-estimation.html#cb34-21" aria-hidden="true" tabindex="-1"></a><span class="co"># storing</span></span>
-<span id="cb34-22"><a href="aipw-and-estimation.html#cb34-22" aria-hidden="true" tabindex="-1"></a>predict.mat2a  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K)</span>
-<span id="cb34-23"><a href="aipw-and-estimation.html#cb34-23" aria-hidden="true" tabindex="-1"></a>predict.mat2b  <span class="ot">&lt;-</span> predict.mat2a</span>
-<span id="cb34-24"><a href="aipw-and-estimation.html#cb34-24" aria-hidden="true" tabindex="-1"></a>aipwK  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
-<span id="cb34-25"><a href="aipw-and-estimation.html#cb34-25" aria-hidden="true" tabindex="-1"></a>weightaipK  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">nrow</span>(index) <span class="sc">/</span> <span class="fu">length</span>(index), K)</span>
-<span id="cb34-26"><a href="aipw-and-estimation.html#cb34-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-27"><a href="aipw-and-estimation.html#cb34-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
-<span id="cb34-28"><a href="aipw-and-estimation.html#cb34-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># E(Y | X, W = 1) using cross-fitting</span></span>
-<span id="cb34-29"><a href="aipw-and-estimation.html#cb34-29" aria-hidden="true" tabindex="-1"></a>    predict.mat2a[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], W[index[, <span class="sc">-</span>i]]), <span class="at">W =</span> Y[index[, <span class="sc">-</span>i]], </span>
-<span id="cb34-30"><a href="aipw-and-estimation.html#cb34-30" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">predictkfold =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, i]), ], <span class="dv">1</span>))</span>
-<span id="cb34-31"><a href="aipw-and-estimation.html#cb34-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># E(Y | X, W = 0) using cross-fitting</span></span>
-<span id="cb34-32"><a href="aipw-and-estimation.html#cb34-32" aria-hidden="true" tabindex="-1"></a>    predict.mat2b[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], W[index[, <span class="sc">-</span>i]]), <span class="at">W =</span> Y[index[, <span class="sc">-</span>i]], </span>
-<span id="cb34-33"><a href="aipw-and-estimation.html#cb34-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">predictkfold =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, i]), ], <span class="dv">0</span>))                                </span>
-<span id="cb34-34"><a href="aipw-and-estimation.html#cb34-34" aria-hidden="true" tabindex="-1"></a>    noise  <span class="ot">&lt;-</span>  ((W[index[, i]] <span class="sc">*</span> (Y[index[, i]] <span class="sc">-</span> predict.mat2a[, i])) <span class="sc">/</span> (predict.mat[, i])) </span>
-<span id="cb34-35"><a href="aipw-and-estimation.html#cb34-35" aria-hidden="true" tabindex="-1"></a>                <span class="sc">-</span> </span>
-<span id="cb34-36"><a href="aipw-and-estimation.html#cb34-36" aria-hidden="true" tabindex="-1"></a>                (((<span class="dv">1</span> <span class="sc">-</span> W[index[, i]]) <span class="sc">*</span> (Y[index[, i]] <span class="sc">-</span> predict.mat2b)) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> predict.mat[, i]))</span>
-<span id="cb34-37"><a href="aipw-and-estimation.html#cb34-37" aria-hidden="true" tabindex="-1"></a>    score[[i]]  <span class="ot">&lt;-</span>  predict.mat2a[, i] <span class="sc">-</span> predict.mat2b[, i] <span class="sc">+</span> noise</span>
-<span id="cb34-38"><a href="aipw-and-estimation.html#cb34-38" aria-hidden="true" tabindex="-1"></a>    aipwK[i]  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score[[i]])</span>
-<span id="cb34-39"><a href="aipw-and-estimation.html#cb34-39" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-40"><a href="aipw-and-estimation.html#cb34-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-41"><a href="aipw-and-estimation.html#cb34-41" aria-hidden="true" tabindex="-1"></a>aipw.grf  <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(aipwK, <span class="at">weights =</span> weightaipK)</span>
-<span id="cb34-42"><a href="aipw-and-estimation.html#cb34-42" aria-hidden="true" tabindex="-1"></a>sd.aipw  <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">unlist</span>(score)) </span>
-<span id="cb34-43"><a href="aipw-and-estimation.html#cb34-43" aria-hidden="true" tabindex="-1"></a>ll  <span class="ot">&lt;-</span>  aipw.grf <span class="sc">-</span> (sd.aipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb34-44"><a href="aipw-and-estimation.html#cb34-44" aria-hidden="true" tabindex="-1"></a>ul  <span class="ot">&lt;-</span>  aipw.grf <span class="sc">+</span> (sd.aipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb34-45"><a href="aipw-and-estimation.html#cb34-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-46"><a href="aipw-and-estimation.html#cb34-46" aria-hidden="true" tabindex="-1"></a>result.aipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;AIPW Est.&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(aipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.aipw<span class="sc">/</span>(<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>), </span>
-<span id="cb34-47"><a href="aipw-and-estimation.html#cb34-47" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul, <span class="dv">3</span>))</span>
-<span id="cb34-48"><a href="aipw-and-estimation.html#cb34-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-49"><a href="aipw-and-estimation.html#cb34-49" aria-hidden="true" tabindex="-1"></a><span class="do">######################</span></span>
-<span id="cb34-50"><a href="aipw-and-estimation.html#cb34-50" aria-hidden="true" tabindex="-1"></a><span class="co"># grf</span></span>
-<span id="cb34-51"><a href="aipw-and-estimation.html#cb34-51" aria-hidden="true" tabindex="-1"></a><span class="do">######################</span></span>
-<span id="cb34-52"><a href="aipw-and-estimation.html#cb34-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-53"><a href="aipw-and-estimation.html#cb34-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a causal forest </span></span>
-<span id="cb34-54"><a href="aipw-and-estimation.html#cb34-54" aria-hidden="true" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span>  <span class="fu">causal_forest</span>(X, Y, W)</span>
-<span id="cb34-55"><a href="aipw-and-estimation.html#cb34-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-56"><a href="aipw-and-estimation.html#cb34-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the conditional average treatment effect on the full sample (CATE).</span></span>
-<span id="cb34-57"><a href="aipw-and-estimation.html#cb34-57" aria-hidden="true" tabindex="-1"></a>grf_ate  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(tau.forest, <span class="at">target.sample =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb34-58"><a href="aipw-and-estimation.html#cb34-58" aria-hidden="true" tabindex="-1"></a>grf_att  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(tau.forest, <span class="at">target.sample =</span> <span class="st">&quot;treated&quot;</span>)</span>
-<span id="cb34-59"><a href="aipw-and-estimation.html#cb34-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-60"><a href="aipw-and-estimation.html#cb34-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-61"><a href="aipw-and-estimation.html#cb34-61" aria-hidden="true" tabindex="-1"></a><span class="do">##  PRINT ALL</span></span>
-<span id="cb34-62"><a href="aipw-and-estimation.html#cb34-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-63"><a href="aipw-and-estimation.html#cb34-63" aria-hidden="true" tabindex="-1"></a><span class="co">#print(paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3)))</span></span>
-<span id="cb34-64"><a href="aipw-and-estimation.html#cb34-64" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to naive estimator:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">1</span>)]) <span class="sc">-</span> <span class="fu">mean</span>(Y[<span class="fu">which</span>( W <span class="sc">==</span> <span class="dv">0</span>)]), <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="aipw-and-estimation.html#cb31-1" aria-hidden="true"></a><span class="co">#######################</span></span>
+<span id="cb31-2"><a href="aipw-and-estimation.html#cb31-2" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb31-3"><a href="aipw-and-estimation.html#cb31-3" aria-hidden="true"></a><span class="co"># Augmented IPW (aipw)</span></span>
+<span id="cb31-4"><a href="aipw-and-estimation.html#cb31-4" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb31-5"><a href="aipw-and-estimation.html#cb31-5" aria-hidden="true"></a><span class="co">#######################</span></span>
+<span id="cb31-6"><a href="aipw-and-estimation.html#cb31-6" aria-hidden="true"></a></span>
+<span id="cb31-7"><a href="aipw-and-estimation.html#cb31-7" aria-hidden="true"></a><span class="co">#n_features2  &lt;- length(setdiff(names(dat2), &quot;Y&quot;))</span></span>
+<span id="cb31-8"><a href="aipw-and-estimation.html#cb31-8" aria-hidden="true"></a><span class="co"># ranger</span></span>
+<span id="cb31-9"><a href="aipw-and-estimation.html#cb31-9" aria-hidden="true"></a><span class="co">#funrf_ranger  &lt;- function(dat){</span></span>
+<span id="cb31-10"><a href="aipw-and-estimation.html#cb31-10" aria-hidden="true"></a><span class="co">#    rf2  &lt;- ranger(</span></span>
+<span id="cb31-11"><a href="aipw-and-estimation.html#cb31-11" aria-hidden="true"></a><span class="co">#        Y ~ ., </span></span>
+<span id="cb31-12"><a href="aipw-and-estimation.html#cb31-12" aria-hidden="true"></a><span class="co">#        data = dat, </span></span>
+<span id="cb31-13"><a href="aipw-and-estimation.html#cb31-13" aria-hidden="true"></a><span class="co">#        mtry = min(ceiling(sqrt(n_features) + 20), n_features),  </span></span>
+<span id="cb31-14"><a href="aipw-and-estimation.html#cb31-14" aria-hidden="true"></a><span class="co">#        respect.unordered.factors = &quot;order&quot;, </span></span>
+<span id="cb31-15"><a href="aipw-and-estimation.html#cb31-15" aria-hidden="true"></a><span class="co">#        seed = 123, </span></span>
+<span id="cb31-16"><a href="aipw-and-estimation.html#cb31-16" aria-hidden="true"></a><span class="co">#        num.trees = 2000</span></span>
+<span id="cb31-17"><a href="aipw-and-estimation.html#cb31-17" aria-hidden="true"></a><span class="co">#    )</span></span>
+<span id="cb31-18"><a href="aipw-and-estimation.html#cb31-18" aria-hidden="true"></a><span class="co">#    return(rf2)</span></span>
+<span id="cb31-19"><a href="aipw-and-estimation.html#cb31-19" aria-hidden="true"></a><span class="co">#}</span></span>
+<span id="cb31-20"><a href="aipw-and-estimation.html#cb31-20" aria-hidden="true"></a></span>
+<span id="cb31-21"><a href="aipw-and-estimation.html#cb31-21" aria-hidden="true"></a><span class="co"># storing</span></span>
+<span id="cb31-22"><a href="aipw-and-estimation.html#cb31-22" aria-hidden="true"></a>predict.mat2a  &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> <span class="kw">nrow</span>(index), <span class="dt">ncol =</span> K)</span>
+<span id="cb31-23"><a href="aipw-and-estimation.html#cb31-23" aria-hidden="true"></a>predict.mat2b  &lt;-<span class="st"> </span>predict.mat2a</span>
+<span id="cb31-24"><a href="aipw-and-estimation.html#cb31-24" aria-hidden="true"></a>aipwK  &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb31-25"><a href="aipw-and-estimation.html#cb31-25" aria-hidden="true"></a>weightaipK  &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">nrow</span>(index) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(index), K)</span>
+<span id="cb31-26"><a href="aipw-and-estimation.html#cb31-26" aria-hidden="true"></a></span>
+<span id="cb31-27"><a href="aipw-and-estimation.html#cb31-27" aria-hidden="true"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>K)){</span>
+<span id="cb31-28"><a href="aipw-and-estimation.html#cb31-28" aria-hidden="true"></a>    <span class="co"># E(Y | X, W = 1) using cross-fitting</span></span>
+<span id="cb31-29"><a href="aipw-and-estimation.html#cb31-29" aria-hidden="true"></a>    predict.mat2a[, i]  &lt;-<span class="st"> </span><span class="kw">fun.rf.grf</span>(<span class="dt">X =</span> <span class="kw">cbind</span>(X[<span class="kw">c</span>(index[, <span class="op">-</span>i]), ], W[index[, <span class="op">-</span>i]]), <span class="dt">W =</span> Y[index[, <span class="op">-</span>i]], </span>
+<span id="cb31-30"><a href="aipw-and-estimation.html#cb31-30" aria-hidden="true"></a>                                    <span class="dt">predictkfold =</span> <span class="kw">cbind</span>(X[<span class="kw">c</span>(index[, i]), ], <span class="dv">1</span>))</span>
+<span id="cb31-31"><a href="aipw-and-estimation.html#cb31-31" aria-hidden="true"></a>    <span class="co"># E(Y | X, W = 0) using cross-fitting</span></span>
+<span id="cb31-32"><a href="aipw-and-estimation.html#cb31-32" aria-hidden="true"></a>    predict.mat2b[, i]  &lt;-<span class="st"> </span><span class="kw">fun.rf.grf</span>(<span class="dt">X =</span> <span class="kw">cbind</span>(X[<span class="kw">c</span>(index[, <span class="op">-</span>i]), ], W[index[, <span class="op">-</span>i]]), <span class="dt">W =</span> Y[index[, <span class="op">-</span>i]], </span>
+<span id="cb31-33"><a href="aipw-and-estimation.html#cb31-33" aria-hidden="true"></a>                                    <span class="dt">predictkfold =</span> <span class="kw">cbind</span>(X[<span class="kw">c</span>(index[, i]), ], <span class="dv">0</span>))                                </span>
+<span id="cb31-34"><a href="aipw-and-estimation.html#cb31-34" aria-hidden="true"></a>    noise  &lt;-<span class="st">  </span>((W[index[, i]] <span class="op">*</span><span class="st"> </span>(Y[index[, i]] <span class="op">-</span><span class="st"> </span>predict.mat2a[, i])) <span class="op">/</span><span class="st"> </span>(predict.mat[, i])) </span>
+<span id="cb31-35"><a href="aipw-and-estimation.html#cb31-35" aria-hidden="true"></a>                <span class="op">-</span><span class="st"> </span></span>
+<span id="cb31-36"><a href="aipw-and-estimation.html#cb31-36" aria-hidden="true"></a><span class="st">                </span>(((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>W[index[, i]]) <span class="op">*</span><span class="st"> </span>(Y[index[, i]] <span class="op">-</span><span class="st"> </span>predict.mat2b)) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>predict.mat[, i]))</span>
+<span id="cb31-37"><a href="aipw-and-estimation.html#cb31-37" aria-hidden="true"></a>    score[[i]]  &lt;-<span class="st">  </span>predict.mat2a[, i] <span class="op">-</span><span class="st"> </span>predict.mat2b[, i] <span class="op">+</span><span class="st"> </span>noise</span>
+<span id="cb31-38"><a href="aipw-and-estimation.html#cb31-38" aria-hidden="true"></a>    aipwK[i]  &lt;-<span class="st"> </span><span class="kw">mean</span>(score[[i]])</span>
+<span id="cb31-39"><a href="aipw-and-estimation.html#cb31-39" aria-hidden="true"></a>}</span>
+<span id="cb31-40"><a href="aipw-and-estimation.html#cb31-40" aria-hidden="true"></a></span>
+<span id="cb31-41"><a href="aipw-and-estimation.html#cb31-41" aria-hidden="true"></a>aipw.grf  &lt;-<span class="st"> </span><span class="kw">weighted.mean</span>(aipwK, <span class="dt">weights =</span> weightaipK)</span>
+<span id="cb31-42"><a href="aipw-and-estimation.html#cb31-42" aria-hidden="true"></a>sd.aipw  &lt;-<span class="st"> </span><span class="kw">sd</span>(<span class="kw">unlist</span>(score)) </span>
+<span id="cb31-43"><a href="aipw-and-estimation.html#cb31-43" aria-hidden="true"></a>ll  &lt;-<span class="st">  </span>aipw.grf <span class="op">-</span><span class="st"> </span>(sd.aipw <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(<span class="kw">unlist</span>(score)))) <span class="op">*</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb31-44"><a href="aipw-and-estimation.html#cb31-44" aria-hidden="true"></a>ul  &lt;-<span class="st">  </span>aipw.grf <span class="op">+</span><span class="st"> </span>(sd.aipw <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(<span class="kw">unlist</span>(score)))) <span class="op">*</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb31-45"><a href="aipw-and-estimation.html#cb31-45" aria-hidden="true"></a></span>
+<span id="cb31-46"><a href="aipw-and-estimation.html#cb31-46" aria-hidden="true"></a>result.aipw  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AIPW Est.&quot;</span> =<span class="st"> </span><span class="kw">round</span>(aipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> =<span class="st"> </span><span class="kw">round</span>(sd.aipw<span class="op">/</span>(<span class="kw">sqrt</span>(<span class="kw">length</span>(W))), <span class="dv">3</span>), </span>
+<span id="cb31-47"><a href="aipw-and-estimation.html#cb31-47" aria-hidden="true"></a>                    <span class="st">&quot;lower bound&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ul, <span class="dv">3</span>))</span>
+<span id="cb31-48"><a href="aipw-and-estimation.html#cb31-48" aria-hidden="true"></a></span>
+<span id="cb31-49"><a href="aipw-and-estimation.html#cb31-49" aria-hidden="true"></a><span class="co">######################</span></span>
+<span id="cb31-50"><a href="aipw-and-estimation.html#cb31-50" aria-hidden="true"></a><span class="co"># grf</span></span>
+<span id="cb31-51"><a href="aipw-and-estimation.html#cb31-51" aria-hidden="true"></a><span class="co">######################</span></span>
+<span id="cb31-52"><a href="aipw-and-estimation.html#cb31-52" aria-hidden="true"></a></span>
+<span id="cb31-53"><a href="aipw-and-estimation.html#cb31-53" aria-hidden="true"></a><span class="co"># Train a causal forest </span></span>
+<span id="cb31-54"><a href="aipw-and-estimation.html#cb31-54" aria-hidden="true"></a>tau.forest  &lt;-<span class="st">  </span><span class="kw">causal_forest</span>(X, Y, W)</span>
+<span id="cb31-55"><a href="aipw-and-estimation.html#cb31-55" aria-hidden="true"></a></span>
+<span id="cb31-56"><a href="aipw-and-estimation.html#cb31-56" aria-hidden="true"></a><span class="co"># Estimate the conditional average treatment effect on the full sample (CATE).</span></span>
+<span id="cb31-57"><a href="aipw-and-estimation.html#cb31-57" aria-hidden="true"></a>grf_ate  &lt;-<span class="st"> </span><span class="kw">average_treatment_effect</span>(tau.forest, <span class="dt">target.sample =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb31-58"><a href="aipw-and-estimation.html#cb31-58" aria-hidden="true"></a>grf_att  &lt;-<span class="st"> </span><span class="kw">average_treatment_effect</span>(tau.forest, <span class="dt">target.sample =</span> <span class="st">&quot;treated&quot;</span>)</span>
+<span id="cb31-59"><a href="aipw-and-estimation.html#cb31-59" aria-hidden="true"></a></span>
+<span id="cb31-60"><a href="aipw-and-estimation.html#cb31-60" aria-hidden="true"></a></span>
+<span id="cb31-61"><a href="aipw-and-estimation.html#cb31-61" aria-hidden="true"></a><span class="co">##  PRINT ALL</span></span>
+<span id="cb31-62"><a href="aipw-and-estimation.html#cb31-62" aria-hidden="true"></a></span>
+<span id="cb31-63"><a href="aipw-and-estimation.html#cb31-63" aria-hidden="true"></a><span class="co">#print(paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3)))</span></span>
+<span id="cb31-64"><a href="aipw-and-estimation.html#cb31-64" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to naive estimator:&quot;</span>, <span class="kw">round</span>(<span class="kw">mean</span>(Y[<span class="kw">which</span>(W <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Y[<span class="kw">which</span>( W <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)]), <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to naive estimator: 2.674&quot;</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="aipw-and-estimation.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to IPW using&quot;</span>, K, <span class="st">&quot;fold cross-fittin:&quot;</span>, <span class="fu">round</span>(ipw.grf, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to IPW using 10 fold cross-fittin: 2.551&quot;</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="aipw-and-estimation.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to IPW oracle:&quot;</span>, <span class="fu">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="aipw-and-estimation.html#cb33-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to IPW using&quot;</span>, K, <span class="st">&quot;fold cross-fittin:&quot;</span>, <span class="kw">round</span>(ipw.grf, <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;treatment effects according to IPW using 10 fold cross-fittin: 2.552&quot;</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="aipw-and-estimation.html#cb35-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to IPW oracle:&quot;</span>, <span class="kw">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to IPW oracle: 2.705&quot;</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="aipw-and-estimation.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to AIPW using&quot;</span>, K, <span class="st">&quot;fold cross-fitting:&quot;</span>, <span class="fu">round</span>(aipw.grf, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="aipw-and-estimation.html#cb37-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to AIPW using&quot;</span>, K, <span class="st">&quot;fold cross-fitting:&quot;</span>, <span class="kw">round</span>(aipw.grf, <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to AIPW using 10 fold cross-fitting: 2.563&quot;</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="aipw-and-estimation.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to GRF:&quot;</span>, <span class="fu">round</span>(grf_ate[[<span class="dv">1</span>]], <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to GRF: 2.545&quot;</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="aipw-and-estimation.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result.ipw)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="aipw-and-estimation.html#cb39-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to GRF:&quot;</span>, <span class="kw">round</span>(grf_ate[[<span class="dv">1</span>]], <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;treatment effects according to GRF: 2.548&quot;</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="aipw-and-estimation.html#cb41-1" aria-hidden="true"></a><span class="kw">print</span>(result.ipw)</span></code></pre></div>
 <pre><code>## IPW estimate           se  lower bound  upper bound 
-##        2.551        0.100        2.354        2.748</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="aipw-and-estimation.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result.aipw)</span></code></pre></div>
+##        2.552        0.100        2.355        2.749</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="aipw-and-estimation.html#cb43-1" aria-hidden="true"></a><span class="kw">print</span>(result.aipw)</span></code></pre></div>
 <pre><code>##   AIPW Est.          se lower bound upper bound 
-##       2.563       0.033       2.498       2.628</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="aipw-and-estimation.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(grf_ate)</span></code></pre></div>
+##       2.563       0.033       2.499       2.628</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="aipw-and-estimation.html#cb45-1" aria-hidden="true"></a><span class="kw">print</span>(grf_ate)</span></code></pre></div>
 <pre><code>##   estimate    std.err 
-## 2.54516745 0.04705196</code></pre>
+## 2.54768440 0.04689813</code></pre>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="6">
-<li id="fn6"><p>This means that <span class="math inline">\(\hat{\mu}(.)\)</span> converges to <span class="math inline">\(\hat{\mu}\)</span> at the <a href="aipw-and-estimation.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<ol start="5">
+<li id="fn5"><p>This means that <span class="math inline">\(\hat{\mu}(.)\)</span> converges to <span class="math inline">\(\hat{\mu}\)</span> at the <a href="aipw-and-estimation.html#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -318,7 +300,7 @@ div.csl-indent {
           </div>
         </div>
       </div>
-<a href="ipw-and-estimation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="inverse-probability-weighting-and-estimation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="assessing-balance.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

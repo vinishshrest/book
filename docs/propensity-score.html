@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Causal Inference: An Introduction | Causal Inference</title>
-  <meta name="description" content="2 Causal Inference: An Introduction | Causal Inference" />
+  <title>3.2 Propensity score | IPW and AIPW</title>
+  <meta name="description" content="3.2 Propensity score | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Causal Inference: An Introduction | Causal Inference" />
+  <meta property="og:title" content="3.2 Propensity score | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Causal Inference: An Introduction | Causal Inference" />
+  <meta name="twitter:title" content="3.2 Propensity score | IPW and AIPW" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="potential-outcome-framework-neyman-rubin-causal-model.html"/>
+<link rel="prev" href="a-simple-example.html"/>
+<link rel="next" href="estimation-of-propensity-score.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -53,6 +53,10 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="assets/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="assets/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -182,7 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Causal Inference</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
           </h1>
         </div>
 
@@ -190,20 +194,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="causal-inference-an-introduction" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">2</span> Causal Inference: An Introduction<a href="causal-inference-an-introduction.html#causal-inference-an-introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>“Correlation is not causality” is one of the most frequently used lines in social science. In a lab experiment, a researcher can perform controlled experiments to determine whether A causes B by controlling for confounders. However, the complexities and interrelations of human behavior create a setting starkly different from the controlled environment of a lab, making things much more convoluted. Causal inference, therefore, can be seen as a process to determine whether A causes B in both lab settings and out-of-lab scenarios.</p>
-<p><strong>A simple example.</strong>
-Say, we are interested in evaluating the effects of a tutoring program on exam scores for an introductory course.</p>
-<p>To begin, in this simple example, we assume that the treatment is (completely) randomly assigned. The class is randomly divided into two groups: one group receives the treatment <strong>(treatment group)</strong> and the other group does not receive the treatment <strong>(control group)</strong>. Proper randomization means that each individual has an equal probability of receiving the treatment or not receiving it. This approach with an arbitrarily high probability ensures balance in both observed and unobserved factors as the sample size grows such that any differences in outcomes between the treatment and control groups can be attributed to the treatment itself, rather than to pre-existing differences between the groups.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <em>Balance</em> here is defined as an instance when all pre-treatment covariates between the treatment and control groups are similar. If this is attained then it increases confidence that the treatment and the control units are comparable.</p>
-<p><strong>Set up.</strong> We use <span class="math inline">\(W\)</span> to denote the treatment status such that
-<span class="math inline">\(W_i \in \{0, \; 1\}\)</span>, <span class="math inline">\(Y_i\)</span> is the exam score following the treatment assignment, and <span class="math inline">\(X_i\)</span> are the covariates (e.g., gender, race). The subscript <span class="math inline">\(i\)</span>
-indicates an individual or unit of observation.</p>
+<div id="propensity-score" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Propensity score<a href="propensity-score.html#propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Previously we discussed the setting of a discrete feature in which case we estimate group-wise ATEs and use the weighted average to obtain an overall ATE estimate. When there are many features (covariates), this approach is prone to the <em>curse of dimensionality</em>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Moreover, if features are continuous, we won’t be able to estimate ATE at each value of <span class="math inline">\(x \in \chi\)</span> due to lack of enough sample size. Instead of estimating group-wise ATE and averaging them, we would want to use a more indirect approach. This is when propensity score comes in.</p>
+<p>The implicit assumption is that we have collected enough features (discrete, continuous, interaction terms, higher degree polynomials) to back unconfoundedness. This again means that the treatment assignment is as good as random after controlling for <span class="math inline">\(X_i\)</span>. More formally, this us back to equation <a href="ipw-and-aipw.html#eq:uncon">(3.3)</a>. But in actuality we are not interested in splitting groups to estimate group-wise treatment effects in the case when covariates are continuous and there are many characteristics determining the treatment assignment.</p>
+<p><strong>Propensity score: <span class="math inline">\(e(x)\)</span>.</strong> The probability of being treated given a set of covariates <span class="math inline">\(X\)</span>s.</p>
+<p><span class="math display" id="eq:prop">\[\begin{equation}
+e(x) = P(W_i = 1 | X_i = x) \tag{3.4}
+\end{equation}\]</span></p>
+<p>The key property of the propensity score is that it balances units in the treatment and control groups. If unconfoundedness assumption holds, we can write the following:</p>
+<p><span class="math display" id="eq:pconf">\[\begin{equation}
+W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) \tag{3.5} 
+\end{equation}\]</span></p>
+<p>What equation <a href="propensity-score.html#eq:pconf">(3.5)</a> says is that instead of controlling for <span class="math inline">\(X\)</span> one can control for the probability of treatment <span class="math inline">\((e(X))\)</span> to establish the desired property that the treatment is as good as random. The propensity scores are mainly used for balancing purposes.</p>
+<p>One straight-forward implication of equation <a href="propensity-score.html#eq:pconf">(3.5)</a> is that if we partition observations into groups with similar propensity score then we can estimate group-wise treatment effects and aggregate them to form an estimate for ATE. This can be done using the propensity score stratification method. The argument here is that when units with similar propensity scores are compared, the covariates are approximately balanced, mimicking a randomized experiment.</p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Of course, balance is not guranteed and in such cases one should think hard whether differences in covariates matter, and if they do, adjustment should be applied.<a href="causal-inference-an-introduction.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<ol start="4">
+<li id="fn4"><p>As the number of covariates increases the domain space shrinks quite rapidly making it infeasible to estimate ATE within the given domain due to thinning out data.<a href="propensity-score.html#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -211,8 +220,8 @@ indicates an individual or unit of observation.</p>
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="potential-outcome-framework-neyman-rubin-causal-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="a-simple-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="estimation-of-propensity-score.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
