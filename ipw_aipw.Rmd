@@ -45,7 +45,7 @@ The target is to estimate the average treatment effect (ATE):
 
 \begin{equation}
 \label{eq:ATE}
-ATE = E[Y_i(1) - Y_i(0)]...... \; equation (1)  
+ATE = E[Y_i(1) - Y_i(0)]  (\#eq:ate)
 \end{equation}
 
 Note that using the following two assumptions: 
@@ -73,39 +73,44 @@ P(W_i = 1 \; | \;  Y_i(0), \;  Y_i(1),  \;  n_T) = \frac{n_T}{n}, \; \; i = \{1,
 
 
 
-In equation \@ref(eq:ptreat), $n_T$ refers to the number of units that should receive the treatment.^[Although it is generally recommended to assign half of the sample to the treatment group and the other half to the control group, this is not a strict requirement.] 
+In equation \@ref(eq:ptreat), $n_T$ refers to the number of units that receives the treatment.^[Although it is generally recommended to assign half of the sample to the treatment group and the other half to the control group, this is not a strict requirement.] 
 In an easy to understand set-up, if a researcher wants $P(W_i = 1) = 0.5$ (unit is equally likely to be treated or untreated), a coin flip can feasibly be used as a mechanism to assign treatment.^[Of course, this is quicky going to be inefficient as the sample size increases. In general, treatment assignment is determinted by a statistical process via a software. For example, if a researcher wants about one-third of the sample treated then a bernoulli trial with the probability of success of 0.33 can be used.] 
 
 
-Although randomized controlled trials (RCTs) are often considered the gold standard in causal inference, but they cannot always be used due to ethical, moral, and monetary reasons. Returning to the example we used in the previous chapter, it is not ethical to demarcate who can attend the tutoring session versus who cannot. This is precisely what an RCT setting does.
-
-In real-world scenarios, tutoring sessions are typically voluntary. Students who regularly attend these sessions may have different baseline (pre-treatment) characteristics compared to those who do not attend. These differences can introduce biases that complicate causal inference in observational studies.
+Although randomized controlled trials (RCTs) are often considered the gold standard in causal inference, they cannot always be used due to ethical, moral, and monetary reasons. Returning to the example we used in the previous chapter, it is not ethical to demarcate who can attend the tutoring session versus who cannot. In real-world scenarios, tutoring sessions are typically voluntary. Students who regularly attend these sessions may have different baseline (pre-treatment) characteristics compared to those who do not attend. These differences can introduce biases that complicate causal inference in observational studies.
 
 
-To proceed further, we require more knowledge about the treatment assignment. In other words, we need to understand which variables determine who attends the tutoring sessions. This information is crucial for identifying potential confounders and for applying methods that can help estimate causal effects in observational settings. This brings us to the **unconfoundedness** assumption. 
+To proceed further in observational setting (without using RCTs), we require more knowledge about the treatment assignment. In other words, we need to understand which variables determine who attends the tutoring sessions. This information is crucial for identifying potential confounders and for applying methods that can help estimate causal effects in observational settings. *In causal inference, confounders are variables that are associated with both the treatment and the outcome. They can introduce bias in the estimation of the causal effect of the treatment on the outcome by providing alternative explanations for any observed relationships.* For example, say you are trying to evaluate the efficacy of a new drug on blood pressure level. If smokers are more likey to get treated and if they tend to have higher blood pressure to begin with, the treatment effects are likely to be understated.  
 
 
-**Unconfoundedness**: The treatment assignment is as good as random once we control for $X$s. $\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi$.   
+This brings us to the **unconfoundedness** assumption. 
+
+
+**Unconfoundedness**: The treatment assignment is as good as random once we control for $X$s. 
+
+\begin{equation}
+\{W_i \perp \{Y_i(0), \; Y_i(1)\} | X_i \} \; for \; all \; x \in \chi. (\#eq:uncon)
+\end{equation}   
 
 As with the tutoring example, the independence assumption (discussed in the previous chapter) is highly unlikely to hold in observational settings. Let's consider the following scenarios:
 
-a. Out of the ten states that are yet to expand Medicaid, eight fall in South. 
+a. Out of the ten states that are yet to expand Medicaid, eight fall in South. Medicaid expansion is not random.
 b. Cigarette taxes are higher in states with higher anti-smoking sentiments. 
 c. Infrastructure development, such as construction of roads, schools, hopitals, are demand-driven. 
 d. The list goes on ..
 
 
-However, if we manage to observe all the $X$s (covariates) that influence the treatment, we can invoke unconfoundedness for causal inference—assuming the stars align and and the universe decides to cooperate.
+However, if we manage to observe all the $X$s (covariates) that influence the treatment, we can invoke unconfoundedness for causal inference.
 
 ## A simple example 
 
-Say, you are interested in evaluating the effect of tutoring program initiated following the first exam on grades at an introductory level course. For simplicity, the possible grades are **A** and **B**. However, students who received B on their first exam are more likely to attend the tutoring session. In other words, $P(W_i = 1 | Y_{iFE} = A) < P(W_i = 1 | Y_{iFE} = B)$. In this case, the treatment assignment is correlated with the past grade, which can predict the grade on the second exam. Hence, using equation (2) to estimate effects of the tutoring program will result in biased estimate. 
+Say, you are interested in evaluating the effect of tutoring program initiated following the first exam on grades at an introductory level course. For simplicity, the possible grades are **A** and **B**. However, students who received B on their first exam are more likely to attend the tutoring session. In other words, $P(W_i = 1 | Y_{iFE} = A) < P(W_i = 1 | Y_{iFE} = B)$ ($Y_{iFE}$ is read as unit $i's$ grade in the first exam). In this case, the treatment assignment is correlated with the past grade, which can predict the grade on the second exam. In other words, if you did well in the first exam, you are likely to perform well in the second exam and so on. Hence, using equation (2) to estimate effects of the tutoring program will result in biased estimate. 
 
 Since we know that the probability of treatment is influenced by the grade on the first exam, we can estimate the conditional average treatment effect (CATE) and average them using weights to form an estimate of ATE. Let's take a look at the data. 
 
 ```{r}
 
-
+# function to report grade breakdown by the first exam grade (A and B)
 grade_mat  <- function(grade_vec){
     grade  <- matrix(0, nrow =2, ncol = 3)
     grade[, 1]  <- c("Treat", "Control")
@@ -116,46 +121,310 @@ grade_mat  <- function(grade_vec){
 
 # Y_iFS == A
 grade  <- grade_mat(c(5, 9, 2, 4))
-colnames(grade)  <- c("1st Exam = A", "A (2nd Exam)", "B (2nd Exam)")
+colnames(grade)  <- c(" ", "A (2nd Exam)", "B (2nd Exam)")
 
+# Se
 grade  %>% kable()  %>% 
-    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")  %>% 
+    add_header_above(c("Table 1." = 1, "Grade in the 2nd exam | 1st exam = A" = 2))
 
 grade  <- grade_mat(c(15, 1, 5, 4))
-colnames(grade)  <- c("1st Exam = B", "A (2nd Exam)", "B (2nd Exam)")
+colnames(grade)  <- c(" ", "A (2nd Exam)", "B (2nd Exam)")
 
 grade  %>% kable()  %>% 
-    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")  %>% 
+    add_header_above(c("Table 2." = 1, "Grade in the 2nd exam | 1st exam = B" = 2))
 ```
 
 
-$\hat{\tau}_{FE=A} = \frac{5}{7} - {9}{13} = 2.1 \; pp$
+$~$
+$~$
 
-$\hat{\tau}_{FE=B} = \frac{15}{20} - {1}{5} = 55 \; pp$
+**Estimation**
+
+$\hat{\tau}_{FE=A} = \frac{5}{7} - \frac{9}{13} = 2.1 \; pp$
+
+$\hat{\tau}_{FE=B} = \frac{15}{20} - \frac{1}{5} = 55 \; pp$
 
 $\hat{\tau}_{AGG} = \frac{20}{45} \hat{\tau}_{FE=A} - \frac{25}{45} \hat{\tau}_{FE=B} = 31.48 \; pp$. 
 
-The first two are CATEs, which is then averaged to form ATE using appropriate weights on the third line. This simple example using the discreate feature space provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).^[In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.]
+The first two are CATEs for the group that recived A and B in the first exam. The assumption is that once conditioned on the grade in the first exam, treatment (who attends vs. who doesn't) is random. This allows valid estimation of within group causal effects, which are then averaged to form ATE using appropriate weights on the third line. This simple example using the discrete feature space (grade in the first exam can be A or B) provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).^[In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.]
 
-## Continuous features and propensity score 
+## Propensity score 
 
-Previously we discussed the case of a discrete feature. In this case we estimates group-wise ATE and used the weighted average to obtain ATE. When there are many features, this approach is prone to the curse of dimensionality. Moreover, if features are continuous, we won't be able to estimate ATE at each value of $x \in \chi$ due to lack of enough sample size. Instead of estimating group-wise ATE and averaging them, we would want to use a more indirect approach. This is when propensity score comes in. 
+Previously we discussed the setting of a discrete feature in which case we estimate group-wise ATEs and use the weighted average to obtain an overall ATE estimate. When there are many features (covariates), this approach is prone to the *curse of dimensionality*.^[As the number of covariates increases the domain space shrinks quite rapidly making it infeasible to estimate ATE within the given domain due to thinning out data.] Moreover, if features are continuous, we won't be able to estimate ATE at each value of $x \in \chi$ due to lack of enough sample size. Instead of estimating group-wise ATE and averaging them, we would want to use a more indirect approach. This is when propensity score comes in. 
 
-The assumption is that we have collected enough features (discrete, continuous, interactions, higher degree polynomials) to back unconfoundedness. This again means that the treatment assignment is as good as random after controlling for $X_i$. More formally, 
+The implicit assumption is that we have collected enough features (discrete, continuous, interaction terms, higher degree polynomials) to back unconfoundedness. This again means that the treatment assignment is as good as random after controlling for $X_i$. More formally, this us back to equation \@ref(eq:uncon). But in actuality we are not interested in splitting groups to estimate group-wise treatment effects in the case when covariates are continuous and there are many characteristics determining the treatment assignment.   
 
-$W_i \perp \{Y_i(0), \; Y_i(1)\} | \; X_i \; ............. equation(3)$ 
+**Propensity score: $e(x)$.** The probability of being treated given a set of covariates $X$s. 
 
-Intuitively, after accounting for the features that influence who receives treatment, the treatment assignment is as good as random among the sub-group with similar features. But in actuality we are not interested in splitting groups to estimate group-wise treatment effects.   
+\begin{equation}
+e(x) = P(W_i = 1 | X_i = x) (#eq:prop)
+\end{equation}
 
-**Propensity score $e(x)$.** The probability of being treated conditional on features $X$s. 
+The key property of the propensity score is that it balances units in the treatment and control groups. If unconfoundedness assumption holds, we can write the following: 
 
-$e(x) = P(W_i = 1 | X_i = x) \; ............. equation(4)$. 
+\begin{equation}
+W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) (\#eq:pconf) 
+\end{equation}
 
-The key property of the propensity score is that it balances units in the treatment and control groups. If equation (3) holds, we can write the following: 
+What equation  \@ref(eq:pconf) says is that instead of controlling for $X$ one can control for the probability of treatment $(e(X))$ to establish the desired property that the treatment is as good as random. The propensity scores are mainly used for balancing purposes. 
 
-$W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) \; ............. equation(5)$ 
 
-What equation (5) says is that instead of controlling for $X$ one can control for the probability of treatment $(e(X))$ to establish the desired property that the treatment is as good as random. The implication of equation (5) is that if we partition observations in groups with similar propensity score then we can estimate group-wise treatment effects and aggregate to form an estimate for ATE. This can be done using the propensity score stratification. 
+One straight-forward implication of equation \@ref(eq:pconf) is that if we partition observations into groups with similar propensity score then we can estimate group-wise treatment effects and aggregate them to form an estimate for ATE. This can be done using the propensity score stratification method. The argument here is that when units with similar propensity scores are compared, the covariates are approximately balanced, mimicking a randomized experiment. 
+
+## Estimation of propensity score
+
+- Propensity scores can be estimated using various statistical or machine learning models. 
+
+- We will first estimate propensity score using a logistic regression model, where the treatment assignment $W$ is regressed on the covariates $X$.
+
+- Next, we will estimate propensity score using random forest model built within the GRF framework in Athey et al. 
+
+**Logistic Regression** 
+
+Using a linear regression framework to predict probabilities when the outcome is binary $\{0, \; 1\}$ falls short since the predicted values can go beyond 0 and 1. Many models contain 
+values within the range of 0 and 1, which can be used to model a binary response. The logistic regression uses a logistic function given as: 
+
+
+\begin{equation}
+p(X) = \frac{e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}}{1 + e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}} (\#eq:logit)  
+\end{equation}
+
+It is easy to see that $lim_{a \rightarrow - \inf}[\frac{e^a}{1+e^a}] = 0$ and $lim_{a \rightarrow  \inf}[\frac{e^a}{1+e^a}] = 1$. Equation \@ref{eq:logit} can be transformed using the *logit transformation* given as: 
+
+\begin{equation}
+g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p
+\end{equation}
+
+We want to fit a logistic regression in order to predict the probability. For now, we will use simulated data. 
+
+
+```{r}
+
+# helper packages
+library(dplyr)  # data wrangling 
+library(ggplot2) # plots
+library(rsample) # data splitting
+library(tidyr) # for reshaping, pivot_wider
+
+# Modeling package 
+library(caret) # for logistic regression modeling 
+
+# Model interpretability 
+library(vip)
+
+
+set.seed(194) # for replicability
+
+# Generate simulated Data 
+
+n <- 2000 # number of obsevations
+p <- 10 # number of covariates
+X <- matrix(rnorm(n * p), n, p) # data matrix
+true_effect  <- 2.56
+
+W <- rbinom(n, 1, 0.1 + 0.4 * (X[, 1] > 0) + 0.2 * (X[, 2] > 0))
+prob  <- 0.1 + 0.4 * (X[, 1] > 0) + 0.2 * (X[, 2] > 0)  # oracle propensity score
+
+Y <- true_effect * W + X[, 2] + pmax(X[, 1], 0) + rnorm(n)
+#plot(X[, 1], X[, 2], col = as.factor(W))
+
+dat  <- data.frame(cbind(W, Y, X))
+colnames(dat)  <- c("W", "Y", paste0("X", seq(1, 10))) 
+dat  <- dat  %>% 
+        mutate(W = as.factor(W))
+
+# create 70% training and 30% test data 
+churn_split  <- initial_split(dat, prop = 0.7)
+dat_train  <- training(churn_split)
+dat_test  <- testing(churn_split)
+
+# dimension of training and testing data
+print(dim(dat_train))
+print(dim(dat_test))
+
+
+# let's compare two different models
+
+# using X1 as the predictor
+cv_model1  <- train(
+     W ~ X1 + X2 + X3 + X4, 
+    data = dat_train, 
+    method = "glm", 
+    family = "binomial", 
+    trControl = trainControl(method = "cv", number = 10)
+)
+
+# misses out on X1
+cv_model2  <- train(
+     W ~ X2 + X3 + X4, 
+    data = dat_train, 
+    method = "glm", 
+    family = "binomial", 
+    trControl = trainControl(method = "cv", number = 10)
+)
+
+
+# print the sample performance measures 
+
+sum_performance  <-  summary(
+    resamples(
+        list(
+            model1  <- cv_model1, 
+            model2  <- cv_model2
+        )
+    )
+)
+
+sum_performance$statistics$Accuracy
+
+# use the confusion matrix 
+
+# predict class 
+
+threshold  <- 0.5
+pred_prob  <- predict(cv_model1, dat_train, type = "prob")
+pred_class_manual  <-  rep(0, 1400)
+pred_class_manual[pred_prob[, 2] >= 0.5]  <- 1
+
+pred_class  <- predict(cv_model1, dat_train)
+
+# print the confusion matrix 
+confusionMatrix(
+    data = relevel(pred_class, ref = "1"), # predictions
+    reference = relevel(dat_train$W, ref = "1") # reference or the true value
+)
+
+# if predict all yes still get an accuracy of 0.5936
+table(dat_train$W)  %>% prop.table()
+
+```
+
+Looking at the confusion matrix, the values on the downward diagonal ([1, 1] and [2, 2] in matrix) are correctly idenfified by the model, while the upward diagonal values ([2, 1] and [1, 2]) are incorrectly classified. If all of the observations were assigned the value of 0, the accuracy would still be 0.5936%. This is termed as the *no information rate*. The model performs quite well in predicting True Negatives (classify as 0, when the value is actually 0). However, it does not perform so well in classifying the True Positives -- more than 50% of the positive cases are classified as negative. 
+
+
+Next, two measures of importance are *sensitivity* and *specificity*. The sensitivity measure tracks the true positive rate from the model, while the specificity measure tracks the true negative rate.
+
+- $sensitivity = \frac{True \; positives}{True \; positives + False \; negatives} = 0.8790$. 
+
+- $specificity = \frac{True \; negatives}{True \; negatives \; + \; False \; positives} = \frac{604}{604 + 85} = 0.8766$. 
+
+**How are the observations classified?**
+A threshold value is used to transform the raw prediction of probabilities into classification such that $P(Y_{i} > p_{threshold})=1.$ The implicit $p_{threshold}$ used is 0.5. Varying the threshold from 0 to 1, one can calculate the relationship between the False Positive Rate (the prediction is positive when in actual the outcome is negative) and True Positive Rate at each threshold value. If the threshold value $(p_{threshold})$ is 1, then all observations are classified as 0, which means that the False Positive Rate is 0 but so is the True Positive Rate. Similarly, if the threshold is 0, then both True and False positive rates are 1. This gives the Receiver Operating Characteristic (ROC). 
+
+```{r, fig.cap="ROC", fig.align = "center"}
+library(ROCR)
+
+# compute probabilities 
+m1_prob  <- predict(cv_model1, dat_train, type = "prob")[, 2]
+m2_prob  <- predict(cv_model2, dat_train, type = "prob")[, 2]
+
+# AUC metrics 
+perf1  <- prediction(m1_prob, dat_train$W)  %>% 
+            performance(measure = "tpr", x.measure = "fpr")
+
+perf2  <- prediction(m2_prob, dat_train$W)  %>% 
+            performance(measure = "tpr", x.measure = "fpr")
+
+# plot ROC curves
+plot(perf1, col = "red")
+plot(perf2, add = TRUE, col = "green") 
+legend(0.8, 0.2, legend = c("cv_model1", "cv_model2"), lty = c(1,1),
+            col = c("red", "green"), cex = 0.6)
+```
+
+The figure above plots the ROC for two models that we tested using cross-validation. The cv_model2 produces a diagonal line, which means that this model is as good as a random guess. Next, cv_model1 performs a whole lot better since a large gains in True positive rate can be achieved with a relatively small increase in False positive rate at the start. The ROC curve pertaining to cv_model1 helps pick a threshold to balance the sensitivity (True Positive Rate) and specificity (1 - False Positive Rate).  
+
+
+The histogram of the estimated propensity scores using the logistic regression is as:  
+
+```{r}
+hist(pred_prob[, 2], main = "Histogram of P(W=1|X)
+      \n using Logistic Regression", xlab = "probabilities")
+```
+
+Now, let's take a look at the confusion matrix using the test data. 
+
+```{r}
+pred_class_test  <- predict(cv_model1, dat_test)
+
+# print the confusion matrix this time for the test sample 
+confusionMatrix(
+    data = relevel(pred_class_test, ref = "1"), # classification from the prediction
+    reference = relevel(dat_test$W, ref = "1") # ground truth 
+)
+```
+
+The measures of accuracy, sensitivity, and specificity are similar for both the training and testing sample.
+
+## Using cross-fitting to predict propensity score
+
+Here, we will be using 10-fold cross-folding to predict propensity score. 
+
+```{r}
+
+fun_probit_predict <- function(predictfold){
+    # @Arg predictfold: number of the fold to avoid for model traning 
+    # but used for prediction
+    cv_model1  <- train(
+                        W ~ X1 + X2 + X3 + X4, 
+                        data = dat[-predictfold, ], 
+                        method = "glm", 
+                        family = "binomial", 
+                        trControl = trainControl(method = "cv", number = 10)
+                        )
+
+    predict_logit  <- predict(cv_model1, dat[predictfold, ], type = "prob")
+    return(predict_logit[, 2])
+    
+}
+
+
+##############################
+#
+# cross-fitting
+#
+##############################
+
+k  <- 10 # number of folds
+len  <-  nrow(dat)
+
+ind  <-  sample(1:len, replace = FALSE, size = len)
+fold  <- cut(1:len, breaks = k, labels = FALSE) # create 10 folds
+
+fold  <-  fold[ind] # randomly allocate the folds by ind
+
+# container to store the predicted values
+
+store  <- c()
+true_index  <- c()
+
+# do the cross-fitting and store
+for(i in 1:k){
+    # which(fold == i) is used as an index, if 8th observation receives the 1st fold for the first time, 
+    # then the 1st prediction value corresponds to the 8th obs 
+    store_new  <- fun_probit_predict(predictfold = which(fold == i)) 
+    store_new  <- as.numeric(as.character(store_new))
+    true_index_new  <- which(fold == i)
+    store  <- c(store, store_new)
+    true_index  <- c(true_index, true_index_new)
+}
+
+# create a dataframe with index that maps the predictions with the actual data
+store  <-  data.frame(pscore = store, index = true_index)
+
+# sort by index
+store  <-  store[order(store[, 2]), ]
+
+# propensity score
+dat  <- dat  %>% 
+            mutate(pscore = store$pscore)
+
+# histogram of propensity score
+hist(dat$pscore, main = "propensity score \n from cross-fitting")
+
+```
 
 ## Propensity score stratification
 
@@ -171,13 +440,46 @@ $\hat{\tau}_{Strat} = \frac{1}{J} \sum_{j = 1}^{J} \hat{\tau}_j$
 
 Here, $\hat{\tau}_{Strat}$ is consistent for $\tau$, meaning that $\hat{\tau}_{Strat} \rightarrow_p \tau$ given that $\hat{e}(x)$ is consistent for $e(x)$ and the number of strata grows appropriately with $N$. However, one needs to set the number of strata, which can be a bit ad-hoc.  
 
-## IPW and Estimation
+Demo of propensity score stratification
+```{r}
+
+# order data by the propensity score: low to high
+dat  <- dat[order(dat$pscore), ]
+
+# cut to form ventiles
+strata  <- cut(dat$pscore, breaks = quantile(dat$pscore, seq(0, 1, 0.05)), labels = 1:20, include.lowest = TRUE)
+
+dat  <-  dat  %>%  
+            mutate(strata = strata)
+
+# compare across strata
+dat_sum  <- dat  %>%  
+                group_by(W, strata)  %>%  
+                summarize(mean_Y = mean(Y))  %>%  
+                pivot_wider(names_from = W, values_from = mean_Y)
+
+colnames(dat_sum)  <-  c("strata", "mean_control", "mean_treat")
+dat_sum  <- dat_sum  %>%  
+                mutate(diff = mean_treat - mean_control)
+
+print(paste("ATE Estimation from propensity score stratification is: ", mean(dat_sum$diff), sep = ""))
+
+print(paste("raw difference is :", mean(dat$Y[dat$W == 1]) - mean(dat$Y[dat$W == 0]), sep = ""))
+
+print(paste("And the true treatment effect is :", true_effect, sep = ""))
+```
+
+We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator.
+
+## Inverse Probability Weighting and Estimation
 
 A more natural way to exploit the condition of unconfoundedness is to weight observations by their propensity score, which is known as the inverse probability weighting. As before $\hat{e}(x)$ is defined as an estimated propensity score. 
 
-$\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} (\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}) \; ....equation(6)$
+\begin{equation}
+\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} (\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}) (\#eq:IPW)
+\end{equation}
 
-Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in features across the treatment and control groups. Note that the validity of $\hat{\tau}$ still hinges on the unconfoundedness assumption. 
+Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in covariates across the treatment and control groups. Note that the validity of $\hat{\tau}$ still hinges on the unconfoundedness assumption. 
 
 **Limitation of IPW Estimate.** One way to analyze the accuracy of $\hat{\tau}_{IPW}$ is to compare it with the oracle IPW estimate, $\hat{\tau}_{IPW}^{*}$. The oracle estimate is obtained from the known propensity score. Readers are referred to Wager (2018) lecture notes regarding the details of the comparison. Briefly, comparison between $\hat{\tau}_{IPW}^{*}$ and $\hat{\tau}_{AGG}$ suggests that the oracle IPW under-performs $\hat{\tau}_{AGG}$. In other words, the variance of the oracle estimate is larger than that of $\hat{\tau}_{AGG}$. 
 
@@ -302,9 +604,14 @@ print(result.oracle.ipw)
 ```
 
 Note that $e(x)$ is estimated via cross-fitting.
+
 1. The data is divided into $K$-folds. 
+
 2. For each fold $k$, model building is administered using $-k$ folds. 
+
 3. Using Step 2, predictions are generated for units in the $k^{th}$ fold.  
+
+4. Steps 2 and 3 are repeated until all $K$ folds are exhausted.
 
 ## AIPW and Estimation
 
