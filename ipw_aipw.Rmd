@@ -428,6 +428,16 @@ hist(dat$pscore, main = "propensity score \n from cross-fitting")
 
 ## Propensity score stratification
 
+Propensity scores are super important as they can be used in various different approaches to enchance the validity of causal inference in observational settings. These include but are not limited to inverse probability weighting, matching estimates, weight adjustments in regression (for better balancing), trimming, and propensity score stratification. These methods will be discussed in detail as we move on with the course. First, let's take a look at propensity score stratification to get a gist of how propensity scores contribute in comparing treatment units with control units. 
+
+The simple idea is given by the cliché  that we want to compare oranges with oranges and not apples. To bring focus back into our context, it simply means that it is no good comparing a treated unit with an extremely high probability of receiving the treatment with a control unit with super low probability of receiving the treatment. But what if (yes, what if) we compare units with similar treatment probabilities? 
+
+Let's run a quick thought experiment. We run the logistic regression and estimate the propensity score. Say, we have two units, each from the treatment and control group, with the propensity score of 0.6. The assumption here is, conditional on the similar propensity score, the treatment assignment is random. This follows from the unconfoundedness assumption: $Y_i^{0}, \; Y_i^{1} \; \perp \; W_i \; | X_i$.
+
+Propensity score stratification divides the estimates of propensity scores into several segments and estimates the ATE within each segment. Finally, these segment-specific ATE estimates are averaged to obtain the overall estimate of ATE.
+
+**Steps for ATE estimation using propensity score stratification**
+
 1. Order observations according to their estimated propensity score. 
 
 $\hat{e}(X)_{i1}, \; \hat{e}(X)_{i2}, ... \; \hat{e}(X)_{iN}$
@@ -469,25 +479,38 @@ print(paste("raw difference is :", mean(dat$Y[dat$W == 1]) - mean(dat$Y[dat$W ==
 print(paste("And the true treatment effect is :", true_effect, sep = ""))
 ```
 
-We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator.
+We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator. Looks like given that we know and observe what variables determine the treatment assignment, propensity score stratification approach performs well in estimating the ATE.
 
-## Inverse Probability Weighting and Estimation
+## Inverse Probability Weighting (IPW)
 
 A more natural way to exploit the condition of unconfoundedness is to weight observations by their propensity score, which is known as the inverse probability weighting. As before $\hat{e}(x)$ is defined as an estimated propensity score. 
 
 \begin{equation}
-\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} (\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}) (\#eq:IPW)
+\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} \Bigg(\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}\Bigg) (\#eq:IPW)
 \end{equation}
 
-Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in covariates across the treatment and control groups. Note that the validity of $\hat{\tau}$ still hinges on the unconfoundedness assumption. 
+Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in covariates across the treatment and control groups. Note that the validity of $\hat{\tau}$ still hinges on the unconfoundedness assumption. Any inference that you make is only good if your assumption holds.  
 
-**Limitation of IPW Estimate.** One way to analyze the accuracy of $\hat{\tau}_{IPW}$ is to compare it with the oracle IPW estimate, $\hat{\tau}_{IPW}^{*}$. The oracle estimate is obtained from the known propensity score. Readers are referred to Wager (2018) lecture notes regarding the details of the comparison. Briefly, comparison between $\hat{\tau}_{IPW}^{*}$ and $\hat{\tau}_{AGG}$ suggests that the oracle IPW under-performs $\hat{\tau}_{AGG}$. In other words, the variance of the oracle estimate is larger than that of $\hat{\tau}_{AGG}$. 
+**Limitation of IPW Estimate.** One way to analyze the accuracy of $\hat{\tau}_{IPW}$ is to compare it with the oracle IPW estimate, $\hat{\tau}_{IPW}^{*}$. The oracle estimate is obtained from the known propensity score. Briefly, comparison between $\hat{\tau}_{IPW}^{*}$ and $\hat{\tau}_{AGG}$ suggests that the oracle IPW under-performs $\hat{\tau}_{AGG}$. In other words, the variance of the oracle estimate is larger than that of $\hat{\tau}_{AGG}$. 
 
 Algorithmically, we can form *score* as:
 
 $(\frac{Y_i \times W_i}{\hat{e}(X_i)} - \frac{Y_i \times (1-W_i)}{1 - \hat{e}(X_i)})$
 
-The mean of it results to $\hat{\tau}$ and the standard error of the estimate is simply $\frac{\hat{\sigma}_{score}}{\sqrt{N}}$.
+The mean of it results to $\hat{\tau}$ and the standard error of the estimate is simply $\frac{\hat{\sigma}_{score}}{\sqrt{N}}$. 
+
+
+**Estimating IPW.** In the example below we will simulate a dataset where the treatment assignment is made to be correlated with the outcome. This means that the independence assumption does not hold. However, since this is a simulated data, we know exactly what covariates influence the treatment assignment. Hence, we can invoke the unconfoundedness assumption. We estimate the propensity score using random forest based on *honest splitting*. For this, we use GRF package from \cite{athey2019}.
+
+Note that $e(x)$ is estimated via cross-fitting.
+
+1. The data is divided into $K$-folds. 
+
+2. For each fold $k$, model building is administered using $-k$ folds. 
+
+3. Using Step 2, predictions are generated for units in the $k^{th}$ fold.  
+
+4. Steps 2 and 3 are repeated until all $K$ folds are exhausted.
 
 **Estimation**
 
@@ -510,8 +533,8 @@ p <- 10
 X <- matrix(rnorm(n * p), n, p)
 X.test <- matrix(0, 101, p)
 X.test[, 1] <- seq(-2, 2, length.out = 101)
-W <- rbinom(n, 1, 0.4 + 0.2 * (X[, 1] > 0))
-prob  <- 0.4 + 0.2 * (X[, 1] > 0)
+prob  <- 1 / (1 + exp(- (X[, 1] + rnorm(n))))
+W <- rbinom(n, 1, prob)
 Y <- 2.56 * W + X[, 2] + pmax(X[, 1], 0) + rnorm(n)
 plot(X[, 1], X[, 2], col = as.factor(W))
 
@@ -573,25 +596,24 @@ for(i in seq(1:K)){
     # fold-specific treatment effect
     score[[i]]  <- ((W[index[, i]] * Y[index[, i]]) / (predict.mat[, i])) - 
                 (((1 - W[index[, i]]) * Y[index[, i]]) / (1 - predict.mat[, i]))
-    score_oracle[[i]]  <- ((W[index[, i]] * Y[index[, i]]) / (prob[i])) - 
-                (((1 - W[index[, i]]) * Y[index[, i]]) / (1 - prob[i]))
 
     tauk[i]  <- mean(score[[i]])
-    tauk_oracle[i]  <- mean(score_oracle[[i]])
 }
 
 # ipw using oracle propensity score and propensity score estimated from grf 
 alpha  <-  0.05 # 5 percent level of significance
 #ipw.ranger  <- mean(((W * Y) / (p.ranger)) - (((1 - W) * Y) / (1 - p.ranger))) 
-ipw.grf  <- weighted.mean(tauk, weights = weighttau)
-ipw.oracle  <- weighted.mean(tauk_oracle, weights = weighttau)
+ipw.grf  <- mean(unlist(score))
+score_oracle  <- ((W * Y) / (prob)) - 
+                ((1 - W) * Y / (1 - prob))
+ipw.oracle  <- mean(score_oracle)
 
 sd.ipw  <-  sd(unlist(score))
-sd.oracle  <-  sd(unlist(score_oracle))
+sd.oracle  <-  sd(score_oracle)
 ll  <- ipw.grf - (sd.ipw / sqrt(length(unlist(score)))) * qnorm(1 - alpha/2)
 ul  <- ipw.grf + (sd.ipw / sqrt(length(unlist(score)))) * qnorm(1 - alpha/2)
-ll_oracle  <- ipw.oracle - (sd.oracle / sqrt(length(unlist(score_oracle)))) * qnorm(1 - alpha/2)
-ul_oracle  <- ipw.oracle + (sd.oracle / sqrt(length(unlist(score_oracle)))) * qnorm(1 - alpha/2)
+ll_oracle  <- ipw.oracle - (sd.oracle / sqrt(length(score_oracle))) * qnorm(1 - alpha/2)
+ul_oracle  <- ipw.oracle + (sd.oracle / sqrt(length(score_oracle))) * qnorm(1 - alpha/2)
 
 result.ipw  <- c("IPW estimate" = round(ipw.grf, 3), "se" = round(sd.ipw / (sqrt(length(W))), 3),
                  "lower bound" = round(ll, 3), "upper bound" = round(ul, 3))
@@ -603,15 +625,8 @@ print(result.ipw)
 print(result.oracle.ipw)
 ```
 
-Note that $e(x)$ is estimated via cross-fitting.
+What? Despite having true propensity score, the Oracle IPW underperforms in accuracy compared to the IPW estimate with unknown propensity score. Whys is it so?
 
-1. The data is divided into $K$-folds. 
-
-2. For each fold $k$, model building is administered using $-k$ folds. 
-
-3. Using Step 2, predictions are generated for units in the $k^{th}$ fold.  
-
-4. Steps 2 and 3 are repeated until all $K$ folds are exhausted.
 
 ## AIPW and Estimation
 
