@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-09" />
+<meta name="date" content="2024-07-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="using-cross-fitting-to-predict-propensity-score.html"/>
-<link rel="next" href="inverse-probability-weighting-and-estimation.html"/>
+<link rel="next" href="inverse-probability-weighting-ipw.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -159,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
 <li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-and-estimation.html"><a href="inverse-probability-weighting-and-estimation.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting and Estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
 <li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
 <li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
 </ul></li>
@@ -196,6 +196,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="propensity-score-stratification" class="section level2 hasAnchor" number="3.5">
 <h2><span class="header-section-number">3.5</span> Propensity score stratification<a href="propensity-score-stratification.html#propensity-score-stratification" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Propensity scores are super important as they can be used in various different approaches to enchance the validity of causal inference in observational settings. These include but are not limited to inverse probability weighting, matching estimates, weight adjustments in regression (for better balancing), trimming, and propensity score stratification. These methods will be discussed in detail as we move on with the course. First, let’s take a look at propensity score stratification to get a gist of how propensity scores contribute in comparing treatment units with control units.</p>
+<p>The simple idea is given by the cliché that we want to compare oranges with oranges and not apples. To bring focus back into our context, it simply means that it is no good comparing a treated unit with an extremely high probability of receiving the treatment with a control unit with super low probability of receiving the treatment. But what if (yes, what if) we compare units with similar treatment probabilities?</p>
+<p>Let’s run a quick thought experiment. We run the logistic regression and estimate the propensity score. Say, we have two units, each from the treatment and control group, with the propensity score of 0.6. The assumption here is, conditional on the similar propensity score, the treatment assignment is random. This follows from the unconfoundedness assumption: <span class="math inline">\(Y_i^{0}, \; Y_i^{1} \; \perp \; W_i \; | X_i\)</span>.</p>
+<p>Propensity score stratification divides the estimates of propensity scores into several segments and estimates the ATE within each segment. Finally, these segment-specific ATE estimates are averaged to obtain the overall estimate of ATE.</p>
+<p><strong>Steps for ATE estimation using propensity score stratification</strong></p>
 <ol style="list-style-type: decimal">
 <li>Order observations according to their estimated propensity score.</li>
 </ol>
@@ -232,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] &quot;raw difference is :3.10098842187519&quot;</code></pre>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="propensity-score-stratification.html#cb24-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;And the true treatment effect is :&quot;</span>, true_effect, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;And the true treatment effect is :2.56&quot;</code></pre>
-<p>We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator.</p>
+<p>We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator. Looks like given that we know and observe what variables determine the treatment assignment, propensity score stratification approach performs well in estimating the ATE.</p>
 </div>
             </section>
 
@@ -240,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="using-cross-fitting-to-predict-propensity-score.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="inverse-probability-weighting-and-estimation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="inverse-probability-weighting-ipw.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

@@ -23,14 +23,14 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-09" />
+<meta name="date" content="2024-07-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="inverse-probability-weighting-and-estimation.html"/>
+<link rel="prev" href="inverse-probability-weighting-ipw.html"/>
 <link rel="next" href="assessing-balance.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -159,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
 <li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
 <li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-and-estimation.html"><a href="inverse-probability-weighting-and-estimation.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting and Estimation</a></li>
+<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
 <li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
 <li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
 </ul></li>
@@ -270,24 +270,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb31-62"><a href="aipw-and-estimation.html#cb31-62" aria-hidden="true"></a></span>
 <span id="cb31-63"><a href="aipw-and-estimation.html#cb31-63" aria-hidden="true"></a><span class="co">#print(paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3)))</span></span>
 <span id="cb31-64"><a href="aipw-and-estimation.html#cb31-64" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to naive estimator:&quot;</span>, <span class="kw">round</span>(<span class="kw">mean</span>(Y[<span class="kw">which</span>(W <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(Y[<span class="kw">which</span>( W <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)]), <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to naive estimator: 2.674&quot;</code></pre>
+<pre><code>## [1] &quot;treatment effects according to naive estimator: 2.92&quot;</code></pre>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="aipw-and-estimation.html#cb33-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to IPW using&quot;</span>, K, <span class="st">&quot;fold cross-fittin:&quot;</span>, <span class="kw">round</span>(ipw.grf, <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to IPW using 10 fold cross-fittin: 2.552&quot;</code></pre>
+<pre><code>## [1] &quot;treatment effects according to IPW using 10 fold cross-fittin: 2.594&quot;</code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="aipw-and-estimation.html#cb35-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to IPW oracle:&quot;</span>, <span class="kw">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to IPW oracle: 2.705&quot;</code></pre>
+<pre><code>## [1] &quot;treatment effects according to IPW oracle: 2.611&quot;</code></pre>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="aipw-and-estimation.html#cb37-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to AIPW using&quot;</span>, K, <span class="st">&quot;fold cross-fitting:&quot;</span>, <span class="kw">round</span>(aipw.grf, <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to AIPW using 10 fold cross-fitting: 2.563&quot;</code></pre>
+<pre><code>## [1] &quot;treatment effects according to AIPW using 10 fold cross-fitting: 2.627&quot;</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="aipw-and-estimation.html#cb39-1" aria-hidden="true"></a><span class="kw">print</span>(<span class="kw">paste</span>(<span class="st">&quot;treatment effects according to GRF:&quot;</span>, <span class="kw">round</span>(grf_ate[[<span class="dv">1</span>]], <span class="dv">3</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;treatment effects according to GRF: 2.548&quot;</code></pre>
+<pre><code>## [1] &quot;treatment effects according to GRF: 2.539&quot;</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="aipw-and-estimation.html#cb41-1" aria-hidden="true"></a><span class="kw">print</span>(result.ipw)</span></code></pre></div>
 <pre><code>## IPW estimate           se  lower bound  upper bound 
-##        2.552        0.100        2.355        2.749</code></pre>
+##        2.594        0.102        2.393        2.794</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="aipw-and-estimation.html#cb43-1" aria-hidden="true"></a><span class="kw">print</span>(result.aipw)</span></code></pre></div>
 <pre><code>##   AIPW Est.          se lower bound upper bound 
-##       2.563       0.033       2.499       2.628</code></pre>
+##       2.627       0.035       2.559       2.695</code></pre>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="aipw-and-estimation.html#cb45-1" aria-hidden="true"></a><span class="kw">print</span>(grf_ate)</span></code></pre></div>
 <pre><code>##   estimate    std.err 
-## 2.54768440 0.04689813</code></pre>
+## 2.53947398 0.04858539</code></pre>
 </div>
 <div class="footnotes">
 <hr />
@@ -300,7 +300,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="inverse-probability-weighting-and-estimation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="inverse-probability-weighting-ipw.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="assessing-balance.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

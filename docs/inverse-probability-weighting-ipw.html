@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.6 Inverse Probability Weighting (IPW) | IPW and AIPW</title>
+  <meta name="description" content="3.6 Inverse Probability Weighting (IPW) | IPW and AIPW" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.6 Inverse Probability Weighting (IPW) | IPW and AIPW" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.6 Inverse Probability Weighting (IPW) | IPW and AIPW" />
+  
+  
+  
+
+<meta name="author" content="Vinish Shrestha" />
+
+
+<meta name="date" content="2024-07-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="propensity-score-stratification.html"/>
+<link rel="next" href="aipw-and-estimation.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="assets/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="assets/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Work in Progress</a></li>
+<li class="chapter" data-level="2" data-path="causal-inference-an-introduction.html"><a href="causal-inference-an-introduction.html"><i class="fa fa-check"></i><b>2</b> Causal Inference: An Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
+<li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
+<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
+<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
+<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
+<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
+<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
+<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>4.2</b> Summary of GRF</a></li>
+<li class="chapter" data-level="4.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>4.3</b> Motivation for Causal Forests</a></li>
+<li class="chapter" data-level="4.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>4.4</b> Causal Forest</a></li>
+<li class="chapter" data-level="4.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>4.5</b> An example of causal forest</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>5</b> Heterogeneous Treatment Effects</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>5.1</b> Some ways to estimate CATE</a></li>
+<li class="chapter" data-level="5.2" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
+<li class="chapter" data-level="5.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>5.3</b> Some Remarks and Questions</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">IPW and AIPW</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="inverse-probability-weighting-ipw" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Inverse Probability Weighting (IPW)<a href="inverse-probability-weighting-ipw.html#inverse-probability-weighting-ipw" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A more natural way to exploit the condition of unconfoundedness is to weight observations by their propensity score, which is known as the inverse probability weighting. As before <span class="math inline">\(\hat{e}(x)\)</span> is defined as an estimated propensity score.</p>
+<p><span class="math display" id="eq:IPW">\[\begin{equation}
+\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} \Bigg(\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}\Bigg) \tag{3.7}
+\end{equation}\]</span></p>
+<p>Intuitively, observations with high propensity score within the treated group are weighted down, while observations with higher propensity score in the control group are weighted more. In this way, propensity score is used to balance the differences in covariates across the treatment and control groups. Note that the validity of <span class="math inline">\(\hat{\tau}\)</span> still hinges on the unconfoundedness assumption. Any inference that you make is only good if your assumption holds.</p>
+<p><strong>Limitation of IPW Estimate.</strong> One way to analyze the accuracy of <span class="math inline">\(\hat{\tau}_{IPW}\)</span> is to compare it with the oracle IPW estimate, <span class="math inline">\(\hat{\tau}_{IPW}^{*}\)</span>. The oracle estimate is obtained from the known propensity score. Briefly, comparison between <span class="math inline">\(\hat{\tau}_{IPW}^{*}\)</span> and <span class="math inline">\(\hat{\tau}_{AGG}\)</span> suggests that the oracle IPW under-performs <span class="math inline">\(\hat{\tau}_{AGG}\)</span>. In other words, the variance of the oracle estimate is larger than that of <span class="math inline">\(\hat{\tau}_{AGG}\)</span>.</p>
+<p>Algorithmically, we can form <em>score</em> as:</p>
+<p><span class="math inline">\((\frac{Y_i \times W_i}{\hat{e}(X_i)} - \frac{Y_i \times (1-W_i)}{1 - \hat{e}(X_i)})\)</span></p>
+<p>The mean of it results to <span class="math inline">\(\hat{\tau}\)</span> and the standard error of the estimate is simply <span class="math inline">\(\frac{\hat{\sigma}_{score}}{\sqrt{N}}\)</span>.</p>
+<p><strong>Estimating IPW.</strong> In the example below we will simulate a dataset where the treatment assignment is made to be correlated with the outcome. This means that the independence assumption does not hold. However, since this is a simulated data, we know exactly what covariates influence the treatment assignment. Hence, we can invoke the unconfoundedness assumption. We estimate the propensity score using random forest based on <em>honest splitting</em>. For this, we use GRF package from .</p>
+<p>Note that <span class="math inline">\(e(x)\)</span> is estimated via cross-fitting.</p>
+<ol style="list-style-type: decimal">
+<li><p>The data is divided into <span class="math inline">\(K\)</span>-folds.</p></li>
+<li><p>For each fold <span class="math inline">\(k\)</span>, model building is administered using <span class="math inline">\(-k\)</span> folds.</p></li>
+<li><p>Using Step 2, predictions are generated for units in the <span class="math inline">\(k^{th}\)</span> fold.</p></li>
+<li><p>Steps 2 and 3 are repeated until all <span class="math inline">\(K\)</span> folds are exhausted.</p></li>
+</ol>
+<p><strong>Estimation</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="inverse-probability-weighting-ipw.html#cb26-1" aria-hidden="true"></a><span class="co">#################################</span></span>
+<span id="cb26-2"><a href="inverse-probability-weighting-ipw.html#cb26-2" aria-hidden="true"></a><span class="co"># Author: VS</span></span>
+<span id="cb26-3"><a href="inverse-probability-weighting-ipw.html#cb26-3" aria-hidden="true"></a><span class="co"># Last Revised: Jan 16, 2024</span></span>
+<span id="cb26-4"><a href="inverse-probability-weighting-ipw.html#cb26-4" aria-hidden="true"></a><span class="co"># Keywords: IPW, AIPW, GRF</span></span>
+<span id="cb26-5"><a href="inverse-probability-weighting-ipw.html#cb26-5" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb26-6"><a href="inverse-probability-weighting-ipw.html#cb26-6" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb26-7"><a href="inverse-probability-weighting-ipw.html#cb26-7" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb26-8"><a href="inverse-probability-weighting-ipw.html#cb26-8" aria-hidden="true"></a><span class="co">#################################</span></span>
+<span id="cb26-9"><a href="inverse-probability-weighting-ipw.html#cb26-9" aria-hidden="true"></a></span>
+<span id="cb26-10"><a href="inverse-probability-weighting-ipw.html#cb26-10" aria-hidden="true"></a></span>
+<span id="cb26-11"><a href="inverse-probability-weighting-ipw.html#cb26-11" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">194</span>)</span>
+<span id="cb26-12"><a href="inverse-probability-weighting-ipw.html#cb26-12" aria-hidden="true"></a></span>
+<span id="cb26-13"><a href="inverse-probability-weighting-ipw.html#cb26-13" aria-hidden="true"></a><span class="co"># Generate Data </span></span>
+<span id="cb26-14"><a href="inverse-probability-weighting-ipw.html#cb26-14" aria-hidden="true"></a>n &lt;-<span class="st"> </span><span class="dv">2000</span></span>
+<span id="cb26-15"><a href="inverse-probability-weighting-ipw.html#cb26-15" aria-hidden="true"></a>p &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb26-16"><a href="inverse-probability-weighting-ipw.html#cb26-16" aria-hidden="true"></a>X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>p), n, p)</span>
+<span id="cb26-17"><a href="inverse-probability-weighting-ipw.html#cb26-17" aria-hidden="true"></a>X.test &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb26-18"><a href="inverse-probability-weighting-ipw.html#cb26-18" aria-hidden="true"></a>X.test[, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb26-19"><a href="inverse-probability-weighting-ipw.html#cb26-19" aria-hidden="true"></a>prob  &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="st"> </span>(X[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n))))</span>
+<span id="cb26-20"><a href="inverse-probability-weighting-ipw.html#cb26-20" aria-hidden="true"></a>W &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dv">1</span>, prob)</span>
+<span id="cb26-21"><a href="inverse-probability-weighting-ipw.html#cb26-21" aria-hidden="true"></a>Y &lt;-<span class="st"> </span><span class="fl">2.56</span> <span class="op">*</span><span class="st"> </span>W <span class="op">+</span><span class="st"> </span>X[, <span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="kw">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n)</span>
+<span id="cb26-22"><a href="inverse-probability-weighting-ipw.html#cb26-22" aria-hidden="true"></a><span class="kw">plot</span>(X[, <span class="dv">1</span>], X[, <span class="dv">2</span>], <span class="dt">col =</span> <span class="kw">as.factor</span>(W))</span></code></pre></div>
+<p><img src="book_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="inverse-probability-weighting-ipw.html#cb27-1" aria-hidden="true"></a><span class="co">#paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3))</span></span>
+<span id="cb27-2"><a href="inverse-probability-weighting-ipw.html#cb27-2" aria-hidden="true"></a></span>
+<span id="cb27-3"><a href="inverse-probability-weighting-ipw.html#cb27-3" aria-hidden="true"></a></span>
+<span id="cb27-4"><a href="inverse-probability-weighting-ipw.html#cb27-4" aria-hidden="true"></a><span class="co">#################################</span></span>
+<span id="cb27-5"><a href="inverse-probability-weighting-ipw.html#cb27-5" aria-hidden="true"></a><span class="co">#################################</span></span>
+<span id="cb27-6"><a href="inverse-probability-weighting-ipw.html#cb27-6" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb27-7"><a href="inverse-probability-weighting-ipw.html#cb27-7" aria-hidden="true"></a><span class="co"># Inverse Probability Weighting</span></span>
+<span id="cb27-8"><a href="inverse-probability-weighting-ipw.html#cb27-8" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb27-9"><a href="inverse-probability-weighting-ipw.html#cb27-9" aria-hidden="true"></a><span class="co">#################################</span></span>
+<span id="cb27-10"><a href="inverse-probability-weighting-ipw.html#cb27-10" aria-hidden="true"></a><span class="co">#################################</span></span>
+<span id="cb27-11"><a href="inverse-probability-weighting-ipw.html#cb27-11" aria-hidden="true"></a></span>
+<span id="cb27-12"><a href="inverse-probability-weighting-ipw.html#cb27-12" aria-hidden="true"></a><span class="co"># use the random forest to get the propensity score </span></span>
+<span id="cb27-13"><a href="inverse-probability-weighting-ipw.html#cb27-13" aria-hidden="true"></a>dat  &lt;-<span class="st"> </span><span class="kw">data.frame</span>(W, X)</span>
+<span id="cb27-14"><a href="inverse-probability-weighting-ipw.html#cb27-14" aria-hidden="true"></a>n_features  &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">setdiff</span>(<span class="kw">names</span>(dat), <span class="st">&quot;W&quot;</span>))</span>
+<span id="cb27-15"><a href="inverse-probability-weighting-ipw.html#cb27-15" aria-hidden="true"></a></span>
+<span id="cb27-16"><a href="inverse-probability-weighting-ipw.html#cb27-16" aria-hidden="true"></a><span class="co"># A. ranger (probability tree)</span></span>
+<span id="cb27-17"><a href="inverse-probability-weighting-ipw.html#cb27-17" aria-hidden="true"></a>rf1_ranger  &lt;-<span class="st"> </span><span class="kw">ranger</span>(</span>
+<span id="cb27-18"><a href="inverse-probability-weighting-ipw.html#cb27-18" aria-hidden="true"></a>    W <span class="op">~</span><span class="st"> </span>., </span>
+<span id="cb27-19"><a href="inverse-probability-weighting-ipw.html#cb27-19" aria-hidden="true"></a>    <span class="dt">data =</span> dat, </span>
+<span id="cb27-20"><a href="inverse-probability-weighting-ipw.html#cb27-20" aria-hidden="true"></a>    <span class="dt">mtry =</span> <span class="kw">min</span>(<span class="kw">ceiling</span>(<span class="kw">sqrt</span>(n_features) <span class="op">+</span><span class="st"> </span><span class="dv">20</span>), n_features),  </span>
+<span id="cb27-21"><a href="inverse-probability-weighting-ipw.html#cb27-21" aria-hidden="true"></a>    <span class="dt">num.trees =</span> <span class="dv">2000</span>, </span>
+<span id="cb27-22"><a href="inverse-probability-weighting-ipw.html#cb27-22" aria-hidden="true"></a>    <span class="dt">probability =</span>  <span class="ot">TRUE</span></span>
+<span id="cb27-23"><a href="inverse-probability-weighting-ipw.html#cb27-23" aria-hidden="true"></a>)</span>
+<span id="cb27-24"><a href="inverse-probability-weighting-ipw.html#cb27-24" aria-hidden="true"></a><span class="co"># OOB predictions from ranger</span></span>
+<span id="cb27-25"><a href="inverse-probability-weighting-ipw.html#cb27-25" aria-hidden="true"></a>p.ranger  &lt;-<span class="st"> </span>rf1_ranger<span class="op">$</span>predictions[, <span class="dv">1</span>]  </span>
+<span id="cb27-26"><a href="inverse-probability-weighting-ipw.html#cb27-26" aria-hidden="true"></a></span>
+<span id="cb27-27"><a href="inverse-probability-weighting-ipw.html#cb27-27" aria-hidden="true"></a><span class="co"># B. probability tree using GRF</span></span>
+<span id="cb27-28"><a href="inverse-probability-weighting-ipw.html#cb27-28" aria-hidden="true"></a></span>
+<span id="cb27-29"><a href="inverse-probability-weighting-ipw.html#cb27-29" aria-hidden="true"></a><span class="co"># cross-fitting index </span></span>
+<span id="cb27-30"><a href="inverse-probability-weighting-ipw.html#cb27-30" aria-hidden="true"></a>K  &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb27-31"><a href="inverse-probability-weighting-ipw.html#cb27-31" aria-hidden="true"></a>ind  &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(W), <span class="dt">replace =</span> <span class="ot">FALSE</span>, <span class="dt">size =</span> <span class="kw">length</span>(W))</span>
+<span id="cb27-32"><a href="inverse-probability-weighting-ipw.html#cb27-32" aria-hidden="true"></a>folds  &lt;-<span class="st"> </span><span class="kw">cut</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(W), <span class="dt">breaks =</span> K, <span class="dt">labels =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb27-33"><a href="inverse-probability-weighting-ipw.html#cb27-33" aria-hidden="true"></a>index  &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> <span class="kw">length</span>(ind) <span class="op">/</span><span class="st"> </span>K, <span class="dt">ncol =</span> K)</span>
+<span id="cb27-34"><a href="inverse-probability-weighting-ipw.html#cb27-34" aria-hidden="true"></a><span class="cf">for</span>(f <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>K){</span>
+<span id="cb27-35"><a href="inverse-probability-weighting-ipw.html#cb27-35" aria-hidden="true"></a>    index[, f]  &lt;-<span class="st"> </span>ind[<span class="kw">which</span>(folds <span class="op">==</span><span class="st"> </span>f)]</span>
+<span id="cb27-36"><a href="inverse-probability-weighting-ipw.html#cb27-36" aria-hidden="true"></a>}</span>
+<span id="cb27-37"><a href="inverse-probability-weighting-ipw.html#cb27-37" aria-hidden="true"></a></span>
+<span id="cb27-38"><a href="inverse-probability-weighting-ipw.html#cb27-38" aria-hidden="true"></a><span class="co"># Build RF using GRF P(W = 1 | X)</span></span>
+<span id="cb27-39"><a href="inverse-probability-weighting-ipw.html#cb27-39" aria-hidden="true"></a>fun.rf.grf  &lt;-<span class="st"> </span><span class="cf">function</span>(X, W, predictkfold){</span>
+<span id="cb27-40"><a href="inverse-probability-weighting-ipw.html#cb27-40" aria-hidden="true"></a>    rf_grf  &lt;-<span class="st"> </span><span class="kw">regression_forest</span>(X, W, <span class="dt">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb27-41"><a href="inverse-probability-weighting-ipw.html#cb27-41" aria-hidden="true"></a>    p.grf  &lt;-<span class="st"> </span><span class="kw">predict</span>(rf_grf, predictkfold)<span class="op">$</span>predictions</span>
+<span id="cb27-42"><a href="inverse-probability-weighting-ipw.html#cb27-42" aria-hidden="true"></a>    <span class="kw">return</span>(p.grf)</span>
+<span id="cb27-43"><a href="inverse-probability-weighting-ipw.html#cb27-43" aria-hidden="true"></a>}</span>
+<span id="cb27-44"><a href="inverse-probability-weighting-ipw.html#cb27-44" aria-hidden="true"></a></span>
+<span id="cb27-45"><a href="inverse-probability-weighting-ipw.html#cb27-45" aria-hidden="true"></a><span class="co"># storing </span></span>
+<span id="cb27-46"><a href="inverse-probability-weighting-ipw.html#cb27-46" aria-hidden="true"></a>predict.mat  &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> <span class="kw">nrow</span>(index), <span class="dt">ncol =</span> K)</span>
+<span id="cb27-47"><a href="inverse-probability-weighting-ipw.html#cb27-47" aria-hidden="true"></a>tauk  &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb27-48"><a href="inverse-probability-weighting-ipw.html#cb27-48" aria-hidden="true"></a>tauk_oracle  &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb27-49"><a href="inverse-probability-weighting-ipw.html#cb27-49" aria-hidden="true"></a>weighttau  &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb27-50"><a href="inverse-probability-weighting-ipw.html#cb27-50" aria-hidden="true"></a>score  &lt;-<span class="st">  </span><span class="kw">list</span>()</span>
+<span id="cb27-51"><a href="inverse-probability-weighting-ipw.html#cb27-51" aria-hidden="true"></a>score_oracle  &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb27-52"><a href="inverse-probability-weighting-ipw.html#cb27-52" aria-hidden="true"></a></span>
+<span id="cb27-53"><a href="inverse-probability-weighting-ipw.html#cb27-53" aria-hidden="true"></a><span class="co"># for each fold i use other folds for estimation </span></span>
+<span id="cb27-54"><a href="inverse-probability-weighting-ipw.html#cb27-54" aria-hidden="true"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>K)){</span>
+<span id="cb27-55"><a href="inverse-probability-weighting-ipw.html#cb27-55" aria-hidden="true"></a>    predict.mat[, i]  &lt;-<span class="st"> </span><span class="kw">fun.rf.grf</span>(<span class="dt">X =</span> X[<span class="kw">c</span>(index[, <span class="op">-</span>i]), ], <span class="dt">W =</span> W[index[, <span class="op">-</span>i]], <span class="dt">predictkfold =</span> X[<span class="kw">c</span>(index[, i]), ])</span>
+<span id="cb27-56"><a href="inverse-probability-weighting-ipw.html#cb27-56" aria-hidden="true"></a>    <span class="co"># fold-specific treatment effect</span></span>
+<span id="cb27-57"><a href="inverse-probability-weighting-ipw.html#cb27-57" aria-hidden="true"></a>    score[[i]]  &lt;-<span class="st"> </span>((W[index[, i]] <span class="op">*</span><span class="st"> </span>Y[index[, i]]) <span class="op">/</span><span class="st"> </span>(predict.mat[, i])) <span class="op">-</span><span class="st"> </span></span>
+<span id="cb27-58"><a href="inverse-probability-weighting-ipw.html#cb27-58" aria-hidden="true"></a><span class="st">                </span>(((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>W[index[, i]]) <span class="op">*</span><span class="st"> </span>Y[index[, i]]) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>predict.mat[, i]))</span>
+<span id="cb27-59"><a href="inverse-probability-weighting-ipw.html#cb27-59" aria-hidden="true"></a></span>
+<span id="cb27-60"><a href="inverse-probability-weighting-ipw.html#cb27-60" aria-hidden="true"></a>    tauk[i]  &lt;-<span class="st"> </span><span class="kw">mean</span>(score[[i]])</span>
+<span id="cb27-61"><a href="inverse-probability-weighting-ipw.html#cb27-61" aria-hidden="true"></a>}</span>
+<span id="cb27-62"><a href="inverse-probability-weighting-ipw.html#cb27-62" aria-hidden="true"></a></span>
+<span id="cb27-63"><a href="inverse-probability-weighting-ipw.html#cb27-63" aria-hidden="true"></a><span class="co"># ipw using oracle propensity score and propensity score estimated from grf </span></span>
+<span id="cb27-64"><a href="inverse-probability-weighting-ipw.html#cb27-64" aria-hidden="true"></a>alpha  &lt;-<span class="st">  </span><span class="fl">0.05</span> <span class="co"># 5 percent level of significance</span></span>
+<span id="cb27-65"><a href="inverse-probability-weighting-ipw.html#cb27-65" aria-hidden="true"></a><span class="co">#ipw.ranger  &lt;- mean(((W * Y) / (p.ranger)) - (((1 - W) * Y) / (1 - p.ranger))) </span></span>
+<span id="cb27-66"><a href="inverse-probability-weighting-ipw.html#cb27-66" aria-hidden="true"></a>ipw.grf  &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">unlist</span>(score))</span>
+<span id="cb27-67"><a href="inverse-probability-weighting-ipw.html#cb27-67" aria-hidden="true"></a>score_oracle  &lt;-<span class="st"> </span>((W <span class="op">*</span><span class="st"> </span>Y) <span class="op">/</span><span class="st"> </span>(prob)) <span class="op">-</span><span class="st"> </span></span>
+<span id="cb27-68"><a href="inverse-probability-weighting-ipw.html#cb27-68" aria-hidden="true"></a><span class="st">                </span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>W) <span class="op">*</span><span class="st"> </span>Y <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>prob))</span>
+<span id="cb27-69"><a href="inverse-probability-weighting-ipw.html#cb27-69" aria-hidden="true"></a>ipw.oracle  &lt;-<span class="st"> </span><span class="kw">mean</span>(score_oracle)</span>
+<span id="cb27-70"><a href="inverse-probability-weighting-ipw.html#cb27-70" aria-hidden="true"></a></span>
+<span id="cb27-71"><a href="inverse-probability-weighting-ipw.html#cb27-71" aria-hidden="true"></a>sd.ipw  &lt;-<span class="st">  </span><span class="kw">sd</span>(<span class="kw">unlist</span>(score))</span>
+<span id="cb27-72"><a href="inverse-probability-weighting-ipw.html#cb27-72" aria-hidden="true"></a>sd.oracle  &lt;-<span class="st">  </span><span class="kw">sd</span>(score_oracle)</span>
+<span id="cb27-73"><a href="inverse-probability-weighting-ipw.html#cb27-73" aria-hidden="true"></a>ll  &lt;-<span class="st"> </span>ipw.grf <span class="op">-</span><span class="st"> </span>(sd.ipw <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(<span class="kw">unlist</span>(score)))) <span class="op">*</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb27-74"><a href="inverse-probability-weighting-ipw.html#cb27-74" aria-hidden="true"></a>ul  &lt;-<span class="st"> </span>ipw.grf <span class="op">+</span><span class="st"> </span>(sd.ipw <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(<span class="kw">unlist</span>(score)))) <span class="op">*</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb27-75"><a href="inverse-probability-weighting-ipw.html#cb27-75" aria-hidden="true"></a>ll_oracle  &lt;-<span class="st"> </span>ipw.oracle <span class="op">-</span><span class="st"> </span>(sd.oracle <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(score_oracle))) <span class="op">*</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb27-76"><a href="inverse-probability-weighting-ipw.html#cb27-76" aria-hidden="true"></a>ul_oracle  &lt;-<span class="st"> </span>ipw.oracle <span class="op">+</span><span class="st"> </span>(sd.oracle <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">length</span>(score_oracle))) <span class="op">*</span><span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb27-77"><a href="inverse-probability-weighting-ipw.html#cb27-77" aria-hidden="true"></a></span>
+<span id="cb27-78"><a href="inverse-probability-weighting-ipw.html#cb27-78" aria-hidden="true"></a>result.ipw  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;IPW estimate&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> =<span class="st"> </span><span class="kw">round</span>(sd.ipw <span class="op">/</span><span class="st"> </span>(<span class="kw">sqrt</span>(<span class="kw">length</span>(W))), <span class="dv">3</span>),</span>
+<span id="cb27-79"><a href="inverse-probability-weighting-ipw.html#cb27-79" aria-hidden="true"></a>                 <span class="st">&quot;lower bound&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ul, <span class="dv">3</span>))</span>
+<span id="cb27-80"><a href="inverse-probability-weighting-ipw.html#cb27-80" aria-hidden="true"></a></span>
+<span id="cb27-81"><a href="inverse-probability-weighting-ipw.html#cb27-81" aria-hidden="true"></a>result.oracle.ipw  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;IPW Oracle estimate&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> =<span class="st"> </span><span class="kw">round</span>(sd.oracle <span class="op">/</span><span class="st"> </span>(<span class="kw">sqrt</span>(<span class="kw">length</span>(W))), <span class="dv">3</span>),</span>
+<span id="cb27-82"><a href="inverse-probability-weighting-ipw.html#cb27-82" aria-hidden="true"></a>                 <span class="st">&quot;lower bound&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ll_oracle, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> =<span class="st"> </span><span class="kw">round</span>(ul_oracle, <span class="dv">3</span>))                 </span>
+<span id="cb27-83"><a href="inverse-probability-weighting-ipw.html#cb27-83" aria-hidden="true"></a></span>
+<span id="cb27-84"><a href="inverse-probability-weighting-ipw.html#cb27-84" aria-hidden="true"></a><span class="kw">print</span>(result.ipw)</span></code></pre></div>
+<pre><code>## IPW estimate           se  lower bound  upper bound 
+##        2.594        0.102        2.393        2.794</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="inverse-probability-weighting-ipw.html#cb29-1" aria-hidden="true"></a><span class="kw">print</span>(result.oracle.ipw)</span></code></pre></div>
+<pre><code>## IPW Oracle estimate                  se         lower bound         upper bound 
+##               2.611               0.133               2.351               2.872</code></pre>
+<p>What? Despite having true propensity score, the Oracle IPW underperforms in accuracy compared to the IPW estimate with unknown propensity score. Whys is it so?</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="propensity-score-stratification.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="aipw-and-estimation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
