@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3.2 Propensity score | IPW and AIPW</title>
   <meta name="description" content="3.2 Propensity score | IPW and AIPW" />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3.2 Propensity score | IPW and AIPW" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-10" />
+<meta name="date" content="2024-07-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,20 +49,18 @@
 
 
 
-<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="assets/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="assets/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -96,7 +94,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -109,7 +107,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -162,6 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
 <li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
 <li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -204,7 +203,7 @@ e(x) = P(W_i = 1 | X_i = x) \tag{3.4}
 \end{equation}\]</span></p>
 <p>The key property of the propensity score is that it balances units in the treatment and control groups. If unconfoundedness assumption holds, we can write the following:</p>
 <p><span class="math display" id="eq:pconf">\[\begin{equation}
-W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) \tag{3.5} 
+W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) \tag{3.5}
 \end{equation}\]</span></p>
 <p>What equation <a href="propensity-score.html#eq:pconf">(3.5)</a> says is that instead of controlling for <span class="math inline">\(X\)</span> one can control for the probability of treatment <span class="math inline">\((e(X))\)</span> to establish the desired property that the treatment is as good as random. The propensity scores are mainly used for balancing purposes.</p>
 <p>One straight-forward implication of equation <a href="propensity-score.html#eq:pconf">(3.5)</a> is that if we partition observations into groups with similar propensity score then we can estimate group-wise treatment effects and aggregate them to form an estimate for ATE. This can be done using the propensity score stratification method. The argument here is that when units with similar propensity scores are compared, the covariates are approximately balanced, mimicking a randomized experiment.</p>

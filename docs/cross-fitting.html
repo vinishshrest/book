@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.1 A simple example | IPW and AIPW</title>
-  <meta name="description" content="3.1 A simple example | IPW and AIPW" />
+  <title>3.9 Cross-fitting | IPW and AIPW</title>
+  <meta name="description" content="3.9 Cross-fitting | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.1 A simple example | IPW and AIPW" />
+  <meta property="og:title" content="3.9 Cross-fitting | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.1 A simple example | IPW and AIPW" />
+  <meta name="twitter:title" content="3.9 Cross-fitting | IPW and AIPW" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ipw-and-aipw.html"/>
-<link rel="next" href="propensity-score.html"/>
+<link rel="prev" href="assessing-balance.html"/>
+<link rel="next" href="causal-forest.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -193,154 +193,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="a-simple-example" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> A simple example<a href="a-simple-example.html#a-simple-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Say, you are interested in evaluating the effect of tutoring program initiated following the first exam on grades at an introductory level course. For simplicity, the possible grades are <strong>A</strong> and <strong>B</strong>. However, students who received B on their first exam are more likely to attend the tutoring session. In other words, <span class="math inline">\(P(W_i = 1 | Y_{iFE} = A) &lt; P(W_i = 1 | Y_{iFE} = B)\)</span> (<span class="math inline">\(Y_{iFE}\)</span> is read as unit <span class="math inline">\(i&#39;s\)</span> grade in the first exam). In this case, the treatment assignment is correlated with the past grade, which can predict the grade on the second exam. In other words, if you did well in the first exam, you are likely to perform well in the second exam and so on. Hence, using equation (2) to estimate effects of the tutoring program will result in biased estimate.</p>
-<p>Since we know that the probability of treatment is influenced by the grade on the first exam, we can estimate the conditional average treatment effect (CATE) and average them using weights to form an estimate of ATE. Let’s take a look at the data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="a-simple-example.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to report grade breakdown by the first exam grade (A and B)</span></span>
-<span id="cb1-2"><a href="a-simple-example.html#cb1-2" aria-hidden="true" tabindex="-1"></a>grade_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(grade_vec){</span>
-<span id="cb1-3"><a href="a-simple-example.html#cb1-3" aria-hidden="true" tabindex="-1"></a>    grade  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb1-4"><a href="a-simple-example.html#cb1-4" aria-hidden="true" tabindex="-1"></a>    grade[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
-<span id="cb1-5"><a href="a-simple-example.html#cb1-5" aria-hidden="true" tabindex="-1"></a>    grade[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">1</span>], grade_vec[<span class="dv">2</span>])</span>
-<span id="cb1-6"><a href="a-simple-example.html#cb1-6" aria-hidden="true" tabindex="-1"></a>    grade[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">3</span>], grade_vec[<span class="dv">4</span>])</span>
-<span id="cb1-7"><a href="a-simple-example.html#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(grade)</span>
-<span id="cb1-8"><a href="a-simple-example.html#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-9"><a href="a-simple-example.html#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="a-simple-example.html#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Y_iFS == A</span></span>
-<span id="cb1-11"><a href="a-simple-example.html#cb1-11" aria-hidden="true" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">4</span>))</span>
-<span id="cb1-12"><a href="a-simple-example.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
-<span id="cb1-13"><a href="a-simple-example.html#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="a-simple-example.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Se</span></span>
-<span id="cb1-15"><a href="a-simple-example.html#cb1-15" aria-hidden="true" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb1-16"><a href="a-simple-example.html#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb1-17"><a href="a-simple-example.html#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 1.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = A&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
-<table class="table table-striped" style="width: auto !important; ">
-<thead>
-<tr>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Table 1.
-</div>
-</th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Grade in the 2nd exam | 1st exam = A
-</div>
-</th>
-</tr>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-A (2nd Exam)
-</th>
-<th style="text-align:left;">
-B (2nd Exam)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Treat
-</td>
-<td style="text-align:left;">
-5
-</td>
-<td style="text-align:left;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Control
-</td>
-<td style="text-align:left;">
-9
-</td>
-<td style="text-align:left;">
-4
-</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="a-simple-example.html#cb2-1" aria-hidden="true" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
-<span id="cb2-2"><a href="a-simple-example.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
-<span id="cb2-3"><a href="a-simple-example.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="a-simple-example.html#cb2-4" aria-hidden="true" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb2-5"><a href="a-simple-example.html#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb2-6"><a href="a-simple-example.html#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 2.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = B&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
-<table class="table table-striped" style="width: auto !important; ">
-<thead>
-<tr>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Table 2.
-</div>
-</th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Grade in the 2nd exam | 1st exam = B
-</div>
-</th>
-</tr>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-A (2nd Exam)
-</th>
-<th style="text-align:left;">
-B (2nd Exam)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Treat
-</td>
-<td style="text-align:left;">
-15
-</td>
-<td style="text-align:left;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Control
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-4
-</td>
-</tr>
-</tbody>
-</table>
-<p><span class="math inline">\(~\)</span>
-<span class="math inline">\(~\)</span></p>
-<p><strong>Estimation</strong></p>
-<p><span class="math inline">\(\hat{\tau}_{FE=A} = \frac{5}{7} - \frac{9}{13} = 2.1 \; pp\)</span></p>
-<p><span class="math inline">\(\hat{\tau}_{FE=B} = \frac{15}{20} - \frac{1}{5} = 55 \; pp\)</span></p>
-<p><span class="math inline">\(\hat{\tau}_{AGG} = \frac{20}{45} \hat{\tau}_{FE=A} - \frac{25}{45} \hat{\tau}_{FE=B} = 31.48 \; pp\)</span>.</p>
-<p>The first two are CATEs for the group that recived A and B in the first exam. The assumption is that once conditioned on the grade in the first exam, treatment (who attends vs. who doesn’t) is random. This allows valid estimation of within group causal effects, which are then averaged to form ATE using appropriate weights on the third line. This simple example using the discrete feature space (grade in the first exam can be A or B) provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="3">
-<li id="fn3"><p>In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.<a href="a-simple-example.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<div id="cross-fitting" class="section level2 hasAnchor" number="3.9">
+<h2><span class="header-section-number">3.9</span> Cross-fitting<a href="cross-fitting.html#cross-fitting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>What is cross-fitting?</strong></p>
+<ol style="list-style-type: decimal">
+<li>Divide the data into K folds randomly.</li>
+<li>Train the model using <span class="math inline">\(-k\)</span> folds (all folds except the <span class="math inline">\(k^{th}\)</span> one).</li>
+<li>Generate a fit of <em>fold k</em> on the model trained using <span class="math inline">\(-k\)</span> folds</li>
+<li>Repeat steps 2 and 3 to generate fit for all <span class="math inline">\(K\)</span> number of folds.</li>
 </ol>
+<p>This is illustrated using the figure below. The data is randomly divided into 5 folds (segments). This is an example of a five-fold cross-fitting. In the first round, the blue segments are used for model building, while responses are constructed for observations in the green segment of the data. Next, we move into the second round and so on; again the blue segments are used for model building and responses are constructed for the green segment. In this way, each observation is used for model building.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="cross-fitting.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-fitting illustration</span></span>
+<span id="cb49-2"><a href="cross-fitting.html#cb49-2" aria-hidden="true" tabindex="-1"></a>colorcode <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">5</span>) <span class="co"># this creates a coding</span></span>
+<span id="cb49-3"><a href="cross-fitting.html#cb49-3" aria-hidden="true" tabindex="-1"></a>colorcode <span class="ot">&lt;-</span> <span class="fu">c</span>(colorcode)</span>
+<span id="cb49-4"><a href="cross-fitting.html#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="cross-fitting.html#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data for the boxes</span></span>
+<span id="cb49-6"><a href="cross-fitting.html#cb49-6" aria-hidden="true" tabindex="-1"></a>boxes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-7"><a href="cross-fitting.html#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="dv">5</span>),</span>
+<span id="cb49-8"><a href="cross-fitting.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>),</span>
+<span id="cb49-9"><a href="cross-fitting.html#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">rep</span>(<span class="fu">paste</span>(<span class="st">&quot;fold&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>), <span class="dv">5</span>), </span>
+<span id="cb49-10"><a href="cross-fitting.html#cb49-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">colorcode =</span> colorcode</span>
+<span id="cb49-11"><a href="cross-fitting.html#cb49-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-12"><a href="cross-fitting.html#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="cross-fitting.html#cb49-13" aria-hidden="true" tabindex="-1"></a>boxes <span class="ot">&lt;-</span> boxes  <span class="sc">%&gt;%</span> </span>
+<span id="cb49-14"><a href="cross-fitting.html#cb49-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">fill =</span> <span class="fu">ifelse</span>(colorcode <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;lightblue&quot;</span>))  <span class="sc">%&gt;%</span> </span>
+<span id="cb49-15"><a href="cross-fitting.html#cb49-15" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(colorcode))</span>
+<span id="cb49-16"><a href="cross-fitting.html#cb49-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-17"><a href="cross-fitting.html#cb49-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-18"><a href="cross-fitting.html#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-19"><a href="cross-fitting.html#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
+<span id="cb49-20"><a href="cross-fitting.html#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb49-21"><a href="cross-fitting.html#cb49-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_rect</span>(<span class="at">data =</span> boxes, <span class="fu">aes</span>(<span class="at">xmin =</span> x , <span class="at">xmax =</span> x <span class="sc">+</span> <span class="dv">2</span>, <span class="at">ymin =</span> y <span class="sc">-</span> <span class="fl">0.3</span>, <span class="at">ymax =</span> y <span class="sc">+</span> <span class="fl">0.5</span>, <span class="at">fill =</span> fill), </span>
+<span id="cb49-22"><a href="cross-fitting.html#cb49-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span>   <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb49-23"><a href="cross-fitting.html#cb49-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">6</span>) <span class="sc">+</span> </span>
+<span id="cb49-24"><a href="cross-fitting.html#cb49-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb49-25"><a href="cross-fitting.html#cb49-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_identity</span>() <span class="sc">+</span></span>
+<span id="cb49-26"><a href="cross-fitting.html#cb49-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">3</span>, <span class="dv">11</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="fl">0.5</span>, <span class="dv">5</span>)), <span class="at">y =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fl">0.3</span>, <span class="dv">5</span>), <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)), <span class="at">label =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">&quot;fold&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>), <span class="fu">paste</span>(<span class="st">&quot;round&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)), <span class="at">color =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;black&quot;</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
+<span id="cb49-27"><a href="cross-fitting.html#cb49-27" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<p><img src="book_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><strong>What does it do?</strong></p>
+<p>Simply put, cross-fitting assures that the same observations are not used for modeling building as well as
+to estimate the response (e.g., predictions). In this way, we would want to alleviate concerns of over-fitting.</p>
+
 </div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="ipw-and-aipw.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="propensity-score.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="assessing-balance.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="causal-forest.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
