@@ -1,0 +1,264 @@
+---
+title: "Difference in Differences"
+output:
+  html_document:
+    css: custom.css
+    includes:
+      in_header: header.html
+biblio-style: apalike
+link-citations: yes
+bibliography: ML.bib
+---
+
+
+
+
+```{r, echo = FALSE, include = FALSE}
+#################################
+#
+# Author: VS
+# Last Revised: Jan 18, 2024
+# Keywords: Heterogeneous Treatment Effects
+# using Lasso, GRF
+#
+#################################
+
+
+# making table
+library("kableExtra")
+library(janitor)
+
+# Helper packages
+library(dplyr) # for data wrangling 
+library(ggplot2) # for graphics
+library(splines)
+
+# Modeling packages 
+library(MASS)  # this allows simulating data from multivariate normal distribution 
+library(DoubleML) # double ML library
+library(grf)
+library(ggplot2)
+library(patchwork)
+
+library(glmnet)   # for regularized regression
+library(caret)    # for automating the tuning process
+
+```
+
+# Canonical DiD
+
+Let's consider that there are two groups: group $i)$ receives the treatment and group $ii)$ does not receive the treatment. 
+We term group $i)$ as the treatment group and group $ii)$ as the control or untreated group. We want to compare the two groups 
+in the pre-treatment period versus the post-treatment period. While doing so we will be utilizing both within and across variation in 
+outcomes between the two groups. 
+
+Let's take a concrete example. We are interested in evaluating the impacts of ACA-Medicaid expansion on insurance outcomes.
+Following the supreme court decision in 2012 that deemed Medicaid expansion voluntary, 26 states expanded 
+Medicaid in 2014, while the rest did not. In fact, 19 states did not expand Medicaid until 2018. We will draw our attention towards 
+expansion states plus the 19 states that did not expand Medicaid until 2018. *States that expanded Medicaid between 2014 and 2018 are 
+dropped from the sample.*    
+
+
+Let's take a quick look at the data.
+
+```{r}
+user = 2
+if(user == 1){
+    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+}else{
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+}
+
+
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow)
+
+# combination of treatment and control groups
+s1  <- c("control 1", "control 2", "control 3", "treat 1", "treat 2") # all southern counties
+s2  <- c("control 1", "control 2", "treat 1", "treat 2") # exclude the non-bordering states
+s3  <- c("control 1", "treat 1") # include only the bordering counties 
+s4  <- c("control 2", "treat 2") 
+
+
+# load in all causes mortality and amenable mortality
+mort_allcauses <-  read_feather( file.path(datapath, "NVSS_data_county_2010to2017_merged_allcauses.feather"))  %>% 
+                    mutate(treat = ifelse(is.na(treat) == T, "control 3", treat))  %>% 
+                    filter(yearexpand == 2014 & age == 0 & race_name == "white")  %>% 
+                    dplyr::select("countyfips", "year", "state.abb", "expand", "yearexpand", "sahieunins138")  %>% 
+                    filter(duplicated(.))   %>%  
+                    arrange(countyfips, year) # sort by countyfips and year
+                     # the select() function is masked 
+                    # by other packages, so use dplyr::select() instead 
+
+# only keep the years 2013 and 2014 for the canonical case
+dat_canonical  <- mort_allcauses  %>% 
+                    filter(year %in% c(2013, 2014))
+
+head(dat_canonical)
+
+dat_canonical  %>% tabyl(state.abb, expand)
+
+cat("The expansion states are: \n")
+table(dat_canonical$state.abb[dat_canonical$expand == 1])
+
+cat("The non-expansion states are: \n")
+table(dat_canonical$state.abb[dat_canonical$expand == 0])
+
+length(table(dat_canonical$state.abb[dat_canonical$expand == 1]))
+length(table(dat_canonical$state.abb[dat_canonical$expand == 0]))
+```
+
+The two groups are as follows: 
+
+i) Expansion states (treated): AR, AZ, CA, CO, CT, DE, HI, IA, IL, KY, MA, MD, MI, MN, ND, NH, NJ, NM, NV, NY, OH, OR, RI, VT, WA, WV 
+
+ii) Non-expansion states (control): AL, FL, GA, ID, KS, ME, MO, MS, NC, NE, OK, SC, SD, TN, TX, UT, VA, WI, WY
+
+
+# Naive estimator 
+
+A naive estimate of ATT would just be the difference in means between the treated and control groups in the period following the expansion. 
+
+ ```{r}
+ naive  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & dat_canonical$year >= 2014]) - 
+           mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & dat_canonical$year >= 2014])
+
+ print(naive)
+
+ ```
+
+The naive estimate suggests that uninsured rate dropped by -13.64 percentage points following the Medicaid expansion in 2014. 
+But can we trust this estimate? Not really. 
+
+Here are some reasons why the naive estimate fails: 
+
+i) We are very far away from the randomized controlled trial in this case. The treatment (decision to expand Medicaid) is not random. Note that states voluntarily decided to expand Medicaid. This means that expansion 
+versus non-expansion states may be very different in terms of pre-treatment or time invariant characteristics. For example, many of the southern states 
+did not expand Medicaid. Also, pre-treatment uninsured rates of southern states are generally higher compared to non-southern states.
+
+ii) The baseline outcome among the treatment group may differ significantly from the control group. For example, southern states have higher population of Blacks compared to non-South. Typically, uninsured rate is higher among Blacks. Hence, it is difficult to disentagle the influence of democraphic composition versus Medicaid expansion. 
+
+```{r}
+
+naive_pre  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & dat_canonical$year < 2014]) - 
+           mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & dat_canonical$year < 2014])
+
+print(naive_pre)
+```
+
+Note that treatment units on average have 7.68 percentage points lower uninsured rate compared to the control units even prior to the treatment. Hence, the naive estimator captures the pre-existing differerences in outcome; something that we don't want. 
+
+iii) Since the treatment is not randomized a lot of baseline characteristics that influence the outcome across the treated and control groups may differ dramatically. If these variables are thought to influence the dynamics of the outcome variable, then we will be capturing the influence of such variables rather than the treatment itself.  
+
+# Canonical Difference in Differences Framework 
+
+We would like to alleviate the aforementioned concerns. One way to address the second concern, i.e., outcomes in pre-treatment period may differ significantly between the treatment and control groups, is to take out the mean difference in outcome during the pre-treatment period from the mean difference in outcome post treatment. This approach uses two groups and two periods, which is termed as the canonical DiD case. 
+
+The canonical DiD can be seen using a $2\times 2$ matrix.
+
+```{r}
+my_mat  <- matrix(c("Y_post_1", "Y_post_0", "Y_pre_1", "Y_pre_0"), nrow = 2, ncol = 2)
+print(my_mat)
+```
+
+Note that the naive estimator simply is: $E(Y_{post}1 - Y_{post}0)$. This can be considered as the first difference. 
+
+Next, we construct the second difference across the two groups during the pre-treatment period as: $E(Y_{pre}1 - Y_{pre}0)$. 
+
+The difference-in-differences estimate: $\delta_{did} = $E[(Y_{post}(1) - Y_{post}(0)] - E[(Y_{pre}(1) - Y_{pre}(0)]$. This defines the term "difference-in-differences" as it involves two differences in means across the treatment and control group; one post treatment and the other prior to the treatment.   
+
+In the Medicaid expansion example that involves two groups and two time periods:
+
+```{r}
+
+cat("did estimate= \n", naive - naive_pre)
+
+```
+
+This suggests that uninsured rate dropped by 5.81 percentage points following the Medicaid expansion in year 2014. 
+
+Let's formally visit the DiD approach to appreciate some necessary assumptions while connecting it with ATT. 
+
+The ATT is given as: 
+
+\begin{equation}
+\tau = E(Y^1(1) - Y^0(1)| D = 1) (\#eq:att)
+\end{equation}
+
+Here, $Y^1(1)$ is the outcome following the treatment, and $Y^0(1)$ is the counterfactual, i.e., the outcome without the treatment. $E(Y^0(1)| D = 1)$, which is the conditional mean outcome of the treatment group in absence of the treatment, is not revealed as it is the counterfactual and our job still remains to come up with a valid counterfactual.
+
+Let's consider the canonical case of DiD with two groups (treatment & control) and two periods (before and after treatment). 
+Formally the **parallel trend assumption (PTA)** is given as:  
+
+\begin{equation}
+E(Y^0(1) - Y^0(0)| D = 1) = E(Y^0(1) - Y^0(0)| D = 0)  (\#eq:ptrend1)
+\end{equation}
+
+Here, we have written the parallel trend assumption using the potential outcomes. $Y^0(1)$ is the potential outcome in the post-treatment period in absence of the treatment, $Y^0(0)$ is the potential outcome in pre-treatment period. All forms of potential outcomes are revealed (observed) except 
+$E(Y^0(1) | D = 1)$, which is average outcome for the treated group in the post-treatment period in absence of the treatment. The parallel trend assumption states that, in absence of the treatment, outcomes for the treatment and control groups after the treatment would follow similar trend to that of the pre-treatment period. 
+
+How does the parallel trend assumption help in identifying the ATT $(\delta)$? To see this, lets expand equation \@ref{eq:att}. 
+
+$$
+\begin{align}
+\delta = E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) \\ 
+= E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) + E(Y^0(0)| D = 1) - E(Y^0(0)| D = 1) \\
+= \{E(Y^1(1)| D = 1) - E(Y^0(0)| D = 1)\} - \{E(Y^0(1)| D = 1) - E(Y^0(0)| D = 1)\}  \\
+= \{E(Y^1(1)| D = 1) - E(Y^0(0)| D = 1)\} - \{E(Y^0(1)| D = 0) - E(Y^0(0)| D = 0)\}  \\
+= \{E(Y(1)| D = 1) - E(Y(0)| D = 1)\} - \{E(Y(1)| D = 0) - E(Y(0)| D = 0)\}  
+\end{align}
+$$
+
+Moving from line 3 to 4 makes use of the parallel trend assumption as given in equation \@ref{eq:ptrend1}. So it turns out that under the parallel 
+trend assumption, DiD framework uncovers the ATT. However, the parallel trend assumption cannot be feasibly tested given that potential outcome of the treated group in absence of the treatment is not observed. 
+
+If we cannot provide a feasible test for the parallel trend assumption, how can we then attest for the validity of the DiD estimate?
+
+# DiD in multi-period set up
+So far we have only considered the canonical DiD (two groups and two period DiD framework). However, data may be available for several periods before and after the treatment implementation. In this case, we will be in the setting of multi-period DiD. For example, for the Medicaid expansion case, we have data spanning from years 2010 to 2017. We'd like to utilize whole of this data. Using the multi-period set up can be helpful for the following reasons:
+
+i) We can trace the dynamic effects of the treatment following the implementation. This means that we can trace the ATT estimate of Medicaid expansion for periods following its implementation, i.e., in 2014, 2015, 2016, and 2017. If the effects of expansion are increasing over time, then this setting will be very helpful. In other words, we can trace the potential heterogeneous effects of the treatment over time. 
+
+ii) Next, the multi-period setting allows us to provide suggestive evidence regarding the parallel trend assumption. See below. 
+
+Let's first plot the mean uninsured rate between the years 2010 and 2017 across the treatment versus the control groups. 
+
+```{r}
+dat_sum  <- mort_allcauses  %>%  
+                group_by(year, expand)  %>%  
+                summarize(uninsured = mean(sahieunins138))
+
+post_cf_treat  <- dat_sum$uninsured[dat_sum$expand == 0] + naive_pre
+dat_treat_cf  <-  data.frame(year = seq(2010, 2017, 1), expand = rep(1, 8), cf = post_cf_treat)
+dat_sum  <- dat_sum  %>% 
+                left_join(dat_treat_cf, by = c("year", "expand"))
+
+ggplot(dat_sum, aes(x = year, y = uninsured, group = as.factor(expand), color = as.factor(expand)), shape = as.factor(expand)) + 
+        geom_point() + geom_line() + theme_minimal() + 
+        geom_vline(xintercept = 2014, linetype = "dashed") + 
+        geom_line(data = dat_sum, 
+        aes(y = cf), 
+        linetype = "dashed", 
+        color = "lightblue", 
+        linewidth = 1)
+```
+
+The plot shows that uninsured rate trended parallelly between the treated and control groups prior to the expansion. The rates dropped following the 
+expansion year (2014) across both the treated and control groups, but the magnitude of drop in uninsured rate is higher for the treated group.^[The drop in uninsured rate for the control group can be explained by the implementation of other aspects of ACA such as subsidies and employment mandate.] 
+
+The DiD uses the control group as the counterfactual for the treated group. In other words, we are assuming that in absence of the treatment, outcome for the treated group would have evolved similarly to that of the control group. This is the key assumption of DiD -- the parallel trend assumption. Note that, once we difference out the pre-treatment means between the treated and controls groups, we obtain the dashed line, which is the counterfactual for the treated group. In this case, the counterfactual line overlaps the average outcome for the treated group, suggesting that outcome was trending similarly across the two groups during the pre-treatment period. Loosely speaking, ATT is the average gap between the outcome for the treated group and the counterfactual outcome during the post-treatment period. 
+
+As previously mentioned, we are unable to provide an actual test for parallel trend assumption due to the missing data on treated observations following the treatment in a state when treatment is absent. This does not mean that we are absolutely helpless. There are a list of things that can be done to provide suggestive evidence in favor of or lack of parallel trend. They are: 
+
+i) Check pre-treatment summary statistics across treatment and control groups. Say, treatment and control groups have highly different pre-treatment characteristics. It is unlikely that parallel trend assumption will hold in this case. It is because pre-treatment variables that influence the outcome can induce different dynamics in trends. Hence, the outcome trends between the treated and control groups may vary even in absence of the treatment. 
+
+ii) Usually trends in outcomes across treated and control groups are assessed to evaluate parallel trends. If outcome is trending parallely between the two groups prior to the treatment, then it provides evidence in favor of PTA. However, concluding that PTA does not hold in a case of non-parallel trend is a narrow assessment at the best, since this approach merely depicts unconditional trends. PTA may have more leverage once (pre-treatment) covariates are accounted for. 
+
+iii) The next approach that has been used widely is the event-study. We will discuss this approach soon.
+
+
+In most cases, unconditional parallel trend assumption may not be very convincing. Why?
+
+# Conditional PTA 
+
+

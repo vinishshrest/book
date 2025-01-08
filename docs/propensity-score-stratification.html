@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.5 Propensity score stratification | IPW and AIPW</title>
-  <meta name="description" content="3.5 Propensity score stratification | IPW and AIPW" />
+  <title>3.6 Propensity score stratification | IPW and AIPW</title>
+  <meta name="description" content="3.6 Propensity score stratification | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.5 Propensity score stratification | IPW and AIPW" />
+  <meta property="og:title" content="3.6 Propensity score stratification | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.5 Propensity score stratification | IPW and AIPW" />
+  <meta name="twitter:title" content="3.6 Propensity score stratification | IPW and AIPW" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-11" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -125,6 +125,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -153,14 +175,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -193,8 +217,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="propensity-score-stratification" class="section level2 hasAnchor" number="3.5">
-<h2><span class="header-section-number">3.5</span> Propensity score stratification<a href="propensity-score-stratification.html#propensity-score-stratification" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="propensity-score-stratification" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Propensity score stratification<a href="propensity-score-stratification.html#propensity-score-stratification" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Propensity scores are super important as they can be used in various different approaches to enchance the validity of causal inference in observational settings. These include but are not limited to inverse probability weighting, matching estimates, weight adjustments in regression (for better balancing), trimming, and propensity score stratification. These methods will be discussed in detail as we move on with the course. First, let’s take a look at propensity score stratification to get a gist of how propensity scores contribute in comparing treatment units with control units.</p>
 <p>The simple idea is given by the cliché that we want to compare oranges with oranges and not apples. To bring focus back into our context, it simply means that it is no good comparing a treated unit with an extremely high probability of receiving the treatment with a control unit with super low probability of receiving the treatment. But what if (yes, what if) we compare units with similar treatment probabilities?</p>
 <p>Let’s run a quick thought experiment. We run the logistic regression and estimate the propensity score. Say, we have two units, each from the treatment and control group, with the propensity score of 0.6. The assumption here is, conditional on the similar propensity score, the treatment assignment is random. This follows from the unconfoundedness assumption: <span class="math inline">\(Y_i^{0}, \; Y_i^{1} \; \perp \; W_i \; | X_i\)</span>.</p>
@@ -211,31 +235,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math inline">\(\hat{\tau}_{Strat} = \frac{1}{J} \sum_{j = 1}^{J} \hat{\tau}_j\)</span></p>
 <p>Here, <span class="math inline">\(\hat{\tau}_{Strat}\)</span> is consistent for <span class="math inline">\(\tau\)</span>, meaning that <span class="math inline">\(\hat{\tau}_{Strat} \rightarrow_p \tau\)</span> given that <span class="math inline">\(\hat{e}(x)\)</span> is consistent for <span class="math inline">\(e(x)\)</span> and the number of strata grows appropriately with <span class="math inline">\(N\)</span>. However, one needs to set the number of strata, which can be a bit ad-hoc.</p>
 <p>Demo of propensity score stratification</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="propensity-score-stratification.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># order data by the propensity score: low to high</span></span>
-<span id="cb18-2"><a href="propensity-score-stratification.html#cb18-2" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat[<span class="fu">order</span>(dat<span class="sc">$</span>pscore), ]</span>
-<span id="cb18-3"><a href="propensity-score-stratification.html#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="propensity-score-stratification.html#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># cut to form ventiles</span></span>
-<span id="cb18-5"><a href="propensity-score-stratification.html#cb18-5" aria-hidden="true" tabindex="-1"></a>strata  <span class="ot">&lt;-</span> <span class="fu">cut</span>(dat<span class="sc">$</span>pscore, <span class="at">breaks =</span> <span class="fu">quantile</span>(dat<span class="sc">$</span>pscore, <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.05</span>)), <span class="at">labels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-6"><a href="propensity-score-stratification.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="propensity-score-stratification.html#cb18-7" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span>  dat  <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-8"><a href="propensity-score-stratification.html#cb18-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">strata =</span> strata)</span>
-<span id="cb18-9"><a href="propensity-score-stratification.html#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="propensity-score-stratification.html#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># compare across strata</span></span>
-<span id="cb18-11"><a href="propensity-score-stratification.html#cb18-11" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-12"><a href="propensity-score-stratification.html#cb18-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(W, strata)  <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-13"><a href="propensity-score-stratification.html#cb18-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">mean_Y =</span> <span class="fu">mean</span>(Y))  <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-14"><a href="propensity-score-stratification.html#cb18-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> W, <span class="at">values_from =</span> mean_Y)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="propensity-score-stratification.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># order data by the propensity score: low to high</span></span>
+<span id="cb60-2"><a href="propensity-score-stratification.html#cb60-2" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat[<span class="fu">order</span>(dat<span class="sc">$</span>pscore), ]</span>
+<span id="cb60-3"><a href="propensity-score-stratification.html#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="propensity-score-stratification.html#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="co"># cut to form ventiles</span></span>
+<span id="cb60-5"><a href="propensity-score-stratification.html#cb60-5" aria-hidden="true" tabindex="-1"></a>strata  <span class="ot">&lt;-</span> <span class="fu">cut</span>(dat<span class="sc">$</span>pscore, <span class="at">breaks =</span> <span class="fu">quantile</span>(dat<span class="sc">$</span>pscore, <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.05</span>)), <span class="at">labels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb60-6"><a href="propensity-score-stratification.html#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="propensity-score-stratification.html#cb60-7" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span>  dat  <span class="sc">%&gt;%</span>  </span>
+<span id="cb60-8"><a href="propensity-score-stratification.html#cb60-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">strata =</span> strata)</span>
+<span id="cb60-9"><a href="propensity-score-stratification.html#cb60-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-10"><a href="propensity-score-stratification.html#cb60-10" aria-hidden="true" tabindex="-1"></a><span class="co"># compare across strata</span></span>
+<span id="cb60-11"><a href="propensity-score-stratification.html#cb60-11" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span>  </span>
+<span id="cb60-12"><a href="propensity-score-stratification.html#cb60-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(W, strata)  <span class="sc">%&gt;%</span>  </span>
+<span id="cb60-13"><a href="propensity-score-stratification.html#cb60-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">mean_Y =</span> <span class="fu">mean</span>(Y))  <span class="sc">%&gt;%</span>  </span>
+<span id="cb60-14"><a href="propensity-score-stratification.html#cb60-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> W, <span class="at">values_from =</span> mean_Y)</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;W&#39;. You can override using the `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="propensity-score-stratification.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat_sum)  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;strata&quot;</span>, <span class="st">&quot;mean_control&quot;</span>, <span class="st">&quot;mean_treat&quot;</span>)</span>
-<span id="cb20-2"><a href="propensity-score-stratification.html#cb20-2" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat_sum  <span class="sc">%&gt;%</span>  </span>
-<span id="cb20-3"><a href="propensity-score-stratification.html#cb20-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">diff =</span> mean_treat <span class="sc">-</span> mean_control)</span>
-<span id="cb20-4"><a href="propensity-score-stratification.html#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="propensity-score-stratification.html#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;ATE Estimation from propensity score stratification is: &quot;</span>, <span class="fu">mean</span>(dat_sum<span class="sc">$</span>diff), <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;ATE Estimation from propensity score stratification is: 2.56135397640408&quot;</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="propensity-score-stratification.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;raw difference is :&quot;</span>, <span class="fu">mean</span>(dat<span class="sc">$</span>Y[dat<span class="sc">$</span>W <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(dat<span class="sc">$</span>Y[dat<span class="sc">$</span>W <span class="sc">==</span> <span class="dv">0</span>]), <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;raw difference is :3.10098842187519&quot;</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="propensity-score-stratification.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;And the true treatment effect is :&quot;</span>, true_effect, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;And the true treatment effect is :2.56&quot;</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="propensity-score-stratification.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat_sum)  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;strata&quot;</span>, <span class="st">&quot;mean_control&quot;</span>, <span class="st">&quot;mean_treat&quot;</span>)</span>
+<span id="cb62-2"><a href="propensity-score-stratification.html#cb62-2" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat_sum  <span class="sc">%&gt;%</span>  </span>
+<span id="cb62-3"><a href="propensity-score-stratification.html#cb62-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">diff =</span> mean_treat <span class="sc">-</span> mean_control)</span>
+<span id="cb62-4"><a href="propensity-score-stratification.html#cb62-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-5"><a href="propensity-score-stratification.html#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;ATE Estimation from propensity score stratification is: &quot;</span>, <span class="fu">mean</span>(dat_sum<span class="sc">$</span>diff), <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;ATE Estimation from propensity score stratification is: 2.50135397640408&quot;</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="propensity-score-stratification.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;raw difference is :&quot;</span>, <span class="fu">mean</span>(dat<span class="sc">$</span>Y[dat<span class="sc">$</span>W <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(dat<span class="sc">$</span>Y[dat<span class="sc">$</span>W <span class="sc">==</span> <span class="dv">0</span>]), <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;raw difference is :3.04098842187519&quot;</code></pre>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="propensity-score-stratification.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;And the true treatment effect is :&quot;</span>, true_effect, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;And the true treatment effect is :2.5&quot;</code></pre>
 <p>We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator. Looks like given that we know and observe what variables determine the treatment assignment, propensity score stratification approach performs well in estimating the ATE.</p>
 </div>
             </section>

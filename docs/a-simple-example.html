@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-11" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="ipw-and-aipw.html"/>
-<link rel="next" href="propensity-score.html"/>
+<link rel="next" href="aggregated-estimator.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -125,6 +125,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -153,14 +175,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -197,23 +221,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.1</span> A simple example<a href="a-simple-example.html#a-simple-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Say, you are interested in evaluating the effect of tutoring program initiated following the first exam on grades at an introductory level course. For simplicity, the possible grades are <strong>A</strong> and <strong>B</strong>. However, students who received B on their first exam are more likely to attend the tutoring session. In other words, <span class="math inline">\(P(W_i = 1 | Y_{iFE} = A) &lt; P(W_i = 1 | Y_{iFE} = B)\)</span> (<span class="math inline">\(Y_{iFE}\)</span> is read as unit <span class="math inline">\(i&#39;s\)</span> grade in the first exam). In this case, the treatment assignment is correlated with the past grade, which can predict the grade on the second exam. In other words, if you did well in the first exam, you are likely to perform well in the second exam and so on. Hence, using equation (2) to estimate effects of the tutoring program will result in biased estimate.</p>
 <p>Since we know that the probability of treatment is influenced by the grade on the first exam, we can estimate the conditional average treatment effect (CATE) and average them using weights to form an estimate of ATE. Let’s take a look at the data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="a-simple-example.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to report grade breakdown by the first exam grade (A and B)</span></span>
-<span id="cb1-2"><a href="a-simple-example.html#cb1-2" aria-hidden="true" tabindex="-1"></a>grade_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(grade_vec){</span>
-<span id="cb1-3"><a href="a-simple-example.html#cb1-3" aria-hidden="true" tabindex="-1"></a>    grade  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb1-4"><a href="a-simple-example.html#cb1-4" aria-hidden="true" tabindex="-1"></a>    grade[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
-<span id="cb1-5"><a href="a-simple-example.html#cb1-5" aria-hidden="true" tabindex="-1"></a>    grade[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">1</span>], grade_vec[<span class="dv">2</span>])</span>
-<span id="cb1-6"><a href="a-simple-example.html#cb1-6" aria-hidden="true" tabindex="-1"></a>    grade[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">3</span>], grade_vec[<span class="dv">4</span>])</span>
-<span id="cb1-7"><a href="a-simple-example.html#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(grade)</span>
-<span id="cb1-8"><a href="a-simple-example.html#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-9"><a href="a-simple-example.html#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="a-simple-example.html#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Y_iFS == A</span></span>
-<span id="cb1-11"><a href="a-simple-example.html#cb1-11" aria-hidden="true" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">4</span>))</span>
-<span id="cb1-12"><a href="a-simple-example.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
-<span id="cb1-13"><a href="a-simple-example.html#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="a-simple-example.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Se</span></span>
-<span id="cb1-15"><a href="a-simple-example.html#cb1-15" aria-hidden="true" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb1-16"><a href="a-simple-example.html#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb1-17"><a href="a-simple-example.html#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 1.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = A&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="a-simple-example.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to report grade breakdown by the first exam grade (A and B)</span></span>
+<span id="cb27-2"><a href="a-simple-example.html#cb27-2" aria-hidden="true" tabindex="-1"></a>grade_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(grade_vec){</span>
+<span id="cb27-3"><a href="a-simple-example.html#cb27-3" aria-hidden="true" tabindex="-1"></a>    grade  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb27-4"><a href="a-simple-example.html#cb27-4" aria-hidden="true" tabindex="-1"></a>    grade[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
+<span id="cb27-5"><a href="a-simple-example.html#cb27-5" aria-hidden="true" tabindex="-1"></a>    grade[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">1</span>], grade_vec[<span class="dv">2</span>])</span>
+<span id="cb27-6"><a href="a-simple-example.html#cb27-6" aria-hidden="true" tabindex="-1"></a>    grade[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">3</span>], grade_vec[<span class="dv">4</span>])</span>
+<span id="cb27-7"><a href="a-simple-example.html#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(grade)</span>
+<span id="cb27-8"><a href="a-simple-example.html#cb27-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-9"><a href="a-simple-example.html#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="a-simple-example.html#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Y_iFS == A</span></span>
+<span id="cb27-11"><a href="a-simple-example.html#cb27-11" aria-hidden="true" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">4</span>))</span>
+<span id="cb27-12"><a href="a-simple-example.html#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
+<span id="cb27-13"><a href="a-simple-example.html#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="a-simple-example.html#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Se</span></span>
+<span id="cb27-15"><a href="a-simple-example.html#cb27-15" aria-hidden="true" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
+<span id="cb27-16"><a href="a-simple-example.html#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb27-17"><a href="a-simple-example.html#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 1.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = A&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
 <table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>
@@ -264,12 +288,12 @@ Control
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="a-simple-example.html#cb2-1" aria-hidden="true" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
-<span id="cb2-2"><a href="a-simple-example.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
-<span id="cb2-3"><a href="a-simple-example.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="a-simple-example.html#cb2-4" aria-hidden="true" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb2-5"><a href="a-simple-example.html#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb2-6"><a href="a-simple-example.html#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 2.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = B&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="a-simple-example.html#cb28-1" aria-hidden="true" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb28-2"><a href="a-simple-example.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
+<span id="cb28-3"><a href="a-simple-example.html#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="a-simple-example.html#cb28-4" aria-hidden="true" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="a-simple-example.html#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb28-6"><a href="a-simple-example.html#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 2.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = B&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
 <table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>
@@ -326,12 +350,12 @@ Control
 <p><span class="math inline">\(\hat{\tau}_{FE=A} = \frac{5}{7} - \frac{9}{13} = 2.1 \; pp\)</span></p>
 <p><span class="math inline">\(\hat{\tau}_{FE=B} = \frac{15}{20} - \frac{1}{5} = 55 \; pp\)</span></p>
 <p><span class="math inline">\(\hat{\tau}_{AGG} = \frac{20}{45} \hat{\tau}_{FE=A} - \frac{25}{45} \hat{\tau}_{FE=B} = 31.48 \; pp\)</span>.</p>
-<p>The first two are CATEs for the group that recived A and B in the first exam. The assumption is that once conditioned on the grade in the first exam, treatment (who attends vs. who doesn’t) is random. This allows valid estimation of within group causal effects, which are then averaged to form ATE using appropriate weights on the third line. This simple example using the discrete feature space (grade in the first exam can be A or B) provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>The first two are CATEs for the group that recived A and B in the first exam. The assumption is that once conditioned on the grade in the first exam, treatment (who attends vs. who doesn’t) is random. This allows valid estimation of within group causal effects, which are then averaged to form ATE using appropriate weights on the third line. This simple example using the discrete feature space (grade in the first exam can be A or B) provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="3">
-<li id="fn3"><p>In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.<a href="a-simple-example.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<ol start="5">
+<li id="fn5"><p>In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.<a href="a-simple-example.html#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -340,7 +364,7 @@ Control
         </div>
       </div>
 <a href="ipw-and-aipw.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="propensity-score.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="aggregated-estimator.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

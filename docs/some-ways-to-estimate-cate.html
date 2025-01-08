@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-06" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -175,11 +175,16 @@ div.csl-indent {
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Continuous features and propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.4" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.4</b> IPW and Estimation</a></li>
-<li class="chapter" data-level="3.5" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.6" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.6</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -223,20 +228,20 @@ div.csl-indent {
 <p><span class="math inline">\(Y_i - m(X_i) = \tau(X_i) (W_i - e(X_i)) + \epsilon_i \; ........(equation \; 3)\)</span></p>
 <p>where, <span class="math inline">\(m(x)\)</span> is the conditional expectation of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>.</p>
 <p><span class="math inline">\(m(x) = E[Y_i | \; X_i = x] = \mu_{W = 0}(X_i) + \tau(X_i) e(X_i)\)</span>,
-where <span class="math inline">\(\mu_{0}(X_i)\)</span> is the baseline conditional response (in absense of treatment) and <span class="math inline">\(e(x) = P(W_i = 1 | \; X_i = x)\)</span>.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+where <span class="math inline">\(\mu_{0}(X_i)\)</span> is the baseline conditional response (in absense of treatment) and <span class="math inline">\(e(x) = P(W_i = 1 | \; X_i = x)\)</span>.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
 <p><span class="math inline">\(\tau(X)\)</span> is parameterized as <span class="math inline">\(\tau(x) = \psi(x).\beta\)</span>, where <span class="math inline">\(\psi\)</span> is some pre-determined set of basis functions: <span class="math inline">\(\chi \rightarrow R^k\)</span>.</p>
 <p>A feasible loss function can be devised using equation 3 and using estimates of <span class="math inline">\(m(x)\)</span> and <span class="math inline">\(e(x)\)</span> from cross-fitting.</p>
 <p><span class="math inline">\(L = \frac{1}{n} \sum_{i = 1}^n((Y_i - \hat{m}(X_i)^{-k(i)}) - (W_i - \hat{e}(X_i)^{-k(i)}) \; \psi(X_i).\beta)^2\)</span>. Note that the parameter of interest is <span class="math inline">\(\beta\)</span>.</p>
 <p>LASSO can be used to estimate <span class="math inline">\(\hat{\beta}\)</span>, where:</p>
-<p><span class="math inline">\(\hat{\beta} = argmin_{\beta}\{L + \lambda \; ||\beta||_{1}\}\)</span>, where <span class="math inline">\(\lambda\)</span> is the regularizer on the complexity of <span class="math inline">\(\tau(.)\)</span>.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
+<p><span class="math inline">\(\hat{\beta} = argmin_{\beta}\{L + \lambda \; ||\beta||_{1}\}\)</span>, where <span class="math inline">\(\lambda\)</span> is the regularizer on the complexity of <span class="math inline">\(\tau(.)\)</span>.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
 <p><strong>Note: The other approach is to use random forest to measure out weight of an observation <span class="math inline">\(i\)</span> in relation to the test point <span class="math inline">\(x\)</span>. This approach is done using causal forest in the Generalized Random Forest framework.</strong></p>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="8">
-<li id="fn8"><p>The distinction between
-<span class="math inline">\(m(x)\)</span> and <span class="math inline">\(m(X_i)\)</span> is such that the former is estimation performed at the new data point <span class="math inline">\(x\)</span>.<a href="some-ways-to-estimate-cate.html#fnref8" class="footnote-back">↩︎</a></p></li>
-<li id="fn9"><p>One can build a highly complex model and improve the in-sample fit. However, this model may perform badly while predicting out-of-sample cases. As such, the complexity of the model should be penalized while training the model.<a href="some-ways-to-estimate-cate.html#fnref9" class="footnote-back">↩︎</a></p></li>
+<ol start="9">
+<li id="fn9"><p>The distinction between
+<span class="math inline">\(m(x)\)</span> and <span class="math inline">\(m(X_i)\)</span> is such that the former is estimation performed at the new data point <span class="math inline">\(x\)</span>.<a href="some-ways-to-estimate-cate.html#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>One can build a highly complex model and improve the in-sample fit. However, this model may perform badly while predicting out-of-sample cases. As such, the complexity of the model should be penalized while training the model.<a href="some-ways-to-estimate-cate.html#fnref10" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

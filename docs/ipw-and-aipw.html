@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-11" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -125,6 +125,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -153,14 +175,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -216,8 +240,8 @@ In a randomized controlled trial each unit has an equal probability of receiving
 <p><span class="math display" id="eq:ptreat">\[\begin{equation}
 P(W_i = 1 \; | \;  Y_i(0), \;  Y_i(1),  \;  n_T) = \frac{n_T}{n}, \; \; i = \{1, ...., n\} \tag{3.2}
 \end{equation}\]</span></p>
-<p>In equation <a href="ipw-and-aipw.html#eq:ptreat">(3.2)</a>, <span class="math inline">\(n_T\)</span> refers to the number of units that receives the treatment.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
-In an easy to understand set-up, if a researcher wants <span class="math inline">\(P(W_i = 1) = 0.5\)</span> (unit is equally likely to be treated or untreated), a coin flip can feasibly be used as a mechanism to assign treatment.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>In equation <a href="ipw-and-aipw.html#eq:ptreat">(3.2)</a>, <span class="math inline">\(n_T\)</span> refers to the number of units that receives the treatment.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+In an easy to understand set-up, if a researcher wants <span class="math inline">\(P(W_i = 1) = 0.5\)</span> (unit is equally likely to be treated or untreated), a coin flip can feasibly be used as a mechanism to assign treatment.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <p>Although randomized controlled trials (RCTs) are often considered the gold standard in causal inference, they cannot always be used due to ethical, moral, and monetary reasons. Returning to the example we used in the previous chapter, it is not ethical to demarcate who can attend the tutoring session versus who cannot. In real-world scenarios, tutoring sessions are typically voluntary. Students who regularly attend these sessions may have different baseline (pre-treatment) characteristics compared to those who do not attend. These differences can introduce biases that complicate causal inference in observational studies.</p>
 <p>To proceed further in observational setting (without using RCTs), we require more knowledge about the treatment assignment. In other words, we need to understand which variables determine who attends the tutoring sessions. This information is crucial for identifying potential confounders and for applying methods that can help estimate causal effects in observational settings. <em>In causal inference, confounders are variables that are associated with both the treatment and the outcome. They can introduce bias in the estimation of the causal effect of the treatment on the outcome by providing alternative explanations for any observed relationships.</em> For example, say you are trying to evaluate the efficacy of a new drug on blood pressure level. If smokers are more likey to get treated and if they tend to have higher blood pressure to begin with, the treatment effects are likely to be understated.</p>
 <p>This brings us to the <strong>unconfoundedness</strong> assumption.</p>
@@ -236,9 +260,9 @@ In an easy to understand set-up, if a researcher wants <span class="math inline"
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Although it is generally recommended to assign half of the sample to the treatment group and the other half to the control group, this is not a strict requirement.<a href="ipw-and-aipw.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Of course, this is quicky going to be inefficient as the sample size increases. In general, treatment assignment is determinted by a statistical process via a software. For example, if a researcher wants about one-third of the sample treated then a bernoulli trial with the probability of success of 0.33 can be used.<a href="ipw-and-aipw.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<ol start="3">
+<li id="fn3"><p>Although it is generally recommended to assign half of the sample to the treatment group and the other half to the control group, this is not a strict requirement.<a href="ipw-and-aipw.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Of course, this is quicky going to be inefficient as the sample size increases. In general, treatment assignment is determinted by a statistical process via a software. For example, if a researcher wants about one-third of the sample treated then a bernoulli trial with the probability of success of 0.33 can be used.<a href="ipw-and-aipw.html#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

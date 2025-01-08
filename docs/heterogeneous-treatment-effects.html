@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-06" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -175,11 +175,16 @@ div.csl-indent {
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="continuous-features-and-propensity-score.html"><a href="continuous-features-and-propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Continuous features and propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.4" data-path="ipw-and-estimation.html"><a href="ipw-and-estimation.html"><i class="fa fa-check"></i><b>3.4</b> IPW and Estimation</a></li>
-<li class="chapter" data-level="3.5" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.5</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.6" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.6</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -220,21 +225,21 @@ div.csl-indent {
 <p>Using the potential outcome framework, ATE is given by: <span class="math inline">\(E[Y_i^{1} - Y_i^{0}]\)</span>.</p>
 <p>The heterogeneous treatment is: <span class="math inline">\(E[Y_i^{1} - Y_i^{0} | X_i = x ]\)</span>. Its the treatment conditional on <span class="math inline">\(X_i\)</span>, which is determined prior to observing the data. Hence, its also termed as the conditional average treatment effect (CATE).</p>
 <p>One simple example borrowed from Wager’s lecture notes to illustrate the concept is that of smoking in Geneva and Palo Alto. Say, two RCTs are conducted in Palo Alto and Geneva to evaluate whether cash incentives among teenagers can reduce the prevalence of smoking.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="heterogeneous-treatment-effects.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Palo-Alto</span></span>
-<span id="cb74-2"><a href="heterogeneous-treatment-effects.html#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-3"><a href="heterogeneous-treatment-effects.html#cb74-3" aria-hidden="true" tabindex="-1"></a>smoke_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(smoke_vec){</span>
-<span id="cb74-4"><a href="heterogeneous-treatment-effects.html#cb74-4" aria-hidden="true" tabindex="-1"></a>    smoke  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb74-5"><a href="heterogeneous-treatment-effects.html#cb74-5" aria-hidden="true" tabindex="-1"></a>    smoke[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
-<span id="cb74-6"><a href="heterogeneous-treatment-effects.html#cb74-6" aria-hidden="true" tabindex="-1"></a>    smoke[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(smoke_vec[<span class="dv">1</span>], smoke_vec[<span class="dv">2</span>])</span>
-<span id="cb74-7"><a href="heterogeneous-treatment-effects.html#cb74-7" aria-hidden="true" tabindex="-1"></a>    smoke[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(smoke_vec[<span class="dv">3</span>], smoke_vec[<span class="dv">4</span>])</span>
-<span id="cb74-8"><a href="heterogeneous-treatment-effects.html#cb74-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(smoke)</span>
-<span id="cb74-9"><a href="heterogeneous-treatment-effects.html#cb74-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb74-10"><a href="heterogeneous-treatment-effects.html#cb74-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-11"><a href="heterogeneous-treatment-effects.html#cb74-11" aria-hidden="true" tabindex="-1"></a>smoke  <span class="ot">&lt;-</span> <span class="fu">smoke_mat</span>(<span class="fu">c</span>(<span class="dv">152</span>, <span class="dv">2362</span>, <span class="dv">5</span>, <span class="dv">122</span>))</span>
-<span id="cb74-12"><a href="heterogeneous-treatment-effects.html#cb74-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(smoke)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Palo Alto&quot;</span>, <span class="st">&quot;Non-S.&quot;</span>, <span class="st">&quot;Smoker&quot;</span>)</span>
-<span id="cb74-13"><a href="heterogeneous-treatment-effects.html#cb74-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-14"><a href="heterogeneous-treatment-effects.html#cb74-14" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(smoke)  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb74-15"><a href="heterogeneous-treatment-effects.html#cb74-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="heterogeneous-treatment-effects.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Palo-Alto</span></span>
+<span id="cb126-2"><a href="heterogeneous-treatment-effects.html#cb126-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb126-3"><a href="heterogeneous-treatment-effects.html#cb126-3" aria-hidden="true" tabindex="-1"></a>smoke_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(smoke_vec){</span>
+<span id="cb126-4"><a href="heterogeneous-treatment-effects.html#cb126-4" aria-hidden="true" tabindex="-1"></a>    smoke  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb126-5"><a href="heterogeneous-treatment-effects.html#cb126-5" aria-hidden="true" tabindex="-1"></a>    smoke[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
+<span id="cb126-6"><a href="heterogeneous-treatment-effects.html#cb126-6" aria-hidden="true" tabindex="-1"></a>    smoke[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(smoke_vec[<span class="dv">1</span>], smoke_vec[<span class="dv">2</span>])</span>
+<span id="cb126-7"><a href="heterogeneous-treatment-effects.html#cb126-7" aria-hidden="true" tabindex="-1"></a>    smoke[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(smoke_vec[<span class="dv">3</span>], smoke_vec[<span class="dv">4</span>])</span>
+<span id="cb126-8"><a href="heterogeneous-treatment-effects.html#cb126-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(smoke)</span>
+<span id="cb126-9"><a href="heterogeneous-treatment-effects.html#cb126-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb126-10"><a href="heterogeneous-treatment-effects.html#cb126-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb126-11"><a href="heterogeneous-treatment-effects.html#cb126-11" aria-hidden="true" tabindex="-1"></a>smoke  <span class="ot">&lt;-</span> <span class="fu">smoke_mat</span>(<span class="fu">c</span>(<span class="dv">152</span>, <span class="dv">2362</span>, <span class="dv">5</span>, <span class="dv">122</span>))</span>
+<span id="cb126-12"><a href="heterogeneous-treatment-effects.html#cb126-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(smoke)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Palo Alto&quot;</span>, <span class="st">&quot;Non-S.&quot;</span>, <span class="st">&quot;Smoker&quot;</span>)</span>
+<span id="cb126-13"><a href="heterogeneous-treatment-effects.html#cb126-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb126-14"><a href="heterogeneous-treatment-effects.html#cb126-14" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(smoke)  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
+<span id="cb126-15"><a href="heterogeneous-treatment-effects.html#cb126-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)</span></code></pre></div>
 <table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>
@@ -274,11 +279,11 @@ Control
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="heterogeneous-treatment-effects.html#cb75-1" aria-hidden="true" tabindex="-1"></a>smoke  <span class="ot">&lt;-</span> <span class="fu">smoke_mat</span>(<span class="fu">c</span>(<span class="dv">581</span>, <span class="dv">2278</span>, <span class="dv">350</span>, <span class="dv">1979</span>))</span>
-<span id="cb75-2"><a href="heterogeneous-treatment-effects.html#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(smoke)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Geneva&quot;</span>, <span class="st">&quot;Non-S.&quot;</span>, <span class="st">&quot;Smoker&quot;</span>)</span>
-<span id="cb75-3"><a href="heterogeneous-treatment-effects.html#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-4"><a href="heterogeneous-treatment-effects.html#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(smoke)  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb75-5"><a href="heterogeneous-treatment-effects.html#cb75-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="heterogeneous-treatment-effects.html#cb127-1" aria-hidden="true" tabindex="-1"></a>smoke  <span class="ot">&lt;-</span> <span class="fu">smoke_mat</span>(<span class="fu">c</span>(<span class="dv">581</span>, <span class="dv">2278</span>, <span class="dv">350</span>, <span class="dv">1979</span>))</span>
+<span id="cb127-2"><a href="heterogeneous-treatment-effects.html#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(smoke)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Geneva&quot;</span>, <span class="st">&quot;Non-S.&quot;</span>, <span class="st">&quot;Smoker&quot;</span>)</span>
+<span id="cb127-3"><a href="heterogeneous-treatment-effects.html#cb127-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-4"><a href="heterogeneous-treatment-effects.html#cb127-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(smoke)  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
+<span id="cb127-5"><a href="heterogeneous-treatment-effects.html#cb127-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)</span></code></pre></div>
 <table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>

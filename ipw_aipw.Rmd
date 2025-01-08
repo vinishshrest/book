@@ -150,6 +150,128 @@ $\hat{\tau}_{AGG} = \frac{20}{45} \hat{\tau}_{FE=A} - \frac{25}{45} \hat{\tau}_{
 
 The first two are CATEs for the group that recived A and B in the first exam. The assumption is that once conditioned on the grade in the first exam, treatment (who attends vs. who doesn't) is random. This allows valid estimation of within group causal effects, which are then averaged to form ATE using appropriate weights on the third line. This simple example using the discrete feature space (grade in the first exam can be A or B) provides intuition that if variables influencing the treatment assignment are observed then ATE estimate can be uncovered by taking weighted average of CATE estimates (these are also group-wise ATE).^[In this case, CATEs are different across the two sub-groups. Sometimes the core interest of analysis can be uncovering the heterogeneous treatment effects, which motivates estimation and inference on CATEs across two or more sub-groups.]
 
+
+## Aggregated Estimator 
+
+As we saw in Section 1, aggregated estimator can be used in when we know what exact variables are determining the treatment assignment. We will consider the discrete case, when a discrete covariate determines the probability of treatment for simplicity. Note that students who received B on their first exam are more likely to attend the tutoring session in our **simple example**. So grade in the first exam (A or B for simplicity) determines the treatment here. 
+
+**Setup.** $Y_i$ is the outcome variable; final exam score. $W_i$ is the treatment variable; whether a student attended the tutoring session. $X_i$ is the covariate; a student's grade on the first exam. We want to evaluate the effects of attending a tutoring program on a student's exam score.  
+
+What we would want to do is to condition on the first exam's grade, estimate the treatment effects, and aggregate it. 
+
+The aggregated estimator is given as: 
+
+\begin{align}
+
+\hat{\tau}_{AGG} = \frac{n_{A}}{n} \bigg[\frac{1}{n_{A1}} \underbrace{\sum}_{\substack{i \in A \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{n_{A0}} \underbrace{\sum}_{\substack{i \in A \\ \textrm{W = 0}}} Y_i \bigg] + 
+\frac{n_{B}}{n} \bigg[\frac{1}{n_{B1}} \underbrace{\sum}_{\substack{i \in B \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{n_{B0}} \underbrace{\sum}_{\substack{i \in B \\ \textrm{W = 0}}} Y_i \bigg] (\#eq:AGG0)
+
+\end{align}
+
+Note that the first block is the treatment effect for those who received A on their first exam, whereas the second block represents 
+treatment effect for those who received B. After a few steps of simple algebra, equation \@ref{eq:AGG0} can be written as: 
+
+\begin{equation}
+= \frac{1}{n} \bigg[ \frac{1}{\frac{n_{A1}}{n_{A}}} \underbrace{\sum}_{\substack{i \in A}} Y_i \times W_i -   
+                    \frac{1}{\frac{n_{A0}}{n_{A}}} \underbrace{\sum}_{\substack{i \in A}} Y_i \times (1 - W_i) \bigg] + \\
+\frac{1}{n} \bigg[ \frac{1}{\frac{n_{B1}}{n_{B}}} \underbrace{\sum}_{\substack{i \in B}} Y_i \times W_i -   
+                    \frac{1}{\frac{n_{B0}}{n_{B}}} \underbrace{\sum}_{\substack{i \in B}} Y_i \times (1 - W_i) \bigg] (\#eq:AGG)
+\end{equation}
+
+Equation \@ref(eq:AGG) looks super complicated, buts its not. Let's breakdown the components of it: 
+
+1. $\frac{n_{A1}}{n_A}:$ Represents the fraction of treated individuals who received $A$ on the first exam. 
+
+2. $\frac{n_{A0}}{n_A}:$ Represents the fraction of untreated individuals who received $A$ on the first exam. 
+
+3. $\frac{n_{B1}}{n_B}:$ Represents the fraction of treated individuals who received $B$ on the first exam. 
+
+4. $\frac{n_{B0}}{n_B}:$ Represents the fraction of untreated individuals who received $B$ on the first exam. 
+
+
+Note that $\frac{n_{A1}}{n_A} = e(X = A)$ and $\frac{n_{A0}}{n_A} = 1 - e(X = A)$ and the same goes with the segment composed of those who received B on their first exam. 
+
+Equation \@ref(eq:AGG) can be further simplified as: 
+
+\begin{equation}
+\hat{\tau}_{AGG} = \frac{1}{n}\bigg[ \sum \frac{Y_i \times W_i}{e(X)} - \sum \frac{Y_i \times (1-W_i)}{1 - e(X)} \bigg] (\#eq:AGG2)
+\end{equation}
+
+Equation \@ref{eq:AGG2} takes the form of an **inverse probability-weighted estimator**.
+We'll find out that Aggregate Estimator $(\hat{\tau}_{AGG})$ is a special case of Inverse Probability Weighting later on in this section.
+
+```{r}
+n <- 2000
+p <- 10
+true_effect  <-  10
+
+set.seed  <- 12570
+agg.means  <- replicate(1000, {
+X <- matrix(rnorm(n * p), n, p)
+X.test <- matrix(0, 101, p)
+X.test[, 1] <- seq(-2, 2, length.out = 101)
+prob  <- 1 / (1 + exp(- (X[, 1] < 1 + rnorm(n))))
+W <- rbinom(n, 1, prob)
+Y <- 60 + true_effect * W + 5 * pmax(X[, 1], 1) + rnorm(n)
+group  <- ifelse( X[, 1] < 1, "A", "B" )
+
+# estimates for those receiving A and B on the first exam
+att.A  <- mean(Y[group == "A" & W == 1]) - mean(Y[group == "A" & W == 0])
+att.B  <- mean(Y[group == "B" & W == 1]) - mean(Y[group == "B" & W == 0])
+
+prop.A  <- mean(group == "A")
+prop.B  <- mean(group == "B")
+
+prop.A * att.A + prop.B * att.B
+
+}
+)
+
+# plot(X[, 1], X[, 2], col = as.factor(W))
+
+hist(agg.means, freq = F, main = "", col= rgb(0, 0, 1, 1/8), xlab = "ATT estimates", las = 1)
+abline(v = true_effect, lwd = 3, lty = 2)
+legend("topright", "True effect", lwd = 3, lty = 2, bty = "n")
+
+paste("mean of AGG estimates: ", round(mean(agg.means), 3))
+paste("standard error of AGG estimates: ", round(sd(agg.means), 3))
+
+```
+
+Let's compare this to a naive estimator. 
+
+```{r}
+set.seed  <- 12570
+naive.means  <- replicate(1000, {
+
+X <- matrix(rnorm(n * p), n, p)
+X.test <- matrix(0, 101, p)
+X.test[, 1] <- seq(-2, 2, length.out = 101)
+
+prob  <- 1 / (1 + exp(- (X[, 1] < 1 + rnorm(n))))
+W <- rbinom(n, 1, prob)
+Y <- 60 + true_effect * W  + 5 * pmax(X[, 1], 1) + rnorm(n)
+
+# naive estimates that does not take voluntary selection into account
+mean(Y[ W == 1]) - mean(Y[ W == 0])
+
+}
+)
+
+# plot(X[, 1], X[, 2], col = as.factor(W))
+
+hist(naive.means, freq = F, main = "", col= rgb(0, 0, 1, 1/8), xlab = "ATT naive estimates", las = 1)
+abline(v = true_effect, lwd = 3, lty = 2)
+legend("topright", "True effect", lwd = 3, lty = 2, bty = "n")
+
+paste("mean of naive estimates: ", round(mean(naive.means), 3))
+paste("standard error of naive estimates: ", round(sd(naive.means), 3))
+```
+
+
+
 ## Propensity score 
 
 Previously we discussed the setting of a discrete feature in which case we estimate group-wise ATEs and use the weighted average to obtain an overall ATE estimate. When there are many features (covariates), this approach is prone to the *curse of dimensionality*.^[As the number of covariates increases the domain space shrinks quite rapidly making it infeasible to estimate ATE within the given domain due to thinning out data.] Moreover, if features are continuous, we won't be able to estimate ATE at each value of $x \in \chi$ due to lack of enough sample size. Instead of estimating group-wise ATE and averaging them, we would want to use a more indirect approach. This is when propensity score comes in. 
@@ -222,7 +344,7 @@ set.seed(194) # for replicability
 n <- 2000 # number of obsevations
 p <- 10 # number of covariates
 X <- matrix(rnorm(n * p), n, p) # data matrix
-true_effect  <- 2.56
+true_effect  <- 2.5
 
 W <- rbinom(n, 1, 0.1 + 0.4 * (X[, 1] > 0) + 0.2 * (X[, 2] > 0))
 prob  <- 0.1 + 0.4 * (X[, 1] > 0) + 0.2 * (X[, 2] > 0)  # oracle propensity score
@@ -481,6 +603,8 @@ print(paste("And the true treatment effect is :", true_effect, sep = ""))
 
 We see that the estimate from stratification gets closer to the true effect compared to the mean difference estimator. Looks like given that we know and observe what variables determine the treatment assignment, propensity score stratification approach performs well in estimating the ATE.
 
+
+
 ## Inverse Probability Weighting (IPW)
 
 A more natural way to exploit the condition of unconfoundedness is to weight observations by their propensity score, which is known as the inverse probability weighting. As before $\hat{e}(x)$ is defined as an estimated propensity score. 
@@ -532,12 +656,14 @@ set.seed(194)
 # Generate Data 
 n <- 2000
 p <- 10
+true_effect  <-  15
+
 X <- matrix(rnorm(n * p), n, p)
 X.test <- matrix(0, 101, p)
 X.test[, 1] <- seq(-2, 2, length.out = 101)
-prob  <- 1 / (1 + exp(- (X[, 1] + rnorm(n))))
+prob  <- 1 / (1 + exp(- (X[, 1] > 1 + rnorm(n))))
 W <- rbinom(n, 1, prob)
-Y <- 2.56 * W + X[, 2] + pmax(X[, 1], 0) + rnorm(n)
+Y <- 60 + true_effect * W + 5 * pmax(X[, 1], 0) + rnorm(n)
 plot(X[, 1], X[, 2], col = as.factor(W))
 
 #paste0("average treatment effect is: ", round(mean(pmax(X[, 1], 0)), 3))
@@ -552,7 +678,7 @@ plot(X[, 1], X[, 2], col = as.factor(W))
 #################################
 
 # use the random forest to get the propensity score 
-dat  <- data.frame(W, X)
+dat  <- data.frame(W, X, Y)
 n_features  <- length(setdiff(names(dat), "W"))
 
 # A. ranger (probability tree)
@@ -628,6 +754,61 @@ print(result.oracle.ipw)
 ```
 
 What? Despite having true propensity score, the Oracle IPW underperforms in accuracy compared to the IPW estimate with unknown propensity score. Why is it so?
+
+## Comparing IPW with Aggregated Estimate 
+
+We know that the probablity of the treatment increases with $X1$, as shown below. 
+
+```{r}
+plot(X[, 1], prob)
+par(new = T)
+abline(v = 0, col = "red", lty = "dashed")
+
+```
+
+Next, we would want to divide $X1$ into segments such that the probability of treatment remains more or less similar in each segment. Since we generated the data ourselves, we know that the probability of treatment increases for observations with $X1 > 0$. However, lets take 10 segments, which cuts the distribution of $X1$ in decile. 
+
+```{r}
+quant  <- quantile(X[, 1], p = seq(0, 1, 0.1))
+group  <- cut(X[, 1], quant, include.lowest = TRUE)
+dat$group  <- group
+```
+
+Next, we want to estimate the treatment effects for each segment and then aggregate it.
+
+```{r}
+
+
+dat_sum   <- data.frame(dat  %>% 
+                mutate(status = ifelse(W == 1, "treatment", "control"))  %>% 
+                group_by(group)  %>% 
+                summarize(num_treat = sum(W), n_group = n()))  %>% 
+                mutate(prop_treat = num_treat / n_group) %>%  
+                select(c(group, prop_treat))
+
+
+dat   <- dat  %>%  
+            merge(dat_sum, by = "group", all.x = T)  %>%  
+            mutate(score = Y * ((W / prop_treat) - ((1 - W) / (1 - prop_treat))) 
+            )
+
+
+paste("aggregated treatment effect is: ", round(mean(dat$score), 3))
+paste("se of aggregated treatment effect is: ", round(sd(dat$score) / sqrt(length(W)), 3))
+
+```
+
+Now, let's estimate the oracle IPW with known propensity score.
+
+```{r}
+score_oracle  <- ((W * Y) / (prob)) - 
+                ((1 - W) * Y / (1 - prob))
+ipw.oracle  <- mean(score_oracle)
+se.oracle  <- sd(score_oracle) / sqrt(length(score_oracle))
+
+paste("oracle IPW estimate: ", round(ipw.oracle, 3))
+paste("standard error: ", round(se.oracle, 3))
+```
 
 
 ## AIPW and Estimation

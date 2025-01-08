@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.9 Cross-fitting | IPW and AIPW</title>
-  <meta name="description" content="3.9 Cross-fitting | IPW and AIPW" />
+  <title>3.11 Cross-fitting | IPW and AIPW</title>
+  <meta name="description" content="3.11 Cross-fitting | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.9 Cross-fitting | IPW and AIPW" />
+  <meta property="og:title" content="3.11 Cross-fitting | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.9 Cross-fitting | IPW and AIPW" />
+  <meta name="twitter:title" content="3.11 Cross-fitting | IPW and AIPW" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-11" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -125,6 +125,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -153,14 +175,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -193,8 +217,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="cross-fitting" class="section level2 hasAnchor" number="3.9">
-<h2><span class="header-section-number">3.9</span> Cross-fitting<a href="cross-fitting.html#cross-fitting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="cross-fitting" class="section level2 hasAnchor" number="3.11">
+<h2><span class="header-section-number">3.11</span> Cross-fitting<a href="cross-fitting.html#cross-fitting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>What is cross-fitting?</strong></p>
 <ol style="list-style-type: decimal">
 <li>Divide the data into K folds randomly.</li>
@@ -203,34 +227,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Repeat steps 2 and 3 to generate fit for all <span class="math inline">\(K\)</span> number of folds.</li>
 </ol>
 <p>This is illustrated using the figure below. The data is randomly divided into 5 folds (segments). This is an example of a five-fold cross-fitting. In the first round, the blue segments are used for model building, while responses are constructed for observations in the green segment of the data. Next, we move into the second round and so on; again the blue segments are used for model building and responses are constructed for the green segment. In this way, each observation is used for model building.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="cross-fitting.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-fitting illustration</span></span>
-<span id="cb49-2"><a href="cross-fitting.html#cb49-2" aria-hidden="true" tabindex="-1"></a>colorcode <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">5</span>) <span class="co"># this creates a coding</span></span>
-<span id="cb49-3"><a href="cross-fitting.html#cb49-3" aria-hidden="true" tabindex="-1"></a>colorcode <span class="ot">&lt;-</span> <span class="fu">c</span>(colorcode)</span>
-<span id="cb49-4"><a href="cross-fitting.html#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="cross-fitting.html#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data for the boxes</span></span>
-<span id="cb49-6"><a href="cross-fitting.html#cb49-6" aria-hidden="true" tabindex="-1"></a>boxes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb49-7"><a href="cross-fitting.html#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="dv">5</span>),</span>
-<span id="cb49-8"><a href="cross-fitting.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>),</span>
-<span id="cb49-9"><a href="cross-fitting.html#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">rep</span>(<span class="fu">paste</span>(<span class="st">&quot;fold&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>), <span class="dv">5</span>), </span>
-<span id="cb49-10"><a href="cross-fitting.html#cb49-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">colorcode =</span> colorcode</span>
-<span id="cb49-11"><a href="cross-fitting.html#cb49-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-12"><a href="cross-fitting.html#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-13"><a href="cross-fitting.html#cb49-13" aria-hidden="true" tabindex="-1"></a>boxes <span class="ot">&lt;-</span> boxes  <span class="sc">%&gt;%</span> </span>
-<span id="cb49-14"><a href="cross-fitting.html#cb49-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">fill =</span> <span class="fu">ifelse</span>(colorcode <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;lightblue&quot;</span>))  <span class="sc">%&gt;%</span> </span>
-<span id="cb49-15"><a href="cross-fitting.html#cb49-15" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(colorcode))</span>
-<span id="cb49-16"><a href="cross-fitting.html#cb49-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb49-17"><a href="cross-fitting.html#cb49-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-18"><a href="cross-fitting.html#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-19"><a href="cross-fitting.html#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
-<span id="cb49-20"><a href="cross-fitting.html#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb49-21"><a href="cross-fitting.html#cb49-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_rect</span>(<span class="at">data =</span> boxes, <span class="fu">aes</span>(<span class="at">xmin =</span> x , <span class="at">xmax =</span> x <span class="sc">+</span> <span class="dv">2</span>, <span class="at">ymin =</span> y <span class="sc">-</span> <span class="fl">0.3</span>, <span class="at">ymax =</span> y <span class="sc">+</span> <span class="fl">0.5</span>, <span class="at">fill =</span> fill), </span>
-<span id="cb49-22"><a href="cross-fitting.html#cb49-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span>   <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb49-23"><a href="cross-fitting.html#cb49-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">6</span>) <span class="sc">+</span> </span>
-<span id="cb49-24"><a href="cross-fitting.html#cb49-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb49-25"><a href="cross-fitting.html#cb49-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_identity</span>() <span class="sc">+</span></span>
-<span id="cb49-26"><a href="cross-fitting.html#cb49-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">3</span>, <span class="dv">11</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="fl">0.5</span>, <span class="dv">5</span>)), <span class="at">y =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fl">0.3</span>, <span class="dv">5</span>), <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)), <span class="at">label =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">&quot;fold&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>), <span class="fu">paste</span>(<span class="st">&quot;round&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)), <span class="at">color =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;black&quot;</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
-<span id="cb49-27"><a href="cross-fitting.html#cb49-27" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
-<p><img src="book_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="cross-fitting.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-fitting illustration</span></span>
+<span id="cb101-2"><a href="cross-fitting.html#cb101-2" aria-hidden="true" tabindex="-1"></a>colorcode <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">5</span>) <span class="co"># this creates a coding</span></span>
+<span id="cb101-3"><a href="cross-fitting.html#cb101-3" aria-hidden="true" tabindex="-1"></a>colorcode <span class="ot">&lt;-</span> <span class="fu">c</span>(colorcode)</span>
+<span id="cb101-4"><a href="cross-fitting.html#cb101-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="cross-fitting.html#cb101-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data for the boxes</span></span>
+<span id="cb101-6"><a href="cross-fitting.html#cb101-6" aria-hidden="true" tabindex="-1"></a>boxes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb101-7"><a href="cross-fitting.html#cb101-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">2</span>), <span class="dv">5</span>),</span>
+<span id="cb101-8"><a href="cross-fitting.html#cb101-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>),</span>
+<span id="cb101-9"><a href="cross-fitting.html#cb101-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">rep</span>(<span class="fu">paste</span>(<span class="st">&quot;fold&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>), <span class="dv">5</span>), </span>
+<span id="cb101-10"><a href="cross-fitting.html#cb101-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">colorcode =</span> colorcode</span>
+<span id="cb101-11"><a href="cross-fitting.html#cb101-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb101-12"><a href="cross-fitting.html#cb101-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-13"><a href="cross-fitting.html#cb101-13" aria-hidden="true" tabindex="-1"></a>boxes <span class="ot">&lt;-</span> boxes  <span class="sc">%&gt;%</span> </span>
+<span id="cb101-14"><a href="cross-fitting.html#cb101-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">fill =</span> <span class="fu">ifelse</span>(colorcode <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;lightblue&quot;</span>))  <span class="sc">%&gt;%</span> </span>
+<span id="cb101-15"><a href="cross-fitting.html#cb101-15" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(colorcode))</span>
+<span id="cb101-16"><a href="cross-fitting.html#cb101-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb101-17"><a href="cross-fitting.html#cb101-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-18"><a href="cross-fitting.html#cb101-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-19"><a href="cross-fitting.html#cb101-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the plot</span></span>
+<span id="cb101-20"><a href="cross-fitting.html#cb101-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb101-21"><a href="cross-fitting.html#cb101-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_rect</span>(<span class="at">data =</span> boxes, <span class="fu">aes</span>(<span class="at">xmin =</span> x , <span class="at">xmax =</span> x <span class="sc">+</span> <span class="dv">2</span>, <span class="at">ymin =</span> y <span class="sc">-</span> <span class="fl">0.3</span>, <span class="at">ymax =</span> y <span class="sc">+</span> <span class="fl">0.5</span>, <span class="at">fill =</span> fill), </span>
+<span id="cb101-22"><a href="cross-fitting.html#cb101-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span>   <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb101-23"><a href="cross-fitting.html#cb101-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">6</span>) <span class="sc">+</span> </span>
+<span id="cb101-24"><a href="cross-fitting.html#cb101-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb101-25"><a href="cross-fitting.html#cb101-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_identity</span>() <span class="sc">+</span></span>
+<span id="cb101-26"><a href="cross-fitting.html#cb101-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">3</span>, <span class="dv">11</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="fl">0.5</span>, <span class="dv">5</span>)), <span class="at">y =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fl">0.3</span>, <span class="dv">5</span>), <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)), <span class="at">label =</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">&quot;fold&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>), <span class="fu">paste</span>(<span class="st">&quot;round&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)), <span class="at">color =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;black&quot;</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
+<span id="cb101-27"><a href="cross-fitting.html#cb101-27" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<p><img src="book_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p><strong>What does it do?</strong></p>
 <p>Simply put, cross-fitting assures that the same observations are not used for modeling building as well as
 to estimate the response (e.g., predictions). In this way, we would want to alleviate concerns of over-fitting.</p>

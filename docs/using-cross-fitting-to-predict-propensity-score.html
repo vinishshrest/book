@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.4 Using cross-fitting to predict propensity score | IPW and AIPW</title>
-  <meta name="description" content="3.4 Using cross-fitting to predict propensity score | IPW and AIPW" />
+  <title>3.5 Using cross-fitting to predict propensity score | IPW and AIPW</title>
+  <meta name="description" content="3.5 Using cross-fitting to predict propensity score | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.4 Using cross-fitting to predict propensity score | IPW and AIPW" />
+  <meta property="og:title" content="3.5 Using cross-fitting to predict propensity score | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.4 Using cross-fitting to predict propensity score | IPW and AIPW" />
+  <meta name="twitter:title" content="3.5 Using cross-fitting to predict propensity score | IPW and AIPW" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-11" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -125,6 +125,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -153,14 +175,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -193,69 +217,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="using-cross-fitting-to-predict-propensity-score" class="section level2 hasAnchor" number="3.4">
-<h2><span class="header-section-number">3.4</span> Using cross-fitting to predict propensity score<a href="using-cross-fitting-to-predict-propensity-score.html#using-cross-fitting-to-predict-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="using-cross-fitting-to-predict-propensity-score" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Using cross-fitting to predict propensity score<a href="using-cross-fitting-to-predict-propensity-score.html#using-cross-fitting-to-predict-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Here, we will be using 10-fold cross-folding to predict propensity score.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-1" aria-hidden="true" tabindex="-1"></a>fun_probit_predict <span class="ot">&lt;-</span> <span class="cf">function</span>(predictfold){</span>
-<span id="cb17-2"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># @Arg predictfold: number of the fold to avoid for model traning </span></span>
-<span id="cb17-3"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but used for prediction</span></span>
-<span id="cb17-4"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-4" aria-hidden="true" tabindex="-1"></a>    cv_model1  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb17-5"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-5" aria-hidden="true" tabindex="-1"></a>                        W <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
-<span id="cb17-6"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">data =</span> dat[<span class="sc">-</span>predictfold, ], </span>
-<span id="cb17-7"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
-<span id="cb17-8"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
-<span id="cb17-9"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb17-10"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-10" aria-hidden="true" tabindex="-1"></a>                        )</span>
-<span id="cb17-11"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-12" aria-hidden="true" tabindex="-1"></a>    predict_logit  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat[predictfold, ], <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
-<span id="cb17-13"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(predict_logit[, <span class="dv">2</span>])</span>
-<span id="cb17-14"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-15"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-16"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-18"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
-<span id="cb17-19"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb17-20"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-fitting</span></span>
-<span id="cb17-21"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb17-22"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
-<span id="cb17-23"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-24"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-24" aria-hidden="true" tabindex="-1"></a>k  <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of folds</span></span>
-<span id="cb17-25"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-25" aria-hidden="true" tabindex="-1"></a>len  <span class="ot">&lt;-</span>  <span class="fu">nrow</span>(dat)</span>
-<span id="cb17-26"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-27"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-27" aria-hidden="true" tabindex="-1"></a>ind  <span class="ot">&lt;-</span>  <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>len, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">size =</span> len)</span>
-<span id="cb17-28"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-28" aria-hidden="true" tabindex="-1"></a>fold  <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="dv">1</span><span class="sc">:</span>len, <span class="at">breaks =</span> k, <span class="at">labels =</span> <span class="cn">FALSE</span>) <span class="co"># create 10 folds</span></span>
-<span id="cb17-29"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-30"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-30" aria-hidden="true" tabindex="-1"></a>fold  <span class="ot">&lt;-</span>  fold[ind] <span class="co"># randomly allocate the folds by ind</span></span>
-<span id="cb17-31"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-32"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co"># container to store the predicted values</span></span>
-<span id="cb17-33"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-34"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-34" aria-hidden="true" tabindex="-1"></a>store  <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb17-35"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-35" aria-hidden="true" tabindex="-1"></a>true_index  <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb17-36"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-37"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="co"># do the cross-fitting and store</span></span>
-<span id="cb17-38"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k){</span>
-<span id="cb17-39"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># which(fold == i) is used as an index, if 8th observation receives the 1st fold for the first time, </span></span>
-<span id="cb17-40"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># then the 1st prediction value corresponds to the 8th obs </span></span>
-<span id="cb17-41"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-41" aria-hidden="true" tabindex="-1"></a>    store_new  <span class="ot">&lt;-</span> <span class="fu">fun_probit_predict</span>(<span class="at">predictfold =</span> <span class="fu">which</span>(fold <span class="sc">==</span> i)) </span>
-<span id="cb17-42"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-42" aria-hidden="true" tabindex="-1"></a>    store_new  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(store_new))</span>
-<span id="cb17-43"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-43" aria-hidden="true" tabindex="-1"></a>    true_index_new  <span class="ot">&lt;-</span> <span class="fu">which</span>(fold <span class="sc">==</span> i)</span>
-<span id="cb17-44"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-44" aria-hidden="true" tabindex="-1"></a>    store  <span class="ot">&lt;-</span> <span class="fu">c</span>(store, store_new)</span>
-<span id="cb17-45"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-45" aria-hidden="true" tabindex="-1"></a>    true_index  <span class="ot">&lt;-</span> <span class="fu">c</span>(true_index, true_index_new)</span>
-<span id="cb17-46"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-46" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-47"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-48"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="co"># create a dataframe with index that maps the predictions with the actual data</span></span>
-<span id="cb17-49"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-49" aria-hidden="true" tabindex="-1"></a>store  <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">pscore =</span> store, <span class="at">index =</span> true_index)</span>
-<span id="cb17-50"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-51"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="co"># sort by index</span></span>
-<span id="cb17-52"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-52" aria-hidden="true" tabindex="-1"></a>store  <span class="ot">&lt;-</span>  store[<span class="fu">order</span>(store[, <span class="dv">2</span>]), ]</span>
-<span id="cb17-53"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-54"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-54" aria-hidden="true" tabindex="-1"></a><span class="co"># propensity score</span></span>
-<span id="cb17-55"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-55" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
-<span id="cb17-56"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-56" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">pscore =</span> store<span class="sc">$</span>pscore)</span>
-<span id="cb17-57"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-58"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of propensity score</span></span>
-<span id="cb17-59"><a href="using-cross-fitting-to-predict-propensity-score.html#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dat<span class="sc">$</span>pscore, <span class="at">main =</span> <span class="st">&quot;propensity score </span><span class="sc">\n</span><span class="st"> from cross-fitting&quot;</span>)</span></code></pre></div>
-<p><img src="book_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-1" aria-hidden="true" tabindex="-1"></a>fun_probit_predict <span class="ot">&lt;-</span> <span class="cf">function</span>(predictfold){</span>
+<span id="cb59-2"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># @Arg predictfold: number of the fold to avoid for model traning </span></span>
+<span id="cb59-3"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but used for prediction</span></span>
+<span id="cb59-4"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-4" aria-hidden="true" tabindex="-1"></a>    cv_model1  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb59-5"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-5" aria-hidden="true" tabindex="-1"></a>                        W <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
+<span id="cb59-6"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">data =</span> dat[<span class="sc">-</span>predictfold, ], </span>
+<span id="cb59-7"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
+<span id="cb59-8"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
+<span id="cb59-9"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb59-10"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-10" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb59-11"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-12"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-12" aria-hidden="true" tabindex="-1"></a>    predict_logit  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat[predictfold, ], <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb59-13"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(predict_logit[, <span class="dv">2</span>])</span>
+<span id="cb59-14"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb59-15"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-16"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-17"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-18"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-18" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb59-19"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-19" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb59-20"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-fitting</span></span>
+<span id="cb59-21"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-21" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb59-22"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-22" aria-hidden="true" tabindex="-1"></a><span class="do">##############################</span></span>
+<span id="cb59-23"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-24"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-24" aria-hidden="true" tabindex="-1"></a>k  <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of folds</span></span>
+<span id="cb59-25"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-25" aria-hidden="true" tabindex="-1"></a>len  <span class="ot">&lt;-</span>  <span class="fu">nrow</span>(dat)</span>
+<span id="cb59-26"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-27"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-27" aria-hidden="true" tabindex="-1"></a>ind  <span class="ot">&lt;-</span>  <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>len, <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">size =</span> len)</span>
+<span id="cb59-28"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-28" aria-hidden="true" tabindex="-1"></a>fold  <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="dv">1</span><span class="sc">:</span>len, <span class="at">breaks =</span> k, <span class="at">labels =</span> <span class="cn">FALSE</span>) <span class="co"># create 10 folds</span></span>
+<span id="cb59-29"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-30"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-30" aria-hidden="true" tabindex="-1"></a>fold  <span class="ot">&lt;-</span>  fold[ind] <span class="co"># randomly allocate the folds by ind</span></span>
+<span id="cb59-31"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-32"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-32" aria-hidden="true" tabindex="-1"></a><span class="co"># container to store the predicted values</span></span>
+<span id="cb59-33"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-34"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-34" aria-hidden="true" tabindex="-1"></a>store  <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb59-35"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-35" aria-hidden="true" tabindex="-1"></a>true_index  <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb59-36"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-37"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-37" aria-hidden="true" tabindex="-1"></a><span class="co"># do the cross-fitting and store</span></span>
+<span id="cb59-38"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-38" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k){</span>
+<span id="cb59-39"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># which(fold == i) is used as an index, if 8th observation receives the 1st fold for the first time, </span></span>
+<span id="cb59-40"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># then the 1st prediction value corresponds to the 8th obs </span></span>
+<span id="cb59-41"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-41" aria-hidden="true" tabindex="-1"></a>    store_new  <span class="ot">&lt;-</span> <span class="fu">fun_probit_predict</span>(<span class="at">predictfold =</span> <span class="fu">which</span>(fold <span class="sc">==</span> i)) </span>
+<span id="cb59-42"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-42" aria-hidden="true" tabindex="-1"></a>    store_new  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(store_new))</span>
+<span id="cb59-43"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-43" aria-hidden="true" tabindex="-1"></a>    true_index_new  <span class="ot">&lt;-</span> <span class="fu">which</span>(fold <span class="sc">==</span> i)</span>
+<span id="cb59-44"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-44" aria-hidden="true" tabindex="-1"></a>    store  <span class="ot">&lt;-</span> <span class="fu">c</span>(store, store_new)</span>
+<span id="cb59-45"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-45" aria-hidden="true" tabindex="-1"></a>    true_index  <span class="ot">&lt;-</span> <span class="fu">c</span>(true_index, true_index_new)</span>
+<span id="cb59-46"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-47"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-48"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-48" aria-hidden="true" tabindex="-1"></a><span class="co"># create a dataframe with index that maps the predictions with the actual data</span></span>
+<span id="cb59-49"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-49" aria-hidden="true" tabindex="-1"></a>store  <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">pscore =</span> store, <span class="at">index =</span> true_index)</span>
+<span id="cb59-50"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-51"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-51" aria-hidden="true" tabindex="-1"></a><span class="co"># sort by index</span></span>
+<span id="cb59-52"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-52" aria-hidden="true" tabindex="-1"></a>store  <span class="ot">&lt;-</span>  store[<span class="fu">order</span>(store[, <span class="dv">2</span>]), ]</span>
+<span id="cb59-53"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-54"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-54" aria-hidden="true" tabindex="-1"></a><span class="co"># propensity score</span></span>
+<span id="cb59-55"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-55" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
+<span id="cb59-56"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-56" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">pscore =</span> store<span class="sc">$</span>pscore)</span>
+<span id="cb59-57"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-58"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-58" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of propensity score</span></span>
+<span id="cb59-59"><a href="using-cross-fitting-to-predict-propensity-score.html#cb59-59" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dat<span class="sc">$</span>pscore, <span class="at">main =</span> <span class="st">&quot;propensity score </span><span class="sc">\n</span><span class="st"> from cross-fitting&quot;</span>)</span></code></pre></div>
+<p><img src="book_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
             </section>
 

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.3 Estimation of propensity score | IPW and AIPW</title>
-  <meta name="description" content="3.3 Estimation of propensity score | IPW and AIPW" />
+  <title>3.4 Estimation of propensity score | IPW and AIPW</title>
+  <meta name="description" content="3.4 Estimation of propensity score | IPW and AIPW" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.3 Estimation of propensity score | IPW and AIPW" />
+  <meta property="og:title" content="3.4 Estimation of propensity score | IPW and AIPW" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.3 Estimation of propensity score | IPW and AIPW" />
+  <meta name="twitter:title" content="3.4 Estimation of propensity score | IPW and AIPW" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2024-07-11" />
+<meta name="date" content="2025-01-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -125,6 +125,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 </style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -153,14 +175,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.2</b> Propensity score</a></li>
-<li class="chapter" data-level="3.3" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.5</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.6" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.6</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.7" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.7</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.8" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.8</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.9" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.9</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
+<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>4</b> Causal Forest</a>
 <ul>
@@ -193,8 +217,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="estimation-of-propensity-score" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Estimation of propensity score<a href="estimation-of-propensity-score.html#estimation-of-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="estimation-of-propensity-score" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Estimation of propensity score<a href="estimation-of-propensity-score.html#estimation-of-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li><p>Propensity scores can be estimated using various statistical or machine learning models.</p></li>
 <li><p>We will first estimate propensity score using a logistic regression model, where the treatment assignment <span class="math inline">\(W\)</span> is regressed on the covariates <span class="math inline">\(X\)</span>.</p></li>
@@ -204,108 +228,115 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Using a linear regression framework to predict probabilities when the outcome is binary <span class="math inline">\(\{0, \; 1\}\)</span> falls short since the predicted values can go beyond 0 and 1. Many models contain
 values within the range of 0 and 1, which can be used to model a binary response. The logistic regression uses a logistic function given as:</p>
 <p><span class="math display" id="eq:logit">\[\begin{equation}
-p(X) = \frac{e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}}{1 + e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}} \tag{3.6}  
+p(X) = \frac{e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}}{1 + e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}} \tag{3.9}  
 \end{equation}\]</span></p>
 <p>It is easy to see that <span class="math inline">\(lim_{a \rightarrow - \inf}[\frac{e^a}{1+e^a}] = 0\)</span> and <span class="math inline">\(lim_{a \rightarrow \inf}[\frac{e^a}{1+e^a}] = 1\)</span>. Equation @ref{eq:logit} can be transformed using the <em>logit transformation</em> given as:</p>
 <p><span class="math display">\[\begin{equation}
 g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p
 \end{equation}\]</span></p>
 <p>We want to fit a logistic regression in order to predict the probability. For now, we will use simulated data.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="estimation-of-propensity-score.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper packages</span></span>
-<span id="cb3-2"><a href="estimation-of-propensity-score.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># data wrangling </span></span>
-<span id="cb3-3"><a href="estimation-of-propensity-score.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># plots</span></span>
-<span id="cb3-4"><a href="estimation-of-propensity-score.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample) <span class="co"># data splitting</span></span>
-<span id="cb3-5"><a href="estimation-of-propensity-score.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr) <span class="co"># for reshaping, pivot_wider</span></span>
-<span id="cb3-6"><a href="estimation-of-propensity-score.html#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="estimation-of-propensity-score.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Modeling package </span></span>
-<span id="cb3-8"><a href="estimation-of-propensity-score.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co"># for logistic regression modeling </span></span>
-<span id="cb3-9"><a href="estimation-of-propensity-score.html#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="estimation-of-propensity-score.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Model interpretability </span></span>
-<span id="cb3-11"><a href="estimation-of-propensity-score.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
-<span id="cb3-12"><a href="estimation-of-propensity-score.html#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="estimation-of-propensity-score.html#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="estimation-of-propensity-score.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>) <span class="co"># for replicability</span></span>
-<span id="cb3-15"><a href="estimation-of-propensity-score.html#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="estimation-of-propensity-score.html#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate simulated Data </span></span>
-<span id="cb3-17"><a href="estimation-of-propensity-score.html#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="estimation-of-propensity-score.html#cb3-18" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span> <span class="co"># number of obsevations</span></span>
-<span id="cb3-19"><a href="estimation-of-propensity-score.html#cb3-19" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of covariates</span></span>
-<span id="cb3-20"><a href="estimation-of-propensity-score.html#cb3-20" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p) <span class="co"># data matrix</span></span>
-<span id="cb3-21"><a href="estimation-of-propensity-score.html#cb3-21" aria-hidden="true" tabindex="-1"></a>true_effect  <span class="ot">&lt;-</span> <span class="fl">2.56</span></span>
-<span id="cb3-22"><a href="estimation-of-propensity-score.html#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="estimation-of-propensity-score.html#cb3-23" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb3-24"><a href="estimation-of-propensity-score.html#cb3-24" aria-hidden="true" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)  <span class="co"># oracle propensity score</span></span>
-<span id="cb3-25"><a href="estimation-of-propensity-score.html#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="estimation-of-propensity-score.html#cb3-26" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> true_effect <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb3-27"><a href="estimation-of-propensity-score.html#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(X[, 1], X[, 2], col = as.factor(W))</span></span>
-<span id="cb3-28"><a href="estimation-of-propensity-score.html#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-29"><a href="estimation-of-propensity-score.html#cb3-29" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(W, Y, X))</span>
-<span id="cb3-30"><a href="estimation-of-propensity-score.html#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;W&quot;</span>, <span class="st">&quot;Y&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>))) </span>
-<span id="cb3-31"><a href="estimation-of-propensity-score.html#cb3-31" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
-<span id="cb3-32"><a href="estimation-of-propensity-score.html#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">W =</span> <span class="fu">as.factor</span>(W))</span>
-<span id="cb3-33"><a href="estimation-of-propensity-score.html#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-34"><a href="estimation-of-propensity-score.html#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co"># create 70% training and 30% test data </span></span>
-<span id="cb3-35"><a href="estimation-of-propensity-score.html#cb3-35" aria-hidden="true" tabindex="-1"></a>churn_split  <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dat, <span class="at">prop =</span> <span class="fl">0.7</span>)</span>
-<span id="cb3-36"><a href="estimation-of-propensity-score.html#cb3-36" aria-hidden="true" tabindex="-1"></a>dat_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(churn_split)</span>
-<span id="cb3-37"><a href="estimation-of-propensity-score.html#cb3-37" aria-hidden="true" tabindex="-1"></a>dat_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(churn_split)</span>
-<span id="cb3-38"><a href="estimation-of-propensity-score.html#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="estimation-of-propensity-score.html#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># dimension of training and testing data</span></span>
-<span id="cb3-40"><a href="estimation-of-propensity-score.html#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_train))</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="estimation-of-propensity-score.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper packages</span></span>
+<span id="cb39-2"><a href="estimation-of-propensity-score.html#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># data wrangling </span></span>
+<span id="cb39-3"><a href="estimation-of-propensity-score.html#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># plots</span></span>
+<span id="cb39-4"><a href="estimation-of-propensity-score.html#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample) <span class="co"># data splitting</span></span>
+<span id="cb39-5"><a href="estimation-of-propensity-score.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr) <span class="co"># for reshaping, pivot_wider</span></span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;tidyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:Matrix&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="estimation-of-propensity-score.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modeling package </span></span>
+<span id="cb42-2"><a href="estimation-of-propensity-score.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co"># for logistic regression modeling </span></span>
+<span id="cb42-3"><a href="estimation-of-propensity-score.html#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="estimation-of-propensity-score.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Model interpretability </span></span>
+<span id="cb42-5"><a href="estimation-of-propensity-score.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;vip&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:utils&#39;:
+## 
+##     vi</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="estimation-of-propensity-score.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>) <span class="co"># for replicability</span></span>
+<span id="cb45-2"><a href="estimation-of-propensity-score.html#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="estimation-of-propensity-score.html#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate simulated Data </span></span>
+<span id="cb45-4"><a href="estimation-of-propensity-score.html#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="estimation-of-propensity-score.html#cb45-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span> <span class="co"># number of obsevations</span></span>
+<span id="cb45-6"><a href="estimation-of-propensity-score.html#cb45-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of covariates</span></span>
+<span id="cb45-7"><a href="estimation-of-propensity-score.html#cb45-7" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p) <span class="co"># data matrix</span></span>
+<span id="cb45-8"><a href="estimation-of-propensity-score.html#cb45-8" aria-hidden="true" tabindex="-1"></a>true_effect  <span class="ot">&lt;-</span> <span class="fl">2.5</span></span>
+<span id="cb45-9"><a href="estimation-of-propensity-score.html#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="estimation-of-propensity-score.html#cb45-10" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb45-11"><a href="estimation-of-propensity-score.html#cb45-11" aria-hidden="true" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)  <span class="co"># oracle propensity score</span></span>
+<span id="cb45-12"><a href="estimation-of-propensity-score.html#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-13"><a href="estimation-of-propensity-score.html#cb45-13" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> true_effect <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb45-14"><a href="estimation-of-propensity-score.html#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(X[, 1], X[, 2], col = as.factor(W))</span></span>
+<span id="cb45-15"><a href="estimation-of-propensity-score.html#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="estimation-of-propensity-score.html#cb45-16" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(W, Y, X))</span>
+<span id="cb45-17"><a href="estimation-of-propensity-score.html#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;W&quot;</span>, <span class="st">&quot;Y&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>))) </span>
+<span id="cb45-18"><a href="estimation-of-propensity-score.html#cb45-18" aria-hidden="true" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
+<span id="cb45-19"><a href="estimation-of-propensity-score.html#cb45-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">W =</span> <span class="fu">as.factor</span>(W))</span>
+<span id="cb45-20"><a href="estimation-of-propensity-score.html#cb45-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-21"><a href="estimation-of-propensity-score.html#cb45-21" aria-hidden="true" tabindex="-1"></a><span class="co"># create 70% training and 30% test data </span></span>
+<span id="cb45-22"><a href="estimation-of-propensity-score.html#cb45-22" aria-hidden="true" tabindex="-1"></a>churn_split  <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dat, <span class="at">prop =</span> <span class="fl">0.7</span>)</span>
+<span id="cb45-23"><a href="estimation-of-propensity-score.html#cb45-23" aria-hidden="true" tabindex="-1"></a>dat_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(churn_split)</span>
+<span id="cb45-24"><a href="estimation-of-propensity-score.html#cb45-24" aria-hidden="true" tabindex="-1"></a>dat_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(churn_split)</span>
+<span id="cb45-25"><a href="estimation-of-propensity-score.html#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-26"><a href="estimation-of-propensity-score.html#cb45-26" aria-hidden="true" tabindex="-1"></a><span class="co"># dimension of training and testing data</span></span>
+<span id="cb45-27"><a href="estimation-of-propensity-score.html#cb45-27" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_train))</span></code></pre></div>
 <pre><code>## [1] 1400   12</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="estimation-of-propensity-score.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_test))</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="estimation-of-propensity-score.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_test))</span></code></pre></div>
 <pre><code>## [1] 600  12</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="estimation-of-propensity-score.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s compare two different models</span></span>
-<span id="cb7-2"><a href="estimation-of-propensity-score.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="estimation-of-propensity-score.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># using X1 as the predictor</span></span>
-<span id="cb7-4"><a href="estimation-of-propensity-score.html#cb7-4" aria-hidden="true" tabindex="-1"></a>cv_model1  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb7-5"><a href="estimation-of-propensity-score.html#cb7-5" aria-hidden="true" tabindex="-1"></a>     W <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
-<span id="cb7-6"><a href="estimation-of-propensity-score.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
-<span id="cb7-7"><a href="estimation-of-propensity-score.html#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
-<span id="cb7-8"><a href="estimation-of-propensity-score.html#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
-<span id="cb7-9"><a href="estimation-of-propensity-score.html#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb7-10"><a href="estimation-of-propensity-score.html#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-11"><a href="estimation-of-propensity-score.html#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="estimation-of-propensity-score.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># misses out on X1</span></span>
-<span id="cb7-13"><a href="estimation-of-propensity-score.html#cb7-13" aria-hidden="true" tabindex="-1"></a>cv_model2  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb7-14"><a href="estimation-of-propensity-score.html#cb7-14" aria-hidden="true" tabindex="-1"></a>     W <span class="sc">~</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
-<span id="cb7-15"><a href="estimation-of-propensity-score.html#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
-<span id="cb7-16"><a href="estimation-of-propensity-score.html#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
-<span id="cb7-17"><a href="estimation-of-propensity-score.html#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
-<span id="cb7-18"><a href="estimation-of-propensity-score.html#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb7-19"><a href="estimation-of-propensity-score.html#cb7-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-20"><a href="estimation-of-propensity-score.html#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-21"><a href="estimation-of-propensity-score.html#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="estimation-of-propensity-score.html#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># print the sample performance measures </span></span>
-<span id="cb7-23"><a href="estimation-of-propensity-score.html#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-24"><a href="estimation-of-propensity-score.html#cb7-24" aria-hidden="true" tabindex="-1"></a>sum_performance  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(</span>
-<span id="cb7-25"><a href="estimation-of-propensity-score.html#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">resamples</span>(</span>
-<span id="cb7-26"><a href="estimation-of-propensity-score.html#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
-<span id="cb7-27"><a href="estimation-of-propensity-score.html#cb7-27" aria-hidden="true" tabindex="-1"></a>            model1  <span class="ot">&lt;-</span> cv_model1, </span>
-<span id="cb7-28"><a href="estimation-of-propensity-score.html#cb7-28" aria-hidden="true" tabindex="-1"></a>            model2  <span class="ot">&lt;-</span> cv_model2</span>
-<span id="cb7-29"><a href="estimation-of-propensity-score.html#cb7-29" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb7-30"><a href="estimation-of-propensity-score.html#cb7-30" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb7-31"><a href="estimation-of-propensity-score.html#cb7-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-32"><a href="estimation-of-propensity-score.html#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="estimation-of-propensity-score.html#cb7-33" aria-hidden="true" tabindex="-1"></a>sum_performance<span class="sc">$</span>statistics<span class="sc">$</span>Accuracy</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="estimation-of-propensity-score.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s compare two different models</span></span>
+<span id="cb49-2"><a href="estimation-of-propensity-score.html#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="estimation-of-propensity-score.html#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># using X1 as the predictor</span></span>
+<span id="cb49-4"><a href="estimation-of-propensity-score.html#cb49-4" aria-hidden="true" tabindex="-1"></a>cv_model1  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb49-5"><a href="estimation-of-propensity-score.html#cb49-5" aria-hidden="true" tabindex="-1"></a>     W <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
+<span id="cb49-6"><a href="estimation-of-propensity-score.html#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
+<span id="cb49-7"><a href="estimation-of-propensity-score.html#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
+<span id="cb49-8"><a href="estimation-of-propensity-score.html#cb49-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
+<span id="cb49-9"><a href="estimation-of-propensity-score.html#cb49-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb49-10"><a href="estimation-of-propensity-score.html#cb49-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-11"><a href="estimation-of-propensity-score.html#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="estimation-of-propensity-score.html#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="co"># misses out on X1</span></span>
+<span id="cb49-13"><a href="estimation-of-propensity-score.html#cb49-13" aria-hidden="true" tabindex="-1"></a>cv_model2  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb49-14"><a href="estimation-of-propensity-score.html#cb49-14" aria-hidden="true" tabindex="-1"></a>     W <span class="sc">~</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
+<span id="cb49-15"><a href="estimation-of-propensity-score.html#cb49-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
+<span id="cb49-16"><a href="estimation-of-propensity-score.html#cb49-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
+<span id="cb49-17"><a href="estimation-of-propensity-score.html#cb49-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
+<span id="cb49-18"><a href="estimation-of-propensity-score.html#cb49-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb49-19"><a href="estimation-of-propensity-score.html#cb49-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-20"><a href="estimation-of-propensity-score.html#cb49-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-21"><a href="estimation-of-propensity-score.html#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-22"><a href="estimation-of-propensity-score.html#cb49-22" aria-hidden="true" tabindex="-1"></a><span class="co"># print the sample performance measures </span></span>
+<span id="cb49-23"><a href="estimation-of-propensity-score.html#cb49-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-24"><a href="estimation-of-propensity-score.html#cb49-24" aria-hidden="true" tabindex="-1"></a>sum_performance  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(</span>
+<span id="cb49-25"><a href="estimation-of-propensity-score.html#cb49-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">resamples</span>(</span>
+<span id="cb49-26"><a href="estimation-of-propensity-score.html#cb49-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb49-27"><a href="estimation-of-propensity-score.html#cb49-27" aria-hidden="true" tabindex="-1"></a>            model1  <span class="ot">&lt;-</span> cv_model1, </span>
+<span id="cb49-28"><a href="estimation-of-propensity-score.html#cb49-28" aria-hidden="true" tabindex="-1"></a>            model2  <span class="ot">&lt;-</span> cv_model2</span>
+<span id="cb49-29"><a href="estimation-of-propensity-score.html#cb49-29" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb49-30"><a href="estimation-of-propensity-score.html#cb49-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb49-31"><a href="estimation-of-propensity-score.html#cb49-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-32"><a href="estimation-of-propensity-score.html#cb49-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-33"><a href="estimation-of-propensity-score.html#cb49-33" aria-hidden="true" tabindex="-1"></a>sum_performance<span class="sc">$</span>statistics<span class="sc">$</span>Accuracy</span></code></pre></div>
 <pre><code>##             Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
 ## Model1 0.6043165 0.6446429 0.6678571 0.6706292 0.6964286 0.7285714    0
 ## Model2 0.5642857 0.5785714 0.5892392 0.5935621 0.6160714 0.6285714    0</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="estimation-of-propensity-score.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use the confusion matrix </span></span>
-<span id="cb9-2"><a href="estimation-of-propensity-score.html#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="estimation-of-propensity-score.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># predict class </span></span>
-<span id="cb9-4"><a href="estimation-of-propensity-score.html#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="estimation-of-propensity-score.html#cb9-5" aria-hidden="true" tabindex="-1"></a>threshold  <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb9-6"><a href="estimation-of-propensity-score.html#cb9-6" aria-hidden="true" tabindex="-1"></a>pred_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
-<span id="cb9-7"><a href="estimation-of-propensity-score.html#cb9-7" aria-hidden="true" tabindex="-1"></a>pred_class_manual  <span class="ot">&lt;-</span>  <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1400</span>)</span>
-<span id="cb9-8"><a href="estimation-of-propensity-score.html#cb9-8" aria-hidden="true" tabindex="-1"></a>pred_class_manual[pred_prob[, <span class="dv">2</span>] <span class="sc">&gt;=</span> <span class="fl">0.5</span>]  <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb9-9"><a href="estimation-of-propensity-score.html#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="estimation-of-propensity-score.html#cb9-10" aria-hidden="true" tabindex="-1"></a>pred_class  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train)</span>
-<span id="cb9-11"><a href="estimation-of-propensity-score.html#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="estimation-of-propensity-score.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># print the confusion matrix </span></span>
-<span id="cb9-13"><a href="estimation-of-propensity-score.html#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
-<span id="cb9-14"><a href="estimation-of-propensity-score.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># predictions</span></span>
-<span id="cb9-15"><a href="estimation-of-propensity-score.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_train<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># reference or the true value</span></span>
-<span id="cb9-16"><a href="estimation-of-propensity-score.html#cb9-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="estimation-of-propensity-score.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use the confusion matrix </span></span>
+<span id="cb51-2"><a href="estimation-of-propensity-score.html#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="estimation-of-propensity-score.html#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># predict class </span></span>
+<span id="cb51-4"><a href="estimation-of-propensity-score.html#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="estimation-of-propensity-score.html#cb51-5" aria-hidden="true" tabindex="-1"></a>threshold  <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb51-6"><a href="estimation-of-propensity-score.html#cb51-6" aria-hidden="true" tabindex="-1"></a>pred_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb51-7"><a href="estimation-of-propensity-score.html#cb51-7" aria-hidden="true" tabindex="-1"></a>pred_class_manual  <span class="ot">&lt;-</span>  <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1400</span>)</span>
+<span id="cb51-8"><a href="estimation-of-propensity-score.html#cb51-8" aria-hidden="true" tabindex="-1"></a>pred_class_manual[pred_prob[, <span class="dv">2</span>] <span class="sc">&gt;=</span> <span class="fl">0.5</span>]  <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb51-9"><a href="estimation-of-propensity-score.html#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="estimation-of-propensity-score.html#cb51-10" aria-hidden="true" tabindex="-1"></a>pred_class  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train)</span>
+<span id="cb51-11"><a href="estimation-of-propensity-score.html#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-12"><a href="estimation-of-propensity-score.html#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="co"># print the confusion matrix </span></span>
+<span id="cb51-13"><a href="estimation-of-propensity-score.html#cb51-13" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb51-14"><a href="estimation-of-propensity-score.html#cb51-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># predictions</span></span>
+<span id="cb51-15"><a href="estimation-of-propensity-score.html#cb51-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_train<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># reference or the true value</span></span>
+<span id="cb51-16"><a href="estimation-of-propensity-score.html#cb51-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -333,8 +364,8 @@ g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \bet
 ##                                          
 ##        &#39;Positive&#39; Class : 1              
 ## </code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="estimation-of-propensity-score.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if predict all yes still get an accuracy of 0.5936</span></span>
-<span id="cb11-2"><a href="estimation-of-propensity-score.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> <span class="fu">prop.table</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="estimation-of-propensity-score.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if predict all yes still get an accuracy of 0.5936</span></span>
+<span id="cb53-2"><a href="estimation-of-propensity-score.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> <span class="fu">prop.table</span>()</span></code></pre></div>
 <pre><code>## 
 ##         0         1 
 ## 0.5935714 0.4064286</code></pre>
@@ -346,43 +377,43 @@ g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \bet
 </ul>
 <p><strong>How are the observations classified?</strong>
 A threshold value is used to transform the raw prediction of probabilities into classification such that <span class="math inline">\(P(Y_{i} &gt; p_{threshold})=1.\)</span> The implicit <span class="math inline">\(p_{threshold}\)</span> used is 0.5. Varying the threshold from 0 to 1, one can calculate the relationship between the False Positive Rate (the prediction is positive when in actual the outcome is negative) and True Positive Rate at each threshold value. If the threshold value <span class="math inline">\((p_{threshold})\)</span> is 1, then all observations are classified as 0, which means that the False Positive Rate is 0 but so is the True Positive Rate. Similarly, if the threshold is 0, then both True and False positive rates are 1. This gives the Receiver Operating Characteristic (ROC).</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="estimation-of-propensity-score.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
-<span id="cb13-2"><a href="estimation-of-propensity-score.html#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="estimation-of-propensity-score.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># compute probabilities </span></span>
-<span id="cb13-4"><a href="estimation-of-propensity-score.html#cb13-4" aria-hidden="true" tabindex="-1"></a>m1_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
-<span id="cb13-5"><a href="estimation-of-propensity-score.html#cb13-5" aria-hidden="true" tabindex="-1"></a>m2_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model2, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
-<span id="cb13-6"><a href="estimation-of-propensity-score.html#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="estimation-of-propensity-score.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># AUC metrics </span></span>
-<span id="cb13-8"><a href="estimation-of-propensity-score.html#cb13-8" aria-hidden="true" tabindex="-1"></a>perf1  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m1_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
-<span id="cb13-9"><a href="estimation-of-propensity-score.html#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
-<span id="cb13-10"><a href="estimation-of-propensity-score.html#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="estimation-of-propensity-score.html#cb13-11" aria-hidden="true" tabindex="-1"></a>perf2  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m2_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
-<span id="cb13-12"><a href="estimation-of-propensity-score.html#cb13-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
-<span id="cb13-13"><a href="estimation-of-propensity-score.html#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="estimation-of-propensity-score.html#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ROC curves</span></span>
-<span id="cb13-15"><a href="estimation-of-propensity-score.html#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf1, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb13-16"><a href="estimation-of-propensity-score.html#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf2, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>) </span>
-<span id="cb13-17"><a href="estimation-of-propensity-score.html#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;cv_model1&quot;</span>, <span class="st">&quot;cv_model2&quot;</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
-<span id="cb13-18"><a href="estimation-of-propensity-score.html#cb13-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">cex =</span> <span class="fl">0.6</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
-<img src="book_files/figure-html/unnamed-chunk-4-1.png" alt="ROC" width="672" />
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="estimation-of-propensity-score.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb55-2"><a href="estimation-of-propensity-score.html#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="estimation-of-propensity-score.html#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="co"># compute probabilities </span></span>
+<span id="cb55-4"><a href="estimation-of-propensity-score.html#cb55-4" aria-hidden="true" tabindex="-1"></a>m1_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
+<span id="cb55-5"><a href="estimation-of-propensity-score.html#cb55-5" aria-hidden="true" tabindex="-1"></a>m2_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model2, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
+<span id="cb55-6"><a href="estimation-of-propensity-score.html#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-7"><a href="estimation-of-propensity-score.html#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># AUC metrics </span></span>
+<span id="cb55-8"><a href="estimation-of-propensity-score.html#cb55-8" aria-hidden="true" tabindex="-1"></a>perf1  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m1_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
+<span id="cb55-9"><a href="estimation-of-propensity-score.html#cb55-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb55-10"><a href="estimation-of-propensity-score.html#cb55-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-11"><a href="estimation-of-propensity-score.html#cb55-11" aria-hidden="true" tabindex="-1"></a>perf2  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m2_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
+<span id="cb55-12"><a href="estimation-of-propensity-score.html#cb55-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb55-13"><a href="estimation-of-propensity-score.html#cb55-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-14"><a href="estimation-of-propensity-score.html#cb55-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ROC curves</span></span>
+<span id="cb55-15"><a href="estimation-of-propensity-score.html#cb55-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf1, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb55-16"><a href="estimation-of-propensity-score.html#cb55-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(perf2, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>) </span>
+<span id="cb55-17"><a href="estimation-of-propensity-score.html#cb55-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;cv_model1&quot;</span>, <span class="st">&quot;cv_model2&quot;</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb55-18"><a href="estimation-of-propensity-score.html#cb55-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">cex =</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
+<img src="book_files/figure-html/unnamed-chunk-10-1.png" alt="ROC" width="672" />
 <p class="caption">
 Figure 3.1: ROC
 </p>
 </div>
 <p>The figure above plots the ROC for two models that we tested using cross-validation. The cv_model2 produces a diagonal line, which means that this model is as good as a random guess. Next, cv_model1 performs a whole lot better since a large gains in True positive rate can be achieved with a relatively small increase in False positive rate at the start. The ROC curve pertaining to cv_model1 helps pick a threshold to balance the sensitivity (True Positive Rate) and specificity (1 - False Positive Rate).</p>
 <p>The histogram of the estimated propensity scores using the logistic regression is as:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="estimation-of-propensity-score.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pred_prob[, <span class="dv">2</span>], <span class="at">main =</span> <span class="st">&quot;Histogram of P(W=1|X)</span></span>
-<span id="cb14-2"><a href="estimation-of-propensity-score.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">      </span><span class="sc">\n</span><span class="st"> using Logistic Regression&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;probabilities&quot;</span>)</span></code></pre></div>
-<p><img src="book_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="estimation-of-propensity-score.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(pred_prob[, <span class="dv">2</span>], <span class="at">main =</span> <span class="st">&quot;Histogram of P(W=1|X)</span></span>
+<span id="cb56-2"><a href="estimation-of-propensity-score.html#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="st">      </span><span class="sc">\n</span><span class="st"> using Logistic Regression&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;probabilities&quot;</span>)</span></code></pre></div>
+<p><img src="book_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>Now, let’s take a look at the confusion matrix using the test data.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="estimation-of-propensity-score.html#cb15-1" aria-hidden="true" tabindex="-1"></a>pred_class_test  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_test)</span>
-<span id="cb15-2"><a href="estimation-of-propensity-score.html#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="estimation-of-propensity-score.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print the confusion matrix this time for the test sample </span></span>
-<span id="cb15-4"><a href="estimation-of-propensity-score.html#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
-<span id="cb15-5"><a href="estimation-of-propensity-score.html#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class_test, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># classification from the prediction</span></span>
-<span id="cb15-6"><a href="estimation-of-propensity-score.html#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_test<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># ground truth </span></span>
-<span id="cb15-7"><a href="estimation-of-propensity-score.html#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="estimation-of-propensity-score.html#cb57-1" aria-hidden="true" tabindex="-1"></a>pred_class_test  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_test)</span>
+<span id="cb57-2"><a href="estimation-of-propensity-score.html#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="estimation-of-propensity-score.html#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print the confusion matrix this time for the test sample </span></span>
+<span id="cb57-4"><a href="estimation-of-propensity-score.html#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb57-5"><a href="estimation-of-propensity-score.html#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class_test, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># classification from the prediction</span></span>
+<span id="cb57-6"><a href="estimation-of-propensity-score.html#cb57-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_test<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># ground truth </span></span>
+<span id="cb57-7"><a href="estimation-of-propensity-score.html#cb57-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
