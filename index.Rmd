@@ -17,4 +17,9 @@ link-citations: yes
 
 # Work in Progress
 
-This is a work in progress.
+This is a work in progress. 
+
+Causal inference, like everything else, is ever-evolving. 
+It is a topic that spans across disciplines and has established deep roots in machine 
+learning literature. For the most part, we are trying to figure out whether *X* causes *Y*.
+Isn't that essentially what science does -- cause and effect?
