@@ -306,9 +306,9 @@ We’ll find out that Aggregate Estimator <span class="math inline">\((\hat{\tau
 <span id="cb29-31"><a href="aggregated-estimator.html#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="st">&quot;True effect&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="aggregated-estimator.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;mean of AGG estimates: &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(agg.means), <span class="dv">3</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;mean of AGG estimates:  9.96&quot;</code></pre>
+<pre><code>## [1] &quot;mean of AGG estimates:  9.956&quot;</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="aggregated-estimator.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;standard error of AGG estimates: &quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(agg.means), <span class="dv">3</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;standard error of AGG estimates:  0.064&quot;</code></pre>
+<pre><code>## [1] &quot;standard error of AGG estimates:  0.062&quot;</code></pre>
 <p>Let’s compare this to a naive estimator.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="aggregated-estimator.html#cb34-1" aria-hidden="true" tabindex="-1"></a>set.seed  <span class="ot">&lt;-</span> <span class="dv">12570</span></span>
 <span id="cb34-2"><a href="aggregated-estimator.html#cb34-2" aria-hidden="true" tabindex="-1"></a>naive.means  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
@@ -334,9 +334,9 @@ We’ll find out that Aggregate Estimator <span class="math inline">\((\hat{\tau
 <span id="cb34-22"><a href="aggregated-estimator.html#cb34-22" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="st">&quot;True effect&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="aggregated-estimator.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;mean of naive estimates: &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(naive.means), <span class="dv">3</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;mean of naive estimates:  9.759&quot;</code></pre>
+<pre><code>## [1] &quot;mean of naive estimates:  9.761&quot;</code></pre>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="aggregated-estimator.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;standard error of naive estimates: &quot;</span>, <span class="fu">round</span>(<span class="fu">sd</span>(naive.means), <span class="dv">3</span>))</span></code></pre></div>
-<pre><code>## [1] &quot;standard error of naive estimates:  0.082&quot;</code></pre>
+<pre><code>## [1] &quot;standard error of naive estimates:  0.084&quot;</code></pre>
 </div>
             </section>
 

@@ -339,10 +339,8 @@ reflect on this topic later.</p>
 <pre><code>## The expansion states are:</code></pre>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dat_canonical<span class="sc">$</span>state.abb[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## 
-##  AR  AZ  CA  CO  CT  DE  HI  IA  IL  KY  MA  MD  MI  MN  ND  NH  NJ  NM  NV  NY  OH 
-## 150  30 115 126  16   6   8 198 204 240  28  48 166 174 106  20  42  66  33 124 176 
-##  OR  RI  VT  WA  WV 
-##  72  10  28  78 110</code></pre>
+##  AR  AZ  CA  CO  CT  DE  HI  IA  IL  KY  MA  MD  MI  MN  ND  NH  NJ  NM  NV  NY  OH  OR  RI  VT  WA  WV 
+## 150  30 115 126  16   6   8 198 204 240  28  48 166 174 106  20  42  66  33 124 176  72  10  28  78 110</code></pre>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;The non-expansion states are: </span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <pre><code>## The non-expansion states are:</code></pre>
 <div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(dat_canonical<span class="sc">$</span>state.abb[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span>])</span></code></pre></div>

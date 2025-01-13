@@ -269,8 +269,7 @@ div.csl-indent {
 <span id="cb54-12"><a href="propensity-score-stratification.html#cb54-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(W, strata)  <span class="sc">%&gt;%</span>  </span>
 <span id="cb54-13"><a href="propensity-score-stratification.html#cb54-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">mean_Y =</span> <span class="fu">mean</span>(Y))  <span class="sc">%&gt;%</span>  </span>
 <span id="cb54-14"><a href="propensity-score-stratification.html#cb54-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> W, <span class="at">values_from =</span> mean_Y)</span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;W&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;W&#39;. You can override using the `.groups` argument.</code></pre>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="propensity-score-stratification.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat_sum)  <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="st">&quot;strata&quot;</span>, <span class="st">&quot;mean_control&quot;</span>, <span class="st">&quot;mean_treat&quot;</span>)</span>
 <span id="cb56-2"><a href="propensity-score-stratification.html#cb56-2" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat_sum  <span class="sc">%&gt;%</span>  </span>
 <span id="cb56-3"><a href="propensity-score-stratification.html#cb56-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">diff =</span> mean_treat <span class="sc">-</span> mean_control)</span>

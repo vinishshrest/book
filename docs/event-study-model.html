@@ -335,17 +335,16 @@ In the model, this pertains to <span class="math inline">\(1(\underbrace{t - G}_
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="event-study-model.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># quick look at the data</span></span>
 <span id="cb137-2"><a href="event-study-model.html#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mort_allcauses)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 16
-##   countyfips  year state.abb expand yearexpand sahieunins138 GovernorisDemocrat1Yes
-##        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;                  &lt;int&gt;
-## 1       1001  2010 AL             0       2014          40.6                      0
-## 2       1001  2011 AL             0       2014          41.6                      0
-## 3       1001  2012 AL             0       2014          39.6                      0
-## 4       1001  2013 AL             0       2014          39.6                      0
-## 5       1001  2014 AL             0       2014          31.9                      0
-## 6       1001  2015 AL             0       2014          27.5                      0
-## # ℹ 9 more variables: yeararound &lt;dbl&gt;, rel_pre4 &lt;dbl&gt;, rel_pre3 &lt;dbl&gt;,
-## #   rel_pre2 &lt;dbl&gt;, rel_pre1 &lt;dbl&gt;, rel_post0 &lt;dbl&gt;, rel_post1 &lt;dbl&gt;,
-## #   rel_post2 &lt;dbl&gt;, rel_post3 &lt;dbl&gt;</code></pre>
+##   countyfips  year state.abb expand yearexpand sahieunins138 GovernorisDemocrat1Yes yeararound rel_pre4 rel_pre3
+##        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;                  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1       1001  2010 AL             0       2014          40.6                      0         -4        0        0
+## 2       1001  2011 AL             0       2014          41.6                      0         -3        0        0
+## 3       1001  2012 AL             0       2014          39.6                      0         -2        0        0
+## 4       1001  2013 AL             0       2014          39.6                      0         -1        0        0
+## 5       1001  2014 AL             0       2014          31.9                      0          0        0        0
+## 6       1001  2015 AL             0       2014          27.5                      0          1        0        0
+## # ℹ 6 more variables: rel_pre2 &lt;dbl&gt;, rel_pre1 &lt;dbl&gt;, rel_post0 &lt;dbl&gt;, rel_post1 &lt;dbl&gt;, rel_post2 &lt;dbl&gt;,
+## #   rel_post3 &lt;dbl&gt;</code></pre>
 <div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="event-study-model.html#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the event study model</span></span>
 <span id="cb139-2"><a href="event-study-model.html#cb139-2" aria-hidden="true" tabindex="-1"></a>reg_es  <span class="ot">&lt;-</span> <span class="fu">lm</span>(sahieunins138 <span class="sc">~</span> rel_pre4 <span class="sc">+</span> rel_pre3 <span class="sc">+</span> rel_pre2 <span class="sc">+</span></span>
 <span id="cb139-3"><a href="event-study-model.html#cb139-3" aria-hidden="true" tabindex="-1"></a>                              rel_post0 <span class="sc">+</span> rel_post1 <span class="sc">+</span> rel_post2 <span class="sc">+</span> rel_post3 <span class="sc">+</span></span>
@@ -468,22 +467,22 @@ are inflated.</p>
 <span id="cb143-2"><a href="event-study-model.html#cb143-2" aria-hidden="true" tabindex="-1"></a>event_study_results <span class="ot">&lt;-</span> fixest<span class="sc">::</span><span class="fu">coefplot</span>(reg_es_cluster, <span class="at">main =</span> <span class="st">&quot;Event Study Estimates&quot;</span>)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="event-study-model.html#cb144-1" aria-hidden="true" tabindex="-1"></a>event_study_results[[<span class="dv">1</span>]]</span></code></pre></div>
-<pre><code>##                          estimate      ci_low    ci_high        estimate_names
-## yeararound::-4:expand  0.43065369  -0.5785019  1.4398093 yeararound::-4:expand
-## yeararound::-3:expand -0.09744166  -0.8672076  0.6723243 yeararound::-3:expand
-## yeararound::-2:expand  0.26399433  -0.3941533  0.9221419 yeararound::-2:expand
-## yeararound::0:expand  -5.81878875  -8.3705184 -3.2670591  yeararound::0:expand
-## yeararound::1:expand  -7.87919826 -10.7368868 -5.0215097  yeararound::1:expand
-## yeararound::2:expand  -7.98776439 -10.8525099 -5.1230189  yeararound::2:expand
-## yeararound::3:expand  -8.28499809 -11.2402855 -5.3297107  yeararound::3:expand
-##                          estimate_names_raw id x           y
-## yeararound::-4:expand yeararound::-4:expand  1 1  0.43065369
-## yeararound::-3:expand yeararound::-3:expand  1 2 -0.09744166
-## yeararound::-2:expand yeararound::-2:expand  1 3  0.26399433
-## yeararound::0:expand   yeararound::0:expand  1 4 -5.81878875
-## yeararound::1:expand   yeararound::1:expand  1 5 -7.87919826
-## yeararound::2:expand   yeararound::2:expand  1 6 -7.98776439
-## yeararound::3:expand   yeararound::3:expand  1 7 -8.28499809</code></pre>
+<pre><code>##                          estimate      ci_low    ci_high        estimate_names    estimate_names_raw id x
+## yeararound::-4:expand  0.43065369  -0.5785019  1.4398093 yeararound::-4:expand yeararound::-4:expand  1 1
+## yeararound::-3:expand -0.09744166  -0.8672076  0.6723243 yeararound::-3:expand yeararound::-3:expand  1 2
+## yeararound::-2:expand  0.26399433  -0.3941533  0.9221419 yeararound::-2:expand yeararound::-2:expand  1 3
+## yeararound::0:expand  -5.81878875  -8.3705184 -3.2670591  yeararound::0:expand  yeararound::0:expand  1 4
+## yeararound::1:expand  -7.87919826 -10.7368868 -5.0215097  yeararound::1:expand  yeararound::1:expand  1 5
+## yeararound::2:expand  -7.98776439 -10.8525099 -5.1230189  yeararound::2:expand  yeararound::2:expand  1 6
+## yeararound::3:expand  -8.28499809 -11.2402855 -5.3297107  yeararound::3:expand  yeararound::3:expand  1 7
+##                                 y
+## yeararound::-4:expand  0.43065369
+## yeararound::-3:expand -0.09744166
+## yeararound::-2:expand  0.26399433
+## yeararound::0:expand  -5.81878875
+## yeararound::1:expand  -7.87919826
+## yeararound::2:expand  -7.98776439
+## yeararound::3:expand  -8.28499809</code></pre>
 <p>We see that the estimates on <span class="math inline">\(\tau_j\)</span> for <span class="math inline">\(j&lt;-1\)</span> is close to zero and statistically insignificant at the
 conventional levels. This provides a suggestive evidence in favor of the parallel trend assumption.
 However, the estimates following the reform implementation drops drastically, demonstrating the

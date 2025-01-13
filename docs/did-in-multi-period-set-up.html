@@ -251,8 +251,7 @@ div.csl-indent {
 <span id="cb119-2"><a href="did-in-multi-period-set-up.html#cb119-2" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> mort_allcauses  <span class="sc">%&gt;%</span>  </span>
 <span id="cb119-3"><a href="did-in-multi-period-set-up.html#cb119-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(year, expand)  <span class="sc">%&gt;%</span>  </span>
 <span id="cb119-4"><a href="did-in-multi-period-set-up.html#cb119-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">uninsured =</span> <span class="fu">mean</span>(sahieunins138))</span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the `.groups` argument.</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="did-in-multi-period-set-up.html#cb121-1" aria-hidden="true" tabindex="-1"></a>post_cf_treat  <span class="ot">&lt;-</span> dat_sum<span class="sc">$</span>uninsured[dat_sum<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span>] <span class="sc">+</span> naive_pre</span>
 <span id="cb121-2"><a href="did-in-multi-period-set-up.html#cb121-2" aria-hidden="true" tabindex="-1"></a>dat_treat_cf  <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">year =</span> <span class="fu">seq</span>(<span class="dv">2010</span>, <span class="dv">2017</span>, <span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">cf =</span> post_cf_treat)</span>
 <span id="cb121-3"><a href="did-in-multi-period-set-up.html#cb121-3" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat_sum  <span class="sc">%&gt;%</span> </span>
@@ -270,8 +269,7 @@ div.csl-indent {
 <span id="cb121-15"><a href="did-in-multi-period-set-up.html#cb121-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
 <span id="cb121-16"><a href="did-in-multi-period-set-up.html#cb121-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, </span>
 <span id="cb121-17"><a href="did-in-multi-period-set-up.html#cb121-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">linewidth =</span> <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 8 rows containing missing values or values outside the scale range
-## (`geom_line()`).</code></pre>
+<pre><code>## Warning: Removed 8 rows containing missing values or values outside the scale range (`geom_line()`).</code></pre>
 <p><img src="book_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <p>The plot shows that uninsured rate trended parallelly between the treated and control groups prior to the expansion. The rates dropped following the
 expansion year (2014) across both the treated and control groups, but the magnitude of drop in uninsured rate is higher for the treated group.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>

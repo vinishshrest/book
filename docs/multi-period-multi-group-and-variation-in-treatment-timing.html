@@ -274,8 +274,7 @@ div.csl-indent {
 <span id="cb156-33"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html#cb156-33" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(group, time) <span class="sc">%&gt;%</span></span>
 <span id="cb156-34"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html#cb156-34" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarise</span>(<span class="at">meanY =</span> <span class="fu">mean</span>(Y), <span class="at">meanYpot =</span> <span class="fu">mean</span>(Ypot))</span>
 <span id="cb156-35"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html#cb156-35" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;group&#39;. You can override using the `.groups`
-## argument.</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;group&#39;. You can override using the `.groups` argument.</code></pre>
 <div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data for potential outcome</span></span>
 <span id="cb158-2"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html#cb158-2" aria-hidden="true" tabindex="-1"></a>datasumpot <span class="ot">&lt;-</span> datasum <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(group, time, meanYpot)) <span class="sc">%&gt;%</span> </span>
 <span id="cb158-3"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html#cb158-3" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">mutate</span>(<span class="at">group =</span> <span class="dv">10</span><span class="sc">*</span>group)</span>
