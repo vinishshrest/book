@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7 Event study model | Difference in Differences</title>
+  <meta name="description" content="7 Event study model | Difference in Differences" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7 Event study model | Difference in Differences" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7 Event study model | Difference in Differences" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="the-2-times-2-difference-in-differences-estimate.html"/>
+<link rel="next" href="two-way-fixed-effect.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>1</b> A Quick Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>1.1</b> Set up</a></li>
+<li class="chapter" data-level="1.2" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>1.2</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>2</b> Naive estimator</a></li>
+<li class="chapter" data-level="3" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>3</b> Canonical Difference in Differences Framework</a></li>
+<li class="chapter" data-level="4" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>4</b> DiD in multi-period set up</a></li>
+<li class="chapter" data-level="5" data-path="conditional-parallel-trend.html"><a href="conditional-parallel-trend.html"><i class="fa fa-check"></i><b>5</b> Conditional Parallel Trend</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>5.1</b> Some concerns with controls</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>6</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="7" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>7</b> Event study model</a></li>
+<li class="chapter" data-level="8" data-path="two-way-fixed-effect.html"><a href="two-way-fixed-effect.html"><i class="fa fa-check"></i><b>8</b> Two way fixed effect</a></li>
+<li class="chapter" data-level="9" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>9</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="10" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>10</b> Multi Period, Multi Group and Variation in Treatment Timing</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>10.1</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="10.2" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>10.2</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="10.3" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>10.3</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="10.4" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>10.4</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Difference in Differences</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="event-study-model" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> Event study model<a href="event-study-model.html#event-study-model" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>As we have discussed, the validity of DiD estimate depends on the parallel trend assumption. Since the <em>direct test</em> for
+parallel trend requires the potential outcome of treated unit in absence of the treatment, it is not feasible. Although
+we are not going to be able to directly test the parallel trend, we can provide suggestive evidence in favor of (or lack of) parallel
+trend. For this, we need multi-period data, particularly for periods prior to the implementation of the treatment.</p>
+<p>A simple way to assess parallel trend is to evaluate the unconditional means across the treated and untreated units
+(expansion and non-expansion states in our case). This is shown in Section 4 (DiD in multi-period set up). I’ve included the
+figure here.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="event-study-model.html#cb38-1" aria-hidden="true" tabindex="-1"></a>f_uninsured</span></code></pre></div>
+<p><img src="did_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Here, we see that the uninsured rates between the expansion and non-expansion states trended similarly (or parallely) prior to the treatment. This allows us to argue that <em>trends in uninsured rate would’ve remained similar (or would not differ systematically) in absence of the ACA-Medicaid reform</em>. This by far is the simplest but yet powerful way to argue parallel trend assumption in practice. However, note that units in non-expansion
+states on average had higher uninsured rate compared to their counterparts in the expansion states even prior to the reform. Ideally, we would want treated and control units to have similar baseline features. This is where regression comes into play. Using regression, we can evaulate a difference-in-differences model by accounting for <em>necessary</em> covariates.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Moreover, it allows us to evaluate dynamic effects of the treatment, i.e., the impacts of the treatment over time (1st period, 2nd period, and so on).</p>
+<p>The event study model can be written as:</p>
+<p><span class="math display">\[\begin{equation}
+\label{eq:DiD_eventstudy}
+Y_{it} = \alpha + \underbrace{\sum_{j = -k}^{k}}_{j \neq -1}  \tau_j \times 1(\underbrace{t - G}_{r} = j) \times D_i + \sigma_{t} + \eta D_{i} + \epsilon_{it}
+\end{equation}\]</span></p>
+<p>So what are these notations here?</p>
+<ul>
+<li><p><span class="math inline">\(\alpha\)</span> is the intercept</p></li>
+<li><p><span class="math inline">\(1(\underbrace{t - G}_{r} = j)\)</span>: This is an indicator that turns on (takes the value 1) when the relative time <span class="math inline">\(r\)</span> in the data is equal to <span class="math inline">\(j\)</span>, and turns off otherwise (takes the value 0). The relative time, <span class="math inline">\(r\)</span>, is simply the difference between the period <span class="math inline">\(t\)</span> and the implementation year of the reform <span class="math inline">\(E\)</span>. For simplicity, I have the minimum and maximum of relative time as <span class="math inline">\(-k\)</span> and <span class="math inline">\(k\)</span>, respectively. But of course, this can vary in practice. The omitted category is the year before the reform (i.e., when <span class="math inline">\(r = -1\)</span>). We’ll discuss more about the omitted category later on.</p></li>
+<li><p><span class="math inline">\(\sigma_t\)</span>: Is the time fixed effects. It captures the changes that are common across treatment and control units over time.</p></li>
+<li><p><span class="math inline">\(D_i\)</span>: Is the fixed effects for treated/control units. In practice, treatment and control units can fundamentally differ in several characteristics. Accounting for <span class="math inline">\(D_i\)</span> separately captures the average difference in the outcome between treatment and control units that does not change over time (time invariant). In other words, controling for <span class="math inline">\(D_i\)</span> accounts for time invariant heterogeneity across the treatment vs. control groups. For example, we saw that expansion units on average had lower uninsured rate even prior to the reform compared to the treated units. For instance, this aspect of the difference in outcomes across the two groups is accounted by <span class="math inline">\(D_i\)</span>.</p></li>
+</ul>
+<p>From a specification perspectice,
+the main difference between the canonical DiD specification and the event study specification is the incorporation
+of the term <span class="math inline">\(1(\underbrace{t - G}_{r} = j)\)</span>, which is interacted with the treatment indicator, <span class="math inline">\(D_i\)</span>.
+This allows us to evaluate the effect of the treatment separately for a given period following (or before) the treatment implementation.
+Such dynamic effects are picked up by <span class="math inline">\(\widehat{\tau_t}\)</span>.</p>
+<p>Let’s try and break down whats going on in the event study specification.</p>
+<ol style="list-style-type: decimal">
+<li><p>First, it is important to realize the role of the omitted category. In the event study specification above,
+I’ve dropped the period prior to the reform. Note that this is essential from a theroretical standpoint, since inclusion of
+all periods would result to a <em>fully saturated model</em> and create multicollinearity.</p></li>
+<li><p>Dropping the period prior to the treatment implementation uses this period as the relative period.</p></li>
+<li><p>From point 2, we can think of the event-study specification as estimating several DiD type models, where the second difference
+is fixed and pertains to the omitted period, while the period of interest varies. Let me elaborate on this.</p></li>
+</ol>
+<p>To see this, note that when <span class="math inline">\(t - G = -1\)</span>, the conditional expectation for the treated group is <span class="math inline">\(E(Y | D = 1, t = G - 1) = \alpha + \sigma_{(G-1)} + \eta\)</span> and
+and for the control group is: <span class="math inline">\(E(Y | D = 0, G-1) = \alpha + \sigma_{(G-1)}\)</span>.</p>
+<p><span class="math inline">\(E(Y | D = 1, G - 1) - E(Y | D = 0, G-1)\)</span> is synonymous to the
+second difference: i.e., the difference in conditional means between the treatment and control units in the period before the treatment implementation. For the first difference, let’s look at the relative period <span class="math inline">\(t - G = 0\)</span>, the period of the reform implementation. The conditional expectation for the treatment group is:
+<span class="math inline">\(E(Y | D = 1, t = G) = \alpha + \tau_0 + \sigma_{G} + \eta\)</span> and that for the control group is: <span class="math inline">\(E(Y | D = 0, t = G) = \alpha + \sigma_{G}\)</span>. Here, the first difference is: <span class="math inline">\(E(Y | D = 1, t = G) - E(Y | D = 0, t = G)\)</span>.</p>
+<p>The DiD estimand during the period of the reform, <span class="math inline">\(r=0\)</span>, is given as:</p>
+<p><span class="math display">\[\begin{equation}
+\underbrace{E(Y | D = 1, t = G) - E(Y | D = 0, t = G)}_{first\; difference} - \underbrace{E(Y | D = 1, t = G - 1) - E(Y | D = 0, t = G-1)}_{second\; difference}
+= \tau_0
+\end{equation}\]</span></p>
+<p>The DiD estimand for the period following the reform <span class="math inline">\((r= 1)\)</span> is given as:</p>
+<p><span class="math display">\[\begin{equation}
+\underbrace{E(Y | D = 1, t = G+1) - E(Y | D = 0, t = G+1)}_{first\; difference} - \underbrace{E(Y | D = 1, t = G - 1) - E(Y | D = 0, t = G-1)}_{second\; difference}
+= \tau_1
+\end{equation}\]</span></p>
+<p>Similarly, we can think of the event study model as nesting the DiD estimation pertaining to the relative periods, <span class="math inline">\(r=2, \; 3\)</span> and so on.</p>
+<p>This way, the event study specification allows us to estimate period specific treatment effects from relative time period <span class="math inline">\(-k\)</span> to <span class="math inline">\(k\)</span> in relation to
+the conditional mean difference between the treated and control groups a period prior to the treatment implementation. Following the estimation of
+the event study model, we will have two sets of estimates: i) <span class="math inline">\(\tau_{-k}, \; \tau_{-k+1}, ..., \; \tau_{-2}\)</span>, and ii) <span class="math inline">\(\tau_{1}\)</span>, <span class="math inline">\(\tau_{2}\)</span>, …, <span class="math inline">\(\tau_{k}\)</span>. The estimation of <span class="math inline">\(\tau\)</span>s prior to the treatment allows us to make inference regarding the parallel trend assumption. If <span class="math inline">\(\widehat{\tau}_j\)</span> for <span class="math inline">\(j&lt;-1\)</span> is close to zero, then it provides <strong>suggestive evidence</strong> that the outcomes between the treatment and control units are trending similarly prior to the treatment.</p>
+<p>Let’s estimate the event study model for the ACA-Medicaid data. Note that we are using the larger data set where year spans from 2010 to 2018.</p>
+<ol style="list-style-type: decimal">
+<li>First create the relative time variable.</li>
+</ol>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="event-study-model.html#cb39-1" aria-hidden="true" tabindex="-1"></a>mort_allcauses  <span class="ot">&lt;-</span> mort_allcauses  <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="event-study-model.html#cb39-2" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">mutate</span>(<span class="at">yeararound =</span> year <span class="sc">-</span> yearexpand) </span>
+<span id="cb39-3"><a href="event-study-model.html#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="event-study-model.html#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># view </span></span>
+<span id="cb39-5"><a href="event-study-model.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(mort_allcauses<span class="sc">$</span>yeararound)</span></code></pre></div>
+<pre><code>## 
+##   -4   -3   -2   -1    0    1    2    3 
+## 2828 2824 2825 2827 2827 2827 2821 2826</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Note that the relative time spans from -4 to 3. Since, we are only considering the states that implemented ACA-Medicaid expansion
+in year 2014, -4 pertains to year 2010, -3 to 2011, and so on. Next, let’s create relative time indicators and interact them with the expansion status.
+In the model, this pertains to <span class="math inline">\(1(\underbrace{t - G}_{r} = j) \times D_i\)</span> part.</li>
+</ol>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="event-study-model.html#cb41-1" aria-hidden="true" tabindex="-1"></a>mort_allcauses  <span class="ot">&lt;-</span> mort_allcauses  <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="event-study-model.html#cb41-2" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">mutate</span>(<span class="at">rel_pre4 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="sc">-</span><span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="co"># indicator for r = -4</span></span>
+<span id="cb41-3"><a href="event-study-model.html#cb41-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre4 =</span> rel_pre4 <span class="sc">*</span> expand, <span class="co"># interact the indicator for r = -4 with expansion status</span></span>
+<span id="cb41-4"><a href="event-study-model.html#cb41-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre3 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-5"><a href="event-study-model.html#cb41-5" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre3 =</span> rel_pre3 <span class="sc">*</span> expand,</span>
+<span id="cb41-6"><a href="event-study-model.html#cb41-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre2 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="sc">-</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-7"><a href="event-study-model.html#cb41-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre2 =</span> rel_pre2 <span class="sc">*</span> expand,</span>
+<span id="cb41-8"><a href="event-study-model.html#cb41-8" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre1 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-9"><a href="event-study-model.html#cb41-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_pre1 =</span> rel_pre1 <span class="sc">*</span> expand,</span>
+<span id="cb41-10"><a href="event-study-model.html#cb41-10" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post0 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-11"><a href="event-study-model.html#cb41-11" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post0 =</span> rel_post0 <span class="sc">*</span> expand,</span>
+<span id="cb41-12"><a href="event-study-model.html#cb41-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post1 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-13"><a href="event-study-model.html#cb41-13" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post1 =</span> rel_post1 <span class="sc">*</span> expand,</span>
+<span id="cb41-14"><a href="event-study-model.html#cb41-14" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post2 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-15"><a href="event-study-model.html#cb41-15" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post2 =</span> rel_post2 <span class="sc">*</span> expand,</span>
+<span id="cb41-16"><a href="event-study-model.html#cb41-16" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post3 =</span> <span class="fu">ifelse</span>(yeararound <span class="sc">==</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb41-17"><a href="event-study-model.html#cb41-17" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rel_post3 =</span> rel_post3 <span class="sc">*</span> expand)</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Now thats done, let’s specify the model and estimate it using OLS.</li>
+</ol>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="event-study-model.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># quick look at the data</span></span>
+<span id="cb42-2"><a href="event-study-model.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mort_allcauses)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 16
+##   countyfips  year state.abb expand yearexpand sahieunins138
+##        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;
+## 1       1001  2010 AL             0       2014          40.6
+## 2       1001  2011 AL             0       2014          41.6
+## 3       1001  2012 AL             0       2014          39.6
+## 4       1001  2013 AL             0       2014          39.6
+## 5       1001  2014 AL             0       2014          31.9
+## 6       1001  2015 AL             0       2014          27.5
+## # i 10 more variables: GovernorisDemocrat1Yes &lt;int&gt;, yeararound &lt;dbl&gt;,
+## #   rel_pre4 &lt;dbl&gt;, rel_pre3 &lt;dbl&gt;, rel_pre2 &lt;dbl&gt;, rel_pre1 &lt;dbl&gt;,
+## #   rel_post0 &lt;dbl&gt;, rel_post1 &lt;dbl&gt;, rel_post2 &lt;dbl&gt;, rel_post3 &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="event-study-model.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the event study model</span></span>
+<span id="cb44-2"><a href="event-study-model.html#cb44-2" aria-hidden="true" tabindex="-1"></a>reg_es  <span class="ot">&lt;-</span> <span class="fu">lm</span>(sahieunins138 <span class="sc">~</span> rel_pre4 <span class="sc">+</span> rel_pre3 <span class="sc">+</span> rel_pre2 <span class="sc">+</span></span>
+<span id="cb44-3"><a href="event-study-model.html#cb44-3" aria-hidden="true" tabindex="-1"></a>                              rel_post0 <span class="sc">+</span> rel_post1 <span class="sc">+</span> rel_post2 <span class="sc">+</span> rel_post3 <span class="sc">+</span></span>
+<span id="cb44-4"><a href="event-study-model.html#cb44-4" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">factor</span>(state.abb) <span class="sc">+</span> </span>
+<span id="cb44-5"><a href="event-study-model.html#cb44-5" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">factor</span>(year), </span>
+<span id="cb44-6"><a href="event-study-model.html#cb44-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">data =</span>  mort_allcauses</span>
+<span id="cb44-7"><a href="event-study-model.html#cb44-7" aria-hidden="true" tabindex="-1"></a>                              )</span>
+<span id="cb44-8"><a href="event-study-model.html#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="event-study-model.html#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="co"># print summary of the results</span></span>
+<span id="cb44-10"><a href="event-study-model.html#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_es)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = sahieunins138 ~ rel_pre4 + rel_pre3 + rel_pre2 + 
+##     rel_post0 + rel_post1 + rel_post2 + rel_post3 + factor(state.abb) + 
+##     factor(year), data = mort_allcauses)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -22.6227  -3.3080  -0.3909   2.8382  22.5153 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          41.12501    0.24654 166.806  &lt; 2e-16 ***
+## rel_pre4              0.43065    0.27124   1.588  0.11236    
+## rel_pre3             -0.09744    0.27131  -0.359  0.71949    
+## rel_pre2              0.26399    0.27129   0.973  0.33052    
+## rel_post0            -5.81879    0.27126 -21.451  &lt; 2e-16 ***
+## rel_post1            -7.87920    0.27124 -29.049  &lt; 2e-16 ***
+## rel_post2            -7.98776    0.27138 -29.434  &lt; 2e-16 ***
+## rel_post3            -8.28500    0.27126 -30.543  &lt; 2e-16 ***
+## factor(state.abb)AR   2.56819    0.34884   7.362 1.87e-13 ***
+## factor(state.abb)AZ  -0.36864    0.53905  -0.684  0.49406    
+## factor(state.abb)CA  -2.08319    0.36686  -5.678 1.38e-08 ***
+## factor(state.abb)CO  -0.21062    0.35968  -0.586  0.55817    
+## factor(state.abb)CT -10.20489    0.68943 -14.802  &lt; 2e-16 ***
+## factor(state.abb)DE  -8.94031    1.06539  -8.392  &lt; 2e-16 ***
+## factor(state.abb)FL   4.55616    0.30746  14.819  &lt; 2e-16 ***
+## factor(state.abb)GA   6.79004    0.25928  26.188  &lt; 2e-16 ***
+## factor(state.abb)HI -13.89239    0.93335 -14.884  &lt; 2e-16 ***
+## factor(state.abb)IA  -8.67819    0.33384 -25.995  &lt; 2e-16 ***
+## factor(state.abb)ID   5.41830    0.34531  15.691  &lt; 2e-16 ***
+## factor(state.abb)IL  -7.21457    0.33243 -21.702  &lt; 2e-16 ***
+## factor(state.abb)KS  -0.24081    0.27825  -0.865  0.38680    
+## factor(state.abb)KY  -3.25760    0.32535 -10.013  &lt; 2e-16 ***
+## factor(state.abb)MA -21.15043    0.55287 -38.256  &lt; 2e-16 ***
+## factor(state.abb)MD  -7.38614    0.45980 -16.064  &lt; 2e-16 ***
+## factor(state.abb)ME  -9.17346    0.49516 -18.526  &lt; 2e-16 ***
+## factor(state.abb)MI  -5.82545    0.34295 -16.986  &lt; 2e-16 ***
+## factor(state.abb)MN -12.83729    0.34039 -37.714  &lt; 2e-16 ***
+## factor(state.abb)MO  -0.34838    0.27350  -1.274  0.20275    
+## factor(state.abb)MS   4.11382    0.29357  14.013  &lt; 2e-16 ***
+## factor(state.abb)NC   3.46979    0.28095  12.350  &lt; 2e-16 ***
+## factor(state.abb)ND  -2.67388    0.37311  -7.166 7.94e-13 ***
+## factor(state.abb)NE  -3.09839    0.28556 -10.850  &lt; 2e-16 ***
+## factor(state.abb)NH  -3.10364    0.62940  -4.931 8.23e-07 ***
+## factor(state.abb)NJ   1.53171    0.47986   3.192  0.00141 ** 
+## factor(state.abb)NM   4.53961    0.41884  10.839  &lt; 2e-16 ***
+## factor(state.abb)NV   7.92988    0.51812  15.305  &lt; 2e-16 ***
+## factor(state.abb)NY -10.64965    0.36130 -29.476  &lt; 2e-16 ***
+## factor(state.abb)OH  -5.42861    0.33978 -15.977  &lt; 2e-16 ***
+## factor(state.abb)OK   7.94963    0.29731  26.739  &lt; 2e-16 ***
+## factor(state.abb)OR  -1.75628    0.40918  -4.292 1.78e-05 ***
+## factor(state.abb)RI  -7.25614    0.84428  -8.594  &lt; 2e-16 ***
+## factor(state.abb)SC   1.69597    0.34075   4.977 6.50e-07 ***
+## factor(state.abb)SD  -0.54719    0.30966  -1.767  0.07724 .  
+## factor(state.abb)TN  -2.13244    0.28390  -7.511 6.07e-14 ***
+## factor(state.abb)TX  14.46773    0.24455  59.160  &lt; 2e-16 ***
+## factor(state.abb)UT  -0.19189    0.39555  -0.485  0.62760    
+## factor(state.abb)VA  -1.06957    0.26702  -4.006 6.21e-05 ***
+## factor(state.abb)VT -16.08079    0.55287 -29.086  &lt; 2e-16 ***
+## factor(state.abb)WA  -1.59608    0.40083  -3.982 6.86e-05 ***
+## factor(state.abb)WI -11.97572    0.30207 -39.645  &lt; 2e-16 ***
+## factor(state.abb)WV  -2.60614    0.37019  -7.040 1.98e-12 ***
+## factor(state.abb)WY   3.09814    0.43006   7.204 6.03e-13 ***
+## factor(year)2011     -0.83040    0.17588  -4.721 2.36e-06 ***
+## factor(year)2012     -2.02063    0.17585 -11.491  &lt; 2e-16 ***
+## factor(year)2013     -2.70561    0.17574 -15.395  &lt; 2e-16 ***
+## factor(year)2014     -7.48354    0.17580 -42.569  &lt; 2e-16 ***
+## factor(year)2015    -11.52848    0.17582 -65.568  &lt; 2e-16 ***
+## factor(year)2016    -13.47716    0.17593 -76.605  &lt; 2e-16 ***
+## factor(year)2017    -13.09156    0.17585 -74.447  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.033 on 22546 degrees of freedom
+## Multiple R-squared:  0.825, Adjusted R-squared:  0.8246 
+## F-statistic:  1833 on 58 and 22546 DF,  p-value: &lt; 2.2e-16</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Let’s cluster the standard error at the state level. I’m going to do this using feols command from
+fixest package. Using feols you can automatically create
+the relative time indicators and interact them with the treatment status as in the coding below.</li>
+</ol>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="event-study-model.html#cb46-1" aria-hidden="true" tabindex="-1"></a>reg_es_cluster  <span class="ot">&lt;-</span> <span class="fu">feols</span>(sahieunins138 <span class="sc">~</span> <span class="fu">i</span>(yeararound, expand, <span class="at">ref =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|</span> year <span class="sc">+</span> state.abb, </span>
+<span id="cb46-2"><a href="event-study-model.html#cb46-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">data =</span>  mort_allcauses, <span class="at">cluster =</span> <span class="sc">~</span>state.abb</span>
+<span id="cb46-3"><a href="event-study-model.html#cb46-3" aria-hidden="true" tabindex="-1"></a>                              )</span>
+<span id="cb46-4"><a href="event-study-model.html#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="event-study-model.html#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_es_cluster)</span></code></pre></div>
+<pre><code>## OLS estimation, Dep. Var.: sahieunins138
+## Observations: 22,605
+## Fixed-effects: year: 8,  state.abb: 45
+## Standard-errors: Clustered (state.abb) 
+##                        Estimate Std. Error   t value   Pr(&gt;|t|)    
+## yeararound::-4:expand  0.430654   0.500730  0.860051 3.9442e-01    
+## yeararound::-3:expand -0.097442   0.381948 -0.255117 7.9982e-01    
+## yeararound::-2:expand  0.263994   0.326565  0.808399 4.2321e-01    
+## yeararound::0:expand  -5.818789   1.266136 -4.595706 3.6185e-05 ***
+## yeararound::1:expand  -7.879198   1.417949 -5.556757 1.5057e-06 ***
+## yeararound::2:expand  -7.987764   1.421451 -5.619445 1.2195e-06 ***
+## yeararound::3:expand  -8.284998   1.466376 -5.649981 1.1003e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## RMSE: 5.02671     Adj. R2: 0.824559
+##                 Within R2: 0.127101</code></pre>
+<p>We see that the relative time estimates from 3 and 2 are equal to one another. However, the clustered standard errors
+are inflated.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>We can then plot the event study estimates.</li>
+</ol>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="event-study-model.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract coefficients and confidence intervals</span></span>
+<span id="cb48-2"><a href="event-study-model.html#cb48-2" aria-hidden="true" tabindex="-1"></a>event_study_results <span class="ot">&lt;-</span> fixest<span class="sc">::</span><span class="fu">coefplot</span>(reg_es_cluster, <span class="at">main =</span> <span class="st">&quot;Event Study Estimates&quot;</span>)</span></code></pre></div>
+<p><img src="did_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="event-study-model.html#cb49-1" aria-hidden="true" tabindex="-1"></a>event_study_results[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>##                          estimate      ci_low    ci_high        estimate_names
+## yeararound::-4:expand  0.43065369  -0.5785019  1.4398093 yeararound::-4:expand
+## yeararound::-3:expand -0.09744166  -0.8672076  0.6723243 yeararound::-3:expand
+## yeararound::-2:expand  0.26399433  -0.3941533  0.9221419 yeararound::-2:expand
+## yeararound::0:expand  -5.81878875  -8.3705184 -3.2670591  yeararound::0:expand
+## yeararound::1:expand  -7.87919826 -10.7368868 -5.0215097  yeararound::1:expand
+## yeararound::2:expand  -7.98776439 -10.8525099 -5.1230189  yeararound::2:expand
+## yeararound::3:expand  -8.28499809 -11.2402855 -5.3297107  yeararound::3:expand
+##                          estimate_names_raw id x           y
+## yeararound::-4:expand yeararound::-4:expand  1 1  0.43065369
+## yeararound::-3:expand yeararound::-3:expand  1 2 -0.09744166
+## yeararound::-2:expand yeararound::-2:expand  1 3  0.26399433
+## yeararound::0:expand   yeararound::0:expand  1 4 -5.81878875
+## yeararound::1:expand   yeararound::1:expand  1 5 -7.87919826
+## yeararound::2:expand   yeararound::2:expand  1 6 -7.98776439
+## yeararound::3:expand   yeararound::3:expand  1 7 -8.28499809</code></pre>
+<p>We see that the estimates on <span class="math inline">\(\tau_j\)</span> for <span class="math inline">\(j&lt;-1\)</span> is close to zero and statistically insignificant at the
+conventional levels. This provides a suggestive evidence in favor of the parallel trend assumption.
+However, the estimates following the reform implementation drops drastically, demonstrating the
+reduction in uninsured rate due to the ACA-Medicaid expansion.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="2">
+<li id="fn2"><p>Again what is <em>necessary</em> is a subject to debate, which we will stay away from for now.<a href="event-study-model.html#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="the-2-times-2-difference-in-differences-estimate.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="two-way-fixed-effect.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": false,
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

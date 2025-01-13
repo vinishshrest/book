@@ -29,7 +29,7 @@
   
   
 <link rel="prev" href="canonical-difference-in-differences-framework.html"/>
-<link rel="next" href="conditional-pta.html"/>
+<link rel="next" href="conditional-parallel-trend.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -134,11 +134,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="canonical-did.html"><a href="canonical-did.html"><i class="fa fa-check"></i><b>1</b> Canonical DiD</a></li>
+<li class="chapter" data-level="1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>1</b> A Quick Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>1.1</b> Set up</a></li>
+<li class="chapter" data-level="1.2" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>1.2</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>2</b> Naive estimator</a></li>
 <li class="chapter" data-level="3" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>3</b> Canonical Difference in Differences Framework</a></li>
 <li class="chapter" data-level="4" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>4</b> DiD in multi-period set up</a></li>
-<li class="chapter" data-level="5" data-path="conditional-pta.html"><a href="conditional-pta.html"><i class="fa fa-check"></i><b>5</b> Conditional PTA</a></li>
+<li class="chapter" data-level="5" data-path="conditional-parallel-trend.html"><a href="conditional-parallel-trend.html"><i class="fa fa-check"></i><b>5</b> Conditional Parallel Trend</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>5.1</b> Some concerns with controls</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>6</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="7" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>7</b> Event study model</a></li>
+<li class="chapter" data-level="8" data-path="two-way-fixed-effect.html"><a href="two-way-fixed-effect.html"><i class="fa fa-check"></i><b>8</b> Two way fixed effect</a></li>
+<li class="chapter" data-level="9" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>9</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="10" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>10</b> Multi Period, Multi Group and Variation in Treatment Timing</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>10.1</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="10.2" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>10.2</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="10.3" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>10.3</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="10.4" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>10.4</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -158,45 +176,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="did-in-multi-period-set-up" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">4</span> DiD in multi-period set up<a href="did-in-multi-period-set-up.html#did-in-multi-period-set-up" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>So far we have only considered the canonical DiD (two groups and two period DiD framework). However, data may be available for several periods before and after the treatment implementation. In this case, we will be in the setting of multi-period DiD. For example, for the Medicaid expansion case, we have data spanning from years 2010 to 2017. We’d like to utilize whole of this data. Using the multi-period set up can be helpful for the following reasons:</p>
+<p>So far we have only considered the canonical DiD (two groups and two period DiD framework).</p>
+<p>However, data may be available for several periods before and after the treatment implementation. In this case, we will be in the setting of multi-period DiD. For example, for the Medicaid expansion case, we have data spanning from years 2010 to 2017. We’d like to utilize all of these years rather than just years 2013 and 2014 as in the canonical DiD setting.</p>
+<p>Using the multi-period set up can be helpful for the following reasons:</p>
 <ol style="list-style-type: lower-roman">
-<li><p>We can trace the dynamic effects of the treatment following the implementation. This means that we can trace the ATT estimate of Medicaid expansion for periods following its implementation, i.e., in 2014, 2015, 2016, and 2017. If the effects of expansion are increasing over time, then this setting will be very helpful. In other words, we can trace the potential heterogeneous effects of the treatment over time.</p></li>
-<li><p>Next, the multi-period setting allows us to provide suggestive evidence regarding the parallel trend assumption. See below.</p></li>
+<li><p>We can trace the dynamic effects of the treatment following the implementation. This means that we can trace the ATT estimate of Medicaid expansion for periods following its implementation, i.e., in 2014, 2015, 2016, and 2017. If the effects of expansion are increasing over time, then this setting will be very helpful in uncovering such dynamics. In other words, we can trace the potential heterogeneous effects of the treatment over time.</p></li>
+<li><p>Next, the multi-period setting allows us to way to check the validity of the parallel trend assumption. As mentioned above, the exact test for the parallel trend assumption is infeasible. However, we can deduce suggestive evidence to assess validity of this assumption. See below.</p></li>
 </ol>
 <p>Let’s first plot the mean uninsured rate between the years 2010 and 2017 across the treatment versus the control groups.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="did-in-multi-period-set-up.html#cb25-1" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> mort_allcauses  <span class="sc">%&gt;%</span>  </span>
-<span id="cb25-2"><a href="did-in-multi-period-set-up.html#cb25-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(year, expand)  <span class="sc">%&gt;%</span>  </span>
-<span id="cb25-3"><a href="did-in-multi-period-set-up.html#cb25-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">uninsured =</span> <span class="fu">mean</span>(sahieunins138))</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="did-in-multi-period-set-up.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate the mean uninsured rate by expansion status and year</span></span>
+<span id="cb24-2"><a href="did-in-multi-period-set-up.html#cb24-2" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> mort_allcauses  <span class="sc">%&gt;%</span>  </span>
+<span id="cb24-3"><a href="did-in-multi-period-set-up.html#cb24-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(year, expand)  <span class="sc">%&gt;%</span>  </span>
+<span id="cb24-4"><a href="did-in-multi-period-set-up.html#cb24-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">uninsured =</span> <span class="fu">mean</span>(sahieunins138))</span></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
 ## `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="did-in-multi-period-set-up.html#cb27-1" aria-hidden="true" tabindex="-1"></a>post_cf_treat  <span class="ot">&lt;-</span> dat_sum<span class="sc">$</span>uninsured[dat_sum<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span>] <span class="sc">+</span> naive_pre</span>
-<span id="cb27-2"><a href="did-in-multi-period-set-up.html#cb27-2" aria-hidden="true" tabindex="-1"></a>dat_treat_cf  <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">year =</span> <span class="fu">seq</span>(<span class="dv">2010</span>, <span class="dv">2017</span>, <span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">cf =</span> post_cf_treat)</span>
-<span id="cb27-3"><a href="did-in-multi-period-set-up.html#cb27-3" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat_sum  <span class="sc">%&gt;%</span> </span>
-<span id="cb27-4"><a href="did-in-multi-period-set-up.html#cb27-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">left_join</span>(dat_treat_cf, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;expand&quot;</span>))</span>
-<span id="cb27-5"><a href="did-in-multi-period-set-up.html#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="did-in-multi-period-set-up.html#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat_sum, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> uninsured, <span class="at">group =</span> <span class="fu">as.factor</span>(expand), <span class="at">color =</span> <span class="fu">as.factor</span>(expand)), <span class="at">shape =</span> <span class="fu">as.factor</span>(expand)) <span class="sc">+</span> </span>
-<span id="cb27-7"><a href="did-in-multi-period-set-up.html#cb27-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb27-8"><a href="did-in-multi-period-set-up.html#cb27-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">2014</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb27-9"><a href="did-in-multi-period-set-up.html#cb27-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">data =</span> dat_sum, </span>
-<span id="cb27-10"><a href="did-in-multi-period-set-up.html#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">y =</span> cf), </span>
-<span id="cb27-11"><a href="did-in-multi-period-set-up.html#cb27-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
-<span id="cb27-12"><a href="did-in-multi-period-set-up.html#cb27-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, </span>
-<span id="cb27-13"><a href="did-in-multi-period-set-up.html#cb27-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## i Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="did-in-multi-period-set-up.html#cb26-1" aria-hidden="true" tabindex="-1"></a>post_cf_treat  <span class="ot">&lt;-</span> dat_sum<span class="sc">$</span>uninsured[dat_sum<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span>] <span class="sc">+</span> naive_pre</span>
+<span id="cb26-2"><a href="did-in-multi-period-set-up.html#cb26-2" aria-hidden="true" tabindex="-1"></a>dat_treat_cf  <span class="ot">&lt;-</span>  <span class="fu">data.frame</span>(<span class="at">year =</span> <span class="fu">seq</span>(<span class="dv">2010</span>, <span class="dv">2017</span>, <span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">cf =</span> post_cf_treat)</span>
+<span id="cb26-3"><a href="did-in-multi-period-set-up.html#cb26-3" aria-hidden="true" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat_sum  <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="did-in-multi-period-set-up.html#cb26-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">left_join</span>(dat_treat_cf, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;expand&quot;</span>))</span>
+<span id="cb26-5"><a href="did-in-multi-period-set-up.html#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="did-in-multi-period-set-up.html#cb26-6" aria-hidden="true" tabindex="-1"></a>f_uninsured  <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat_sum, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> uninsured, <span class="at">group =</span> <span class="fu">as.factor</span>(expand), <span class="at">color =</span> <span class="fu">as.factor</span>(expand)), <span class="at">shape =</span> <span class="fu">as.factor</span>(expand)) <span class="sc">+</span> </span>
+<span id="cb26-7"><a href="did-in-multi-period-set-up.html#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb26-8"><a href="did-in-multi-period-set-up.html#cb26-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">2014</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) </span>
+<span id="cb26-9"><a href="did-in-multi-period-set-up.html#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="did-in-multi-period-set-up.html#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat_sum, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> uninsured, <span class="at">group =</span> <span class="fu">as.factor</span>(expand), <span class="at">color =</span> <span class="fu">as.factor</span>(expand)), <span class="at">shape =</span> <span class="fu">as.factor</span>(expand)) <span class="sc">+</span> </span>
+<span id="cb26-11"><a href="did-in-multi-period-set-up.html#cb26-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb26-12"><a href="did-in-multi-period-set-up.html#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">2014</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb26-13"><a href="did-in-multi-period-set-up.html#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>(<span class="at">data =</span> dat_sum, </span>
+<span id="cb26-14"><a href="did-in-multi-period-set-up.html#cb26-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">y =</span> cf), </span>
+<span id="cb26-15"><a href="did-in-multi-period-set-up.html#cb26-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, </span>
+<span id="cb26-16"><a href="did-in-multi-period-set-up.html#cb26-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, </span>
+<span id="cb26-17"><a href="did-in-multi-period-set-up.html#cb26-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">linewidth =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 8 rows containing missing values or values outside the scale range
 ## (`geom_line()`).</code></pre>
 <p><img src="did_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>The plot shows that uninsured rate trended parallelly between the treated and control groups prior to the expansion. The rates dropped following the
-expansion year (2014) across both the treated and control groups, but the magnitude of drop in uninsured rate is higher for the treated group.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> What we are doing in DiD is using the control group as the counterfactual for the treated group. In other words, we are assuming that in absence of the treatment, outcome for the treated group would have evolved similarly to that of the control group. This is the key assumption of DiD, which is also known as the parallel trend assumption. Note that, once we difference out the pre-treatment means between the treated and controls groups, we obtain the dashed line, which is the counterfactual for the treated group. In this case, the counterfactual line overlaps the average outcome for the treated group given the parallel trends in outcomes prior to the treatment. Loosely speaking, ATT is the gap between the outcome for the treated group and the counterfactual outcome during the post-treatment period.</p>
-<p>As previously mentioned, we are unable to provide an actual test for parallel trend assumption due to the missing data on treated observations following the treatment in a state when treatment is absent. This does not mean that we are absolutely helpless. There are a list of things that can be done to provide suggestive evidence in favor of or lack of parallel trend. The list goes as:</p>
+expansion year (2014) across both the treated and control groups, but the magnitude of drop in uninsured rate is higher for the treated group.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>The DiD uses the control group as the counterfactual for the treated group. In other words, we are assuming that in absence of the treatment, outcome for the treated group would have evolved similarly to that of the control group. This is the key assumption of DiD – the parallel trend assumption. Note that, once we difference out the pre-treatment means between the treated and controls groups, we obtain the dashed line, which is the counterfactual for the treated group. In this case, the counterfactual line overlaps the average outcome for the treated group, suggesting that outcome was trending similarly across the two groups during the pre-treatment period. Loosely speaking, ATT is the average gap between the outcome for the treated group (solid blue line) and the counterfactual outcome (dashed line) during the post-treatment period.</p>
+<p>As previously mentioned, we are unable to provide an actual test for parallel trend assumption due to the missing data on treated observations following the treatment in a state when treatment is absent. This does not mean that we are absolutely helpless. There are a list of things that can be done to provide suggestive evidence in favor of or lack of parallel trend. They are:</p>
 <ol style="list-style-type: lower-roman">
 <li><p>Check pre-treatment summary statistics across treatment and control groups. Say, treatment and control groups have highly different pre-treatment characteristics. It is unlikely that parallel trend assumption will hold in this case. It is because pre-treatment variables that influence the outcome can induce different dynamics in trends. Hence, the outcome trends between the treated and control groups may vary even in absence of the treatment.</p></li>
 <li><p>Usually trends in outcomes across treated and control groups are assessed to evaluate parallel trends. If outcome is trending parallely between the two groups prior to the treatment, then it provides evidence in favor of PTA. However, concluding that PTA does not hold in a case of non-parallel trend is a narrow assessment at the best, since this approach merely depicts unconditional trends. PTA may have more leverage once (pre-treatment) covariates are accounted for.</p></li>
-<li><p>The next approach that has been used widely is the event-study. We will discuss this approach soon.</p></li>
+<li><p>The next approach that has been used widely is the <strong>event-study</strong>. We will discuss this approach soon.</p></li>
 </ol>
 <p>In most cases, unconditional parallel trend assumption may not be very convincing. Why?</p>
 </div>
@@ -212,7 +233,7 @@ expansion year (2014) across both the treated and control groups, but the magnit
         </div>
       </div>
 <a href="canonical-difference-in-differences-framework.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="conditional-pta.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="conditional-parallel-trend.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

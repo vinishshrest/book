@@ -134,11 +134,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="canonical-did.html"><a href="canonical-did.html"><i class="fa fa-check"></i><b>1</b> Canonical DiD</a></li>
+<li class="chapter" data-level="1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>1</b> A Quick Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>1.1</b> Set up</a></li>
+<li class="chapter" data-level="1.2" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>1.2</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>2</b> Naive estimator</a></li>
 <li class="chapter" data-level="3" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>3</b> Canonical Difference in Differences Framework</a></li>
 <li class="chapter" data-level="4" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>4</b> DiD in multi-period set up</a></li>
-<li class="chapter" data-level="5" data-path="conditional-pta.html"><a href="conditional-pta.html"><i class="fa fa-check"></i><b>5</b> Conditional PTA</a></li>
+<li class="chapter" data-level="5" data-path="conditional-parallel-trend.html"><a href="conditional-parallel-trend.html"><i class="fa fa-check"></i><b>5</b> Conditional Parallel Trend</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>5.1</b> Some concerns with controls</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>6</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="7" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>7</b> Event study model</a></li>
+<li class="chapter" data-level="8" data-path="two-way-fixed-effect.html"><a href="two-way-fixed-effect.html"><i class="fa fa-check"></i><b>8</b> Two way fixed effect</a></li>
+<li class="chapter" data-level="9" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>9</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="10" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>10</b> Multi Period, Multi Group and Variation in Treatment Timing</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>10.1</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="10.2" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>10.2</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="10.3" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>10.3</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="10.4" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>10.4</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -160,16 +178,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">3</span> Canonical Difference in Differences Framework<a href="canonical-difference-in-differences-framework.html#canonical-difference-in-differences-framework" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>We would like to alleviate the aforementioned concerns. One way to address the second concern, i.e., outcomes in pre-treatment period may differ significantly between the treatment and control groups, is to take out the mean difference in outcome during the pre-treatment period from the mean difference in outcome post treatment. This approach uses two groups and two periods, which is termed as the canonical DiD case.</p>
 <p>The canonical DiD can be seen using a <span class="math inline">\(2\times 2\)</span> matrix.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="canonical-difference-in-differences-framework.html#cb21-1" aria-hidden="true" tabindex="-1"></a>my_mat  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="st">&quot;Y_post_1&quot;</span>, <span class="st">&quot;Y_post_0&quot;</span>, <span class="st">&quot;Y_pre_1&quot;</span>, <span class="st">&quot;Y_pre_0&quot;</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb21-2"><a href="canonical-difference-in-differences-framework.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(my_mat)</span></code></pre></div>
-<pre><code>##      [,1]       [,2]     
-## [1,] &quot;Y_post_1&quot; &quot;Y_pre_1&quot;
-## [2,] &quot;Y_post_0&quot; &quot;Y_pre_0&quot;</code></pre>
-<p>Note that the naive estimator simply is: <span class="math inline">\(E(Y_{post}1 - Y_{post}0)\)</span>. This can be considered as the first difference.</p>
-<p>Next, we construct the second difference across the two groups during the pre-treatment period as: <span class="math inline">\(E(Y_{pre}1 - Y_{pre}0)\)</span>.</p>
-<p>The difference-in-differences estimate: $_{did} = <span class="math inline">\(E[(Y_{post}(1) - Y_{post}(0)] - E[(Y_{pre}(1) - Y_{pre}(0)]\)</span>. This defines the term “difference-in-differences” as it involves two differences in means across the treatment and control group; one post treatment and the other prior to the treatment.</p>
-<p>In the Medicaid expansion example that involves two groups and two time periods:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="canonical-difference-in-differences-framework.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;did estimate= </span><span class="sc">\n</span><span class="st">&quot;</span>, naive <span class="sc">-</span> naive_pre)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="canonical-difference-in-differences-framework.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the data for the 2x2 matrix</span></span>
+<span id="cb21-2"><a href="canonical-difference-in-differences-framework.html#cb21-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb21-3"><a href="canonical-difference-in-differences-framework.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Treated&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb21-4"><a href="canonical-difference-in-differences-framework.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>), <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb21-5"><a href="canonical-difference-in-differences-framework.html#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">7</span>), <span class="co"># Example outcomes</span></span>
+<span id="cb21-6"><a href="canonical-difference-in-differences-framework.html#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;Y_11&quot;</span>, <span class="st">&quot;Y_01&quot;</span>, <span class="st">&quot;Y_10&quot;</span>, <span class="st">&quot;Y_00&quot;</span>) <span class="co"># Labels for matrix cells</span></span>
+<span id="cb21-7"><a href="canonical-difference-in-differences-framework.html#cb21-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-8"><a href="canonical-difference-in-differences-framework.html#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="canonical-difference-in-differences-framework.html#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Base plot</span></span>
+<span id="cb21-10"><a href="canonical-difference-in-differences-framework.html#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> group)) <span class="sc">+</span></span>
+<span id="cb21-11"><a href="canonical-difference-in-differences-framework.html#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> <span class="co"># Create the matrix grid</span></span>
+<span id="cb21-12"><a href="canonical-difference-in-differences-framework.html#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> label), <span class="at">size =</span> <span class="dv">6</span>, <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>) <span class="sc">+</span> <span class="co"># Add cell labels</span></span>
+<span id="cb21-13"><a href="canonical-difference-in-differences-framework.html#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="fl">2.55</span>, <span class="at">label =</span> <span class="st">&quot;Pre-Treatment&quot;</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">fontface =</span> <span class="st">&quot;italic&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-14"><a href="canonical-difference-in-differences-framework.html#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">2</span>, <span class="at">y =</span> <span class="fl">2.55</span>, <span class="at">label =</span> <span class="st">&quot;Post-Treatment&quot;</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">fontface =</span> <span class="st">&quot;italic&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-15"><a href="canonical-difference-in-differences-framework.html#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">0.45</span>, <span class="at">y =</span> <span class="dv">2</span>, <span class="at">label =</span> <span class="st">&quot;Control Group&quot;</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">fontface =</span> <span class="st">&quot;italic&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-16"><a href="canonical-difference-in-differences-framework.html#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">0.45</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">label =</span> <span class="st">&quot;Treated Group&quot;</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">fontface =</span> <span class="st">&quot;italic&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-17"><a href="canonical-difference-in-differences-framework.html#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb21-18"><a href="canonical-difference-in-differences-framework.html#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;2x2 Difference-in-Differences Matrix Illustration&quot;</span>,</span>
+<span id="cb21-19"><a href="canonical-difference-in-differences-framework.html#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-20"><a href="canonical-difference-in-differences-framework.html#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb21-21"><a href="canonical-difference-in-differences-framework.html#cb21-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb21-22"><a href="canonical-difference-in-differences-framework.html#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb21-23"><a href="canonical-difference-in-differences-framework.html#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb21-24"><a href="canonical-difference-in-differences-framework.html#cb21-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-25"><a href="canonical-difference-in-differences-framework.html#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-26"><a href="canonical-difference-in-differences-framework.html#cb21-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-27"><a href="canonical-difference-in-differences-framework.html#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">16</span>)</span>
+<span id="cb21-28"><a href="canonical-difference-in-differences-framework.html#cb21-28" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="did_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Note that the naive estimator simply is: <span class="math inline">\(E(Y_{11}) - E(Y_{01})\)</span>. This can be considered as the first difference.</p>
+<p>Next, we construct the second difference across the two groups during the pre-treatment period as: <span class="math inline">\(E(Y_{10}) - E(Y_{00})\)</span>.</p>
+<p>The difference-in-differences estimate: $_{did} = <span class="math inline">\(E[Y_{11} - Y_{01}] - E[Y_{10} - Y_{00}]\)</span>.
+This defines the term “difference-in-differences” as it involves two differences in means across the treatment and control group; one post treatment and the other prior to the treatment.</p>
+<p>In the ACA-Medicaid expansion example that involves two groups and two time periods:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="canonical-difference-in-differences-framework.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;did estimate= </span><span class="sc">\n</span><span class="st">&quot;</span>, naive <span class="sc">-</span> naive_pre)</span></code></pre></div>
 <pre><code>## did estimate= 
 ##  -5.813426</code></pre>
 <p>This suggests that uninsured rate dropped by 5.81 percentage points following the Medicaid expansion in year 2014.</p>
@@ -178,18 +221,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display" id="eq:att">\[\begin{equation}
 \tau = E(Y^1(1) - Y^0(1)| D = 1) \tag{3.1}
 \end{equation}\]</span></p>
-<p>Here, <span class="math inline">\(Y^1(1)\)</span> is the outcome following the treatment, and <span class="math inline">\(Y^0(1)\)</span> is the counterfactual, i.e., the outcome without the treatment. <span class="math inline">\(E(Y^0(1)|1)\)</span>, which is the conditional mean outcome of the treatment group in absence of the treatment, is not revealed as it is the counterfactual and our job still remains to come up with a valid counterfactual.</p>
-<p>Let’s consider the classic case of DiD with two groups (treatment &amp; control) and two periods (before and after treatment).
+<p>Here, <span class="math inline">\(Y^1(1)\)</span> is the outcome following the treatment, and <span class="math inline">\(Y^0(1)\)</span> is the counterfactual, i.e., the outcome without the treatment. <span class="math inline">\(E(Y^0(1)| D = 1)\)</span>, the conditional mean outcome of the treatment group in absence of the treatment, is not revealed as it is the counterfactual. Our job still remains to come up with a valid counterfactual.</p>
+<p>The validity of the difference-in-differences estimate rest on the <strong>parallel trend assumption</strong>.
+Let’s consider the canonical case of DiD with two groups (treatment &amp; control) and two periods (before and after treatment).
 Formally the <strong>parallel trend assumption (PTA)</strong> is given as:</p>
 <p><span class="math display" id="eq:ptrend1">\[\begin{equation}
 E(Y^0(1) - Y^0(0)| D = 1) = E(Y^0(1) - Y^0(0)| D = 0)  \tag{3.2}
 \end{equation}\]</span></p>
 <p>Here, we have written the parallel trend assumption using the potential outcomes. <span class="math inline">\(Y^0(1)\)</span> is the potential outcome in the post-treatment period in absence of the treatment, <span class="math inline">\(Y^0(0)\)</span> is the potential outcome in pre-treatment period. All forms of potential outcomes are revealed (observed) except
 <span class="math inline">\(E(Y^0(1) | D = 1)\)</span>, which is average outcome for the treated group in the post-treatment period in absence of the treatment. The parallel trend assumption states that, in absence of the treatment, outcomes for the treatment and control groups after the treatment would follow similar trend to that of the pre-treatment period.</p>
-<p>How does the parallel trend assumption help in identifying the ATT $()? To see this, lets expand equation @ref{eq:att}.</p>
+<p>How does the parallel trend assumption help in identifying the ATT <span class="math inline">\((\delta)\)</span>? To see this, lets expand equation @ref{eq:att}.</p>
 <p><span class="math display">\[
 \begin{align}
-\tau = E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) \\
+\delta = E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) \\
 = E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) + E(Y^0(0)| D = 1) - E(Y^0(0)| D = 1) \\
 = \{E(Y^1(1)| D = 1) - E(Y^0(0)| D = 1)\} - \{E(Y^0(1)| D = 1) - E(Y^0(0)| D = 1)\}  \\
 = \{E(Y^1(1)| D = 1) - E(Y^0(0)| D = 1)\} - \{E(Y^0(1)| D = 0) - E(Y^0(0)| D = 0)\}  \\
@@ -197,8 +241,8 @@ E(Y^0(1) - Y^0(0)| D = 1) = E(Y^0(1) - Y^0(0)| D = 0)  \tag{3.2}
 \end{align}
 \]</span></p>
 <p>Moving from line 3 to 4 makes use of the parallel trend assumption as given in equation @ref{eq:ptrend1}. So it turns out that under the parallel
-trend assumption, DiD framework uncovers the ATT. However, the parallel trend assumption cannot be feasibly tested given that potential outcome of the treated group in absence of the treatment is not observed.</p>
-<p>If we cannot provide a feasible test for the parallel trend assumption, how can we then attest for the validity of the DiD estimate?</p>
+trend assumption, DiD framework uncovers the ATT.</p>
+<p>However, the parallel trend assumption cannot be exactly tested since it is impossible to observe the potential outcome of the treated group in absence of the treatment. If we cannot provide a feasible test for the parallel trend assumption, how can we then attest for the validity of the DiD estimate?</p>
 </div>
             </section>
 

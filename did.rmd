@@ -45,21 +45,41 @@ library(caret)    # for automating the tuning process
 
 ```
 
-# Canonical DiD
+# A Quick Introduction
 
 Let's consider that there are two groups: group $i)$ receives the treatment and group $ii)$ does not receive the treatment. 
 We term group $i)$ as the treatment group and group $ii)$ as the control or untreated group. We want to compare the two groups 
 in the pre-treatment period versus the post-treatment period. While doing so we will be utilizing both within and across variation in 
 outcomes between the two groups. 
 
-Let's take a concrete example. We are interested in evaluating the impacts of ACA-Medicaid expansion on insurance outcomes.
+## Set up
+For example, you observe units **A** and **B** in periods 1 and 2. Unit **A** is treated in period 2, whereas unit **B** does not receive 
+treatment. The variation in treatment between periods 1 and 2 is the within variation in treatment. The comparison in treatment across units **A** and 
+**B** is the across variation.  
+
+**Goal.** We would want to compare the difference in average outcomes between two periods for unit **A** with the difference in 
+average outcomes between the two periods pertaining to unit **B**.
+
+
+## An example: Evaluating the impact of Medicaid expansion on uninsured rate
+Let's take a concrete example. 
+
+Say, we are interested in evaluating the impacts of ACA-Medicaid expansion on insurance outcomes.
 Following the supreme court decision in 2012 that deemed Medicaid expansion voluntary, 26 states expanded 
-Medicaid in 2014, while the rest did not. In fact, 19 states did not expand Medicaid until 2018. We will draw our attention towards 
-expansion states plus the 19 states that did not expand Medicaid until 2018. *States that expanded Medicaid between 2014 and 2018 are 
-dropped from the sample.*    
+Medicaid in 2014, while the rest did not. In fact, 19 states did not expand Medicaid until 2018. 
+
+Data for this example comes from one of my projects and can be downloaded from github. We are looking at the county-level data, where our 
+outcome variable is the uninsured rate. We want to evaluate the ATT. What is the effect of ACA-Medicaid 
+expansion reform on uninsured rates? 
+
+We will draw our attention to the 
+states that expanded Medicaid in 2014 plus the 19 states that did not expand Medicaid until 2018. 
+*States that expanded Medicaid between 2014 and 2018 are dropped from the sample.* This is to avoid the case of 
+*bad comparison*, an issue that arises from comparing early *treated units* with *later treated* units. We will 
+reflect on this topic later.    
 
 
-Let's take a quick look at the data.
+For now, let's take a quick look at the data.
 
 ```{r}
 user = 2
@@ -73,18 +93,12 @@ if(user == 1){
 library(pacman)
 p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow)
 
-# combination of treatment and control groups
-s1  <- c("control 1", "control 2", "control 3", "treat 1", "treat 2") # all southern counties
-s2  <- c("control 1", "control 2", "treat 1", "treat 2") # exclude the non-bordering states
-s3  <- c("control 1", "treat 1") # include only the bordering counties 
-s4  <- c("control 2", "treat 2") 
 
-
-# load in all causes mortality and amenable mortality
+# load in county level uninsured rate data merged with other variables 
 mort_allcauses <-  read_feather( file.path(datapath, "NVSS_data_county_2010to2017_merged_allcauses.feather"))  %>% 
                     mutate(treat = ifelse(is.na(treat) == T, "control 3", treat))  %>% 
                     filter(yearexpand == 2014 & age == 0 & race_name == "white")  %>% 
-                    dplyr::select("countyfips", "year", "state.abb", "expand", "yearexpand", "sahieunins138")  %>% 
+                    dplyr::select("countyfips", "year", "state.abb", "expand", "yearexpand", "sahieunins138", "GovernorisDemocrat1Yes")  %>% 
                     filter(duplicated(.))   %>%  
                     arrange(countyfips, year) # sort by countyfips and year
                      # the select() function is masked 
@@ -108,11 +122,12 @@ length(table(dat_canonical$state.abb[dat_canonical$expand == 1]))
 length(table(dat_canonical$state.abb[dat_canonical$expand == 0]))
 ```
 
+
 The two groups are as follows: 
 
-i) Expansion states (treated): AR, AZ, CA, CO, CT, DE, HI, IA, IL, KY, MA, MD, MI, MN, ND, NH, NJ, NM, NV, NY, OH, OR, RI, VT, WA, WV 
+i) **Expansion states (treated)**: AR, AZ, CA, CO, CT, DE, HI, IA, IL, KY, MA, MD, MI, MN, ND, NH, NJ, NM, NV, NY, OH, OR, RI, VT, WA, WV 
 
-ii) Non-expansion states (control): AL, FL, GA, ID, KS, ME, MO, MS, NC, NE, OK, SC, SD, TN, TX, UT, VA, WI, WY
+ii) **Non-expansion states (control)**: AL, FL, GA, ID, KS, ME, MO, MS, NC, NE, OK, SC, SD, TN, TX, UT, VA, WI, WY
 
 
 # Naive estimator 
@@ -127,17 +142,20 @@ A naive estimate of ATT would just be the difference in means between the treate
 
  ```
 
-The naive estimate suggests that uninsured rate dropped by -13.64 percentage points following the Medicaid expansion in 2014. 
-But can we trust this estimate? Not really. 
+The naive estimate suggests that uninsured rate dropped by -13.66 percentage points following the Medicaid expansion in 2014. 
+But can we trust this estimate? Not really! 
 
 Here are some reasons why the naive estimate fails: 
 
-i) We are very far away from the randomized controlled trial in this case. The treatment (decision to expand Medicaid) is not random. Note that states voluntarily decided to expand Medicaid. This means that expansion 
-versus non-expansion states may be very different in terms of pre-treatment or time invariant characteristics. For example, many of the southern states 
-did not expand Medicaid. Also, pre-treatment uninsured rates of southern states are generally higher compared to non-southern states.
+i) One way to assess the validity of naive estimate is to compare the (natural) experiment on hand with the randomized control case.  
+Note that we are very far away from the randomized controlled trial in this case. The treatment (decision to expand Medicaid) is not random. Note that states voluntarily decided to expand Medicaid. This means that expansion 
+versus non-expansion states may be very different in terms of pre-treatment characteristics. For example, many of the southern states 
+did not expand Medicaid. Also, pre-treatment uninsured rates of southern states are generally higher compared to non-southern states. The naive 
+comparison can simply be capturing the difference in pre-treatment characteristics correlated with the treatment assignment.
 
 ii) The baseline outcome among the treatment group may differ significantly from the control group. For example, southern states have higher population of Blacks compared to non-South. Typically, uninsured rate is higher among Blacks. Hence, it is difficult to disentagle the influence of democraphic composition versus Medicaid expansion. 
 
+Let's evaluate the difference in uninsured rate between the expansion versus the non-expansion states in the pre-treatment year (2013).
 ```{r}
 
 naive_pre  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & dat_canonical$year < 2014]) - 
@@ -157,17 +175,45 @@ We would like to alleviate the aforementioned concerns. One way to address the s
 The canonical DiD can be seen using a $2\times 2$ matrix.
 
 ```{r}
-my_mat  <- matrix(c("Y_post_1", "Y_post_0", "Y_pre_1", "Y_pre_0"), nrow = 2, ncol = 2)
-print(my_mat)
+
+# Create the data for the 2x2 matrix
+data <- data.frame(
+  group = rep(c("Control", "Treated"), each = 2),
+  time = rep(c("Pre", "Post"), times = 2),
+  outcome = c(5, 5, 5, 7), # Example outcomes
+  label = c("Y_11", "Y_01", "Y_10", "Y_00") # Labels for matrix cells
+)
+
+# Base plot
+ggplot(data, aes(x = time, y = group)) +
+  geom_tile(fill = "lightblue", color = "black") + # Create the matrix grid
+  geom_text(aes(label = label), size = 6, fontface = "bold") + # Add cell labels
+  annotate("text", x = 1, y = 2.55, label = "Pre-Treatment", size = 5, fontface = "italic") +
+  annotate("text", x = 2, y = 2.55, label = "Post-Treatment", size = 5, fontface = "italic") +
+  annotate("text", x = 0.45, y = 2, label = "Control Group", angle = 90, size = 5, fontface = "italic") +
+  annotate("text", x = 0.45, y = 1, label = "Treated Group", angle = 90, size = 5, fontface = "italic") +
+  labs(
+    title = "2x2 Difference-in-Differences Matrix Illustration",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
 ```
 
-Note that the naive estimator simply is: $E(Y_{post}1 - Y_{post}0)$. This can be considered as the first difference. 
+Note that the naive estimator simply is: $E(Y_{11}) - E(Y_{01})$. This can be considered as the first difference. 
 
-Next, we construct the second difference across the two groups during the pre-treatment period as: $E(Y_{pre}1 - Y_{pre}0)$. 
+Next, we construct the second difference across the two groups during the pre-treatment period as: $E(Y_{10}) - E(Y_{00})$. 
 
-The difference-in-differences estimate: $\delta_{did} = $E[(Y_{post}(1) - Y_{post}(0)] - E[(Y_{pre}(1) - Y_{pre}(0)]$. This defines the term "difference-in-differences" as it involves two differences in means across the treatment and control group; one post treatment and the other prior to the treatment.   
+The difference-in-differences estimate: $\tau_{did} = $E[Y_{11} - Y_{01}] - E[Y_{10} - Y_{00}]$. 
+This defines the term "difference-in-differences" as it involves two differences in means across the treatment and control group; one post treatment and the other prior to the treatment.   
 
-In the Medicaid expansion example that involves two groups and two time periods:
+In the ACA-Medicaid expansion example that involves two groups and two time periods:
 
 ```{r}
 
@@ -185,8 +231,9 @@ The ATT is given as:
 \tau = E(Y^1(1) - Y^0(1)| D = 1) (\#eq:att)
 \end{equation}
 
-Here, $Y^1(1)$ is the outcome following the treatment, and $Y^0(1)$ is the counterfactual, i.e., the outcome without the treatment. $E(Y^0(1)| D = 1)$, which is the conditional mean outcome of the treatment group in absence of the treatment, is not revealed as it is the counterfactual and our job still remains to come up with a valid counterfactual.
+Here, $Y^1(1)$ is the outcome following the treatment, and $Y^0(1)$ is the counterfactual, i.e., the outcome without the treatment. $E(Y^0(1)| D = 1)$, the conditional mean outcome of the treatment group in absence of the treatment, is not revealed as it is the counterfactual. Our job still remains to come up with a valid counterfactual.
 
+The validity of the difference-in-differences estimate rest on the **parallel trend assumption**.
 Let's consider the canonical case of DiD with two groups (treatment & control) and two periods (before and after treatment). 
 Formally the **parallel trend assumption (PTA)** is given as:  
 
@@ -210,28 +257,38 @@ $$
 $$
 
 Moving from line 3 to 4 makes use of the parallel trend assumption as given in equation \@ref{eq:ptrend1}. So it turns out that under the parallel 
-trend assumption, DiD framework uncovers the ATT. However, the parallel trend assumption cannot be feasibly tested given that potential outcome of the treated group in absence of the treatment is not observed. 
+trend assumption, DiD framework uncovers the ATT. 
 
-If we cannot provide a feasible test for the parallel trend assumption, how can we then attest for the validity of the DiD estimate?
+However, the parallel trend assumption cannot be exactly tested since it is impossible to observe the potential outcome of the treated group in absence of the treatment. If we cannot provide a feasible test for the parallel trend assumption, how can we then attest for the validity of the DiD estimate?
 
 # DiD in multi-period set up
-So far we have only considered the canonical DiD (two groups and two period DiD framework). However, data may be available for several periods before and after the treatment implementation. In this case, we will be in the setting of multi-period DiD. For example, for the Medicaid expansion case, we have data spanning from years 2010 to 2017. We'd like to utilize whole of this data. Using the multi-period set up can be helpful for the following reasons:
+So far we have only considered the canonical DiD (two groups and two period DiD framework). 
 
-i) We can trace the dynamic effects of the treatment following the implementation. This means that we can trace the ATT estimate of Medicaid expansion for periods following its implementation, i.e., in 2014, 2015, 2016, and 2017. If the effects of expansion are increasing over time, then this setting will be very helpful. In other words, we can trace the potential heterogeneous effects of the treatment over time. 
+However, data may be available for several periods before and after the treatment implementation. In this case, we will be in the setting of multi-period DiD. For example, for the Medicaid expansion case, we have data spanning from years 2010 to 2017. We'd like to utilize all of these years rather than just years 2013 and 2014 as in the canonical DiD setting. 
 
-ii) Next, the multi-period setting allows us to provide suggestive evidence regarding the parallel trend assumption. See below. 
+Using the multi-period set up can be helpful for the following reasons:
+
+i) We can trace the dynamic effects of the treatment following the implementation. This means that we can trace the ATT estimate of Medicaid expansion for periods following its implementation, i.e., in 2014, 2015, 2016, and 2017. If the effects of expansion are increasing over time, then this setting will be very helpful in uncovering such dynamics. In other words, we can trace the potential heterogeneous effects of the treatment over time. 
+
+ii) Next, the multi-period setting allows us to way to check the validity of the parallel trend assumption. As mentioned above, the exact test for the parallel trend assumption is infeasible. However, we can deduce suggestive evidence to assess validity of this assumption. See below. 
 
 Let's first plot the mean uninsured rate between the years 2010 and 2017 across the treatment versus the control groups. 
 
 ```{r}
+# estimate the mean uninsured rate by expansion status and year
 dat_sum  <- mort_allcauses  %>%  
                 group_by(year, expand)  %>%  
                 summarize(uninsured = mean(sahieunins138))
+
 
 post_cf_treat  <- dat_sum$uninsured[dat_sum$expand == 0] + naive_pre
 dat_treat_cf  <-  data.frame(year = seq(2010, 2017, 1), expand = rep(1, 8), cf = post_cf_treat)
 dat_sum  <- dat_sum  %>% 
                 left_join(dat_treat_cf, by = c("year", "expand"))
+
+f_uninsured  <- ggplot(dat_sum, aes(x = year, y = uninsured, group = as.factor(expand), color = as.factor(expand)), shape = as.factor(expand)) + 
+        geom_point() + geom_line() + theme_minimal() + 
+        geom_vline(xintercept = 2014, linetype = "dashed") 
 
 ggplot(dat_sum, aes(x = year, y = uninsured, group = as.factor(expand), color = as.factor(expand)), shape = as.factor(expand)) + 
         geom_point() + geom_line() + theme_minimal() + 
@@ -246,7 +303,7 @@ ggplot(dat_sum, aes(x = year, y = uninsured, group = as.factor(expand), color = 
 The plot shows that uninsured rate trended parallelly between the treated and control groups prior to the expansion. The rates dropped following the 
 expansion year (2014) across both the treated and control groups, but the magnitude of drop in uninsured rate is higher for the treated group.^[The drop in uninsured rate for the control group can be explained by the implementation of other aspects of ACA such as subsidies and employment mandate.] 
 
-The DiD uses the control group as the counterfactual for the treated group. In other words, we are assuming that in absence of the treatment, outcome for the treated group would have evolved similarly to that of the control group. This is the key assumption of DiD -- the parallel trend assumption. Note that, once we difference out the pre-treatment means between the treated and controls groups, we obtain the dashed line, which is the counterfactual for the treated group. In this case, the counterfactual line overlaps the average outcome for the treated group, suggesting that outcome was trending similarly across the two groups during the pre-treatment period. Loosely speaking, ATT is the average gap between the outcome for the treated group and the counterfactual outcome during the post-treatment period. 
+The DiD uses the control group as the counterfactual for the treated group. In other words, we are assuming that in absence of the treatment, outcome for the treated group would have evolved similarly to that of the control group. This is the key assumption of DiD -- the parallel trend assumption. Note that, once we difference out the pre-treatment means between the treated and controls groups, we obtain the dashed line, which is the counterfactual for the treated group. In this case, the counterfactual line overlaps the average outcome for the treated group, suggesting that outcome was trending similarly across the two groups during the pre-treatment period. Loosely speaking, ATT is the average gap between the outcome for the treated group (solid blue line) and the counterfactual outcome (dashed line) during the post-treatment period. 
 
 As previously mentioned, we are unable to provide an actual test for parallel trend assumption due to the missing data on treated observations following the treatment in a state when treatment is absent. This does not mean that we are absolutely helpless. There are a list of things that can be done to provide suggestive evidence in favor of or lack of parallel trend. They are: 
 
@@ -254,11 +311,852 @@ i) Check pre-treatment summary statistics across treatment and control groups. S
 
 ii) Usually trends in outcomes across treated and control groups are assessed to evaluate parallel trends. If outcome is trending parallely between the two groups prior to the treatment, then it provides evidence in favor of PTA. However, concluding that PTA does not hold in a case of non-parallel trend is a narrow assessment at the best, since this approach merely depicts unconditional trends. PTA may have more leverage once (pre-treatment) covariates are accounted for. 
 
-iii) The next approach that has been used widely is the event-study. We will discuss this approach soon.
+iii) The next approach that has been used widely is the **event-study**. We will discuss this approach soon.
 
 
 In most cases, unconditional parallel trend assumption may not be very convincing. Why?
 
-# Conditional PTA 
+# Conditional Parallel Trend 
+
+We have discussed the parallel trend assumption already. This is the unconditional parallel trend assumption, which assumes that the 
+**parallel trend assumption** holds without accounting for any covariates. 
+
+One way to bolster the credibility of the parallel trend assumption is to claim that it only holds conditional on covariates. For example, since 
+the decision of whether to expand Medicaid was under the states' discretion, we may want to condition on a state's partisan leaning, i.e. Democrat versus Republican Governor. 
+
+In the canonical model, the parallel trend assumption can be modified to obtain the conditional parallel trend assumption. This means we 
+are assuming that the parallel trend only exists once conditioned on covariates. This is given as below.
+
+\begin{equation}
+E(Y^0(1) - Y^0(0)| D = 1, X) = E(Y^0(1) - Y^0(0)| D = 0, X)  (\#eq:ptrend2)
+\end{equation}
+
+The conditional parallel trend is easy to understand when covariates required are small in number and if 
+covariates are discrete. For example, say, in the case of ACA-Medicaid example, the parallel trend 
+assumption holds once accounting for state's partisan leaning in 2013 (pre-treatment). What does this mean exactly? 
+This would be equivalent to running two different DiD estimates: one for the group with Democrat Governor and the 
+other for the Republican governor. This gives two DiD estimates. Next, we average these two estimates to get the DiD 
+estimate for the whole sample.
+
+GovernorisDemocrat1Yes is a variable that indicates whether a state's governor is of the Democrat party.
+
+```{r}
+# we need to first get the state partisan data for 2013 and merge with the main data
+# note that it is recommended to conduct all data cleaning in separate files. 
+# we are doing this in a fly, so I break that rule. 
+dat_gov2013  <- dat_canonical  %>% 
+                    filter(year == 2013)  %>% 
+                    dplyr::select(c(countyfips, GovernorisDemocrat1Yes))  %>% 
+                    rename(GovernorisDemocrat1Yes2013 = GovernorisDemocrat1Yes)
+
+dat_canonical  <- dat_canonical  %>% 
+                    merge(dat_gov2013, by = c("countyfips"), all.x = TRUE)
+
+# get the first and second differences for states with democrat governor in 2013
+first_diff_dem  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & 
+                    dat_canonical$year == 2014 & 
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 1], na.rm = T)  - 
+                    mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & 
+                    dat_canonical$year == 2014 &
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 1], na.rm = T)
+
+second_diff_dem  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & 
+                    dat_canonical$year == 2013 & 
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 1], na.rm = T) - 
+                    mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & 
+                    dat_canonical$year == 2013 &
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 1], na.rm = T)
+
+# get the first and second differences for the state with the republican state in 2013
+first_diff_rep  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & 
+                    dat_canonical$year == 2014 & 
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 0], na.rm = T)  - 
+                    mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & 
+                    dat_canonical$year == 2014 &
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 0], na.rm = T)
+
+second_diff_rep  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & 
+                    dat_canonical$year == 2013 & 
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 0], na.rm = T)   - 
+                    mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & 
+                    dat_canonical$year == 2013 &
+                    dat_canonical$GovernorisDemocrat1Yes2013 == 0], na.rm = T)
+
+did_dem  <- first_diff_dem - second_diff_dem
+
+did_rep  <- first_diff_rep - second_diff_rep
+
+# fraction with Democrat Governor
+gov_dem  <- mean(dat_canonical$GovernorisDemocrat1Yes2013, na.rm = T) 
+
+# weighted average
+did_estimate  <- (gov_dem * did_dem) + (1 - gov_dem) * did_rep
+
+# conditional DiD estimate
+cat("did estimate (controling for state partisan leaning in 2013) = \n", did_estimate)
+
+# unconditional DiD estimate (note: we already have this from previous estimation)
+cat("did estimate (no controls) = \n", naive - naive_pre)
+```
+
+
+What we observe is that DiD estimate that accounts for a state's political leaning in 
+2013 is slightly lower than the unconditional version. The difference is not too large in this case. 
+However, I'd still be inclined to trust the conditional DiD estimate. 
+
+Why so?
+
+This is because the condition forces comparison across the treatment vs. control units with the same political leaning in 2013.
+For example, treated units under the Democrat regime are compared to control units also under the Democrat regime. The same goes with 
+treated and control units falling under the Republican Governor in 2013. Since, ACA 
+was highly politicized and also since Democrat vs. Republican states are quite different in socio-economic factors, we 
+need to make sure that we are comparing units with similar political leaning.
+In other words, we are conducting relatively more similar comparison.  
+
+
+## Some concerns with controls 
+
+Ok, we sort of argued that conditional DiD may perform better in the real world. 
+Like everything, this does not come easily. 
+
+Here are some concerns regarding including covariates.
+
+1. First of all, we don't always clearly know what to control for in the real world. I previously made the 
+case that a state's political leaning is an important variable and one should account for it. However, there 
+might be other variables that I'm completely missing out. We can use economic reasoning, past studies in the 
+literature, as well as data based methods (e.g., double lasso for variable selection) to decide on controls. 
+
+2. There are *good* controls and there are *bad* controls. Let's say you think its important to improve 
+comparability between the treated and control units. To do so, you pick income in 2014 as a control. This, I'd argue, 
+is an example of a *bad* control. Why? Its because income in 2014 might be affected by the ACA-Medicaid expansion, which can 
+lead to bias in the estimate of interest. We'd want to make sure that the controls are not directly affected by the reform itself. 
+This is why mostly researchers rely on pre-treatment variables rather than post-treatment variables as controls. 
+
+3. Earlier, we looked at the case of a binary variable (Republican vs. Democrat Governor in 2013) as a covariate. However, in this 
+setting, if the number of control increases, then the sample space thins out fairly quickly. Say, we add the following binary controls: 
+$i)$ urban|rural, $ii)$ south|non-south, $iii)$ high|low uninsured unit based on 2013 (baseline) uninsured rates. Here, we'd have $2^{4}$ different 
+splitting of the sample. If you decide to add in more controls, the number of subgroups will increase exponentially. Note that we've only considered 
+binary controls so far. This issue worsens if you add in continuous variables as controls. This is known as the *curse of dimensionality*.
+
+There are several ways to avoid this curse. One relatively less taxing approach is to incorporate controls in the regression format. However, this 
+leads to its own issues. Firstly, the covariates are being linearly incorporated in the regression, which leads to a linear functional form assumption. 
+Second, if the effect of the reform varies along the covariate, then this might lead to a bias on the estimate of interest. Hence, we'd want to incorporate controls in a more flexible way using the inverse probability weighting for DiD or Doubly Robust framework tailored for DiD. But more on this later!
+
+
+
+# The $2 \times 2$ Difference-in-Differences Estimate
+
+Now that we've disscussed the difference-in-differences framework (mostly canonical DiD), 
+we would like to look at various ways of estimating DiD. As we've seen, (a canonical) DiD estimation can simply be done non-parametrically by 
+using the appropriate differences in means. Another way to do it is by using the regression framework, which 
+provides several advantages including but not limited to: $i)$ estimation of standard errors; $ii)$ ease of accounting for 
+necessary covariates; and $iii)$ feasible estimation of DiD with multiple treatment groups with staggered treatment.
+
+Let's begin with the canonical DiD framework using the regression format. I'm going to set it up as the following:
+
+\begin{equation}
+\label{eq:DiD_reg}
+Y_{it} = \alpha + \tau Post_{it} \times D_{i} + \sigma Post_{it} + \eta D_{i} + \epsilon_{it} 
+\end{equation}
+
+Let's rewrite the DiD estimator from before as:
+
+$\tau_{did} = \underbrace{E[Y_{11} - Y_{10} | D = 1]}_{first\; difference} - \underbrace{E[Y_{01} - Y_{00} | D = 0]}_{second\; difference}$
+
+We'd want to see whether estimation of $\tau$ in the regression above uncovers the DiD estimate. Let's look at 
+the following conditional expectations. 
+
+1). expected outcome for treated group post treatment: $E(Y | D = 1, Post = 1) = \alpha + \tau + \sigma + \eta$
+
+2). expected outcome for treated group pre treatment: $E(Y | D = 1, Post = 0) = \alpha +  \eta$
+
+3). expected outcome for control group post treatment: $E(Y | D = 0, Post = 1) = \alpha + \sigma$
+
+4). expected outcome for control group pre treatment: $E(Y | D = 0, Post = 0) = \alpha$
+
+If you do the math, the first difference is given as $\tau + \sigma$ and the second difference is $\sigma$. The DiD -- the difference 
+between the first and the second difference -- is $\tau$. Hence, the estimation of $\tau$, in the regression framework above, 
+is the DiD estimate.
+
+Let's apply this to our ACA-Medicaid example. 
+
+```{r}
+
+# lets create the post, treat, and the interaction between the post and treat (labeled as did)
+dat_canonical  <- dat_canonical  %>% 
+                      mutate(post = ifelse(year >= 2014, 1, 0), 
+                             treat = ifelse(expand == 1, 1, 0), 
+                             did = post * treat)
+
+reg_did  <- lm(sahieunins138 ~ did + post + treat, data = dat_canonical)
+summary(reg_did)
+
+did  <- naive - naive_pre
+print(did)
+```
+
+
+Note that the difference in mean did and the regression coefficient on the interaction between 
+$Post \times treat$ are the same. Plus, we get the standard errors as well. Of course, the standard errors 
+are not adjusted for clustering. The errors of observations within a cluster (the ground at which the treatment is 
+implemented, in our case state) will be correlated, so we need to account for it. The way to do it is to cluster the 
+standard error at the state level. This can be done using the fixest library and feols command.  
+
+```{r}
+
+reg_did_cluster  <- feols(sahieunins138 ~ did + post + treat, data = dat_canonical, cluster = ~state.abb)
+summary(reg_did_cluster)
+
+```
+
+Note that the did coefficient remains unchanged. However, the standard error is inflated after clustering the errors at the 
+state level.
+
+
+# Event study model
+
+As we have discussed, the validity of DiD estimate depends on the parallel trend assumption. Since the *direct test* for 
+parallel trend requires the potential outcome of treated unit in absence of the treatment, it is not feasible. Although 
+we are not going to be able to directly test the parallel trend, we can provide suggestive evidence in favor of (or lack of) parallel 
+trend. For this, we need multi-period data, particularly for periods prior to the implementation of the treatment. 
+
+A simple way to assess parallel trend is to evaluate the unconditional means across the treated and untreated units 
+(expansion and non-expansion states in our case). This is shown in Section 4 (DiD in multi-period set up). I've included the 
+figure here. 
+
+```{r}
+f_uninsured
+```
+
+Here, we see that the uninsured rates between the expansion and non-expansion states trended similarly (or parallely) prior to the treatment. This allows us to argue that *trends in uninsured rate would've remained similar (or would not differ systematically) in absence of the ACA-Medicaid reform*. This by far is the simplest but yet powerful way to argue parallel trend assumption in practice. However, note that units in non-expansion 
+states on average had higher uninsured rate compared to their counterparts in the expansion states even prior to the reform. Ideally, we would want treated and control units to have similar baseline features. This is where regression comes into play. Using regression, we can evaulate a difference-in-differences model by accounting for *necessary* covariates.^[Again what is *necessary* is a subject to debate, which we will stay away from for now.] Moreover, it allows us to evaluate dynamic effects of the treatment, i.e., the impacts of the treatment over time (1st period, 2nd period, and so on).
+
+The event study model can be written as:
+
+\begin{equation}
+\label{eq:DiD_eventstudy}
+Y_{it} = \alpha + \underbrace{\sum_{j = -k}^{k}}_{j \neq -1}  \tau_j \times 1(\underbrace{t - G}_{r} = j) \times D_i + \sigma_{t} + \eta D_{i} + \epsilon_{it}
+\end{equation}
+
+So what are these notations here?
+
+- $\alpha$ is the intercept 
+
+- $1(\underbrace{t - G}_{r} = j)$: This is an indicator that turns on (takes the value 1) when the relative time $r$ in the data is equal to $j$, and turns off otherwise (takes the value 0). The relative time, $r$, is simply the difference between the period $t$ and the implementation year of the reform $E$. For simplicity, I have the minimum and maximum of relative time as $-k$ and $k$, respectively. But of course, this can vary in practice. The omitted category is the year before the reform (i.e., when $r = -1$). We'll discuss more about the omitted category later on.
+
+- $\sigma_t$: Is the time fixed effects. It captures the changes that are common across treatment and control units over time.
+
+- $D_i$: Is the fixed effects for treated/control units. In practice, treatment and control units can fundamentally differ in several characteristics. Accounting for $D_i$ separately captures the average difference in the outcome between treatment and control units that does not change over time (time invariant). In other words, controling for $D_i$ accounts for time invariant heterogeneity across the treatment vs. control groups. For example, we saw that expansion units on average had lower uninsured rate even prior to the reform compared to the treated units. For instance, this aspect of the difference in outcomes across the two groups is accounted by $D_i$. 
+
+From a specification perspectice,
+the main difference between the canonical DiD specification and the event study specification is the incorporation 
+of the term $1(\underbrace{t - G}_{r} = j)$, which is interacted with the treatment indicator, $D_i$. 
+This allows us to evaluate the effect of the treatment separately for a given period following (or before) the treatment implementation.
+Such dynamic effects are picked up by $\widehat{\tau_t}$.  
+
+Let's try and break down whats going on in the event study specification. 
+
+1. First, it is important to realize the role of the omitted category. In the event study specification above, 
+I've dropped the period prior to the reform. Note that this is essential from a theroretical standpoint, since inclusion of 
+all periods would result to a *fully saturated model* and create multicollinearity. 
+
+2. Dropping the period prior to the treatment implementation uses this period as the relative period.
+
+3. From point 2, we can think of the event-study specification as estimating several DiD type models, where the second difference 
+is fixed and pertains to the omitted period, while the period of interest varies. Let me elaborate on this. 
+
+To see this, note that when $t - G = -1$, the conditional expectation for the treated group is $E(Y | D = 1, t = G - 1) = \alpha + \sigma_{(G-1)} + \eta$ and 
+and for the control group is: $E(Y | D = 0, G-1) = \alpha + \sigma_{(G-1)}$. 
+
+$E(Y | D = 1, G - 1) - E(Y | D = 0, G-1)$ is synonymous to the 
+second difference: i.e., the difference in conditional means between the treatment and control units in the period before the treatment implementation. For the first difference, let's look at the relative period $t - G = 0$, the period of the reform implementation. The conditional expectation for the treatment group is: 
+$E(Y | D = 1, t = G) = \alpha + \tau_0 + \sigma_{G} + \eta$ and that for the control group is: $E(Y | D = 0, t = G) = \alpha + \sigma_{G}$. Here, the first difference is: $E(Y | D = 1, t = G) -  E(Y | D = 0, t = G)$. 
+
+The DiD estimand during the period of the reform, $r=0$, is given as: 
+
+\begin{equation}
+\underbrace{E(Y | D = 1, t = G) - E(Y | D = 0, t = G)}_{first\; difference} - \underbrace{E(Y | D = 1, t = G - 1) - E(Y | D = 0, t = G-1)}_{second\; difference}
+= \tau_0
+\end{equation}
+
+The DiD estimand for the period following the reform $(r= 1)$ is given as: 
+
+\begin{equation}
+\underbrace{E(Y | D = 1, t = G+1) - E(Y | D = 0, t = G+1)}_{first\; difference} - \underbrace{E(Y | D = 1, t = G - 1) - E(Y | D = 0, t = G-1)}_{second\; difference}
+= \tau_1
+\end{equation}
+
+Similarly, we can think of the event study model as nesting the DiD estimation pertaining to the relative periods, $r=2, \; 3$ and so on.
+
+
+This way, the event study specification allows us to estimate period specific treatment effects from relative time period $-k$ to $k$ in relation to 
+the conditional mean difference between the treated and control groups a period prior to the treatment implementation. Following the estimation of 
+the event study model, we will have two sets of estimates: i) $\tau_{-k}, \; \tau_{-k+1}, ..., \; \tau_{-2}$, and ii) $\tau_{1}$, $\tau_{2}$, ..., $\tau_{k}$. The estimation of $\tau$s prior to the treatment allows us to make inference regarding the parallel trend assumption. If $\widehat{\tau}_j$ for $j<-1$ is close to zero, then it provides **suggestive evidence** that the outcomes between the treatment and control units are trending similarly prior to the treatment.  
+
+Let's estimate the event study model for the ACA-Medicaid data. Note that we are using the larger data set where year spans from 2010 to 2018.
+
+1. First create the relative time variable. 
+ ```{r}
+ mort_allcauses  <- mort_allcauses  %>% 
+                      mutate(yeararound = year - yearexpand) 
+
+# view 
+table(mort_allcauses$yeararound)
+ ```
+
+2. Note that the relative time spans from -4 to 3. Since, we are only considering the states that implemented ACA-Medicaid expansion 
+in year 2014, -4 pertains to year 2010, -3 to 2011, and so on. Next, let's create relative time indicators and interact them with the expansion status. 
+In the model, this pertains to $1(\underbrace{t - G}_{r} = j) \times D_i$ part. 
+
+ ```{r}
+ mort_allcauses  <- mort_allcauses  %>% 
+                        mutate(rel_pre4 = ifelse(yeararound == -4, 1, 0), # indicator for r = -4
+                               rel_pre4 = rel_pre4 * expand, # interact the indicator for r = -4 with expansion status
+                               rel_pre3 = ifelse(yeararound == -3, 1, 0), 
+                               rel_pre3 = rel_pre3 * expand,
+                               rel_pre2 = ifelse(yeararound == -2, 1, 0), 
+                               rel_pre2 = rel_pre2 * expand,
+                               rel_pre1 = ifelse(yeararound == -1, 1, 0), 
+                               rel_pre1 = rel_pre1 * expand,
+                               rel_post0 = ifelse(yeararound == 0, 1, 0), 
+                               rel_post0 = rel_post0 * expand,
+                               rel_post1 = ifelse(yeararound == 1, 1, 0), 
+                               rel_post1 = rel_post1 * expand,
+                               rel_post2 = ifelse(yeararound == 2, 1, 0), 
+                               rel_post2 = rel_post2 * expand,
+                               rel_post3 = ifelse(yeararound == 3, 1, 0), 
+                               rel_post3 = rel_post3 * expand)
+ ```
+
+ 3. Now thats done, let's specify the model and estimate it using OLS.
+
+ ```{r}
+ # quick look at the data
+ head(mort_allcauses)
+
+ # specify the event study model
+ reg_es  <- lm(sahieunins138 ~ rel_pre4 + rel_pre3 + rel_pre2 +
+                               rel_post0 + rel_post1 + rel_post2 + rel_post3 +
+                               factor(state.abb) + 
+                               factor(year), 
+                               data =  mort_allcauses
+                               )
+
+# print summary of the results
+ summary(reg_es)
+
+ ```
+
+4. Let's cluster the standard error at the state level. I'm going to do this using feols command from 
+fixest package. Using feols you can automatically create 
+the relative time indicators and interact them with the treatment status as in the coding below.
+
+ ```{r}
+
+ reg_es_cluster  <- feols(sahieunins138 ~ i(yeararound, expand, ref = -1) | year + state.abb, 
+                               data =  mort_allcauses, cluster = ~state.abb
+                               )
+
+ summary(reg_es_cluster)
+
+ ```
+
+ We see that the relative time estimates from 3 and 2 are equal to one another. However, the clustered standard errors 
+ are inflated.  
+
+ 5. We can then plot the event study estimates.
+
+ ```{r}
+ # Extract coefficients and confidence intervals
+event_study_results <- fixest::coefplot(reg_es_cluster, main = "Event Study Estimates")
+
+
+event_study_results[[1]]
+ ```
+
+ We see that the estimates on $\tau_j$ for $j<-1$ is close to zero and statistically insignificant at the 
+ conventional levels. This provides a suggestive evidence in favor of the parallel trend assumption. 
+ However, the estimates following the reform implementation drops drastically, demonstrating the 
+ reduction in uninsured rate due to the ACA-Medicaid expansion.
+
+# Two way fixed effect (TWFE) Revisited
+
+We have already seen the TWFE and its importance in accounting for unobserved heterogeneity.
+The TWFE is heavily linked to the difference-in-differences setting (perhaps mistakenly). 
+However, note that the TWFE estimator is not equal to 
+the DiD estimator unless the treatment effects are homogeneous across both units and time. 
+
+\begin{equation}
+\label{eq:TWFE}
+Y_{it} = \theta_{t} + \eta_{i} + \alpha D_{it} + v_{it} \;.....TWFE
+\end{equation}
+
+Here, $Y_{it}$ is the outcome of individual $i$ in period $t$ ($t \in \{1,\;2,\;...,\;T\}$)
+
+$\theta_{t}$ is the time fixed effects; $\eta_{i}$ is the unit fixed effect
+
+$D_{it}$ captures whether individual $i$ is treated in time $t$
+
+Equation above is the TWFE. 
+
+In two groups and two-period setting, the above equation can be estimated in a number of different ways. 
+Let's simulate data to look. 
+
+Assign treatment effect = 20
+
+**Data Arrange 1: Demeaning to get rid of $\eta_i$ from TWFE equation (Within Estimator)**
+
+Let's look at the concept behind the within estimator.
+In the two-period two-group case, TWFE can be written as:
+\begin{equation}
+Y_{i1} = \theta_{1} + \eta_{i} + \alpha D_{i1} + v_{i1} \nonumber
+\\
+Y_{i2} = \theta_{2} + \eta_{i} + \alpha D_{i2} + v_{i2}
+\end{equation}
+
+where, $i$ is represented by 1 (treatment group) and 0 (untreated group). 
+
+Adding the sub-equations and dividing by the number of time period $(T=2)$ yields:
+\begin{equation}
+\frac{Y_{i1}+Y_{i2}}{2}  = \frac{\theta_{1}+\theta_{2}}{2} + \frac{2\eta_{i}}{2} + \frac{\alpha (D_{i1}+D_{i2})}{2} 
++ \frac{v_{i1}+v_{i2}}{2} \\
+Y_{i}  = \frac{\theta_{1}+\theta_{2}}{2} + \eta_{i} + \alpha D_{i} + v_{i} \nonumber
+\end{equation}
+
+
+Substracting the above equation from the TWFE yields the following:
+\begin{equation}
+Y_{it}-Y_{i} = \theta_{t} - \frac{\theta_{1}+\theta_{2}}{2} + \alpha (D_{it}-D_i) + (v_{it}-v_i)
+\end{equation}
+
+The code shows data arranging for the within estimator. 
+```{r}
+###########################
+# Treatment group
+###########################
+treat_t <- rep(1, 1000)
+period_t <- rep(c(0, 1), each = 500)
+id <- rep(seq(1, 500, 1), 2) #for the panel nature of data
+y_treat <- 20 * period_t + 7  + rnorm(1000, 0, 5) 
+treatdata <- data.frame(treat = treat_t, period = period_t, Y = y_treat, id = id)
+treatdata <- treatdata %>% mutate(Ytrans = Y - mean(Y),
+                                  D = treat * period - mean(treat * period))
+
+##########################
+# control group
+##########################
+control_t <- rep(0, 1000)  
+period_c <- rep(c(0, 1), each = 500)
+id <- rep(seq(501, 1000, 1), 2)
+y_control <- 3 +  rnorm(1000, 0, 5) 
+controldata = data.frame(treat = control_t, period = period_c, Y = y_control, id = id)
+controldata <- controldata %>% mutate(Ytrans = Y - mean(Y),
+                                  D = treat * period - mean(treat * period))
+
+data = rbind(treatdata, controldata)
+```
+
+
+**Data Arrange 2: First differencing**
+
+Let's briefly look at the concept behind first differencing.
+Write TWFE as: 
+\begin{equation}
+Y_{i1} = \theta_{1} + \eta_{i} + \alpha D_{i1} + v_{i1} \nonumber
+\\
+Y_{i2} = \theta_{2} + \eta_{i} + \alpha D_{i2} + v_{i2}
+\end{equation}
+
+for $i \in \{0,\;1\}$. 
+
+Then, 
+\begin{equation}
+Y_{i2} - Y_{i1} = \theta_{2} - \theta_{1} + \alpha (D_{i2}-D_{i1}) + (v_{i2} - v_{i1}) 
+\end{equation}
+
+
+The code shows data arranging for the first difference estimator.
+```{r}
+# First the treated group
+fd_treat1 <- treatdata %>% filter(period == 0) %>% dplyr::select(-c("Ytrans"))
+colnames(fd_treat1) <- c("treat1", "period1", "Y1", "id")
+fd_treat2 <- treatdata %>% filter(period == 1)%>% dplyr::select(-c("Ytrans"))
+colnames(fd_treat2) <- c("treat2", "period2", "Y2", "id")
+fd_treat <- merge(fd_treat1, fd_treat2, by = "id", all.x = T)
+fd_treat <- fd_treat %>% mutate(Y_FD = Y2 - Y1,
+                                D = (period2 * treat2) - (period1 * treat1)) 
+
+# Then the control group
+fd_control1 <- controldata %>% filter(period == 0) %>% dplyr::select(-c("Ytrans"))
+colnames(fd_control1) <- c("treat1", "period1", "Y1", "id")
+fd_control2 <- controldata %>% filter(period == 1)%>% dplyr::select(-c("Ytrans"))
+colnames(fd_control2) <- c("treat2", "period2", "Y2", "id")
+fd_control <- merge(fd_control1, fd_control2, by = "id", all.x = T)
+fd_control <- fd_control %>% mutate(Y_FD = Y2 - Y1,
+                                D = (period2 * treat2) - (period1 * treat1)) 
+
+FDdata = rbind(fd_treat, fd_control)
+```
+
+# Various ways of estimation
+
+1. Typical Estimation
+```{r}
+reg1 <- lm(Y ~ treat:period + treat + period, data)
+summary(reg1)
+```
+
+2. Within Estimator
+
+```{r}
+reg2 <- lm(Ytrans ~ D + period, data)
+summary(reg2)
+```
+
+3. First Difference
+```{r}
+reg3 <- lm(Y_FD ~ D, FDdata)
+summary(reg3)
+```
+
+4. Imputation method
+
+This traces the counterfactual (untreated potential outcome) of the treated group using paths of the untreated group. 
+Using the first difference (or within transformation):
+\begin{equation}
+Y_{i2}(0) - Y_{i1}(0)  = \theta_{2} - \theta_{1} + v_{i2}-v_{i1} \nonumber
+\\
+\Delta Y_{it}(0) = \theta_t + \Delta v_{it}
+\end{equation}
+
+where, $\theta_{t-1}$ is normalized to 0. Estimate the above equation using only the untreated group and estimate 
+$\hat{\theta_t}$. This is the time 
+trend in the untreated group. The parallel trend assumption states that the outcome in treated group would have moved 
+in a similar way to the untreated group in absence of the treatment. So, let's use $\hat{\theta_t}$ to adjust for the 
+pathway in the treated group and find the potential outcome in the treated group in absence of the treatment. Note that 
+$\hat{\theta_t} = \frac{1}{n_0}\sum_1^n (1-D_i) \Delta Y_{it}$.
+
+\begin{equation}
+\hat{Y_{it}(0)} = Y_{it-1} + \hat{\theta_t}
+\end{equation}
+
+Then write $ATT_{imp}$ as:
+
+\begin{equation}
+ATT_{imp} = \frac{1}{n_1}\sum_{1}^{n}D_{i}(Y_{it}-\hat{Y_{it}(0)}) \\
+=  \frac{1}{n_1}\sum_{1}^{n}D_{i}(Y_{it}-({Y_{it-1}+\hat{\theta_{t}}}) ) \\
+=  \frac{1}{n_1}\sum_{1}^{n}D_{i}(Y_{it}-({Y_{it-1}}) - \frac{1}{n_0}\sum_{1}^{n}(1-D_{i})(Y_{it}-({Y_{it-1}}) \\
+=  \frac{1}{n_1}\sum_{1}^{n}D_{i}\Delta Y_{it} - \frac{1}{n_0}\sum_{1}^{n}(1-D_{i}) \Delta Y_{it}
+
+\end{equation}
+
+```{r}
+reg <- lm(Y_FD ~ period2, subset(FDdata, treat1 == 0))
+FDdata$yhattreat = FDdata$Y1 +  reg[[1]][[1]]
+FDdata$imp = FDdata$Y2 - FDdata$yhattreat
+mean(FDdata$imp[FDdata$treat1 == 1])
+```
+
+5. Frisch-Waugh Theorem 
+
+
+
+
+# Multi Period, Multi Group and Variation in Treatment Timing
+
+```{r}
+trueeffect <- 10
+intercep <- 10
+N <- 5000
+T <- 20
+early <- 5
+late <- 15
+
+datagen <- function(T, N, group){
+  timeT <- rep(1:T, each = N)
+  treatT <- rep(1, length(timeT))
+  groupT <- rep(group, length(timeT))
+  df <- data.frame(time = timeT, treat = treatT, group = groupT)
+  return(df)
+}
+
+dftreat <- datagen(T, N, 1) # early treatment
+dftreat2 <- datagen(T, N, 2) # late treatment
+dfuntreat <- datagen(T, N, 3) # untreated
+
+data <- rbind(dftreat, dftreat2, dfuntreat)
+
+# generating policy variables 
+data <- data %>% 
+        mutate(policy = 0, policy = ifelse(group == 1 & time > early, 1, policy), policy = ifelse(group == 2 & time > late, 1, policy),
+        dumtreat1 = ifelse(group == 1, 1, 0), dumtreat2 = ifelse(group == 2, 1, 0), dumtreat3 = ifelse(group == 3, 1, 0))
+
+e <- rnorm(nrow(data), 0, 5)
+
+data <- data %>% mutate(Y = 1 + trueeffect*dumtreat1*policy + trueeffect*dumtreat2*policy + time + dumtreat1*2 + dumtreat2*4 + e,
+                        Ypot = 1 + 1*dumtreat1*policy + 1*dumtreat2*policy + time + dumtreat1*2 + dumtreat2*4 + e)
+
+datasum <- data.frame(data %>%
+            group_by(group, time) %>%
+            summarise(meanY = mean(Y), meanYpot = mean(Ypot))
+)
+
+# data for potential outcome
+datasumpot <- datasum %>% dplyr::select(c(group, time, meanYpot)) %>% 
+                             mutate(group = 10*group)
+datasum <- datasum %>% dplyr::select(-c(meanYpot))
+colnames(datasumpot) <- c("group", "time", "meanY")
+
+datasum <- rbind(datasum, datasumpot)
+
+vlines <- data.frame(xint = c(6, 16))
+
+datasum$group = factor(datasum$group)
+ggplot(datasum, aes(x = time, y = meanY, group = group)) + geom_line(aes(linetype = group, color = group),size = 2) + #geom_point(aes(shape = group, size = 3)) + 
+scale_linetype_manual(name = "Linetype",values = c("1" = 1, "2" = 1, "3" = 1, "10" = 2, "20" = 2, "30" = 2), guide = "none") + 
+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(color = "black"), legend.position = "none") + xlab("period") + ylab("Outcome") + 
+geom_vline(data = vlines, aes(xintercept = xint), linetype = "dashed") + 
+annotate(x = c(5.2, 15.2, 2, 9, 17), y = c(0, 0, 35, 35, 35), label = c(bquote(t[k]^"*"), bquote(t[l]^"*"), "PRE(k)", "MID(k,l)", "POST(l)"), geom = "text", parse = TRUE)
+```
+
+The figure above depicts the case of three groups: $i)$ early treated (treatment starting from the $6^{th}$ period, $t_{k}^{*}$); 
+$ii)$ late treated ($16^{th}$ period, $t_{k}^{*}$); and untreated group. The figure provides an example of staggered treatment adoption. 
+This means that units are treated at different points in time and once treated they are always treated.
+The solid lines represent observed outcomes, whereas the dotted lines are the potential outcomes. For the untreated
+group and not yet treated periods the observed outcomes are also the potential outcomes.
+
+To go further, let's introduce some notations.
+
+- *$T$* is defined as the number of periods. \
+- Groups are defined based on the timing of the treatment of the unit. *$G_{i}$* indicates the group of the unit and 
+all set of groups include $\zeta \in \{2,\; ...., T,\;T+1\}$. Units that are treated in period 1 are dropped in this setup. 
+One reason to do so is that no pretreatment outcomes are observed for this group, which means that it is not possible to 
+use the parallel trend assumption. *T+1* group is used to denote units that remain untreated throughout the period 
+(never treated group). It is possible that eventually all units are treated. In this case, one can limit the data to time 
+period with not yet treated group.      
+- $Y_{it}(g)$ is denoted as the outcome of unit $i$ observed at time $t$ when the unit was treated in period $g$. 
+- $Y_{it}(0)$ is the potential outcome of unit $i$ at time $t$ had the unit not been treated. 
+
+There are a few assumptions that we need to consider. There are more assumputions highlighted in @callaway2022 paper. But 
+I will focus on two main ones.
+
+*Staggered Treatment Assignment.* For all units and for all $t = 2,\;3,...,\;T$, $D_{it-1}=1$ implies $D_{it}=1$. This 
+means that once a unit is treated, it remains treated. 
+
+*Parallel Trend Assumption for Multi Period and Variation in Treatment Timing.* For all $t = 2,\;3,...,\;T$
+
+\begin{equation}
+E[\Delta Y_{it}(0)|G=g]=E[\Delta Y_{it}(0)]
+\end{equation} 
+
+This basically says that the average pathway of group g if it was untreated 
+(potential outcome) would be same as the average pathway of other group (untreated) for each time period. This holds for 
+each group $g \in \zeta$. 
+In other words, this can be thought as an extension of the parallel trend assumption for $2 \times 2$, but in this case 
+it should hold for each $g \in \zeta$ and for each time period $t$. 
+The parallel trend described in the assumption above is highly general, meaning that it assumes parallel trends for any groups.
+However, this may not be the case as groups can be very different in observed characteristics and can have different pathways 
+in absence of the treatment. 
+Hence, there are other versions of parallel trend assumption to consider:
+
+    a. parallel trend holds only for groups with similar observed characteristics 
+    b. parallel trend holds only for certain time periods 
+    c. parallel trend holds only for those group who ever participate in the treatment 
+
+## Problem with TWFE in Multiple Group with Treatment Timing Variation
+To understand what TWFE is estimating, write the potential outcome as:
+
+\begin{equation}
+Y_{it}(0) = \theta_{t} + \eta_{i} + v_{it}..... (A)
+\end{equation}
+
+Then write the TWFE using the potential outcome As
+
+\begin{equation}
+Y_{it} = Y_{it}(0) + 1\{t \geq G_{i}\}(Y_{it}(G_i)-Y_{it}(0))..... (B)
+\end{equation}
+
+Note that substituting $(A)$ into $(B)$ gives the TWFE.
+Let's look at the terms in the above equation closely. $ 1\{t \geq G_{i}\}$ represents $D_{it}$ and  
+$(Y_{it}(G_i)-Y_{it}(0))$ is the $\alpha$ parameter in equation TWFE. The equality $(Y_{it}(G_i)-Y_{it}(0))=\alpha$
+indicates that the effects of being treated is the same for each group in $\zeta$ and the effects do not 
+vary over time. In other words, the effects of treatment are homogeneous across units and over time. 
+
+## What is TWFE Estimating when there is Treatment Timing Variation?
+
+Using @goodman2021's decomposition the TWFEDD estimate $\hat{\alpha}^{DD}$ can be written as:
+
+\begin{equation}
+\hat{\alpha}^{DD} = \sum_{k \neq U} s_{ku} \hat{\alpha}^{2 \times 2}_{k} + \underbrace{\sum_{k \neq U} \sum_{l>k}[s^k_{kl}\hat{\alpha}_{kl}^{2 \times 2,k}+ s^l_{kl}\hat{\alpha}_{kl}^{2 \times 2,l}]}_\text{timing only estimator}....TWFE(decomposition)
+\end{equation}
+
+Here, 
+
+$\hat{\alpha}^{2 \times 2}_{kU} = [\bar{y}_k^{Post(k)}-\bar{y}_k^{Pre(k)}] - [\bar{y}_U^{Post(k)}-\bar{y}_U^{Pre(k)}]$; this is when group $k$ is compared to untreated group $U$.
+
+
+$\hat{\alpha}^{2 \times 2, k}_{kl} = [\bar{y}_k^{MID(k,l)}-\bar{y}_k^{Pre(k)}] - [\bar{y}_l^{MID(k,l)}-\bar{y}_l^{Pre(k)}]$; this is when early group $(k)$ is compared to late treated
+group $(l)$ during the period when group $l$ is not yet treated.
+
+
+$\hat{\alpha}^{2 \times 2, l}_{kl} = [\bar{y}_l^{POST(l)}-\bar{y}_k^{MID(k,l)}] - [\bar{y}_k^{POST(l)}-\bar{y}_k^{MID(k,l)}]$; this is when late group $(l)$ is 
+compared to early treated group $(k)$ using the window between $MID(k,l)$ and $POST(l)$ when the treatment status of group $(k)$ does not change. 
+Here, early treated group is being used as the control 
+group. 
+
+Note that the second block in *TWFE(decomposition)* uses variation in timing of treatment to identify the effects. Each group serves as the control to the other during the window 
+when the treatment status do not change.
+
+$s_{ku}$, $s_{kl}^{k}$, and $s_{kl}^{l} are the weights placed on the estimates that compares: $i)$ treated to untreated units (giving rise to 2 $2 \times 2$ DD estimates); 
+$ii)$ early treated to late treated in between $PRE(k)$ and $MID(k,l)$ window; and $iii)$ late treated to early treated between $MID(k,l)$ to $POST(l)$ window, respectively. 
+@goodman2021 presents the following interpretation for the weights:
+
+
+\begin{equation}
+s_{kU} = \frac{(n_k + n_U)^2 \overbrace{n_{kU}(1-n_{kU})\bar{D}_k(1-\bar{D}_k)}^{\hat{V}^{D}_{kU}} }{\hat{V}^{D}}
+\end{equation}
+
+
+\begin{equation}
+s_{kl}^{k} = \frac{((n_k + n_l)(1-\bar{D}_l))^2 \overbrace{n_{kl}(1-n_{kl})\frac{\bar{D}_k-\bar{D}_l}{1-\bar{D}_l}\frac{1-\bar{D}_k}{1-\bar{D}_l}}^{\hat{V}^{D,k}_{kl}} }{\hat{V}^{D}}
+\end{equation}
+
+
+and 
+
+
+\begin{equation}
+s_{kl}^{l} = \frac{((n_k + n_l)\bar{D}_k)^2 \overbrace{n_{kl}(1-n_{kl})\frac{\bar{D}_l}{\bar{D}_k}\frac{\bar{D}_k-\bar{D}_l}{\bar{D}_k}}^{\hat{V}^{D,l}_{kl}} }{\hat{V}^{D}}
+\end{equation}
+
+where, 
+
+\begin{equation}
+\sum_{k \neq U} s_{ku} + \sum_{k \neq l} \sum_{l>k}(s_{kl}^{k} + s_{kl}^{l}) = 1
+\end{equation}
+
+
+The TWFE estimate depends on weight implied to each of the $2\times 2$ DD estimate. The weights depend 
+on the sample size of the group that is treated as well as the untreated group. Note that the weight also 
+depends on the variance of the subsample based on the treated vs untreated groups. For instance, 
+${\hat{V}^{D,k}_{kl}}$ denotes the variance in $D_i$ for the subsample defined by groups $k$ and $l$, for 
+the period $Pre$ and $Mid(k,\;l)$. 
+
+
+Let us take a look at $\bar{D}_k(1-\bar{D}_k)$, 
+$\frac{\bar{D}_k-\bar{D}_l}{1-\bar{D}_l}\frac{1-\bar{D}_k}{1-\bar{D}_l}$, and 
+$\frac{\bar{D}_l}{\bar{D}_k}\frac{\bar{D}_k-\bar{D}_l}{\bar{D}_k}$ more closely. It is seen that these values 
+are maximized when treatment occurs at the middle of the time window the researcher uses. In other words, 
+the TWFE estimate depends on when the treatment occurs in the panel; if there is heterogeneous effects between 
+groups, these effects are going to be emphasized (or de-emphasized) depending on wherein the given time window 
+the treatment falls.  
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('output/plotsim1.pdf')
+```
+
+This can be explained using a simulation that uses treatment effects of 10 and 15 for the early and late 
+treated groups, respectively. The timing window comprise of 20 periods; the treatment timing of the early 
+treated group is fixed at period 9, whereas the treatment timing for the late treated group is allowed to 
+vary backwards from period 16 to 10. The figure shows that the higher treatment effect for the late treated 
+group is supressed when the treatment timing is towards the end of the panel; the treatment effect increases 
+as the treatment period for the late treated group approaches to the middle of the panel. When the treatment 
+for the late period occurs at the middle of the panel (period 10), the estimate is very close to 12.5 -- the 
+average effect of early and late treated groups. Note that $K$ timing group yields $K^2 - K$ $2\times 2$ 
+"timing-only" DD estimates ($\hat{\beta}^{2\times 2 k}_{kl}$ or $\hat{\beta}^{2\times 2 l}_{kl}$); 
+one untreated unit (throught out the time window) yields $K^2$ DD estimates.
+
+## Assumptions governing TWFEDD estimate
+
+The TWFEDD estimate measures weighted average of all possible $2 \times 2$ DD average treatment effects on 
+treated. In the case of groups being defined as treatment timing $k,\;g,\;U$, the $2\times 2$ DD estimates 
+can be written as:
+
+\begin{equation}
+\hat{\alpha}^{2\times 2}_{kU} = [\bar{y}_k^{POST(k)} - \bar{y}_k^{PRE(k)}] - [\bar{y}_U^{POST(k)} - \bar{y}_U^{PRE(k)}]  
+\end{equation}
+
+\begin{equation}
+\hat{\alpha}^{2\times 2 k}_{kl} = [\bar{y}_k^{MID(k,l)} - \bar{y}_k^{PRE(k)}] - [\bar{y}_l^{MID(k,l)} - \bar{y}_l^{PRE(k)}]  
+\end{equation}
+
+\begin{equation}
+\hat{\alpha}^{2\times 2 l}_{kl} = [\bar{y}_l^{POST(l)} - \bar{y}_l^{MID(k,l)}] - [\bar{y}_k^{POST(l)} - \bar{y}_k^{MID(k,l)}]  
+\end{equation}
+
+Now, let us express the estimates based on the counterfactuals. First, write 
+
+\begin{equation}
+y_{it} = D_{it}Y_{it}(t_i) + (1-D_{it})Y_{0}
+\end{equation}
+
+where, $Y_{it}$ is the outcome of unit $i$ in time $t$ and $Y_{0}$ is the counterfactual outcome. Following 
+@callaway2022 define ATT for group $k$ at time period $\tau \geq k$ as $ATT_{k}(\tau) = E[Y_{i\tau}(t^{*}_{k}) - Y_{i\tau}(0)|t_i = k]$ 
+Now, let us define $W$ as the date range or windows with $T_W$ periods. 
+
+In practice, $W$ represents the post treatment 
+window in $2 \times 2$ DD. But note that there are $T_{W}$ periods. In our case above, $W$ for group $k$ represents 
+the $MID(k,l)$ plus the $POST(l)$ windows and $T_{W} = 2$. Group $k$ is treated in two windows -- $MID(k,l)$ 
+and $POST(l)$; hence, the $ATT_{k}(W)$ is just the average of ATTs across the windows. 
+
+\begin{equation}
+ATT_{k}(W) =  \frac{1}{T_{W}} \sum_{t \in W} E[Y_{it}(k)-Y_{it}(0)|t_{i}=k]
+\end{equation}
+
+
+Now, define the change in average untreated potential outcome between pre and the post period as:
+
+\begin{equation}
+\Delta Y_{k}^{0}(W_1, W_0) =  \frac{1}{T_{W_1}} \sum_{t \in W_1} E[Y_{it}(0)|t_{i}=k] - \frac{1}{T_{W_0}} \sum_{t \in W_1} E[Y_{it}(0)|t_{i}=k] 
+\end{equation}
+
+Using this notation, the $2 \times 2$ $\hat{\beta}$s can be written as:
+
+\begin{equation}
+\hat{\alpha}_k^{2\times 2} = ATT_{k}^{(POST(k))} + \overbrace{[ \Delta Y_{k}^{0}(POST(k),PRE(k)) - \Delta Y_{U}^{0}(POST(k),PRE(k))}^{parallel\;trend}]
+\end{equation}
+
+\begin{equation}
+\hat{\alpha}_{kl}^{2\times 2 k} = ATT_{k}^{(MID(k,l))} + 
+\overbrace{[ \Delta Y_{k}^{0}(MID(k,l),PRE(k)) - \Delta Y_{U}^{0}(MID(k,l),PRE(k))}^{parallel\;trend}]
+\end{equation}
+
+\begin{equation}
+\hat{\alpha}_{kl}^{2\times 2 l} = ATT_{l}^{(MID(k,l))} + 
+\overbrace{[ \Delta Y_{l}^{0}(POST(l),MID(k,l)) - \Delta Y_{k}^{0}(POST(l),MID(k,l))}^{parallel\;trend}] +
+[ATT_k(MID(k,l))-ATT_k(POST(l))]
+\end{equation}
+
+While $\hat{\alpha}_{k}^{2\times 2}$ and $\hat{\alpha}_{k}^{2 \times 2}$ depends on the parallel trend assumption, $\hat{\alpha}_{k}^{2 \times 2}$ 
+also depends on the difference between group $k's$ $ATT$ in $MID(k,l)$ and $POST(l)$. This is because the late treatment group is compared also with 
+the early treatment group, and if there is presence of treatment dynamic in early treated group, this will show up in $\hat{\alpha}_{kl}^{2\times 2 l}$. Substituting 
+the expressions of $\hat{\alpha}_{k}^{2\times 2}$, $\hat{\alpha}_{k}^{2 \times 2}$, and $\hat{\alpha}_{kl}^{2\times 2 l}$ into the TWFE decomposition yields the following:
+
+
+\begin{equation}
+\plim_{N \to \infty} \hat{\alpha} = \alpha = VWATT + VWCT + \Delta ATT
+\end{equation}
+
+where, VWATT is the variance weighted average treatment effect on the treated; VWCT is the variance weighted common trends; and $\Delta ATT$ is the change in average treatment effect
+on treated of group $k$ between the $Mid(k,l)$ and $Posk(l)$ period (treatment effect dynamics or heterogeneity over time). 
+
+An intuition is that parallel trend assumption justifies comparing treated vs. untreated (or not yet treated groups), and deviation in pathways of outcome 
+can be attributed to treatement. As such, @callaway2022 refers to these groups (untreated and not yet treated) as "good comparison" groups. Now, early treatment 
+group, that serves as the comparison group for the late treated group, can be a "bad comparison" if the treatment effect (of early treated group) varies with time.  
+
+## How Does Treatment Effect Heterogeneity in Time Affect TWFE?
+
+As we have seen earlier, the TWFE estimator is baised even in cases where the parallel trend assumption holds given that the treatment effect varies over time. As of 
+VWATT, this is a weighted version of each $2 \times 2$ DD estimate and the weights are dependent on treatment timing as well as treatment heterogeneity across groups. 
+For example, states with high anti-smoking sentiments have increases cigarette taxes earlier; increases in cigarette taxes can affect populace living in 
+state with higher anti-smoking sentiments more compared to states with low anti smoking sentiments. Now given that states with relatively lower of anti-smoking sentiments 
+increased cigarette taxes later (and if this falls in the middle of the panel), the VWATT will provide higher weights to the states with lower anti-smoking sentiments. In 
+this case, the estimate of cigarette taxes will be underestimated.
+
+
+
+
+
 
 

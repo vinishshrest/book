@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Naive estimator | Difference in Differences</title>
-  <meta name="description" content="2 Naive estimator | Difference in Differences" />
+  <title>6 The \(2 \times 2\) Difference-in-Differences Estimate | Difference in Differences</title>
+  <meta name="description" content="6 The \(2 \times 2\) Difference-in-Differences Estimate | Difference in Differences" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Naive estimator | Difference in Differences" />
+  <meta property="og:title" content="6 The \(2 \times 2\) Difference-in-Differences Estimate | Difference in Differences" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Naive estimator | Difference in Differences" />
+  <meta name="twitter:title" content="6 The \(2 \times 2\) Difference-in-Differences Estimate | Difference in Differences" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"/>
-<link rel="next" href="canonical-difference-in-differences-framework.html"/>
+<link rel="prev" href="some-concerns-with-controls.html"/>
+<link rel="next" href="event-study-model.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -174,43 +174,89 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="naive-estimator" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">2</span> Naive estimator<a href="naive-estimator.html#naive-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>A naive estimate of ATT would just be the difference in means between the treated and control groups in the period following the expansion.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="naive-estimator.html#cb17-1" aria-hidden="true" tabindex="-1"></a>naive  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
-<span id="cb17-2"><a href="naive-estimator.html#cb17-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>])</span>
-<span id="cb17-3"><a href="naive-estimator.html#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="naive-estimator.html#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(naive)</span></code></pre></div>
-<pre><code>## [1] -13.65797</code></pre>
-<p>The naive estimate suggests that uninsured rate dropped by -13.66 percentage points following the Medicaid expansion in 2014.
-But can we trust this estimate? Not really!</p>
-<p>Here are some reasons why the naive estimate fails:</p>
-<ol style="list-style-type: lower-roman">
-<li><p>One way to assess the validity of naive estimate is to compare the (natural) experiment on hand with the randomized control case.<br />
-Note that we are very far away from the randomized controlled trial in this case. The treatment (decision to expand Medicaid) is not random. Note that states voluntarily decided to expand Medicaid. This means that expansion
-versus non-expansion states may be very different in terms of pre-treatment characteristics. For example, many of the southern states
-did not expand Medicaid. Also, pre-treatment uninsured rates of southern states are generally higher compared to non-southern states. The naive
-comparison can simply be capturing the difference in pre-treatment characteristics correlated with the treatment assignment.</p></li>
-<li><p>The baseline outcome among the treatment group may differ significantly from the control group. For example, southern states have higher population of Blacks compared to non-South. Typically, uninsured rate is higher among Blacks. Hence, it is difficult to disentagle the influence of democraphic composition versus Medicaid expansion.</p></li>
-</ol>
-<p>Let’s evaluate the difference in uninsured rate between the expansion versus the non-expansion states in the pre-treatment year (2013).</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="naive-estimator.html#cb19-1" aria-hidden="true" tabindex="-1"></a>naive_pre  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
-<span id="cb19-2"><a href="naive-estimator.html#cb19-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>])</span>
-<span id="cb19-3"><a href="naive-estimator.html#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="naive-estimator.html#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(naive_pre)</span></code></pre></div>
-<pre><code>## [1] -7.844546</code></pre>
-<p>Note that treatment units on average have 7.68 percentage points lower uninsured rate compared to the control units even prior to the treatment. Hence, the naive estimator captures the pre-existing differerences in outcome; something that we don’t want.</p>
-<ol start="3" style="list-style-type: lower-roman">
-<li>Since the treatment is not randomized a lot of baseline characteristics that influence the outcome across the treated and control groups may differ dramatically. If these variables are thought to influence the dynamics of the outcome variable, then we will be capturing the influence of such variables rather than the treatment itself.</li>
-</ol>
+<div id="the-2-times-2-difference-in-differences-estimate" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate<a href="the-2-times-2-difference-in-differences-estimate.html#the-2-times-2-difference-in-differences-estimate" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Now that we’ve disscussed the difference-in-differences framework (mostly canonical DiD),
+we would like to look at various ways of estimating DiD. As we’ve seen, (a canonical) DiD estimation can simply be done non-parametrically by
+using the appropriate differences in means. Another way to do it is by using the regression framework, which
+provides several advantages including but not limited to: <span class="math inline">\(i)\)</span> estimation of standard errors; <span class="math inline">\(ii)\)</span> ease of accounting for
+necessary covariates; and <span class="math inline">\(iii)\)</span> feasible estimation of DiD with multiple treatment groups with staggered treatment.</p>
+<p>Let’s begin with the canonical DiD framework using the regression format. I’m going to set it up as the following:</p>
+<p><span class="math display">\[\begin{equation}
+\label{eq:DiD_reg}
+Y_{it} = \alpha + \tau Post_{it} \times D_{i} + \sigma Post_{it} + \eta D_{i} + \epsilon_{it}
+\end{equation}\]</span></p>
+<p>Let’s rewrite the DiD estimator from before as:</p>
+<p><span class="math inline">\(\tau_{did} = \underbrace{E[Y_{11} - Y_{10} | D = 1]}_{first\; difference} - \underbrace{E[Y_{01} - Y_{00} | D = 0]}_{second\; difference}\)</span></p>
+<p>We’d want to see whether estimation of <span class="math inline">\(\tau\)</span> in the regression above uncovers the DiD estimate. Let’s look at
+the following conditional expectations.</p>
+<p>1). expected outcome for treated group post treatment: <span class="math inline">\(E(Y | D = 1, Post = 1) = \alpha + \tau + \sigma + \eta\)</span></p>
+<p>2). expected outcome for treated group pre treatment: <span class="math inline">\(E(Y | D = 1, Post = 0) = \alpha + \eta\)</span></p>
+<p>3). expected outcome for control group post treatment: <span class="math inline">\(E(Y | D = 0, Post = 1) = \alpha + \sigma\)</span></p>
+<p>4). expected outcome for control group pre treatment: <span class="math inline">\(E(Y | D = 0, Post = 0) = \alpha\)</span></p>
+<p>If you do the math, the first difference is given as <span class="math inline">\(\tau + \sigma\)</span> and the second difference is <span class="math inline">\(\sigma\)</span>. The DiD – the difference
+between the first and the second difference – is <span class="math inline">\(\tau\)</span>. Hence, the estimation of <span class="math inline">\(\tau\)</span>, in the regression framework above,
+is the DiD estimate.</p>
+<p>Let’s apply this to our ACA-Medicaid example.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lets create the post, treat, and the interaction between the post and treat (labeled as did)</span></span>
+<span id="cb32-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-2" aria-hidden="true" tabindex="-1"></a>dat_canonical  <span class="ot">&lt;-</span> dat_canonical  <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-3" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">post =</span> <span class="fu">ifelse</span>(year <span class="sc">&gt;=</span> <span class="dv">2014</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb32-4"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">treat =</span> <span class="fu">ifelse</span>(expand <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb32-5"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">did =</span> post <span class="sc">*</span> treat)</span>
+<span id="cb32-6"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-7" aria-hidden="true" tabindex="-1"></a>reg_did  <span class="ot">&lt;-</span> <span class="fu">lm</span>(sahieunins138 <span class="sc">~</span> did <span class="sc">+</span> post <span class="sc">+</span> treat, <span class="at">data =</span> dat_canonical)</span>
+<span id="cb32-8"><a href="the-2-times-2-difference-in-differences-estimate.html#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_did)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = sahieunins138 ~ did + post + treat, data = dat_canonical)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -25.2196  -5.1221  -0.7641   4.7804  26.7359 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  41.4641     0.1890  219.41   &lt;2e-16 ***
+## did          -5.8134     0.4126  -14.09   &lt;2e-16 ***
+## post         -4.7840     0.2673  -17.89   &lt;2e-16 ***
+## treat        -7.8445     0.2918  -26.89   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 7.655 on 5650 degrees of freedom
+## Multiple R-squared:  0.425,  Adjusted R-squared:  0.4247 
+## F-statistic:  1392 on 3 and 5650 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb34-1" aria-hidden="true" tabindex="-1"></a>did  <span class="ot">&lt;-</span> naive <span class="sc">-</span> naive_pre</span>
+<span id="cb34-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(did)</span></code></pre></div>
+<pre><code>## [1] -5.813426</code></pre>
+<p>Note that the difference in mean did and the regression coefficient on the interaction between
+<span class="math inline">\(Post \times treat\)</span> are the same. Plus, we get the standard errors as well. Of course, the standard errors
+are not adjusted for clustering. The errors of observations within a cluster (the ground at which the treatment is
+implemented, in our case state) will be correlated, so we need to account for it. The way to do it is to cluster the
+standard error at the state level. This can be done using the fixest library and feols command.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb36-1" aria-hidden="true" tabindex="-1"></a>reg_did_cluster  <span class="ot">&lt;-</span> <span class="fu">feols</span>(sahieunins138 <span class="sc">~</span> did <span class="sc">+</span> post <span class="sc">+</span> treat, <span class="at">data =</span> dat_canonical, <span class="at">cluster =</span> <span class="sc">~</span>state.abb)</span>
+<span id="cb36-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_did_cluster)</span></code></pre></div>
+<pre><code>## OLS estimation, Dep. Var.: sahieunins138
+## Observations: 5,654
+## Standard-errors: Clustered (state.abb) 
+##             Estimate Std. Error   t value   Pr(&gt;|t|)    
+## (Intercept) 41.46411   2.041183  20.31376  &lt; 2.2e-16 ***
+## did         -5.81343   1.266824  -4.58898 3.6981e-05 ***
+## post        -4.78400   0.278769 -17.16117  &lt; 2.2e-16 ***
+## treat       -7.84455   2.612190  -3.00305 4.3962e-03 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## RMSE: 7.65276   Adj. R2: 0.424736</code></pre>
+<p>Note that the did coefficient remains unchanged. However, the standard error is inflated after clustering the errors at the
+state level.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="canonical-difference-in-differences-framework.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="some-concerns-with-controls.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="event-study-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

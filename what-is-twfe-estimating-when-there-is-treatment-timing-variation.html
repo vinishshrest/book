@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Naive estimator | Difference in Differences</title>
-  <meta name="description" content="2 Naive estimator | Difference in Differences" />
+  <title>10.2 What is TWFE Estimating when there is Treatment Timing Variation? | Difference in Differences</title>
+  <meta name="description" content="10.2 What is TWFE Estimating when there is Treatment Timing Variation? | Difference in Differences" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Naive estimator | Difference in Differences" />
+  <meta property="og:title" content="10.2 What is TWFE Estimating when there is Treatment Timing Variation? | Difference in Differences" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Naive estimator | Difference in Differences" />
+  <meta name="twitter:title" content="10.2 What is TWFE Estimating when there is Treatment Timing Variation? | Difference in Differences" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"/>
-<link rel="next" href="canonical-difference-in-differences-framework.html"/>
+<link rel="prev" href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"/>
+<link rel="next" href="assumptions-governing-twfedd-estimate.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -174,43 +174,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="naive-estimator" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">2</span> Naive estimator<a href="naive-estimator.html#naive-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>A naive estimate of ATT would just be the difference in means between the treated and control groups in the period following the expansion.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="naive-estimator.html#cb17-1" aria-hidden="true" tabindex="-1"></a>naive  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
-<span id="cb17-2"><a href="naive-estimator.html#cb17-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>])</span>
-<span id="cb17-3"><a href="naive-estimator.html#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="naive-estimator.html#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(naive)</span></code></pre></div>
-<pre><code>## [1] -13.65797</code></pre>
-<p>The naive estimate suggests that uninsured rate dropped by -13.66 percentage points following the Medicaid expansion in 2014.
-But can we trust this estimate? Not really!</p>
-<p>Here are some reasons why the naive estimate fails:</p>
-<ol style="list-style-type: lower-roman">
-<li><p>One way to assess the validity of naive estimate is to compare the (natural) experiment on hand with the randomized control case.<br />
-Note that we are very far away from the randomized controlled trial in this case. The treatment (decision to expand Medicaid) is not random. Note that states voluntarily decided to expand Medicaid. This means that expansion
-versus non-expansion states may be very different in terms of pre-treatment characteristics. For example, many of the southern states
-did not expand Medicaid. Also, pre-treatment uninsured rates of southern states are generally higher compared to non-southern states. The naive
-comparison can simply be capturing the difference in pre-treatment characteristics correlated with the treatment assignment.</p></li>
-<li><p>The baseline outcome among the treatment group may differ significantly from the control group. For example, southern states have higher population of Blacks compared to non-South. Typically, uninsured rate is higher among Blacks. Hence, it is difficult to disentagle the influence of democraphic composition versus Medicaid expansion.</p></li>
-</ol>
-<p>Let’s evaluate the difference in uninsured rate between the expansion versus the non-expansion states in the pre-treatment year (2013).</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="naive-estimator.html#cb19-1" aria-hidden="true" tabindex="-1"></a>naive_pre  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
-<span id="cb19-2"><a href="naive-estimator.html#cb19-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>])</span>
-<span id="cb19-3"><a href="naive-estimator.html#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="naive-estimator.html#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(naive_pre)</span></code></pre></div>
-<pre><code>## [1] -7.844546</code></pre>
-<p>Note that treatment units on average have 7.68 percentage points lower uninsured rate compared to the control units even prior to the treatment. Hence, the naive estimator captures the pre-existing differerences in outcome; something that we don’t want.</p>
-<ol start="3" style="list-style-type: lower-roman">
-<li>Since the treatment is not randomized a lot of baseline characteristics that influence the outcome across the treated and control groups may differ dramatically. If these variables are thought to influence the dynamics of the outcome variable, then we will be capturing the influence of such variables rather than the treatment itself.</li>
-</ol>
+<div id="what-is-twfe-estimating-when-there-is-treatment-timing-variation" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> What is TWFE Estimating when there is Treatment Timing Variation?<a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html#what-is-twfe-estimating-when-there-is-treatment-timing-variation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using <span class="citation">(<a href="#ref-goodman2021" role="doc-biblioref"><strong>goodman2021?</strong></a>)</span>’s decomposition the TWFEDD estimate <span class="math inline">\(\hat{\alpha}^{DD}\)</span> can be written as:</p>
+<p><span class="math display">\[\begin{equation}
+\hat{\alpha}^{DD} = \sum_{k \neq U} s_{ku} \hat{\alpha}^{2 \times 2}_{k} + \underbrace{\sum_{k \neq U} \sum_{l&gt;k}[s^k_{kl}\hat{\alpha}_{kl}^{2 \times 2,k}+ s^l_{kl}\hat{\alpha}_{kl}^{2 \times 2,l}]}_\text{timing only estimator}....TWFE(decomposition)
+\end{equation}\]</span></p>
+<p>Here,</p>
+<p><span class="math inline">\(\hat{\alpha}^{2 \times 2}_{kU} = [\bar{y}_k^{Post(k)}-\bar{y}_k^{Pre(k)}] - [\bar{y}_U^{Post(k)}-\bar{y}_U^{Pre(k)}]\)</span>; this is when group <span class="math inline">\(k\)</span> is compared to untreated group <span class="math inline">\(U\)</span>.</p>
+<p><span class="math inline">\(\hat{\alpha}^{2 \times 2, k}_{kl} = [\bar{y}_k^{MID(k,l)}-\bar{y}_k^{Pre(k)}] - [\bar{y}_l^{MID(k,l)}-\bar{y}_l^{Pre(k)}]\)</span>; this is when early group <span class="math inline">\((k)\)</span> is compared to late treated
+group <span class="math inline">\((l)\)</span> during the period when group <span class="math inline">\(l\)</span> is not yet treated.</p>
+<p><span class="math inline">\(\hat{\alpha}^{2 \times 2, l}_{kl} = [\bar{y}_l^{POST(l)}-\bar{y}_k^{MID(k,l)}] - [\bar{y}_k^{POST(l)}-\bar{y}_k^{MID(k,l)}]\)</span>; this is when late group <span class="math inline">\((l)\)</span> is
+compared to early treated group <span class="math inline">\((k)\)</span> using the window between <span class="math inline">\(MID(k,l)\)</span> and <span class="math inline">\(POST(l)\)</span> when the treatment status of group <span class="math inline">\((k)\)</span> does not change.
+Here, early treated group is being used as the control
+group.</p>
+<p>Note that the second block in <em>TWFE(decomposition)</em> uses variation in timing of treatment to identify the effects. Each group serves as the control to the other during the window
+when the treatment status do not change.</p>
+<p><span class="math inline">\(s_{ku}\)</span>, <span class="math inline">\(s_{kl}^{k}\)</span>, and $s_{kl}^{l} are the weights placed on the estimates that compares: <span class="math inline">\(i)\)</span> treated to untreated units (giving rise to 2 <span class="math inline">\(2 \times 2\)</span> DD estimates);
+<span class="math inline">\(ii)\)</span> early treated to late treated in between <span class="math inline">\(PRE(k)\)</span> and <span class="math inline">\(MID(k,l)\)</span> window; and <span class="math inline">\(iii)\)</span> late treated to early treated between <span class="math inline">\(MID(k,l)\)</span> to <span class="math inline">\(POST(l)\)</span> window, respectively.
+<span class="citation">(<a href="#ref-goodman2021" role="doc-biblioref"><strong>goodman2021?</strong></a>)</span> presents the following interpretation for the weights:</p>
+<p><span class="math display">\[\begin{equation}
+s_{kU} = \frac{(n_k + n_U)^2 \overbrace{n_{kU}(1-n_{kU})\bar{D}_k(1-\bar{D}_k)}^{\hat{V}^{D}_{kU}} }{\hat{V}^{D}}
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+s_{kl}^{k} = \frac{((n_k + n_l)(1-\bar{D}_l))^2 \overbrace{n_{kl}(1-n_{kl})\frac{\bar{D}_k-\bar{D}_l}{1-\bar{D}_l}\frac{1-\bar{D}_k}{1-\bar{D}_l}}^{\hat{V}^{D,k}_{kl}} }{\hat{V}^{D}}
+\end{equation}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\begin{equation}
+s_{kl}^{l} = \frac{((n_k + n_l)\bar{D}_k)^2 \overbrace{n_{kl}(1-n_{kl})\frac{\bar{D}_l}{\bar{D}_k}\frac{\bar{D}_k-\bar{D}_l}{\bar{D}_k}}^{\hat{V}^{D,l}_{kl}} }{\hat{V}^{D}}
+\end{equation}\]</span></p>
+<p>where,</p>
+<p><span class="math display">\[\begin{equation}
+\sum_{k \neq U} s_{ku} + \sum_{k \neq l} \sum_{l&gt;k}(s_{kl}^{k} + s_{kl}^{l}) = 1
+\end{equation}\]</span></p>
+<p>The TWFE estimate depends on weight implied to each of the <span class="math inline">\(2\times 2\)</span> DD estimate. The weights depend
+on the sample size of the group that is treated as well as the untreated group. Note that the weight also
+depends on the variance of the subsample based on the treated vs untreated groups. For instance,
+<span class="math inline">\({\hat{V}^{D,k}_{kl}}\)</span> denotes the variance in <span class="math inline">\(D_i\)</span> for the subsample defined by groups <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span>, for
+the period <span class="math inline">\(Pre\)</span> and <span class="math inline">\(Mid(k,\;l)\)</span>.</p>
+<p>Let us take a look at <span class="math inline">\(\bar{D}_k(1-\bar{D}_k)\)</span>,
+<span class="math inline">\(\frac{\bar{D}_k-\bar{D}_l}{1-\bar{D}_l}\frac{1-\bar{D}_k}{1-\bar{D}_l}\)</span>, and
+<span class="math inline">\(\frac{\bar{D}_l}{\bar{D}_k}\frac{\bar{D}_k-\bar{D}_l}{\bar{D}_k}\)</span> more closely. It is seen that these values
+are maximized when treatment occurs at the middle of the time window the researcher uses. In other words,
+the TWFE estimate depends on when the treatment occurs in the panel; if there is heterogeneous effects between
+groups, these effects are going to be emphasized (or de-emphasized) depending on wherein the given time window
+the treatment falls.</p>
+<embed src="output/plotsim1.pdf" width="100%" type="application/pdf" />
+<p>This can be explained using a simulation that uses treatment effects of 10 and 15 for the early and late
+treated groups, respectively. The timing window comprise of 20 periods; the treatment timing of the early
+treated group is fixed at period 9, whereas the treatment timing for the late treated group is allowed to
+vary backwards from period 16 to 10. The figure shows that the higher treatment effect for the late treated
+group is supressed when the treatment timing is towards the end of the panel; the treatment effect increases
+as the treatment period for the late treated group approaches to the middle of the panel. When the treatment
+for the late period occurs at the middle of the panel (period 10), the estimate is very close to 12.5 – the
+average effect of early and late treated groups. Note that <span class="math inline">\(K\)</span> timing group yields <span class="math inline">\(K^2 - K\)</span> <span class="math inline">\(2\times 2\)</span>
+“timing-only” DD estimates (<span class="math inline">\(\hat{\beta}^{2\times 2 k}_{kl}\)</span> or <span class="math inline">\(\hat{\beta}^{2\times 2 l}_{kl}\)</span>);
+one untreated unit (throught out the time window) yields <span class="math inline">\(K^2\)</span> DD estimates.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="canonical-difference-in-differences-framework.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="assumptions-governing-twfedd-estimate.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
