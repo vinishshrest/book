@@ -784,7 +784,7 @@ dat_sum   <- data.frame(dat  %>%
                 group_by(group)  %>% 
                 summarize(num_treat = sum(W), n_group = n()))  %>% 
                 mutate(prop_treat = num_treat / n_group) %>%  
-                select(c(group, prop_treat))
+                dplyr::select(c(group, prop_treat))
 
 
 dat   <- dat  %>%  
@@ -992,7 +992,7 @@ boxes <- data.frame(
 
 boxes <- boxes  %>% 
             mutate(fill = ifelse(colorcode == 1, "lightgreen", "lightblue"))  %>% 
-            select(-c(colorcode))
+            dplyr::select(-c(colorcode))
   
 
 

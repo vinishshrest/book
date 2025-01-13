@@ -1,5 +1,5 @@
 ---
-title: "Difference in Differences"
+title: "Causal Inference"
 output:
   html_document:
     css: custom.css
@@ -45,7 +45,9 @@ library(caret)    # for automating the tuning process
 
 ```
 
-# A Quick Introduction
+# Difference in Differences
+
+## A Quick Introduction
 
 Let's consider that there are two groups: group $i)$ receives the treatment and group $ii)$ does not receive the treatment. 
 We term group $i)$ as the treatment group and group $ii)$ as the control or untreated group. We want to compare the two groups 
@@ -130,7 +132,7 @@ i) **Expansion states (treated)**: AR, AZ, CA, CO, CT, DE, HI, IA, IL, KY, MA, M
 ii) **Non-expansion states (control)**: AL, FL, GA, ID, KS, ME, MO, MS, NC, NE, OK, SC, SD, TN, TX, UT, VA, WI, WY
 
 
-# Naive estimator 
+## Naive estimator 
 
 A naive estimate of ATT would just be the difference in means between the treated and control groups in the period following the expansion. 
 
@@ -168,7 +170,7 @@ Note that treatment units on average have 7.68 percentage points lower uninsured
 
 iii) Since the treatment is not randomized a lot of baseline characteristics that influence the outcome across the treated and control groups may differ dramatically. If these variables are thought to influence the dynamics of the outcome variable, then we will be capturing the influence of such variables rather than the treatment itself.  
 
-# Canonical Difference in Differences Framework 
+## Canonical Difference in Differences Framework 
 
 We would like to alleviate the aforementioned concerns. One way to address the second concern, i.e., outcomes in pre-treatment period may differ significantly between the treatment and control groups, is to take out the mean difference in outcome during the pre-treatment period from the mean difference in outcome post treatment. This approach uses two groups and two periods, which is termed as the canonical DiD case. 
 
@@ -261,7 +263,7 @@ trend assumption, DiD framework uncovers the ATT.
 
 However, the parallel trend assumption cannot be exactly tested since it is impossible to observe the potential outcome of the treated group in absence of the treatment. If we cannot provide a feasible test for the parallel trend assumption, how can we then attest for the validity of the DiD estimate?
 
-# DiD in multi-period set up
+## DiD in multi-period set up
 So far we have only considered the canonical DiD (two groups and two period DiD framework). 
 
 However, data may be available for several periods before and after the treatment implementation. In this case, we will be in the setting of multi-period DiD. For example, for the Medicaid expansion case, we have data spanning from years 2010 to 2017. We'd like to utilize all of these years rather than just years 2013 and 2014 as in the canonical DiD setting. 
@@ -316,7 +318,7 @@ iii) The next approach that has been used widely is the **event-study**. We will
 
 In most cases, unconditional parallel trend assumption may not be very convincing. Why?
 
-# Conditional Parallel Trend 
+## Conditional Parallel Trend Assumption
 
 We have discussed the parallel trend assumption already. This is the unconditional parallel trend assumption, which assumes that the 
 **parallel trend assumption** holds without accounting for any covariates. 
@@ -444,7 +446,7 @@ Second, if the effect of the reform varies along the covariate, then this might 
 
 
 
-# The $2 \times 2$ Difference-in-Differences Estimate
+## The $2 \times 2$ Difference-in-Differences Estimate
 
 Now that we've disscussed the difference-in-differences framework (mostly canonical DiD), 
 we would like to look at various ways of estimating DiD. As we've seen, (a canonical) DiD estimation can simply be done non-parametrically by 
@@ -513,7 +515,7 @@ Note that the did coefficient remains unchanged. However, the standard error is 
 state level.
 
 
-# Event study model
+## Event study model
 
 As we have discussed, the validity of DiD estimate depends on the parallel trend assumption. Since the *direct test* for 
 parallel trend requires the potential outcome of treated unit in absence of the treatment, it is not feasible. Although 
@@ -679,7 +681,7 @@ event_study_results[[1]]
  However, the estimates following the reform implementation drops drastically, demonstrating the 
  reduction in uninsured rate due to the ACA-Medicaid expansion.
 
-# Two way fixed effect (TWFE) Revisited
+## Two way fixed effect (TWFE) Revisited
 
 We have already seen the TWFE and its importance in accounting for unobserved heterogeneity.
 The TWFE is heavily linked to the difference-in-differences setting (perhaps mistakenly). 
@@ -798,7 +800,7 @@ fd_control <- fd_control %>% mutate(Y_FD = Y2 - Y1,
 FDdata = rbind(fd_treat, fd_control)
 ```
 
-# Various ways of estimation
+## Various ways of estimation
 
 1. Typical Estimation
 ```{r}
@@ -862,7 +864,7 @@ mean(FDdata$imp[FDdata$treat1 == 1])
 
 
 
-# Multi Period, Multi Group and Variation in Treatment Timing
+## Multi Period, Multi Group and Variation in Treatment Timing
 
 ```{r}
 trueeffect <- 10
