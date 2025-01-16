@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 A simulated DGP | Why causality?</title>
+  <meta name="description" content="5 A simulated DGP | Why causality?" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 A simulated DGP | Why causality?" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 A simulated DGP | Why causality?" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="dag-directed-acyclic-graph.html"/>
+<link rel="next" href="discussion.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="a-lab-experiment.html"><a href="a-lab-experiment.html"><i class="fa fa-check"></i><b>2</b> A lab experiment</a></li>
+<li class="chapter" data-level="3" data-path="challenges.html"><a href="challenges.html"><i class="fa fa-check"></i><b>3</b> Challenges</a></li>
+<li class="chapter" data-level="4" data-path="dag-directed-acyclic-graph.html"><a href="dag-directed-acyclic-graph.html"><i class="fa fa-check"></i><b>4</b> DAG (Directed Acyclic Graph)</a></li>
+<li class="chapter" data-level="5" data-path="a-simulated-dgp.html"><a href="a-simulated-dgp.html"><i class="fa fa-check"></i><b>5</b> A simulated DGP</a></li>
+<li class="chapter" data-level="6" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>6</b> Discussion</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Why causality?</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="a-simulated-dgp" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> A simulated DGP<a href="a-simulated-dgp.html#a-simulated-dgp" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Let’s consider the following DGP solely for the purpose of our understanding.</p>
+<ol style="list-style-type: lower-roman">
+<li>College education boosts health by 10 percent.</li>
+<li>Income boosts health by 20 percent.</li>
+<li>40 percent more people from higher income households have college education.</li>
+<li>Having insurance boosts health by 5 percent.</li>
+</ol>
+<p>The DAG representing the DGP is as follows:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="a-simulated-dgp.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a causal diagram</span></span>
+<span id="cb12-2"><a href="a-simulated-dgp.html#cb12-2" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;</span></span>
+<span id="cb12-3"><a href="a-simulated-dgp.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="st">dag {</span></span>
+<span id="cb12-4"><a href="a-simulated-dgp.html#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="st">  college -&gt; health     </span></span>
+<span id="cb12-5"><a href="a-simulated-dgp.html#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="st">  income -&gt; college    </span></span>
+<span id="cb12-6"><a href="a-simulated-dgp.html#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="st">  income -&gt; health</span></span>
+<span id="cb12-7"><a href="a-simulated-dgp.html#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="st">  ins -&gt; health     </span></span>
+<span id="cb12-8"><a href="a-simulated-dgp.html#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb12-9"><a href="a-simulated-dgp.html#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>)</span>
+<span id="cb12-10"><a href="a-simulated-dgp.html#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="a-simulated-dgp.html#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the DAG</span></span>
+<span id="cb12-12"><a href="a-simulated-dgp.html#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggdag</span>(dag) <span class="sc">+</span></span>
+<span id="cb12-13"><a href="a-simulated-dgp.html#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb12-14"><a href="a-simulated-dgp.html#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Causal Diagram Representing the Made-up DGP.&quot;</span>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
+<p><img src="why_causality_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="a-simulated-dgp.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of observations</span></span>
+<span id="cb13-2"><a href="a-simulated-dgp.html#cb13-2" aria-hidden="true" tabindex="-1"></a>n   <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb13-3"><a href="a-simulated-dgp.html#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="a-simulated-dgp.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># income follows the log normal distributing</span></span>
+<span id="cb13-5"><a href="a-simulated-dgp.html#cb13-5" aria-hidden="true" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(n, <span class="at">meanlog =</span> <span class="dv">1</span>, <span class="at">sdlog =</span> <span class="fl">0.5</span>)</span>
+<span id="cb13-6"><a href="a-simulated-dgp.html#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="a-simulated-dgp.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># multiplying the log normal dist with 20000</span></span>
+<span id="cb13-8"><a href="a-simulated-dgp.html#cb13-8" aria-hidden="true" tabindex="-1"></a>income  <span class="ot">&lt;-</span>  income <span class="sc">*</span> <span class="dv">20000</span></span>
+<span id="cb13-9"><a href="a-simulated-dgp.html#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="a-simulated-dgp.html#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># a right skewed distribution</span></span>
+<span id="cb13-11"><a href="a-simulated-dgp.html#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(income)</span></code></pre></div>
+<p><img src="why_causality_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="a-simulated-dgp.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a log normal distribution</span></span>
+<span id="cb14-2"><a href="a-simulated-dgp.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(income))</span></code></pre></div>
+<p><img src="why_causality_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="a-simulated-dgp.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># high income </span></span>
+<span id="cb15-2"><a href="a-simulated-dgp.html#cb15-2" aria-hidden="true" tabindex="-1"></a>high_income  <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(income <span class="sc">&gt;</span> <span class="fu">median</span>(income), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb15-3"><a href="a-simulated-dgp.html#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="a-simulated-dgp.html#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># college education </span></span>
+<span id="cb15-5"><a href="a-simulated-dgp.html#cb15-5" aria-hidden="true" tabindex="-1"></a>college  <span class="ot">&lt;-</span>  <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.3</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> high_income)</span>
+<span id="cb15-6"><a href="a-simulated-dgp.html#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="a-simulated-dgp.html#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># proportion of college graduates by income status</span></span>
+<span id="cb15-8"><a href="a-simulated-dgp.html#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">table</span>(college[high_income <span class="sc">==</span> <span class="dv">0</span>]))</span></code></pre></div>
+<pre><code>## 
+##     0     1 
+## 35110 14890</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="a-simulated-dgp.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">table</span>(college[high_income <span class="sc">==</span> <span class="dv">1</span>]))</span></code></pre></div>
+<pre><code>## 
+##     0     1 
+## 15005 34995</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="a-simulated-dgp.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># insurance status</span></span>
+<span id="cb19-2"><a href="a-simulated-dgp.html#cb19-2" aria-hidden="true" tabindex="-1"></a>ins  <span class="ot">&lt;-</span>  <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb19-3"><a href="a-simulated-dgp.html#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="a-simulated-dgp.html#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># health (good health 1, poor health 0)</span></span>
+<span id="cb19-5"><a href="a-simulated-dgp.html#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 60 percent of people with no college, low income, and no insurance have good health</span></span>
+<span id="cb19-6"><a href="a-simulated-dgp.html#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 10 percent more of people with college have good health and so on.</span></span>
+<span id="cb19-7"><a href="a-simulated-dgp.html#cb19-7" aria-hidden="true" tabindex="-1"></a>health  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.6</span> <span class="sc">+</span> <span class="fl">0.1</span> <span class="sc">*</span> college <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> high_income <span class="sc">+</span> <span class="fl">0.05</span> <span class="sc">*</span> ins)</span>
+<span id="cb19-8"><a href="a-simulated-dgp.html#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="a-simulated-dgp.html#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(health)</span></code></pre></div>
+<pre><code>## health
+##     0     1 
+## 22653 77347</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="a-simulated-dgp.html#cb21-1" aria-hidden="true" tabindex="-1"></a>data  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">good_health =</span> health, <span class="at">income =</span> income, <span class="at">high_income =</span> high_income, <span class="at">college =</span> college, <span class="at">insurance =</span> ins)</span>
+<span id="cb21-2"><a href="a-simulated-dgp.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<pre><code>##   good_health   income high_income college insurance
+## 1           1 34417.33           0       1         0
+## 2           1 22355.88           0       1         0
+## 3           1 69727.32           1       1         1
+## 4           1 26338.96           0       1         0
+## 5           1 72055.47           1       0         1
+## 6           1 98543.01           1       1         1</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="a-simulated-dgp.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># building models</span></span>
+<span id="cb23-2"><a href="a-simulated-dgp.html#cb23-2" aria-hidden="true" tabindex="-1"></a>reg1  <span class="ot">&lt;-</span> <span class="fu">lm</span>(good_health <span class="sc">~</span> college, <span class="at">data =</span> data)</span>
+<span id="cb23-3"><a href="a-simulated-dgp.html#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="a-simulated-dgp.html#cb23-4" aria-hidden="true" tabindex="-1"></a>reg2  <span class="ot">&lt;-</span> <span class="fu">lm</span>(good_health <span class="sc">~</span> college <span class="sc">+</span> income, <span class="at">data =</span> data)</span>
+<span id="cb23-5"><a href="a-simulated-dgp.html#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="a-simulated-dgp.html#cb23-6" aria-hidden="true" tabindex="-1"></a>reg3  <span class="ot">&lt;-</span> <span class="fu">lm</span>(good_health <span class="sc">~</span> college <span class="sc">+</span> high_income, <span class="at">data =</span> data)</span>
+<span id="cb23-7"><a href="a-simulated-dgp.html#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="a-simulated-dgp.html#cb23-8" aria-hidden="true" tabindex="-1"></a>reg4  <span class="ot">&lt;-</span> <span class="fu">lm</span>(good_health <span class="sc">~</span> college <span class="sc">+</span> income <span class="sc">+</span> high_income, <span class="at">data =</span> data)</span>
+<span id="cb23-9"><a href="a-simulated-dgp.html#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="a-simulated-dgp.html#cb23-10" aria-hidden="true" tabindex="-1"></a>reg5  <span class="ot">&lt;-</span> <span class="fu">lm</span>(good_health <span class="sc">~</span> college <span class="sc">+</span> high_income <span class="sc">+</span> ins, <span class="at">data =</span> data)</span>
+<span id="cb23-11"><a href="a-simulated-dgp.html#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="a-simulated-dgp.html#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="a-simulated-dgp.html#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = good_health ~ college, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.8660  0.1340  0.1340  0.3186  0.3186 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.681353   0.001824  373.59   &lt;2e-16 ***
+## college     0.184659   0.002582   71.51   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4083 on 99998 degrees of freedom
+## Multiple R-squared:  0.04865,    Adjusted R-squared:  0.04864 
+## F-statistic:  5114 on 1 and 99998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="a-simulated-dgp.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = good_health ~ college + income, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.46577  0.01155  0.15379  0.29496  0.40457 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 5.805e-01  2.788e-03  208.22   &lt;2e-16 ***
+## college     1.476e-01  2.670e-03   55.29   &lt;2e-16 ***
+## income      1.936e-06  4.083e-08   47.41   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4038 on 99997 degrees of freedom
+## Multiple R-squared:  0.06957,    Adjusted R-squared:  0.06955 
+## F-statistic:  3739 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="a-simulated-dgp.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = good_health ~ college + high_income, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.92468  0.07532  0.07532  0.27187  0.37750 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.622504   0.001960  317.54   &lt;2e-16 ***
+## college     0.105627   0.002751   38.40   &lt;2e-16 ***
+## high_income 0.196547   0.002751   71.45   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3982 on 99997 degrees of freedom
+## Multiple R-squared:  0.09486,    Adjusted R-squared:  0.09484 
+## F-statistic:  5240 on 2 and 99997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="a-simulated-dgp.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg4)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = good_health ~ college + income + high_income, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.92752  0.07272  0.07770  0.27248  0.37902 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  6.260e-01  2.881e-03 217.273   &lt;2e-16 ***
+## college      1.056e-01  2.751e-03  38.403   &lt;2e-16 ***
+## income      -9.226e-08  5.561e-08  -1.659   0.0971 .  
+## high_income  2.009e-01  3.799e-03  52.884   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3982 on 99996 degrees of freedom
+## Multiple R-squared:  0.09489,    Adjusted R-squared:  0.09486 
+## F-statistic:  3494 on 3 and 99996 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="a-simulated-dgp.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg5)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = good_health ~ college + high_income + ins, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.9511  0.0489  0.1012  0.2978  0.4037 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.596329   0.002326  256.38   &lt;2e-16 ***
+## college     0.105855   0.002745   38.56   &lt;2e-16 ***
+## high_income 0.196633   0.002745   71.63   &lt;2e-16 ***
+## ins         0.052284   0.002513   20.80   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3974 on 99996 degrees of freedom
+## Multiple R-squared:  0.09876,    Adjusted R-squared:  0.09873 
+## F-statistic:  3653 on 3 and 99996 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We know that the treatment effect of interest is 10, i.e., college increase the
+chances of being in good health by 10 percentage points.</p>
+<p>We’ve ran 5 different models (estimated using OLS).</p>
+<ol style="list-style-type: decimal">
+<li><p>reg1: Misses out on other variables, particularly income. This falsely says that that college education
+increases the chances of being in better health by 18 pp. We’ve got an omitted variable bias problem here.</p></li>
+<li><p>reg2: Adds income in a lineary way. This reduced the coefficient on college education; but still its off from
+the actual effect. Perhaps, its because we linearly control for income?</p></li>
+<li><p>reg3: Adds in the status of high income (whether income is higher than the median). This is the variable that matters in the DGP. Once we account for income in this way, the coefficient on college education moves to 0.1055 – very close to true effect. <em>One realization is that controling for the variable is not just enough; it is essential to get the correct functional form down as well.</em></p></li>
+<li><p>reg4: Uses the specification for reg3, but adds in control for income linearly. Not much changes.</p></li>
+<li><p>reg5: Adds in control for insurance. Since, insurance acts alone in the DGP, it does not affect the estimate on college education.</p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="dag-directed-acyclic-graph.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="discussion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": false,
+"toc": {
+"collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

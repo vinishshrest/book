@@ -1,0 +1,396 @@
+---
+title: "Why causality?"
+output:
+  html_document:
+    css: custom.css
+    includes:
+      in_header: header.html
+biblio-style: apalike
+link-citations: yes
+bibliography: ML.bib
+---
+
+# Introduction
+
+These lectures aim to explore the concept of cause and effect, a fundamental pursuit in science. At its core, we often ask whether  X  causes  Y , and if so, by how much. The ideal way to address such questions is through a carefully designed experiment—one that is controlled and systematic.
+
+In an experimental setting, the researcher typically has control over key aspects of the setup: assigning treatments, ensuring controls are in place, and accurately measuring outcomes. However, the luxury of conducting controlled experiments is often out of reach, especially for many real-world research questions.
+
+This collection of lectures focuses on the challenge of causal inference in such situations, specifically when relying on observational data. The emphasis will be on intuitive and empirical approaches, rather than delving deeply into the theoretical foundations of causal inference.
+  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+
+# declare paths and libraries
+user = 2
+if(user == 1){
+    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+}else{
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+}
+
+
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow)
+theme_set(theme_minimal())
+```
+
+
+
+# A lab experiment
+
+Let's consider a simple example. Suppose you want to investigate the importance of sunlight for the growth of a jade plant. How might you proceed?
+
+You might start by obtaining two baby jade plants from the same seller. Place jade plant A near the window sill, where it can receive ample sunlight, and place jade plant B in a closet within the same room, where it receives no sunlight. To ensure fairness, keep the room temperature uniform and water both plants equally, once a week. After some time, you evaluate the growth of both plants.
+
+Of course, this is just a thought experiment—you wouldn't actually do this because we already know the plant in the closet would not survive. However, this example illustrates the core idea of a controlled experiment.
+
+What's happening in our thought experiment? We've essentially conducted a minimal lab experiment:
+
+1.	Treatment Assignment: The “treatment,” or variable of interest, is the exposure to sunlight. You control which plant receives the treatment and which does not.
+
+2.	Controlling for Other Variables: Factors like water and temperature, which could also influence plant growth, have been held constant.
+
+3.  Measurement: You can (more or less) accurately measure the growth of the plant (e.g., height). Eventually, you can measure which one survived.
+
+
+
+# Challenges
+
+When exploring cause-and-effect relationships, a fundamental challenge arises: we often cannot conduct controlled lab experiments for most real-world questions. Let's consider an example to illustrate this.
+
+Imagine you, as a researcher, want to study the relationship between having a college degree and health outcomes. Ideally, you'd want to observe an individual, say person A, in two states: i) with college level education; and ii) without college level education. Next, you'd want to measure her health outcomes in these two states and make comparison.
+
+However, this is not possible with the main reason being that you cannot observe two individuals in different states at a given point in time. Mostly, you'll have to tackle your research questions with observational data. 
+
+Let's look at the observational data.
+Specifically, your dependent variable is the prevalence of poor health, and your independent variable is the percentage of the population with a college degree. You obtain county-level data for the year 2010, which includes the fraction of people in poor health and the percentage of the population with a college degree.
+
+
+
+```{r}
+
+# load in county level uninsured rate data merged with other variables 
+mort_allcauses <-  read_feather( file.path(datapath, "NVSS_data_county_2010to2017_merged_allcauses.feather"))  %>% 
+                    filter(year == 2010 & age == 0 & race_name == "black")  %>% 
+                    dplyr::select("countyfips", "year", "state.abb", "expand", "yearexpand", "sahieunins_allinc", "GovernorisDemocrat1Yes", "mortality_rate1000", "percap_income_2010", 
+                    "rural_urban_code2013a", "p_college2010", 
+                    "prop_black_2010", "prop_white_2010", "infant.mort", 
+                    "poor.health", "low.birthweight")  %>% 
+                    filter(duplicated(.))   %>%  
+                    arrange(countyfips, year)
+
+f0  <- ggplot(subset(mort_allcauses), aes(y = poor.health, x = p_college2010)) + geom_point() +
+            geom_smooth(method = "lm", se  = FALSE) + 
+            xlab("percent college 2010") + ylab("fraction poor health 2010")
+f1  <- ggplot(subset(mort_allcauses), aes(y = percap_income_2010, x = p_college2010)) + geom_point() +
+            geom_smooth(method = "lm", se  = FALSE) + 
+            xlab("percent college 2010") + ylab("per capita income 2010")
+f3  <- ggplot(subset(mort_allcauses), aes(y = sahieunins_allinc, x = p_college2010)) + geom_point() +
+            geom_smooth(method = "lm", se  = FALSE) + 
+            xlab("uninsured rate in 2010") + ylab("fraction poor health 2010")
+f1
+
+```
+
+At first glance, the data reveals a relationship between these variables. But how do we interpret this relationship? Does having a college degree cause better health, or is something else at play?
+
+Let's take a look at more wholesome illustrations. 
+
+```{r}
+f0 + f1 + f3
+```
+
+We see that percent college is negatively correlated with poor health. However, places with higher 
+proportion of college graduates also have higher per capita income and lower uninsured rates. Both income and 
+insurance status may have a causal effect on one's health. Hence, it is unwise to make a rushed 
+claim that college education leads to better health status. It may, or it may not. We dont know yet!
+
+# DAG (Directed Acyclic Graph)
+
+A simple way to keep track of whats going on is to make use of causal diagrams. This is 
+known as Directed Acyclic Graph (DAG) in various fields like statistics, computer science, and epidemiology.
+It's mainly used to depict the relationship between variables.  
+
+I'm going to use several set of assumptions to provide illustrations depicting the relationship between variables. This will 
+allow us to configure some concerns that obstruct inference on causality. 
+
+Here is the first causal 
+diagram pertaining to our example.  
+
+```{r}
+library(dagitty) # libraries for DAG
+library(ggdag)
+
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  college -> income     
+  college -> ins     
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example A.") + theme_void()
+```
+
+Consider the data-generating process (DGP) depicted above. The DGP represents the underlying set of mechanisms or laws of the universe that produce the data we observe. However, these mechanisms are not immediately apparent to us. Essentially, our goal is to uncover and understand the phenomena governing the DGP.
+
+
+Note that variable of interest is college education. As shown in the causal diagram above, the 
+arrow moves away from college education to the rest of the variables. Then the arrows from 
+other variables point to health. Literally reading this: 
+
+1. College affects Health
+
+2. College affects insurance status. Insurance affects health. (mechanism through how college affects health).
+
+3. College affects income. Income then affects health. (another mechanism through which college affects health). 
+
+Since, we are trying to trace the causal link between college education and health, mechanisms through which 
+college education affects health are good. These are the ``good pathways" and we don't need to be concerned about them. 
+
+However, I'd argue that the DAG in example A misrepresents the DGP. Let's consider a slightly better scenario. Here, we allow income to cause health.
+
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  income -> college   
+  college -> ins     
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example B.") + theme_void()
+```
+
+Note that income causes both health and college education in the above DAG. This restricts us from identifying the cause effect of college education on health. We won't be able to figure out whether college education leads to better health or income that is correlated with college education drives the effect. 
+
+To isolate the effect of college education on health, we would want to look at individuals 
+with the same income and utilize the variation in college education. For example, look among individuals with income of 50,000; some will have college education and some won't. This variation in college education can be fruitful in identification. Hence, we would want to *control* for income. Once we have done this, we've blocked the bad pathway.
+
+I'd still argue the DAG presented above is based on unrealistic set of assumptions.
+
+Next, we consider the following DAG with feedback loop between college, health, 
+income and insurance status. 
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  college -> income 
+  health -> income 
+  income -> college
+  health -> college    
+  college -> ins     
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example C.") + theme_void()
+```
+
+
+Note that now arrows are facing both ways for income, health, and college. 
+We have a loop between income, health, and college. This means:
+
+1. Income can affect health; health can affect income.
+
+2. Income can affect college education; college can affect income. 
+
+3. College education can affect health; health can affect college education. 
+
+
+In other words, income, college, and health are jointly determined. The relationship between 
+college and health is convoluted. To *identify* the relationship between college and health, we'd want to 
+account for the unwanted channels. This means that we'd want to block out the following channels: 
+i) income to college; ii) health to income; iii) health to college. The first two channels are arguably 
+accounted for by controlling for income. How about the last channel?
+
+The DAG is saying that college causes health; and health causes college education. This is the case when 
+causality runs both ways. We call this as **reverse causality**.
+
+Let's consider another version of DAG. This is where I introduce the unobserved component. Not all of the 
+variables governing the DGP are actually observed by the researcher. In fact, you are often limited by the 
+data that you observe. Hence, you need to regonize the importance of variables that are in play for DAG but aren't 
+observed.  
+
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  college -> income 
+  health -> income 
+  income -> college
+  health -> college    
+  college -> ins     
+  income -> health
+  ins -> health  
+  unobs -> college 
+  unobs -> health
+  unobs -> ins
+  unobs -> income   
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example D.") + theme_void()
+```
+
+Among the all of the DAGs presented in this second, the last DAG perhaps most closely represent the DGP. 
+However, there are two limitations here. First, is the limitation arising from data. You just don't have 
+data for **unobserved** variables. These variables actually belong to the data generation, but since you 
+don;t have them, you cannot control for them. This leads to **omitted variable** bias in your inference. 
+Second is the **reverse causality** problem -- as discussed previously, the effect runs borth from health to college and 
+college to health. This is like saying that better health can influence your education, and your education can also influence 
+health. 
+
+Much of causal inference is about alleviating the concerns of **omitted varables** and **reverse causality**.
+
+# A simulated DGP
+
+Let's consider the following DGP solely for the purpose of our understanding. 
+
+i) College education boosts health by 10 percent. 
+ii) Income boosts health by 20 percent. 
+iii) 40 percent more people from higher income households have college education. 
+iv) Having insurance boosts health by 5 percent.
+
+The DAG representing the DGP is as follows:
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  income -> college    
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Representing the Made-up DGP.") + theme_void()
+```
+
+```{r}
+
+# number of observations
+n   <- 100000
+
+# income follows the log normal distributing
+income  <- rlnorm(n, meanlog = 1, sdlog = 0.5)
+
+# multiplying the log normal dist with 20000
+income  <-  income * 20000
+
+# a right skewed distribution
+hist(income)
+
+# a log normal distribution
+hist(log(income))
+
+# high income 
+high_income  <- ifelse(income > median(income), 1, 0)
+
+# college education 
+college  <-  rbinom(n, 1, 0.3 + 0.4 * high_income)
+
+# proportion of college graduates by income status
+print(table(college[high_income == 0]))
+print(table(college[high_income == 1]))
+
+# insurance status
+ins  <-  rbinom(n, 1, 0.5)
+
+# health (good health 1, poor health 0)
+# 60 percent of people with no college, low income, and no insurance have good health
+# 10 percent more of people with college have good health and so on.
+health  <- rbinom(n, 1, 0.6 + 0.1 * college + 0.2 * high_income + 0.05 * ins)
+
+table(health)
+
+data  <- data.frame(good_health = health, income = income, high_income = high_income, college = college, insurance = ins)
+head(data)
+
+
+# building models
+reg1  <- lm(good_health ~ college, data = data)
+
+reg2  <- lm(good_health ~ college + income, data = data)
+
+reg3  <- lm(good_health ~ college + high_income, data = data)
+
+reg4  <- lm(good_health ~ college + income + high_income, data = data)
+
+reg5  <- lm(good_health ~ college + high_income + ins, data = data)
+
+
+summary(reg1)
+
+summary(reg2)
+
+summary(reg3)
+
+summary(reg4)
+
+summary(reg5)
+
+
+```
+
+We know that the treatment effect of interest is 10, i.e., college increase the 
+chances of being in good health by 10 percentage points.
+
+We've ran 5 different models (estimated using OLS).  
+
+1. reg1: Misses out on other variables, particularly income. This falsely says that that college education 
+increases the chances of being in better health by 18 pp. We've got an omitted variable bias problem here.
+
+2. reg2: Adds income in a lineary way. This reduced the coefficient on college education; but still its off from 
+the actual effect. Perhaps, its because we linearly control for income? 
+
+3. reg3: Adds in the status of high income (whether income is higher than the median). This is the variable that matters in the DGP. Once we account for income in this way, the coefficient on college education moves to 0.1055 -- very close to true effect. *One realization is that controling for the variable is not just enough; it is essential to get the correct functional form down as well.*
+
+4. reg4: Uses the specification for reg3, but adds in control for income linearly. Not much changes. 
+
+5. reg5: Adds in control for insurance. Since, insurance acts alone in the DGP, it does not affect the estimate on college education. 
+
+
+# Discussion 
+
+In this lecture, we've discussed some fundamental blocks you need to consider before 
+starting up with research. Data plays a critical component of research and it is necessary to 
+put in deep thought as to how the DGP might be constructed. This will allow us to recognize 
+"good" vs. "bad" pathways and also it'll inform you about the variables that you'd want to have in 
+consideration. 
+
+Not all of the variables that you want will be available to you. But you need to make the best out of 
+what you have. This could mean various things including but not limited to: i) figuring out what variables you'd want but are not available, ii) giving thought to the potential problem of omitted variable bias (and reverse causality), and 
+iii) trying out several different ways to account for controls. 
+
+Ultimately, we are trying to understand something (new) about the DGP. In reality, the laws governing the DGP may not be that simple. That means we should try harder with persistence and creativity.
