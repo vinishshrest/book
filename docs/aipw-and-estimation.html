@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3.9 AIPW and Estimation | Causal Inference</title>
-  <meta name="description" content="3.9 AIPW and Estimation | Causal Inference" />
+  <title>4.9 AIPW and Estimation | Causal Inference</title>
+  <meta name="description" content="4.9 AIPW and Estimation | Causal Inference" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3.9 AIPW and Estimation | Causal Inference" />
+  <meta property="og:title" content="4.9 AIPW and Estimation | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3.9 AIPW and Estimation | Causal Inference" />
+  <meta name="twitter:title" content="4.9 AIPW and Estimation | Causal Inference" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2025-01-13" />
+<meta name="date" content="2025-01-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -161,64 +161,72 @@ div.csl-indent {
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Work in Progress</a></li>
-<li class="chapter" data-level="2" data-path="causal-inference-an-introduction.html"><a href="causal-inference-an-introduction.html"><i class="fa fa-check"></i><b>2</b> Causal Inference: An Introduction</a>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>2.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
-<li class="chapter" data-level="2.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>2.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="2.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>2.3</b> RCT</a></li>
-<li class="chapter" data-level="2.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>2.4</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="2.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>2.5</b> An estimation example</a></li>
-<li class="chapter" data-level="2.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>2.6</b> Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="2.7" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.7</b> Discussion</a></li>
-<li class="chapter" data-level="2.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>2.8</b> Reference</a></li>
+<li class="chapter" data-level="2.1" data-path="a-lab-experiment.html"><a href="a-lab-experiment.html"><i class="fa fa-check"></i><b>2.1</b> A lab experiment</a></li>
+<li class="chapter" data-level="2.2" data-path="challenges.html"><a href="challenges.html"><i class="fa fa-check"></i><b>2.2</b> Challenges</a></li>
+<li class="chapter" data-level="2.3" data-path="dag-directed-acyclic-graph.html"><a href="dag-directed-acyclic-graph.html"><i class="fa fa-check"></i><b>2.3</b> DAG (Directed Acyclic Graph)</a></li>
+<li class="chapter" data-level="2.4" data-path="a-simulated-dgp.html"><a href="a-simulated-dgp.html"><i class="fa fa-check"></i><b>2.4</b> A simulated DGP</a></li>
+<li class="chapter" data-level="2.5" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>2.5</b> Discussion</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>3</b> IPW and AIPW</a>
+<li class="chapter" data-level="3" data-path="causal-inference-an-introduction.html"><a href="causal-inference-an-introduction.html"><i class="fa fa-check"></i><b>3</b> Causal Inference: An Introduction</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>3.1</b> A simple example</a></li>
-<li class="chapter" data-level="3.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>3.2</b> Aggregated Estimator</a></li>
-<li class="chapter" data-level="3.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>3.3</b> Propensity score</a></li>
-<li class="chapter" data-level="3.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>3.4</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="3.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>3.5</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="3.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>3.6</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="3.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>3.7</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="3.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>3.8</b> Comparing IPW with Aggregated Estimate</a></li>
-<li class="chapter" data-level="3.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>3.9</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="3.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>3.10</b> Assessing Balance</a></li>
-<li class="chapter" data-level="3.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>3.11</b> Cross-fitting</a></li>
+<li class="chapter" data-level="3.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>3.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
+<li class="chapter" data-level="3.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>3.2</b> Average treatment effect (ATE)</a></li>
+<li class="chapter" data-level="3.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>3.3</b> RCT</a></li>
+<li class="chapter" data-level="3.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>3.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="3.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>3.5</b> An estimation example</a></li>
+<li class="chapter" data-level="3.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>3.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="3.7" data-path="discussion-1.html"><a href="discussion-1.html"><i class="fa fa-check"></i><b>3.7</b> Discussion</a></li>
+<li class="chapter" data-level="3.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>3.8</b> Reference</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>4</b> Difference in Differences</a>
+<li class="chapter" data-level="4" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>4</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>4.1</b> A Quick Introduction</a></li>
-<li class="chapter" data-level="4.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>4.2</b> Set up</a></li>
-<li class="chapter" data-level="4.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>4.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
-<li class="chapter" data-level="4.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>4.4</b> Naive estimator</a></li>
-<li class="chapter" data-level="4.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>4.5</b> Canonical Difference in Differences Framework</a></li>
-<li class="chapter" data-level="4.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>4.6</b> DiD in multi-period set up</a></li>
-<li class="chapter" data-level="4.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>4.7</b> Conditional Parallel Trend Assumption</a></li>
-<li class="chapter" data-level="4.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>4.8</b> Some concerns with controls</a></li>
-<li class="chapter" data-level="4.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>4.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
-<li class="chapter" data-level="4.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>4.10</b> Event study model</a></li>
-<li class="chapter" data-level="4.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>4.11</b> Two way fixed effect (TWFE) Revisited</a></li>
-<li class="chapter" data-level="4.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>4.12</b> Various ways of estimation</a></li>
-<li class="chapter" data-level="4.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>4.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
-<li class="chapter" data-level="4.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>4.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
-<li class="chapter" data-level="4.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>4.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
-<li class="chapter" data-level="4.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>4.16</b> Assumptions governing TWFEDD estimate</a></li>
-<li class="chapter" data-level="4.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>4.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+<li class="chapter" data-level="4.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>4.1</b> A simple example</a></li>
+<li class="chapter" data-level="4.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>4.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="4.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>4.3</b> Propensity score</a></li>
+<li class="chapter" data-level="4.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>4.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="4.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>4.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="4.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>4.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="4.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>4.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="4.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>4.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="4.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>4.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="4.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>4.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="4.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>4.11</b> Cross-fitting</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>5</b> Causal Forest</a>
+<li class="chapter" data-level="5" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>5</b> Difference in Differences</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>5.2</b> Summary of GRF</a></li>
-<li class="chapter" data-level="5.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>5.3</b> Motivation for Causal Forests</a></li>
-<li class="chapter" data-level="5.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>5.4</b> Causal Forest</a></li>
-<li class="chapter" data-level="5.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>5.5</b> An example of causal forest</a></li>
+<li class="chapter" data-level="5.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>5.1</b> A Quick Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>5.2</b> Set up</a></li>
+<li class="chapter" data-level="5.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>5.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+<li class="chapter" data-level="5.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>5.4</b> Naive estimator</a></li>
+<li class="chapter" data-level="5.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>5.5</b> Canonical Difference in Differences Framework</a></li>
+<li class="chapter" data-level="5.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>5.6</b> DiD in multi-period set up</a></li>
+<li class="chapter" data-level="5.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>5.7</b> Conditional Parallel Trend Assumption</a></li>
+<li class="chapter" data-level="5.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>5.8</b> Some concerns with controls</a></li>
+<li class="chapter" data-level="5.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>5.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="5.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>5.10</b> Event study model</a></li>
+<li class="chapter" data-level="5.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>5.11</b> Two way fixed effect (TWFE) Revisited</a></li>
+<li class="chapter" data-level="5.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>5.12</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="5.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>5.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
+<li class="chapter" data-level="5.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>5.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="5.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>5.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="5.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>5.16</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="5.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>5.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>6</b> Heterogeneous Treatment Effects</a>
+<li class="chapter" data-level="6" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>6</b> Causal Forest</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>6.1</b> Some ways to estimate CATE</a></li>
-<li class="chapter" data-level="6.2" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>6.2</b> Estimation</a></li>
-<li class="chapter" data-level="6.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>6.3</b> Some Remarks and Questions</a></li>
+<li class="chapter" data-level="6.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>6.2</b> Summary of GRF</a></li>
+<li class="chapter" data-level="6.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>6.3</b> Motivation for Causal Forests</a></li>
+<li class="chapter" data-level="6.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>6.4</b> Causal Forest</a></li>
+<li class="chapter" data-level="6.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>6.5</b> An example of causal forest</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>7</b> Heterogeneous Treatment Effects</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>7.1</b> Some ways to estimate CATE</a></li>
+<li class="chapter" data-level="7.2" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>7.2</b> Estimation</a></li>
+<li class="chapter" data-level="7.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>7.3</b> Some Remarks and Questions</a></li>
 </ul></li>
 </ul>
 
@@ -237,8 +245,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="aipw-and-estimation" class="section level2 hasAnchor" number="3.9">
-<h2><span class="header-section-number">3.9</span> AIPW and Estimation<a href="aipw-and-estimation.html#aipw-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="aipw-and-estimation" class="section level2 hasAnchor" number="4.9">
+<h2><span class="header-section-number">4.9</span> AIPW and Estimation<a href="aipw-and-estimation.html#aipw-and-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Augmented Inverse Probability Weighting (AIPW) provides a robust way to estimate ATE by alleviating the limitation of IPW estimate.</p>
 <p>Following the IPW approach, estimation of ATE is given in equation (6). The other approach to estimate <span class="math inline">\(\tau\)</span> is to think of it from the conditional response approach. Write <span class="math inline">\(\mu_{w}(x) = E[Y_i| \; X_i = x, W_i = w]\)</span>. Then:</p>
 <p><span class="math inline">\(\tau(x) = E[Y_i| \; X_i = x, W_i = 1] - E[Y_i| \; X_i = x, W_i = 0]\)</span></p>
@@ -249,86 +257,86 @@ div.csl-indent {
 <p><span class="math inline">\(\hat{\tau}_{AIPW} = \lowerbracket{\frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}^{-k(i)}(X_i) - \mu_{0}^{-k(i)}(X_i)}_{consistent \; estimate \; of \; \tau} + \frac{(Y_i - \hat{\mu}_1^{-k(i)}(X_i)). W_i}{\hat{e}^{-k(i)}(X_i)} - \frac{(Y_i - \hat{\mu}_0^{-k(i)}(X_i)). (1-W_i)}{1 - \hat{e}^{-k(i)}(X_i)})\)</span></p>
 <p>The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights given by the propensity score. There are two attractive features of AIPW estimate. First, $_{AIPW} is consistent as long as <span class="math inline">\(\hat{e}(x)\)</span> or <span class="math inline">\(\hat{\mu}_{w}(x)\)</span> is consistent. This is because <span class="math inline">\(E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0\)</span>. Second, <span class="math inline">\(\hat{\tau}_{AIPW}\)</span> is a good approximation to oracle <span class="math inline">\(\hat{\tau}_{AIPW}^{*}\)</span> as long as <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both <span class="math inline">\(\hat{\mu}(.)\)</span> and <span class="math inline">\(\hat{e}(.)\)</span> are <span class="math inline">\(\sqrt{n}\)</span>-consistent<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>, then the following holds.</p>
 <p><span class="math inline">\(\sqrt{n}(\hat{\tau}_{AIPW} - \hat{\tau}_{AIPW}^{*}) \rightarrow_p 0\)</span>.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="aipw-and-estimation.html#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
-<span id="cb77-2"><a href="aipw-and-estimation.html#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb77-3"><a href="aipw-and-estimation.html#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Augmented IPW (aipw)</span></span>
-<span id="cb77-4"><a href="aipw-and-estimation.html#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb77-5"><a href="aipw-and-estimation.html#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
-<span id="cb77-6"><a href="aipw-and-estimation.html#cb77-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-7"><a href="aipw-and-estimation.html#cb77-7" aria-hidden="true" tabindex="-1"></a><span class="co">#n_features2  &lt;- length(setdiff(names(dat2), &quot;Y&quot;))</span></span>
-<span id="cb77-8"><a href="aipw-and-estimation.html#cb77-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ranger</span></span>
-<span id="cb77-9"><a href="aipw-and-estimation.html#cb77-9" aria-hidden="true" tabindex="-1"></a><span class="co">#funrf_ranger  &lt;- function(dat){</span></span>
-<span id="cb77-10"><a href="aipw-and-estimation.html#cb77-10" aria-hidden="true" tabindex="-1"></a><span class="co">#    rf2  &lt;- ranger(</span></span>
-<span id="cb77-11"><a href="aipw-and-estimation.html#cb77-11" aria-hidden="true" tabindex="-1"></a><span class="co">#        Y ~ ., </span></span>
-<span id="cb77-12"><a href="aipw-and-estimation.html#cb77-12" aria-hidden="true" tabindex="-1"></a><span class="co">#        data = dat, </span></span>
-<span id="cb77-13"><a href="aipw-and-estimation.html#cb77-13" aria-hidden="true" tabindex="-1"></a><span class="co">#        mtry = min(ceiling(sqrt(n_features) + 20), n_features),  </span></span>
-<span id="cb77-14"><a href="aipw-and-estimation.html#cb77-14" aria-hidden="true" tabindex="-1"></a><span class="co">#        respect.unordered.factors = &quot;order&quot;, </span></span>
-<span id="cb77-15"><a href="aipw-and-estimation.html#cb77-15" aria-hidden="true" tabindex="-1"></a><span class="co">#        seed = 123, </span></span>
-<span id="cb77-16"><a href="aipw-and-estimation.html#cb77-16" aria-hidden="true" tabindex="-1"></a><span class="co">#        num.trees = 2000</span></span>
-<span id="cb77-17"><a href="aipw-and-estimation.html#cb77-17" aria-hidden="true" tabindex="-1"></a><span class="co">#    )</span></span>
-<span id="cb77-18"><a href="aipw-and-estimation.html#cb77-18" aria-hidden="true" tabindex="-1"></a><span class="co">#    return(rf2)</span></span>
-<span id="cb77-19"><a href="aipw-and-estimation.html#cb77-19" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb77-20"><a href="aipw-and-estimation.html#cb77-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-21"><a href="aipw-and-estimation.html#cb77-21" aria-hidden="true" tabindex="-1"></a><span class="co"># storing</span></span>
-<span id="cb77-22"><a href="aipw-and-estimation.html#cb77-22" aria-hidden="true" tabindex="-1"></a>predict.mat2a  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K)</span>
-<span id="cb77-23"><a href="aipw-and-estimation.html#cb77-23" aria-hidden="true" tabindex="-1"></a>predict.mat2b  <span class="ot">&lt;-</span> predict.mat2a</span>
-<span id="cb77-24"><a href="aipw-and-estimation.html#cb77-24" aria-hidden="true" tabindex="-1"></a>aipwK  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
-<span id="cb77-25"><a href="aipw-and-estimation.html#cb77-25" aria-hidden="true" tabindex="-1"></a>weightaipK  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">nrow</span>(index) <span class="sc">/</span> <span class="fu">length</span>(index), K)</span>
-<span id="cb77-26"><a href="aipw-and-estimation.html#cb77-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-27"><a href="aipw-and-estimation.html#cb77-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
-<span id="cb77-28"><a href="aipw-and-estimation.html#cb77-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># E(Y | X, W = 1) using cross-fitting</span></span>
-<span id="cb77-29"><a href="aipw-and-estimation.html#cb77-29" aria-hidden="true" tabindex="-1"></a>    predict.mat2a[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], W[index[, <span class="sc">-</span>i]]), <span class="at">W =</span> Y[index[, <span class="sc">-</span>i]], </span>
-<span id="cb77-30"><a href="aipw-and-estimation.html#cb77-30" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">predictkfold =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, i]), ], <span class="dv">1</span>))</span>
-<span id="cb77-31"><a href="aipw-and-estimation.html#cb77-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># E(Y | X, W = 0) using cross-fitting</span></span>
-<span id="cb77-32"><a href="aipw-and-estimation.html#cb77-32" aria-hidden="true" tabindex="-1"></a>    predict.mat2b[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], W[index[, <span class="sc">-</span>i]]), <span class="at">W =</span> Y[index[, <span class="sc">-</span>i]], </span>
-<span id="cb77-33"><a href="aipw-and-estimation.html#cb77-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">predictkfold =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, i]), ], <span class="dv">0</span>))                                </span>
-<span id="cb77-34"><a href="aipw-and-estimation.html#cb77-34" aria-hidden="true" tabindex="-1"></a>    noise  <span class="ot">&lt;-</span>  ((W[index[, i]] <span class="sc">*</span> (Y[index[, i]] <span class="sc">-</span> predict.mat2a[, i])) <span class="sc">/</span> (predict.mat[, i])) </span>
-<span id="cb77-35"><a href="aipw-and-estimation.html#cb77-35" aria-hidden="true" tabindex="-1"></a>                <span class="sc">-</span> </span>
-<span id="cb77-36"><a href="aipw-and-estimation.html#cb77-36" aria-hidden="true" tabindex="-1"></a>                (((<span class="dv">1</span> <span class="sc">-</span> W[index[, i]]) <span class="sc">*</span> (Y[index[, i]] <span class="sc">-</span> predict.mat2b)) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> predict.mat[, i]))</span>
-<span id="cb77-37"><a href="aipw-and-estimation.html#cb77-37" aria-hidden="true" tabindex="-1"></a>    score[[i]]  <span class="ot">&lt;-</span>  predict.mat2a[, i] <span class="sc">-</span> predict.mat2b[, i] <span class="sc">+</span> noise</span>
-<span id="cb77-38"><a href="aipw-and-estimation.html#cb77-38" aria-hidden="true" tabindex="-1"></a>    aipwK[i]  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score[[i]])</span>
-<span id="cb77-39"><a href="aipw-and-estimation.html#cb77-39" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb77-40"><a href="aipw-and-estimation.html#cb77-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-41"><a href="aipw-and-estimation.html#cb77-41" aria-hidden="true" tabindex="-1"></a>aipw.grf  <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(aipwK, <span class="at">weights =</span> weightaipK)</span>
-<span id="cb77-42"><a href="aipw-and-estimation.html#cb77-42" aria-hidden="true" tabindex="-1"></a>sd.aipw  <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">unlist</span>(score)) </span>
-<span id="cb77-43"><a href="aipw-and-estimation.html#cb77-43" aria-hidden="true" tabindex="-1"></a>ll  <span class="ot">&lt;-</span>  aipw.grf <span class="sc">-</span> (sd.aipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb77-44"><a href="aipw-and-estimation.html#cb77-44" aria-hidden="true" tabindex="-1"></a>ul  <span class="ot">&lt;-</span>  aipw.grf <span class="sc">+</span> (sd.aipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb77-45"><a href="aipw-and-estimation.html#cb77-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-46"><a href="aipw-and-estimation.html#cb77-46" aria-hidden="true" tabindex="-1"></a>result.aipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;AIPW Est.&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(aipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.aipw<span class="sc">/</span>(<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>), </span>
-<span id="cb77-47"><a href="aipw-and-estimation.html#cb77-47" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul, <span class="dv">3</span>))</span>
-<span id="cb77-48"><a href="aipw-and-estimation.html#cb77-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-49"><a href="aipw-and-estimation.html#cb77-49" aria-hidden="true" tabindex="-1"></a><span class="do">######################</span></span>
-<span id="cb77-50"><a href="aipw-and-estimation.html#cb77-50" aria-hidden="true" tabindex="-1"></a><span class="co"># grf</span></span>
-<span id="cb77-51"><a href="aipw-and-estimation.html#cb77-51" aria-hidden="true" tabindex="-1"></a><span class="do">######################</span></span>
-<span id="cb77-52"><a href="aipw-and-estimation.html#cb77-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-53"><a href="aipw-and-estimation.html#cb77-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a causal forest </span></span>
-<span id="cb77-54"><a href="aipw-and-estimation.html#cb77-54" aria-hidden="true" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span>  <span class="fu">causal_forest</span>(X, Y, W)</span>
-<span id="cb77-55"><a href="aipw-and-estimation.html#cb77-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-56"><a href="aipw-and-estimation.html#cb77-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the conditional average treatment effect on the full sample (CATE).</span></span>
-<span id="cb77-57"><a href="aipw-and-estimation.html#cb77-57" aria-hidden="true" tabindex="-1"></a>grf_ate  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(tau.forest, <span class="at">target.sample =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb77-58"><a href="aipw-and-estimation.html#cb77-58" aria-hidden="true" tabindex="-1"></a>grf_att  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(tau.forest, <span class="at">target.sample =</span> <span class="st">&quot;treated&quot;</span>)</span>
-<span id="cb77-59"><a href="aipw-and-estimation.html#cb77-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-60"><a href="aipw-and-estimation.html#cb77-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-61"><a href="aipw-and-estimation.html#cb77-61" aria-hidden="true" tabindex="-1"></a><span class="do">##  PRINT ALL</span></span>
-<span id="cb77-62"><a href="aipw-and-estimation.html#cb77-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb77-63"><a href="aipw-and-estimation.html#cb77-63" aria-hidden="true" tabindex="-1"></a><span class="co">#print(paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3)))</span></span>
-<span id="cb77-64"><a href="aipw-and-estimation.html#cb77-64" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to naive estimator:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">1</span>)]) <span class="sc">-</span> <span class="fu">mean</span>(Y[<span class="fu">which</span>( W <span class="sc">==</span> <span class="dv">0</span>)]), <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="aipw-and-estimation.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb106-2"><a href="aipw-and-estimation.html#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb106-3"><a href="aipw-and-estimation.html#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Augmented IPW (aipw)</span></span>
+<span id="cb106-4"><a href="aipw-and-estimation.html#cb106-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb106-5"><a href="aipw-and-estimation.html#cb106-5" aria-hidden="true" tabindex="-1"></a><span class="do">#######################</span></span>
+<span id="cb106-6"><a href="aipw-and-estimation.html#cb106-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-7"><a href="aipw-and-estimation.html#cb106-7" aria-hidden="true" tabindex="-1"></a><span class="co">#n_features2  &lt;- length(setdiff(names(dat2), &quot;Y&quot;))</span></span>
+<span id="cb106-8"><a href="aipw-and-estimation.html#cb106-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ranger</span></span>
+<span id="cb106-9"><a href="aipw-and-estimation.html#cb106-9" aria-hidden="true" tabindex="-1"></a><span class="co">#funrf_ranger  &lt;- function(dat){</span></span>
+<span id="cb106-10"><a href="aipw-and-estimation.html#cb106-10" aria-hidden="true" tabindex="-1"></a><span class="co">#    rf2  &lt;- ranger(</span></span>
+<span id="cb106-11"><a href="aipw-and-estimation.html#cb106-11" aria-hidden="true" tabindex="-1"></a><span class="co">#        Y ~ ., </span></span>
+<span id="cb106-12"><a href="aipw-and-estimation.html#cb106-12" aria-hidden="true" tabindex="-1"></a><span class="co">#        data = dat, </span></span>
+<span id="cb106-13"><a href="aipw-and-estimation.html#cb106-13" aria-hidden="true" tabindex="-1"></a><span class="co">#        mtry = min(ceiling(sqrt(n_features) + 20), n_features),  </span></span>
+<span id="cb106-14"><a href="aipw-and-estimation.html#cb106-14" aria-hidden="true" tabindex="-1"></a><span class="co">#        respect.unordered.factors = &quot;order&quot;, </span></span>
+<span id="cb106-15"><a href="aipw-and-estimation.html#cb106-15" aria-hidden="true" tabindex="-1"></a><span class="co">#        seed = 123, </span></span>
+<span id="cb106-16"><a href="aipw-and-estimation.html#cb106-16" aria-hidden="true" tabindex="-1"></a><span class="co">#        num.trees = 2000</span></span>
+<span id="cb106-17"><a href="aipw-and-estimation.html#cb106-17" aria-hidden="true" tabindex="-1"></a><span class="co">#    )</span></span>
+<span id="cb106-18"><a href="aipw-and-estimation.html#cb106-18" aria-hidden="true" tabindex="-1"></a><span class="co">#    return(rf2)</span></span>
+<span id="cb106-19"><a href="aipw-and-estimation.html#cb106-19" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
+<span id="cb106-20"><a href="aipw-and-estimation.html#cb106-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-21"><a href="aipw-and-estimation.html#cb106-21" aria-hidden="true" tabindex="-1"></a><span class="co"># storing</span></span>
+<span id="cb106-22"><a href="aipw-and-estimation.html#cb106-22" aria-hidden="true" tabindex="-1"></a>predict.mat2a  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K)</span>
+<span id="cb106-23"><a href="aipw-and-estimation.html#cb106-23" aria-hidden="true" tabindex="-1"></a>predict.mat2b  <span class="ot">&lt;-</span> predict.mat2a</span>
+<span id="cb106-24"><a href="aipw-and-estimation.html#cb106-24" aria-hidden="true" tabindex="-1"></a>aipwK  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb106-25"><a href="aipw-and-estimation.html#cb106-25" aria-hidden="true" tabindex="-1"></a>weightaipK  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">nrow</span>(index) <span class="sc">/</span> <span class="fu">length</span>(index), K)</span>
+<span id="cb106-26"><a href="aipw-and-estimation.html#cb106-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-27"><a href="aipw-and-estimation.html#cb106-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
+<span id="cb106-28"><a href="aipw-and-estimation.html#cb106-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># E(Y | X, W = 1) using cross-fitting</span></span>
+<span id="cb106-29"><a href="aipw-and-estimation.html#cb106-29" aria-hidden="true" tabindex="-1"></a>    predict.mat2a[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], W[index[, <span class="sc">-</span>i]]), <span class="at">W =</span> Y[index[, <span class="sc">-</span>i]], </span>
+<span id="cb106-30"><a href="aipw-and-estimation.html#cb106-30" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">predictkfold =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, i]), ], <span class="dv">1</span>))</span>
+<span id="cb106-31"><a href="aipw-and-estimation.html#cb106-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># E(Y | X, W = 0) using cross-fitting</span></span>
+<span id="cb106-32"><a href="aipw-and-estimation.html#cb106-32" aria-hidden="true" tabindex="-1"></a>    predict.mat2b[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], W[index[, <span class="sc">-</span>i]]), <span class="at">W =</span> Y[index[, <span class="sc">-</span>i]], </span>
+<span id="cb106-33"><a href="aipw-and-estimation.html#cb106-33" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">predictkfold =</span> <span class="fu">cbind</span>(X[<span class="fu">c</span>(index[, i]), ], <span class="dv">0</span>))                                </span>
+<span id="cb106-34"><a href="aipw-and-estimation.html#cb106-34" aria-hidden="true" tabindex="-1"></a>    noise  <span class="ot">&lt;-</span>  ((W[index[, i]] <span class="sc">*</span> (Y[index[, i]] <span class="sc">-</span> predict.mat2a[, i])) <span class="sc">/</span> (predict.mat[, i])) </span>
+<span id="cb106-35"><a href="aipw-and-estimation.html#cb106-35" aria-hidden="true" tabindex="-1"></a>                <span class="sc">-</span> </span>
+<span id="cb106-36"><a href="aipw-and-estimation.html#cb106-36" aria-hidden="true" tabindex="-1"></a>                (((<span class="dv">1</span> <span class="sc">-</span> W[index[, i]]) <span class="sc">*</span> (Y[index[, i]] <span class="sc">-</span> predict.mat2b)) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> predict.mat[, i]))</span>
+<span id="cb106-37"><a href="aipw-and-estimation.html#cb106-37" aria-hidden="true" tabindex="-1"></a>    score[[i]]  <span class="ot">&lt;-</span>  predict.mat2a[, i] <span class="sc">-</span> predict.mat2b[, i] <span class="sc">+</span> noise</span>
+<span id="cb106-38"><a href="aipw-and-estimation.html#cb106-38" aria-hidden="true" tabindex="-1"></a>    aipwK[i]  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score[[i]])</span>
+<span id="cb106-39"><a href="aipw-and-estimation.html#cb106-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb106-40"><a href="aipw-and-estimation.html#cb106-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-41"><a href="aipw-and-estimation.html#cb106-41" aria-hidden="true" tabindex="-1"></a>aipw.grf  <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(aipwK, <span class="at">weights =</span> weightaipK)</span>
+<span id="cb106-42"><a href="aipw-and-estimation.html#cb106-42" aria-hidden="true" tabindex="-1"></a>sd.aipw  <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">unlist</span>(score)) </span>
+<span id="cb106-43"><a href="aipw-and-estimation.html#cb106-43" aria-hidden="true" tabindex="-1"></a>ll  <span class="ot">&lt;-</span>  aipw.grf <span class="sc">-</span> (sd.aipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb106-44"><a href="aipw-and-estimation.html#cb106-44" aria-hidden="true" tabindex="-1"></a>ul  <span class="ot">&lt;-</span>  aipw.grf <span class="sc">+</span> (sd.aipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb106-45"><a href="aipw-and-estimation.html#cb106-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-46"><a href="aipw-and-estimation.html#cb106-46" aria-hidden="true" tabindex="-1"></a>result.aipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;AIPW Est.&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(aipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.aipw<span class="sc">/</span>(<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>), </span>
+<span id="cb106-47"><a href="aipw-and-estimation.html#cb106-47" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul, <span class="dv">3</span>))</span>
+<span id="cb106-48"><a href="aipw-and-estimation.html#cb106-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-49"><a href="aipw-and-estimation.html#cb106-49" aria-hidden="true" tabindex="-1"></a><span class="do">######################</span></span>
+<span id="cb106-50"><a href="aipw-and-estimation.html#cb106-50" aria-hidden="true" tabindex="-1"></a><span class="co"># grf</span></span>
+<span id="cb106-51"><a href="aipw-and-estimation.html#cb106-51" aria-hidden="true" tabindex="-1"></a><span class="do">######################</span></span>
+<span id="cb106-52"><a href="aipw-and-estimation.html#cb106-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-53"><a href="aipw-and-estimation.html#cb106-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a causal forest </span></span>
+<span id="cb106-54"><a href="aipw-and-estimation.html#cb106-54" aria-hidden="true" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span>  <span class="fu">causal_forest</span>(X, Y, W)</span>
+<span id="cb106-55"><a href="aipw-and-estimation.html#cb106-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-56"><a href="aipw-and-estimation.html#cb106-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the conditional average treatment effect on the full sample (CATE).</span></span>
+<span id="cb106-57"><a href="aipw-and-estimation.html#cb106-57" aria-hidden="true" tabindex="-1"></a>grf_ate  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(tau.forest, <span class="at">target.sample =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb106-58"><a href="aipw-and-estimation.html#cb106-58" aria-hidden="true" tabindex="-1"></a>grf_att  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(tau.forest, <span class="at">target.sample =</span> <span class="st">&quot;treated&quot;</span>)</span>
+<span id="cb106-59"><a href="aipw-and-estimation.html#cb106-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-60"><a href="aipw-and-estimation.html#cb106-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-61"><a href="aipw-and-estimation.html#cb106-61" aria-hidden="true" tabindex="-1"></a><span class="do">##  PRINT ALL</span></span>
+<span id="cb106-62"><a href="aipw-and-estimation.html#cb106-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-63"><a href="aipw-and-estimation.html#cb106-63" aria-hidden="true" tabindex="-1"></a><span class="co">#print(paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3)))</span></span>
+<span id="cb106-64"><a href="aipw-and-estimation.html#cb106-64" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to naive estimator:&quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">1</span>)]) <span class="sc">-</span> <span class="fu">mean</span>(Y[<span class="fu">which</span>( W <span class="sc">==</span> <span class="dv">0</span>)]), <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to naive estimator: 15.558&quot;</code></pre>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="aipw-and-estimation.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to IPW using&quot;</span>, K, <span class="st">&quot;fold cross-fittin:&quot;</span>, <span class="fu">round</span>(ipw.grf, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="aipw-and-estimation.html#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to IPW using&quot;</span>, K, <span class="st">&quot;fold cross-fittin:&quot;</span>, <span class="fu">round</span>(ipw.grf, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to IPW using 10 fold cross-fittin: 15.508&quot;</code></pre>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="aipw-and-estimation.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to IPW oracle:&quot;</span>, <span class="fu">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="aipw-and-estimation.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to IPW oracle:&quot;</span>, <span class="fu">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to IPW oracle: 16.496&quot;</code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="aipw-and-estimation.html#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to AIPW using&quot;</span>, K, <span class="st">&quot;fold cross-fitting:&quot;</span>, <span class="fu">round</span>(aipw.grf, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="aipw-and-estimation.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to AIPW using&quot;</span>, K, <span class="st">&quot;fold cross-fitting:&quot;</span>, <span class="fu">round</span>(aipw.grf, <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to AIPW using 10 fold cross-fitting: 15.037&quot;</code></pre>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="aipw-and-estimation.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to GRF:&quot;</span>, <span class="fu">round</span>(grf_ate[[<span class="dv">1</span>]], <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="aipw-and-estimation.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;treatment effects according to GRF:&quot;</span>, <span class="fu">round</span>(grf_ate[[<span class="dv">1</span>]], <span class="dv">3</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;treatment effects according to GRF: 15.031&quot;</code></pre>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="aipw-and-estimation.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result.ipw)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="aipw-and-estimation.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result.ipw)</span></code></pre></div>
 <pre><code>## IPW estimate           se  lower bound  upper bound 
 ##       15.508        3.092        9.448       21.568</code></pre>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="aipw-and-estimation.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result.aipw)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="aipw-and-estimation.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result.aipw)</span></code></pre></div>
 <pre><code>##   AIPW Est.          se lower bound upper bound 
 ##      15.037       0.031      14.975      15.098</code></pre>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="aipw-and-estimation.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(grf_ate)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="aipw-and-estimation.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(grf_ate)</span></code></pre></div>
 <pre><code>##    estimate     std.err 
 ## 15.03144837  0.05209014</code></pre>
 </div>

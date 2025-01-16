@@ -38,7 +38,7 @@ theme_set(theme_minimal())
 
 
 
-# A lab experiment
+## A lab experiment
 
 Let's consider a simple example. Suppose you want to investigate the importance of sunlight for the growth of a jade plant. How might you proceed?
 
@@ -56,7 +56,7 @@ What's happening in our thought experiment? We've essentially conducted a minima
 
 
 
-# Challenges
+## Challenges
 
 When exploring cause-and-effect relationships, a fundamental challenge arises: we often cannot conduct controlled lab experiments for most real-world questions. Let's consider an example to illustrate this.
 
@@ -107,7 +107,7 @@ proportion of college graduates also have higher per capita income and lower uni
 insurance status may have a causal effect on one's health. Hence, it is unwise to make a rushed 
 claim that college education leads to better health status. It may, or it may not. We dont know yet!
 
-# DAG (Directed Acyclic Graph)
+## DAG (Directed Acyclic Graph)
 
 A simple way to keep track of whats going on is to make use of causal diagrams. This is 
 known as Directed Acyclic Graph (DAG) in various fields like statistics, computer science, and epidemiology.
@@ -269,7 +269,7 @@ health.
 
 Much of causal inference is about alleviating the concerns of **omitted varables** and **reverse causality**.
 
-# A simulated DGP
+## A simulated DGP
 
 Let's consider the following DGP solely for the purpose of our understanding. 
 
@@ -381,7 +381,7 @@ the actual effect. Perhaps, its because we linearly control for income?
 5. reg5: Adds in control for insurance. Since, insurance acts alone in the DGP, it does not affect the estimate on college education. 
 
 
-# Discussion 
+## Discussion 
 
 In this lecture, we've discussed some fundamental blocks you need to consider before 
 starting up with research. Data plays a critical component of research and it is necessary to 
@@ -393,4 +393,4 @@ Not all of the variables that you want will be available to you. But you need to
 what you have. This could mean various things including but not limited to: i) figuring out what variables you'd want but are not available, ii) giving thought to the potential problem of omitted variable bias (and reverse causality), and 
 iii) trying out several different ways to account for controls. 
 
-Ultimately, we are trying to understand something (new) about the DGP. In reality, the laws governing the DGP may not be that simple. That means we should try harder with persistence and creativity.
+Ultimately, we are trying to understand something (new) about the DGP. In reality, the laws governing the DGP may not be that simple. That means we should try harder with persistence and creativity. In the next lecture we'll talk about regression.
