@@ -42,7 +42,7 @@ theme_set(theme_minimal())
 
 
 
-# The best-fit line
+## The best-fit line
 
 Let me first start with an illustration. Say, we want to understand the relationship between 
 education and income. Let's first simulate the data and plot the relationship. 
@@ -80,7 +80,7 @@ f0 / f1
 Each point on the figure pertains to an individual. Panel A uses the raw points, while Panel 
 B adds in the best-fit line. This is also known as the regression line. 
 
-# Linear Regression Specification
+## Linear Regression Specification
 
 Let's write down the relationship between years of education and earnings using a linear 
 simple (univariate) regression model. 
@@ -121,7 +121,7 @@ Y_{i} = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_{i}  (\#eq:reg1)
 where, $X_2$ can be experience. To aim for simplicity, we'll mainly focus on simple linear regression.
 
 
-# Law of iterated expectation
+## Law of iterated expectation
 
 Say you have two random variables $X$ and $Y$. The law of iterated expectation says that:
 
@@ -129,7 +129,7 @@ $E(E(Y|X)) = E(Y)$.
 
 The inside expectation is conditional on X values, whereas the outside expectation exhausts the $X$ domain. 
 
-# Error term
+## Error term
 Say, that the model that you have specified is correct; i.e., $Y$ is explained only by $X$. It is easy to see that the error term will consist of the variation in $Y$ that is unexplained 
 by $X$. In this case, the error term will just consist of noise. 
 
@@ -210,7 +210,7 @@ replace, the value of $\hat{\alpha}$ into the second equation to get:
 
 
 
-# Decomposition 
+## Decomposition 
 The linear regression is estimating the *conditional mean*. The conditional mean function 
 is written as: 
 
@@ -228,7 +228,7 @@ Y_i = \underbrace{E(Y_i | X_i)}_{conditional \; expectation} + \underbrace{\epsi
 
 Here, we've decomposed the regression specification into two parts: $i)$ conditional mean; and $ii)$ unobserved component.
 
-# Estimation
+## Estimation
 
 There are different ways to estimate a regression specification. These include the method of moment estimation (as we've seen before), the maximum likelihood estimation (MLE), and computation 
 estimation. Here, we take a look at the computational approach. 
@@ -328,7 +328,7 @@ ylab("residual sum of \n square") + xlab("beta values")
 
 ```
 
-# Running a regression 
+## Running a regression 
 
 Regression is a flexible tool to model the relationship between the dependent and independent 
 variables. Consider the data coming from the following simulated DGP.
@@ -403,7 +403,7 @@ summary(reg)
 
 We see that a year of education leads to an increase in earnings by 3,984. On average, a female's earning is less than that of male's by 2,647. Also, on average, the effect of an additional year of education among females is 512 more than that of male's. Note that these estimates are not too different from the true parameters used to generate the simulated DGP.    
 
-# Standard Errors
+## Standard Errors
 
 **Standard Error of the Regression.**
 
@@ -480,7 +480,7 @@ print(se_educ)
 se(reg_model)[[2]]
 ```
 
-# An exercise
+## An exercise
 
 ```{r}
 setwd("/Users/vshrestha/Dropbox/Machine Learning/book/data")
