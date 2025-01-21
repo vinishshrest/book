@@ -1,0 +1,510 @@
+---
+title: "Regression"
+output:
+  html_document:
+    css: custom.css
+    includes:
+      in_header: header.html
+biblio-style: apalike
+link-citations: yes
+bibliography: ML.bib
+---
+
+# Why Regression?
+
+We've discussed the "good" vs. "bad" pathways in the previous lecture. What we'd want 
+to do is close off the "bad" pathways as much as possible. One way to do this is by 
+using regression. 
+
+In fact, we ran several regression models towards the end of the 
+last lecture. And we were happy that by controlling for income, we were able to trace 
+the effect of college education on health as defined by the simulated DGP. By accounting 
+for the necessary variables, regression may allow us to estimate causal effects. However, 
+there are strong limitations to this approach, something which will discuss soon.
+
+First, let's discuss some fundamentals of regression. 
+
+
+```{r}
+# declare paths and libraries
+user = 2
+if(user == 1){
+    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+}else{
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+}
+
+
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow)
+theme_set(theme_minimal())
+```
+
+
+
+# The best-fit line
+
+Let me first start with an illustration. Say, we want to understand the relationship between 
+education and income. Let's first simulate the data and plot the relationship. 
+
+```{r}
+n  <- 1000
+educ  <- sample(seq(1, 16, 1), n, replace = TRUE)
+income  <- 20000 + 2000 * educ + rnorm(n, mean = 10000, sd = 5000)
+
+dat  <- data.frame(educ = educ, income = income)
+
+# mean income for each value of education
+dat_sum  <- dat  %>% 
+                group_by(educ)  %>% 
+                summarize(mean_income = mean(income))
+
+# merge 
+dat  <- dat  %>% 
+            merge(dat_sum, by = "educ", all.x = T)
+
+f0  <- ggplot(dat, aes(x = educ, y = income)) + geom_point() + 
+            geom_line(aes(x = educ, y = mean_income), size = 1) +
+        xlab("years of education") + ggtitle("Panel A") + 
+        annotate("text", x = 10, y = 35000, 
+                label = "Line plotting the conditional mean", color = "blue", hjust = 0)
+
+f1  <- ggplot(dat, aes(x = educ, y = income)) + geom_point() + 
+geom_smooth(method = "lm", se = FALSE, color  = "blue") + xlab("years of education") + 
+annotate("text", x = 10, y = 35000, label = "Best-Fit Line; E(Y|X)", color = "blue", hjust = 0) + 
+ggtitle("Panel B")
+
+f0 / f1
+```
+
+Each point on the figure pertains to an individual. Panel A uses the raw points, while Panel 
+B adds in the best-fit line. This is also known as the regression line. 
+
+# Linear Regression Specification
+
+Let's write down the relationship between years of education and earnings using a linear 
+simple (univariate) regression model. 
+
+\begin{equation}
+Y_{i} = \alpha + \beta X_{i} + \epsilon_{i}  (\#eq:reg1)
+\end{equation}
+
+where, 
+
+- $Y_{i}$ is income for an individual $i$, 
+
+- $X_i$ is years of education, 
+
+- $\alpha$ is the y-intercept, 
+
+- $\beta$ is the slope,
+
+- $\epsilon_i$ is the error term. 
+
+We'll observe $Y$ and $X$. 
+$\epsilon_{i}$, the error term, is an unobserved *random variable*. 
+The error term can be written as: 
+$\epsilon_{i} = Y_i - \alpha - \beta X_{i}$. 
+
+Note that the regression specification is a population concept. For example, if you could have everyone 
+in the population in your data set, then $\beta$ is the population coefficient. The error is again a population concept. However, (almost always) you don't observe the population; you have to work with the sample. Using a sample, you need to estimate $\alpha$ and $\beta$. 
+
+For the regression to make sense, we've got to make some assumptions regarding the error term. Note that 
+you don't observe the error term. Anything that explains $Y$ but is not specified in the regression is captured by the error term. For example, in the earning specification, we are missing out on experience, as earning increases with experience. Once not specified, this variable is observed by the error term. Say, if you build an eagle-eye model, by including all of the variables that should be in the model, and that you also have the functional form correctly specified. In this case, the error term just drops out and the model becomes deterministic, similar to $y = mx + c$. 
+
+You can move from the simple regression to multiple regression by linearly adding variabes. 
+
+\begin{equation}
+Y_{i} = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_{i}  (\#eq:reg1)
+\end{equation}
+
+where, $X_2$ can be experience. To aim for simplicity, we'll mainly focus on simple linear regression.
+
+
+# Law of iterated expectation
+
+Say you have two random variables $X$ and $Y$. The law of iterated expectation says that:
+
+$E(E(Y|X)) = E(Y)$. 
+
+The inside expectation is conditional on X values, whereas the outside expectation exhausts the $X$ domain. 
+
+# Error term
+Say, that the model that you have specified is correct; i.e., $Y$ is explained only by $X$. It is easy to see that the error term will consist of the variation in $Y$ that is unexplained 
+by $X$. In this case, the error term will just consist of noise. 
+
+One widely used assumption is that the errors are: $i)$ identically and independently distributed; and $ii)$ comes from the normal distribution with 
+mean 0 and variance $\sigma^2$, i.e., $\epsilon \sim (0, \; \sigma^2)$. This is a 
+strong assumption for two reasons. First, the error terms might be correlated. For example, individuals who live close each other in terms of spatial proximity might share something in common. Second, variance in the error term might vary with values on $Xs$. To see this, earnings may have larger variance for individuals with higher levels of education, compared to those with lower levels of education. When the variance of the error term is not constant across all levels of the explanatory variables, this condition is known as *heteroskedasticity*. It violates one of the key assumptions of the Ordinary Least Squares (OLS) regression model, which assumes *homoskedasticity*, i.e., the error term has a constant variance.
+
+
+Instead of assuming that $E(\epsilon) = 0 $, we'll utilize the *exogeneity* assumption to make sense of regression. This assumption implicitly states that we've closed all of the backdoors to "bad pathways" in the DGP. Let's say that we've got the following DGP. 
+
+
+```{r}
+library(dagitty) # libraries for DAG
+library(ggdag)
+
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  health -> educa     
+  educa -> earn     
+  health -> earn     
+  race -> educa
+  race -> earn
+  height -> earn     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example A.") + theme_void()
+```
+
+In this DGP, channels from health and race are *bad pathways* and need to be accounted for in order to evaluate the causal effect of education on earnings. Once we have accounted for all of the *bad* and of course *good* pathways, we can see that height only affects earnings but no other variables. Since, height is not correlated to the explanatory variables $(Xs)$, we term height as an exogeneous variable. The *exogeneity assumption* states that the error term $(\epsilon$)$ is uncorrelated with the explanatory variables $Xs$ included in the model. This means that after accounting for $Xs$, the error term is independent of $Xs$. For instance, in the given DGP process, once accounting for education, health, and race, the unaccounted variation in earnings is not correlated with these variables. This conditional independence of error term implies that 
+
+$E(u|Xs) = 0$. 
+
+Next, we can establish this following using the Law of Iterated Expectation:
+
+\begin{align}
+E(uX) = E[E[uX|X]] = E[X\underbrace{E[u|X]}_{=0}] \\
+       = 0
+\end{align}
+
+
+So we've got two population-related assumptions:
+
+i) $E(u) = 0$ 
+
+ii) $E(uX) = 0$
+
+Note that there are two unknowns ($\alpha$ and $\beta$). Let's first 
+set-up the sample counterparts: 
+
+a. $\frac{1}{n} \sum_{i}^{n}(Y_i - \hat{\alpha} - \hat{\beta} X_i) = 0$
+
+b. $\frac{1}{n} \sum_{i}^{n} X_i(Y_i - \hat{\alpha} - \hat{\beta} X_i) = 0$
+
+**Solve for $\hat{\alpha}$**
+
+\begin{align}
+\frac{1}{n} \sum_{i}^{n}(Y_i - \hat{\alpha} - \hat{\beta} X_i) = 0 \\
+\hat{\alpha} = \hat{Y} - \hat{\beta} \hat{X}
+\end{align}
+
+replace, the value of $\hat{\alpha}$ into the second equation to get:
+
+\begin{align}
+\frac{1}{n} \sum_{i}^{n} X_i(Y_i - \hat{\alpha} - \hat{\beta} X_i) = 0 \\
+\frac{1}{n} \sum_{i}^{n} X_i(Y_i - \hat{Y} + \hat{\beta} \hat{X} - \hat{\beta} X_i) = 0 \\
+\frac{1}{n} \sum_{i}^{n} X_i(Y_i - \hat{Y}) = \hat{\beta} \frac{1}{n} \sum_{i}^{n}X_i (X_i - \hat{X}) \\
+\frac{1}{n} \sum_{i}^{n} (Y_i - \hat{Y}) = \hat{\beta} \frac{1}{n} \sum_{i}^{n} (X_i - \hat{X}) \\
+\frac{1}{n} \sum_{i}^{n} (Y_i - \hat{Y})(X_i - \hat{X}) = \hat{\beta} \frac{1}{n} \sum_{i}^{n} (X_i - \hat{X})^2 \\
+\hat{\beta} = \frac{cov(X,Y)}{var(X)}
+\end{align}
+
+
+
+
+
+# Decomposition 
+The linear regression is estimating the *conditional mean*. The conditional mean function 
+is written as: 
+
+\begin{equation}
+E(Y_i|X_i) = \alpha + \beta X_i (\#eq:reg2)
+\end{equation}
+
+The above equality directly comes from the underlying assumption $E(u|X)=0$, or the independence of error term once conditioned on $X$.
+
+We can rewrite the regression specification as: 
+
+\begin{equation}
+Y_i = \underbrace{E(Y_i | X_i)}_{conditional \; expectation} + \underbrace{\epsilon_i}_{unobserved \; component} (\#eq:reg3)
+\end{equation}
+
+Here, we've decomposed the regression specification into two parts: $i)$ conditional mean; and $ii)$ unobserved component.
+
+# Estimation
+
+There are different ways to estimate a regression specification. These include the method of moment estimation (as we've seen before), the maximum likelihood estimation (MLE), and computation 
+estimation. Here, we take a look at the computational approach. 
+
+Let's take a look at the error term, $\epsilon_i$, a bit more carefully. We can flip the 
+terms around and end up with.
+
+\begin{equation}
+\epsilon_{i} = Y_{i} - (\alpha + \beta X_{i}) (\#eq:reg3)
+\end{equation}
+
+Note that $Y_{i} - (\alpha + \beta X_{i})$ are also termed as residuals.
+
+
+Intuitively, we'd want to minimize the prediction error, right? 
+Hence, we'd want to go for the estimates for $\alpha$ and $\beta$ such that these estimates 
+minimize the residual sum of the squares (RSS). This gives us an objective function. 
+
+\begin{equation}
+\underbrace{min}_{\alpha, \; \beta} \sum_{i = 1}^N \bigg(Y_{i} - (\alpha + \beta X_{i})\bigg)^2 (\#eq:objective)
+\end{equation}
+
+The estimates of $\alpha$ and $\beta$ are termed as $\widehat{\alpha}$ and $\widehat{\beta}$, 
+respectively. 
+
+Next, we'll write an algorithm to follow the objective function. 
+
+1. Create a grid form for $\alpha$ and $\beta$ values. 
+```{r}
+alpha_vals  <- seq(18000, 35000, by = 10) 
+beta_vals  <-  seq(500, 5000, by = 10)
+
+# create a grid 
+grid  <- expand.grid(alpha_vals = alpha_vals, beta_vals = beta_vals)
+
+store  <- rep(0, nrow(grid))
+```
+
+2. Declare the objective function. The function takes in the values of $X$, $Y$, $\tilde{\alpha}$, 
+$\tilde{\beta}$ and gives the ssr.
+
+```{r}
+fun_objective  <- function(alpha, beta, X, Y) {
+
+    # @Arg alpha: intercept
+    # @Arg beta: slope
+    # @Arg X: independent variable 
+    # @Arg Y: dependent variable 
+
+    residual_sq  <-  (Y - alpha - beta * X)^2
+    ssr  <- sum(residual_sq)
+
+    return(ssr)   
+
+}
+
+```
+
+3. Pick the estimates on $\alpha$ and $\beta$ that minimizes the ssr. 
+
+```{r}
+for(i in seq(nrow(grid))){
+store[i]  <- fun_objective(alpha = grid[i,1], beta = grid[i,2], X = educ, Y = income)
+}
+
+index  <- which(store == min(store))
+coef  <- grid[index, ]
+```
+
+4. Compare the estimate that minimizes the ssr with estimates produced from in-built regression 
+library in R. 
+
+```{r}
+print(grid[index, ])
+
+print(lm(income ~ educ, dat))
+```
+
+5. Let's plot to see how ssr varies with estimates of $\beta$. Fix the value of $\alpha$ at the estimate 
+from 4. 
+
+```{r}
+# create a dataframe
+data  <- cbind(grid, store)
+
+# restrict the value of alpha at the one that minimizes the ssr
+data  <- data  %>% 
+            filter(alpha_vals == coef[[1]])
+
+# get the estimate on beta for the set alpha so that it minimizes ssr  
+beta_hat  <- beta_vals[which(data$store == min(data$store))]
+
+#plot
+ggplot(data, aes(x = beta_vals, y = store)) + geom_point() + 
+geom_vline(xintercept = beta_hat) + 
+ylab("residual sum of \n square") + xlab("beta values")
+
+```
+
+# Running a regression 
+
+Regression is a flexible tool to model the relationship between the dependent and independent 
+variables. Consider the data coming from the following simulated DGP.
+
+
+```{r}
+set.seed(1254)
+n  <- 2000
+female  <- rbinom(n, 1, 0.5)
+educ  <- sample(seq(0, 16, 1), n, replace = TRUE)
+income  <- 20000 + (4000 * educ) -(2500 * female) + (500 * female * educ) + rnorm(n, mean = 0, sd = 2500)
+
+dat  <- data.frame(educ = educ, income = income, female = female)
+
+# 
+head(dat)
+```
+
+Say, you want to investigate whether the relationship between education and earnings 
+varies by gender. More specifically, you want to evaluate whether increase in years of education 
+has differential returns on earnings for females compared to males. How do you do this?
+
+You'd want to set up your null and alternative hypothesis and test your alternative hypothesis under the null. 
+
+**Null hypothesis.** Returns to education on earnings does not vary by gender. 
+
+**Alternative hypothesis.** Returns to education are different for female compared to male. 
+
+Let's first start with a simple regression specification. 
+
+\begin{equation}
+earnings_i = \alpha + \beta education_i + \epsilon_i
+\end{equation}
+
+This specification needs to be modified in order to account for gender. 
+
+\begin{equation}
+earnings_i = \alpha + \beta_1 education_i + \beta_2 gender + \epsilon_i
+\end{equation}
+
+here, $gender$ is a binary variable, taking the value $0$ if male and $1$ if female. The coefficient 
+on $\beta_1$ evaluates the effect of 1 additional year of education on earnings, and the coefficient on 
+$\beta_2$ evaluates the change in average earnings among females compared to males. However, this 
+specification still does not model our alternative hypothesis: Returns to education are lower for female compared to male. To test this, we need to incorporate an interaction term between education and gender. 
+
+
+\begin{equation}
+earnings_i = \alpha + \beta_1 education_i + \beta_2 gender + \beta_3 gender \times education + \epsilon_i
+\end{equation}
+
+Let's break down what the coefficients are capturing:
+
+- $\alpha$: captures the average earnings for males with 0 education value. 
+
+- $\beta_1$: captures the effect of one additional year of education on earnings for male. 
+
+- $\beta_2$: captures the effect of being a female on average earnings compared to male. 
+
+- $\beta_3$: tells us whether the impact of an additional year of education for female is different than for female. To see this: the expected returns to education for: 
+
+    a. male = $\alpha + \beta_1 E(education_i)$. 
+    
+    b. female: $\alpha + E(education_i) \times (\beta_1 + \beta_3) + \beta_2$.  
+
+
+Let's run the specification that tests our alternative hypothesis. 
+
+```{r}
+reg  <- lm(income ~ educ +  female +  female*educ, dat)
+summary(reg)
+```
+
+We see that a year of education leads to an increase in earnings by 3,984. On average, a female's earning is less than that of male's by 2,647. Also, on average, the effect of an additional year of education among females is 512 more than that of male's. Note that these estimates are not too different from the true parameters used to generate the simulated DGP.    
+
+# Standard Errors
+
+**Standard Error of the Regression.**
+
+Is the just the square root of the variance of the error term.
+
+Using a simple regression the standard error of the regression can be attained by the following. 
+
+1. Write down the variance of the error term. 
+
+    - $\sigma^2 = \frac{1}{n} \sum_{i=1}^{n} \epsilon_i$ 
+
+2. Note that the variance is not feasible as we don't observe $\epsilon_i$. We'd want to get the feasible variance estimator $\widehat{\sigma}^2$ by replacing the $\epsilon_i$ by the residual, i.e. $\widehat{\epsilon_i}$. This gives us:   
+
+    - $\widehat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^{n} \widehat{\epsilon_i}$ 
+
+3. Note that the variance estimate from 2 is biased downwards. This is because we have estimated $p$ number of parameters before getting the residuals. The remaining degree of freedom is $n-p$. So instead dividing the sum of the square of residuals by $n$, we divide it by $n-p$. 
+
+    - $\widehat{\sigma}^2 = \frac{1}{n-p} \sum_{i=1}^{n} \widehat{\epsilon_i}$ 
+
+Here, $\widehat{\sigma}^2$ is the estimated variance of the error term. The square root of it is the 
+**standard error of the regression**. It tells us on average how far away is the actual observation ($Y$-value) from the regression line (best-fit line or $E(Y|X)$). Lower the standard error of the regression, better the fit. 
+
+Let's estimate the standard error of the regression. 
+
+```{r}
+set.seed(125)
+n  <- 1000
+educ  <- sample(seq(1, 16, 1), n, replace = TRUE)
+income  <- 20000 + 2000 * educ + rnorm(n, mean = 10000, sd = 5000)
+
+dat  <- data.frame(educ = educ, income = income)
+
+# estimate the model
+reg_model  <- lm(income~educ, data = dat) 
+
+# get the residuals
+resid  <- residuals(reg_model) 
+
+# sum of the square of residuals 
+ssr  <- sum(resid^2)
+
+# divide ssr by n - p 
+var_error  <- ssr / (n - length((coef(reg_model))))
+
+# get se 
+se = sqrt(var_error)
+
+print(se)
+
+# compare to the regression output
+summary(reg_model)$sigma
+```
+
+
+**Standard error of the coefficient**
+
+Once we've estimated the standard error of the regression, we can go ahead estimate the **standard error of the coefficient**. 
+
+- $\widehat{var}(\hat{\beta}) = \frac{\widehat{\sigma}^2}{var(X) \times (n - 1)}$
+
+Let's estimate the standard error of income coefficient. 
+
+```{r}
+# estimate the variance of education coefficient
+var_educ  <-  se^2 / (sd(educ)^2 * (n - 1))
+
+# get the standard error
+se_educ  <- sqrt(var_educ)
+
+# print
+print(se_educ)
+
+# compare the hand-estimated se with the model estimate
+se(reg_model)[[2]]
+```
+
+# An exercise
+
+```{r}
+setwd("/Users/vshrestha/Dropbox/Machine Learning/book/data")
+
+# arrow to open large data sets
+library(arrow)
+
+# birthweight data for 2000
+bw_data2000  <- read_feather( "NCHS_birthweight2000.feather")
+head(bw_data2000)
+```
+
+1. Keep the following variables: a) datayear (year of birth), b) state (state of residence), c) dmage  (mother's age), d) mrace (mother's race), e) birth weight, f) child gender, and g) marital status. You should find the corresponding variables using the natality documentation here: \url{https://www.nber.org/research/data/vital-statistics-natality-birth-data}.    
+
+2. Build a birthweight-education regression model in an attempt to evaluate the relationship between mother's education and child's birthweight. Start from a simple regression that specifies the relationship between mother's education and child birthweight. 
+
+3. Draw a DAG to illustrate how the DGP might look like.
+
+4. Add in necessary covariates following the illustration in 3. Explain the addition of the covariates, i.e., why is it important to incorporate these covariates in your model specification. 
+
+5. Test the hypothesis that returns to education on child's birthweight can vary by black vs. white race.
+
+6. Include the state of residence in your model specification. Show the results from this specification. What happens to the coefficient on mother's education?   
+
+7. Is it important to include the state of mother's residence in the model specification? Why?
+
+8. Have you estimated the causal effect of mother's education on children's birthweight? Explain. 

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6.3 Motivation for Causal Forests | Causal Inference</title>
-  <meta name="description" content="6.3 Motivation for Causal Forests | Causal Inference" />
+  <title>16.3 Motivation for Causal Forests | Causal Inference</title>
+  <meta name="description" content="16.3 Motivation for Causal Forests | Causal Inference" />
   <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6.3 Motivation for Causal Forests | Causal Inference" />
+  <meta property="og:title" content="16.3 Motivation for Causal Forests | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6.3 Motivation for Causal Forests | Causal Inference" />
+  <meta name="twitter:title" content="16.3 Motivation for Causal Forests | Causal Inference" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2025-01-16" />
+<meta name="date" content="2025-01-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -180,53 +180,63 @@ div.csl-indent {
 <li class="chapter" data-level="3.7" data-path="discussion-1.html"><a href="discussion-1.html"><i class="fa fa-check"></i><b>3.7</b> Discussion</a></li>
 <li class="chapter" data-level="3.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>3.8</b> Reference</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>4</b> IPW and AIPW</a>
+<li class="chapter" data-level="4" data-path="why-regression.html"><a href="why-regression.html"><i class="fa fa-check"></i><b>4</b> Why Regression?</a></li>
+<li class="chapter" data-level="5" data-path="the-best-fit-line.html"><a href="the-best-fit-line.html"><i class="fa fa-check"></i><b>5</b> The best-fit line</a></li>
+<li class="chapter" data-level="6" data-path="linear-regression-specification.html"><a href="linear-regression-specification.html"><i class="fa fa-check"></i><b>6</b> Linear Regression Specification</a></li>
+<li class="chapter" data-level="7" data-path="law-of-iterated-expectation.html"><a href="law-of-iterated-expectation.html"><i class="fa fa-check"></i><b>7</b> Law of iterated expectation</a></li>
+<li class="chapter" data-level="8" data-path="error-term.html"><a href="error-term.html"><i class="fa fa-check"></i><b>8</b> Error term</a></li>
+<li class="chapter" data-level="9" data-path="decomposition.html"><a href="decomposition.html"><i class="fa fa-check"></i><b>9</b> Decomposition</a></li>
+<li class="chapter" data-level="10" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>10</b> Estimation</a></li>
+<li class="chapter" data-level="11" data-path="running-a-regression.html"><a href="running-a-regression.html"><i class="fa fa-check"></i><b>11</b> Running a regression</a></li>
+<li class="chapter" data-level="12" data-path="standard-errors.html"><a href="standard-errors.html"><i class="fa fa-check"></i><b>12</b> Standard Errors</a></li>
+<li class="chapter" data-level="13" data-path="an-exercise.html"><a href="an-exercise.html"><i class="fa fa-check"></i><b>13</b> An exercise</a></li>
+<li class="chapter" data-level="14" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>14</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>4.1</b> A simple example</a></li>
-<li class="chapter" data-level="4.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>4.2</b> Aggregated Estimator</a></li>
-<li class="chapter" data-level="4.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>4.3</b> Propensity score</a></li>
-<li class="chapter" data-level="4.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>4.4</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="4.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>4.5</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="4.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>4.6</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="4.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>4.7</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="4.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>4.8</b> Comparing IPW with Aggregated Estimate</a></li>
-<li class="chapter" data-level="4.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>4.9</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="4.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>4.10</b> Assessing Balance</a></li>
-<li class="chapter" data-level="4.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>4.11</b> Cross-fitting</a></li>
+<li class="chapter" data-level="14.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>14.1</b> A simple example</a></li>
+<li class="chapter" data-level="14.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>14.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="14.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>14.3</b> Propensity score</a></li>
+<li class="chapter" data-level="14.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>14.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="14.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>14.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="14.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>14.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="14.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>14.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="14.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>14.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="14.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>14.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="14.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>14.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="14.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>14.11</b> Cross-fitting</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>5</b> Difference in Differences</a>
+<li class="chapter" data-level="15" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>15</b> Difference in Differences</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>5.1</b> A Quick Introduction</a></li>
-<li class="chapter" data-level="5.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>5.2</b> Set up</a></li>
-<li class="chapter" data-level="5.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>5.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
-<li class="chapter" data-level="5.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>5.4</b> Naive estimator</a></li>
-<li class="chapter" data-level="5.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>5.5</b> Canonical Difference in Differences Framework</a></li>
-<li class="chapter" data-level="5.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>5.6</b> DiD in multi-period set up</a></li>
-<li class="chapter" data-level="5.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>5.7</b> Conditional Parallel Trend Assumption</a></li>
-<li class="chapter" data-level="5.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>5.8</b> Some concerns with controls</a></li>
-<li class="chapter" data-level="5.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>5.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
-<li class="chapter" data-level="5.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>5.10</b> Event study model</a></li>
-<li class="chapter" data-level="5.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>5.11</b> Two way fixed effect (TWFE) Revisited</a></li>
-<li class="chapter" data-level="5.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>5.12</b> Various ways of estimation</a></li>
-<li class="chapter" data-level="5.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>5.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
-<li class="chapter" data-level="5.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>5.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
-<li class="chapter" data-level="5.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>5.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
-<li class="chapter" data-level="5.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>5.16</b> Assumptions governing TWFEDD estimate</a></li>
-<li class="chapter" data-level="5.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>5.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+<li class="chapter" data-level="15.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>15.1</b> A Quick Introduction</a></li>
+<li class="chapter" data-level="15.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>15.2</b> Set up</a></li>
+<li class="chapter" data-level="15.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>15.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+<li class="chapter" data-level="15.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>15.4</b> Naive estimator</a></li>
+<li class="chapter" data-level="15.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>15.5</b> Canonical Difference in Differences Framework</a></li>
+<li class="chapter" data-level="15.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>15.6</b> DiD in multi-period set up</a></li>
+<li class="chapter" data-level="15.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>15.7</b> Conditional Parallel Trend Assumption</a></li>
+<li class="chapter" data-level="15.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>15.8</b> Some concerns with controls</a></li>
+<li class="chapter" data-level="15.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>15.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="15.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>15.10</b> Event study model</a></li>
+<li class="chapter" data-level="15.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>15.11</b> Two way fixed effect (TWFE) Revisited</a></li>
+<li class="chapter" data-level="15.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>15.12</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="15.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>15.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
+<li class="chapter" data-level="15.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>15.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="15.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>15.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="15.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>15.16</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="15.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>15.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>6</b> Causal Forest</a>
+<li class="chapter" data-level="16" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>16</b> Causal Forest</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
-<li class="chapter" data-level="6.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>6.2</b> Summary of GRF</a></li>
-<li class="chapter" data-level="6.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>6.3</b> Motivation for Causal Forests</a></li>
-<li class="chapter" data-level="6.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>6.4</b> Causal Forest</a></li>
-<li class="chapter" data-level="6.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>6.5</b> An example of causal forest</a></li>
+<li class="chapter" data-level="16.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
+<li class="chapter" data-level="16.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>16.2</b> Summary of GRF</a></li>
+<li class="chapter" data-level="16.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>16.3</b> Motivation for Causal Forests</a></li>
+<li class="chapter" data-level="16.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>16.4</b> Causal Forest</a></li>
+<li class="chapter" data-level="16.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>16.5</b> An example of causal forest</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>7</b> Heterogeneous Treatment Effects</a>
+<li class="chapter" data-level="17" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>17</b> Heterogeneous Treatment Effects</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>7.1</b> Some ways to estimate CATE</a></li>
-<li class="chapter" data-level="7.2" data-path="estimation.html"><a href="estimation.html"><i class="fa fa-check"></i><b>7.2</b> Estimation</a></li>
-<li class="chapter" data-level="7.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>7.3</b> Some Remarks and Questions</a></li>
+<li class="chapter" data-level="17.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>17.1</b> Some ways to estimate CATE</a></li>
+<li class="chapter" data-level="17.2" data-path="estimation-1.html"><a href="estimation-1.html"><i class="fa fa-check"></i><b>17.2</b> Estimation</a></li>
+<li class="chapter" data-level="17.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>17.3</b> Some Remarks and Questions</a></li>
 </ul></li>
 </ul>
 
@@ -245,8 +255,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="motivation-for-causal-forests" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Motivation for Causal Forests<a href="motivation-for-causal-forests.html#motivation-for-causal-forests" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="motivation-for-causal-forests" class="section level2 hasAnchor" number="16.3">
+<h2><span class="header-section-number">16.3</span> Motivation for Causal Forests<a href="motivation-for-causal-forests.html#motivation-for-causal-forests" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let’s expand on estimating the average treatment effect of a treatment intervention <span class="math inline">\(W\)</span>. The specifics are listed as:</p>
 <ul>
 <li><span class="math inline">\(W_i \in \{0, \; 1\}\)</span>: treatment intervention</li>
@@ -280,27 +290,27 @@ div.csl-indent {
 <li>Use cross-fitting for prediction. prediction of observation <span class="math inline">\(i&#39;s\)</span> outcome &amp; treatment assignment is obtained without using the observation ``<span class="math inline">\(i\)</span>“. </li>
 </ul>
 <p>Lets take a look at residual-on-residual in the case of homogeneous treatment effect.</p>
-<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="motivation-for-causal-forests.html#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate data</span></span>
-<span id="cb188-2"><a href="motivation-for-causal-forests.html#cb188-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb188-3"><a href="motivation-for-causal-forests.html#cb188-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb188-4"><a href="motivation-for-causal-forests.html#cb188-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb188-5"><a href="motivation-for-causal-forests.html#cb188-5" aria-hidden="true" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
-<span id="cb188-6"><a href="motivation-for-causal-forests.html#cb188-6" aria-hidden="true" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
-<span id="cb188-7"><a href="motivation-for-causal-forests.html#cb188-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-8"><a href="motivation-for-causal-forests.html#cb188-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate W and Y </span></span>
-<span id="cb188-9"><a href="motivation-for-causal-forests.html#cb188-9" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb188-10"><a href="motivation-for-causal-forests.html#cb188-10" aria-hidden="true" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb188-11"><a href="motivation-for-causal-forests.html#cb188-11" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fl">2.5</span> <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb188-12"><a href="motivation-for-causal-forests.html#cb188-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-13"><a href="motivation-for-causal-forests.html#cb188-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Train regression forests</span></span>
-<span id="cb188-14"><a href="motivation-for-causal-forests.html#cb188-14" aria-hidden="true" tabindex="-1"></a>mx  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb188-15"><a href="motivation-for-causal-forests.html#cb188-15" aria-hidden="true" tabindex="-1"></a>ex  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) </span>
-<span id="cb188-16"><a href="motivation-for-causal-forests.html#cb188-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-17"><a href="motivation-for-causal-forests.html#cb188-17" aria-hidden="true" tabindex="-1"></a>Wcen  <span class="ot">&lt;-</span> W <span class="sc">-</span> ex<span class="sc">$</span>predictions</span>
-<span id="cb188-18"><a href="motivation-for-causal-forests.html#cb188-18" aria-hidden="true" tabindex="-1"></a>Ycen  <span class="ot">&lt;-</span> Y <span class="sc">-</span> mx<span class="sc">$</span>predictions </span>
-<span id="cb188-19"><a href="motivation-for-causal-forests.html#cb188-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb188-20"><a href="motivation-for-causal-forests.html#cb188-20" aria-hidden="true" tabindex="-1"></a>reg  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(<span class="fu">lm</span>(Ycen <span class="sc">~</span> Wcen))</span>
-<span id="cb188-21"><a href="motivation-for-causal-forests.html#cb188-21" aria-hidden="true" tabindex="-1"></a>reg</span></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="motivation-for-causal-forests.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate data</span></span>
+<span id="cb214-2"><a href="motivation-for-causal-forests.html#cb214-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb214-3"><a href="motivation-for-causal-forests.html#cb214-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb214-4"><a href="motivation-for-causal-forests.html#cb214-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb214-5"><a href="motivation-for-causal-forests.html#cb214-5" aria-hidden="true" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb214-6"><a href="motivation-for-causal-forests.html#cb214-6" aria-hidden="true" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb214-7"><a href="motivation-for-causal-forests.html#cb214-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb214-8"><a href="motivation-for-causal-forests.html#cb214-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate W and Y </span></span>
+<span id="cb214-9"><a href="motivation-for-causal-forests.html#cb214-9" aria-hidden="true" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb214-10"><a href="motivation-for-causal-forests.html#cb214-10" aria-hidden="true" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb214-11"><a href="motivation-for-causal-forests.html#cb214-11" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fl">2.5</span> <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb214-12"><a href="motivation-for-causal-forests.html#cb214-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb214-13"><a href="motivation-for-causal-forests.html#cb214-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Train regression forests</span></span>
+<span id="cb214-14"><a href="motivation-for-causal-forests.html#cb214-14" aria-hidden="true" tabindex="-1"></a>mx  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb214-15"><a href="motivation-for-causal-forests.html#cb214-15" aria-hidden="true" tabindex="-1"></a>ex  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) </span>
+<span id="cb214-16"><a href="motivation-for-causal-forests.html#cb214-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb214-17"><a href="motivation-for-causal-forests.html#cb214-17" aria-hidden="true" tabindex="-1"></a>Wcen  <span class="ot">&lt;-</span> W <span class="sc">-</span> ex<span class="sc">$</span>predictions</span>
+<span id="cb214-18"><a href="motivation-for-causal-forests.html#cb214-18" aria-hidden="true" tabindex="-1"></a>Ycen  <span class="ot">&lt;-</span> Y <span class="sc">-</span> mx<span class="sc">$</span>predictions </span>
+<span id="cb214-19"><a href="motivation-for-causal-forests.html#cb214-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb214-20"><a href="motivation-for-causal-forests.html#cb214-20" aria-hidden="true" tabindex="-1"></a>reg  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(<span class="fu">lm</span>(Ycen <span class="sc">~</span> Wcen))</span>
+<span id="cb214-21"><a href="motivation-for-causal-forests.html#cb214-21" aria-hidden="true" tabindex="-1"></a>reg</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Ycen ~ Wcen)
@@ -319,9 +329,9 @@ div.csl-indent {
 ## Residual standard error: 1.055 on 1998 degrees of freedom
 ## Multiple R-squared:  0.5685, Adjusted R-squared:  0.5683 
 ## F-statistic:  2632 on 1 and 1998 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="motivation-for-causal-forests.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The treatment effect estimate based on residual-on-residual regression is: &quot;</span>, <span class="fu">coefficients</span>(reg)[<span class="dv">2</span>])) </span></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="motivation-for-causal-forests.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The treatment effect estimate based on residual-on-residual regression is: &quot;</span>, <span class="fu">coefficients</span>(reg)[<span class="dv">2</span>])) </span></code></pre></div>
 <pre><code>## [1] &quot;The treatment effect estimate based on residual-on-residual regression is: 2.45817277748273&quot;</code></pre>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="motivation-for-causal-forests.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The true treatment effect is: &quot;</span>, <span class="fl">2.5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="motivation-for-causal-forests.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The true treatment effect is: &quot;</span>, <span class="fl">2.5</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;The true treatment effect is: 2.5&quot;</code></pre>
 </div>
 <div class="footnotes">

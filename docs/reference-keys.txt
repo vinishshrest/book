@@ -1,3 +1,7 @@
+eq:reg1
+eq:reg2
+eq:reg3
+eq:objective
 eq:ate
 eq:ptreat
 eq:uncon
@@ -7,7 +11,7 @@ eq:AGG2
 eq:prop
 eq:pconf
 eq:logit
-fig:unnamed-chunk-18
+fig:unnamed-chunk-31
 eq:IPW
 eq:att
 eq:ptrend1
@@ -29,6 +33,16 @@ an-estimation-example
 unconfoundedness-assumption
 discussion-1
 reference
+why-regression
+the-best-fit-line
+linear-regression-specification
+law-of-iterated-expectation
+error-term
+decomposition
+estimation
+running-a-regression
+standard-errors
+an-exercise
 ipw-and-aipw
 a-simple-example
 aggregated-estimator
@@ -67,5 +81,5 @@ causal-forest-1
 an-example-of-causal-forest
 heterogeneous-treatment-effects
 some-ways-to-estimate-cate
-estimation
+estimation-1
 some-remarks-and-questions

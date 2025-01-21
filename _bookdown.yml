@@ -2,8 +2,16 @@ book_filename: "book" # figures will be in book_files
 output_dir: "docs" # all html output will be in doc dir
 delete_merged_file: true
 rmd_files: 
-  html: ["index.Rmd", "why_causality.Rmd", "01-intro.Rmd", "ipw_aipw.Rmd", "did.rmd",
+  html: ["index.Rmd", "why_causality.Rmd", "01-intro.Rmd",
+        "regression.Rmd", 
+        "ipw_aipw.Rmd", "did.rmd",
         "grf_causal_forest.Rmd", "01heterogenous_treatment.Rmd"]
+
+
+# bookdown::render_book("index.Rmd", "bookdown::gitbook")
+# bookdown::render_book("index.Rmd", "bookdown::pdf_book")
+# bookdown::preview_chapter("01-intro.Rmd", "bookdown::gitbook") ## this previews only one chapter, intro chapter in this case
+
   
 
   
