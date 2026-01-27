@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4.4 Standard Error | Causal Inference</title>
-  <meta name="description" content="4.4 Standard Error | Causal Inference" />
+  <title>4.1 Normal Equation | Causal Inference</title>
+  <meta name="description" content="4.1 Normal Equation | Causal Inference" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4.4 Standard Error | Causal Inference" />
+  <meta property="og:title" content="4.1 Normal Equation | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4.4 Standard Error | Causal Inference" />
+  <meta name="twitter:title" content="4.1 Normal Equation | Causal Inference" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="multivariate-model.html"/>
-<link rel="next" href="causal-inference.html"/>
+<link rel="prev" href="regression-and-gradient-descent.html"/>
+<link rel="next" href="gradient-descent.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -240,50 +240,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="standard-error" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Standard Error<a href="standard-error.html#standard-error" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="standard-error.html#cb18-1" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
-<span id="cb18-2"><a href="standard-error.html#cb18-2" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="standard-error.html#cb18-3" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="standard-error.html#cb18-4" tabindex="-1"></a><span class="co"># Standard errors </span></span>
-<span id="cb18-5"><a href="standard-error.html#cb18-5" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="standard-error.html#cb18-6" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="standard-error.html#cb18-7" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
-<span id="cb18-8"><a href="standard-error.html#cb18-8" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="standard-error.html#cb18-9" tabindex="-1"></a><span class="co"># 1. Get the standard error of the regression</span></span>
-<span id="cb18-10"><a href="standard-error.html#cb18-10" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="standard-error.html#cb18-11" tabindex="-1"></a>error <span class="op">=</span> (X <span class="op">@</span> theta <span class="op">-</span> y)</span>
-<span id="cb18-12"><a href="standard-error.html#cb18-12" tabindex="-1"></a>error_sq <span class="op">=</span> error.T <span class="op">@</span> error</span>
-<span id="cb18-13"><a href="standard-error.html#cb18-13" tabindex="-1"></a>sigma_sq <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (m <span class="op">-</span><span class="dv">3</span>) <span class="op">*</span> error_sq</span>
-<span id="cb18-14"><a href="standard-error.html#cb18-14" tabindex="-1"></a>se_reg <span class="op">=</span> np.sqrt(sigma_sq)</span>
-<span id="cb18-15"><a href="standard-error.html#cb18-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard error of the regression is: </span><span class="sc">{</span>se_reg<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb18-16"><a href="standard-error.html#cb18-16" tabindex="-1"></a></span>
-<span id="cb18-17"><a href="standard-error.html#cb18-17" tabindex="-1"></a><span class="co"># 2. get standard errors of the respective coefficients </span></span>
-<span id="cb18-18"><a href="standard-error.html#cb18-18" tabindex="-1"></a>var_cov <span class="op">=</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">*</span> sigma_sq</span>
-<span id="cb18-19"><a href="standard-error.html#cb18-19" tabindex="-1"></a>manual_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
-<span id="cb18-20"><a href="standard-error.html#cb18-20" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors of coefficients (manual estimation): </span><span class="sc">{</span>manual_se<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb18-21"><a href="standard-error.html#cb18-21" tabindex="-1"></a></span>
-<span id="cb18-22"><a href="standard-error.html#cb18-22" tabindex="-1"></a><span class="co"># se from stats model</span></span>
-<span id="cb18-23"><a href="standard-error.html#cb18-23" tabindex="-1"></a>X_sm <span class="op">=</span> sm.add_constant(X)   <span class="co"># add intercept</span></span>
-<span id="cb18-24"><a href="standard-error.html#cb18-24" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X_sm).fit()</span>
-<span id="cb18-25"><a href="standard-error.html#cb18-25" tabindex="-1"></a></span>
-<span id="cb18-26"><a href="standard-error.html#cb18-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>params<span class="sc">}</span><span class="ss">&quot;</span>)   <span class="co"># coefficients</span></span>
-<span id="cb18-27"><a href="standard-error.html#cb18-27" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>bse<span class="sc">}</span><span class="ss">&quot;</span>)      <span class="co"># standard errors</span></span></code></pre></div>
-<pre><code>standard error of the regression is: [[0.98562573]]
-standard errors of coefficients (manual estimation): [0.03123574 0.03242909 0.03072431]
-coefficients from statmodels: [10.00156877 40.74650082  6.62076534]
-standard errors from statmodels: [0.03123574 0.03242909 0.03072431]</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
-
+<div id="normal-equation" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Normal Equation<a href="normal-equation.html#normal-equation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider the following regression model specification:</p>
+<p><span class="math display">\[
+Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i
+\]</span></p>
+<p>The job is to estimate model parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>.</p>
+<p>Note that <span class="math inline">\(\epsilon_i\)</span> is the error term and we’d want to minimize some version of this. Let’s write out the
+error as:</p>
+<p><span class="math display">\[
+\epsilon_i = Y_i - \alpha - \beta_1 X_{1i} -\beta_2 X_{2i}
+\]</span></p>
+<p>We know that the error term <span class="math inline">\(\epsilon\)</span> is a <span class="math inline">\(n \times 1\)</span> vector. We can obtain residuals by using estimates of model parameters. Of course, we don’t want to pick any parameters – the estimates should follow some objective.</p>
+<p>One idea is to estimate the model parameters with an objective of minimizing the mean of the error. However, this is 0 by construction. So what we’d want to do instead is minimize the mean squared error.</p>
+<p><span class="math display">\[
+MSE(X, h_{\theta}) = \frac{1}{m} \sum_{i=1}^{m} (\theta^{T} x_i - y_i)^2
+\]</span></p>
+<p>From the equation above, we know that the MSE is just the mean of the sum of the squared errors. We can write the sum of the squared of errors using the matrix version as:</p>
+<p><span class="math display">\[
+SSE(X, \theta) = (y - X\theta)^T(y-X\theta)
+\]</span></p>
+<p>Expanding this and setting the derivatives w.r.t. <span class="math inline">\(\theta\)</span> equal to zero gives:
+<span class="math display">\[
+\begin{aligned}
+SSE(X, \theta) = y^Ty - 2\theta^{T} X^Ty + \theta^{T}X^{T}X\theta \\
+\frac{\partial(SSE)}{\partial{\theta}} = -2X^{T}y + 2X^{T}X\theta = 0
+\end{aligned}
+\]</span></p>
+<p>Now solving for <span class="math inline">\(\theta\)</span> gives the normal equation:
+<span class="math display">\[
+\hat{\theta} = (X^TX)^{-1}X^{T}y
+\]</span></p>
+<p>Let’s code the normal equation and print out the estimates. Before jumping into estimating the
+normal equation, we’ve got to be careful and add the intercept term (all ones) on X as the simulated data from make_regression comes without it. We’ll do this using add_dummy_feature() in sklearn.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="normal-equation.html#cb8-1" tabindex="-1"></a><span class="co"># The normal equation</span></span>
+<span id="cb8-2"><a href="normal-equation.html#cb8-2" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X)</span>
+<span id="cb8-3"><a href="normal-equation.html#cb8-3" tabindex="-1"></a>theta_best <span class="op">=</span> np.linalg.inv((X.T <span class="op">@</span> X)) <span class="op">@</span> (X.T <span class="op">@</span> y)</span>
+<span id="cb8-4"><a href="normal-equation.html#cb8-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from normal equation: </span><span class="sc">{</span>theta_best<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>coefficients from normal equation: [10.00156877 40.74650082  6.62076534]</code></pre>
 </div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="multivariate-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="causal-inference.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="regression-and-gradient-descent.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gradient-descent.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
