@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="an-exercise.html"/>
-<link rel="next" href="normal-equation.html"/>
+<link rel="next" href="causal-inference.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -157,13 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.8" data-path="standard-errors.html"><a href="standard-errors.html"><i class="fa fa-check"></i><b>3.8</b> Standard Errors</a></li>
 <li class="chapter" data-level="3.9" data-path="an-exercise.html"><a href="an-exercise.html"><i class="fa fa-check"></i><b>3.9</b> An exercise</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="regression-and-gradient-descent.html"><a href="regression-and-gradient-descent.html"><i class="fa fa-check"></i><b>4</b> Regression and Gradient Descent</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="normal-equation.html"><a href="normal-equation.html"><i class="fa fa-check"></i><b>4.1</b> Normal Equation</a></li>
-<li class="chapter" data-level="4.2" data-path="gradient-descent.html"><a href="gradient-descent.html"><i class="fa fa-check"></i><b>4.2</b> Gradient Descent</a></li>
-<li class="chapter" data-level="4.3" data-path="multivariate-model.html"><a href="multivariate-model.html"><i class="fa fa-check"></i><b>4.3</b> Multivariate model</a></li>
-<li class="chapter" data-level="4.4" data-path="standard-error.html"><a href="standard-error.html"><i class="fa fa-check"></i><b>4.4</b> Standard Error</a></li>
-</ul></li>
+<li class="chapter" data-level="4" data-path="regression-and-gradient-descent.html"><a href="regression-and-gradient-descent.html"><i class="fa fa-check"></i><b>4</b> Regression and Gradient Descent</a></li>
 <li class="chapter" data-level="5" data-path="causal-inference.html"><a href="causal-inference.html"><i class="fa fa-check"></i><b>5</b> Causal Inference</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>5.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
@@ -317,6 +311,233 @@ target: [ 3.24877735  8.66339401 19.45702327 31.55545159  3.92293402]</code></pr
 <div class="figcaption">png</div>
 </div>
 <p>Now, we are ready to discuss two methods. Let’s start with the Normal equation method.</p>
+<p><strong>i. Normal Equation</strong></p>
+<p>Consider the following regression model specification:</p>
+<p><span class="math display">\[
+Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i
+\]</span></p>
+<p>The job is to estimate model parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>.</p>
+<p>Note that <span class="math inline">\(\epsilon_i\)</span> is the error term and we’d want to minimize some version of this. Let’s write out the
+error as:</p>
+<p><span class="math display">\[
+\epsilon_i = Y_i - \alpha - \beta_1 X_{1i} -\beta_2 X_{2i}
+\]</span></p>
+<p>We know that the error term <span class="math inline">\(\epsilon\)</span> is a <span class="math inline">\(n \times 1\)</span> vector. We can obtain residuals by using estimates of model parameters. Of course, we don’t want to pick any parameters – the estimates should follow some objective.</p>
+<p>One idea is to estimate the model parameters with an objective of minimizing the mean of the error. However, this is 0 by construction. So what we’d want to do instead is minimize the mean squared error.</p>
+<p><span class="math display">\[
+MSE(X, h_{\theta}) = \frac{1}{m} \sum_{i=1}^{m} (\theta^{T} x_i - y_i)^2
+\]</span></p>
+<p>From the equation above, we know that the MSE is just the mean of the sum of the squared errors. We can write the sum of the squared of errors using the matrix version as:</p>
+<p><span class="math display">\[
+SSE(X, \theta) = (y - X\theta)^T(y-X\theta)
+\]</span></p>
+<p>Expanding this and setting the derivatives w.r.t. <span class="math inline">\(\theta\)</span> equal to zero gives:
+<span class="math display">\[
+\begin{aligned}
+SSE(X, \theta) = y^Ty - 2\theta^{T} X^Ty + \theta^{T}X^{T}X\theta \\
+\frac{\partial(SSE)}{\partial{\theta}} = -2X^{T}y + 2X^{T}X\theta = 0
+\end{aligned}
+\]</span></p>
+<p>Now solving for <span class="math inline">\(\theta\)</span> gives the normal equation:
+<span class="math display">\[
+\hat{\theta} = (X^TX)^{-1}X^{T}y
+\]</span></p>
+<p>Let’s code the normal equation and print out the estimates. Before jumping into estimating the
+normal equation, we’ve got to be careful and add the intercept term (all ones) on X as the simulated data from make_regression comes without it. We’ll do this using add_dummy_feature() in sklearn.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="regression-and-gradient-descent.html#cb8-1" tabindex="-1"></a><span class="co"># The normal equation</span></span>
+<span id="cb8-2"><a href="regression-and-gradient-descent.html#cb8-2" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X)</span>
+<span id="cb8-3"><a href="regression-and-gradient-descent.html#cb8-3" tabindex="-1"></a>theta_best <span class="op">=</span> np.linalg.inv((X.T <span class="op">@</span> X)) <span class="op">@</span> (X.T <span class="op">@</span> y)</span>
+<span id="cb8-4"><a href="regression-and-gradient-descent.html#cb8-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from normal equation: </span><span class="sc">{</span>theta_best<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>coefficients from normal equation: [10.00156877 40.74650082  6.62076534]</code></pre>
+<p><strong>ii. Gradient Descent</strong></p>
+<p>Imagine that you are standing at the top of a mountain and want to descend the mountain as quickly as possible. One simple way is to consider a few directions – north, south, east, and west – and evaluate the steepness (gradient). Then you’d want to take a small step towards the steepest direction, pause, and re-evaluate the steepness. Doing this repeatedly gets you to the bottom of the mountain as fast as possible.</p>
+<p>The idea of gradient descent is similar in context to the aforementioned analogy. We’ve already been exposed to the idea of MSE and the objective of minimizing MSE. Instead of using the closed form normal equation to solve for the minimum of MSE, gradient descent uses <em>gradient</em> of MSE to adjust the estimates and move closer to the minimum.</p>
+<p>The gradient is a vector of partial derivatives of MSE that points to the direction of steepest increase increase in MSE. Hence, to minimize the loss, we’d want to move in opposite direction of the gradient. By repeatedly updating our parameter in this way, we move closer and closer to the minimum of the loss function. To simply the concept, we’ll start with the univariate case without the intercept.</p>
+<p><span class="math display">\[
+\begin{aligned}
+Y_i = \beta X_i + \epsilon_i
+\end{aligned}
+\]</span></p>
+<p>The MSE and the derivative is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+MSE(\beta) = \frac{1}{m} (Y - \beta X)^{T}(Y - \beta X)  \\
+\frac{\partial{MSE}}{\partial{\beta}} = -\frac{2}{m} X^{T}(Y - \beta X)
+\end{aligned}
+\]</span></p>
+<p>Here, <span class="math inline">\(\frac{2}{m}X^{T}(Y - \beta X)\)</span> is the gradient of the univariate specification, which informs the direction of the steepest increase in MSE. To reduce MSE, we therefore move in the opposite direction of the gradient.</p>
+<p>Now that we have the gradient, the gradient descent algorithm can be set up as follows:
+1. Start with an initial guesses of the parameter <span class="math inline">\((\beta_o)\)</span>.
+2. Update estimates of parameters by moving to the opposite direction of the gradient.
+<span class="math display">\[     
+      \beta_{new} = \beta_o - \eta \times gradient_o.
+      \]</span>
+where, <span class="math inline">\(\eta\)</span> is the <em>learning rate</em>.
+3. Re-evaluate the gradient using <span class="math inline">\(\beta_{new}\)</span>.
+4. Repeat steps 2 and 3 for a given number of times or until convergence is reached.</p>
+<p>Let’s simulate data for univariate model specification to visually see what this looks like.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="regression-and-gradient-descent.html#cb10-1" tabindex="-1"></a>dat_uni <span class="op">=</span> make_regression(</span>
+<span id="cb10-2"><a href="regression-and-gradient-descent.html#cb10-2" tabindex="-1"></a>                n_samples<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb10-3"><a href="regression-and-gradient-descent.html#cb10-3" tabindex="-1"></a>                n_features<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-4"><a href="regression-and-gradient-descent.html#cb10-4" tabindex="-1"></a>                n_informative<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-5"><a href="regression-and-gradient-descent.html#cb10-5" tabindex="-1"></a>                n_targets<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-6"><a href="regression-and-gradient-descent.html#cb10-6" tabindex="-1"></a>                bias<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb10-7"><a href="regression-and-gradient-descent.html#cb10-7" tabindex="-1"></a>                noise<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb10-8"><a href="regression-and-gradient-descent.html#cb10-8" tabindex="-1"></a>                random_state<span class="op">=</span><span class="dv">42</span>, </span>
+<span id="cb10-9"><a href="regression-and-gradient-descent.html#cb10-9" tabindex="-1"></a>                coef<span class="op">=</span><span class="va">True</span></span>
+<span id="cb10-10"><a href="regression-and-gradient-descent.html#cb10-10" tabindex="-1"></a>)</span>
+<span id="cb10-11"><a href="regression-and-gradient-descent.html#cb10-11" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="regression-and-gradient-descent.html#cb10-12" tabindex="-1"></a>X_uni, y_uni, coef <span class="op">=</span> dat_uni</span>
+<span id="cb10-13"><a href="regression-and-gradient-descent.html#cb10-13" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The first five rows of X: </span><span class="sc">{</span>X_uni[<span class="dv">0</span>:<span class="dv">5</span>,:]<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-14"><a href="regression-and-gradient-descent.html#cb10-14" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The first five y values: </span><span class="sc">{</span>y_uni[<span class="dv">0</span>:<span class="dv">5</span>]<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-15"><a href="regression-and-gradient-descent.html#cb10-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The coefficient of univariate model is: </span><span class="sc">{</span>coef<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-16"><a href="regression-and-gradient-descent.html#cb10-16" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="regression-and-gradient-descent.html#cb10-17" tabindex="-1"></a><span class="co"># set up gradient descent </span></span>
+<span id="cb10-18"><a href="regression-and-gradient-descent.html#cb10-18" tabindex="-1"></a>beta <span class="op">=</span> <span class="op">-</span><span class="dv">5</span> <span class="co"># initialize beta</span></span>
+<span id="cb10-19"><a href="regression-and-gradient-descent.html#cb10-19" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.1</span> <span class="co"># learning rate</span></span>
+<span id="cb10-20"><a href="regression-and-gradient-descent.html#cb10-20" tabindex="-1"></a>m <span class="op">=</span> X_uni.shape[<span class="dv">0</span>] <span class="co"># number of observations</span></span>
+<span id="cb10-21"><a href="regression-and-gradient-descent.html#cb10-21" tabindex="-1"></a>iter_val <span class="op">=</span> <span class="dv">100</span> <span class="co"># number of iteration steps</span></span>
+<span id="cb10-22"><a href="regression-and-gradient-descent.html#cb10-22" tabindex="-1"></a>y_uni <span class="op">=</span> y_uni.reshape((m,<span class="dv">1</span>)) <span class="co"># reshape into m*1 vector</span></span>
+<span id="cb10-23"><a href="regression-and-gradient-descent.html#cb10-23" tabindex="-1"></a>beta_store <span class="op">=</span> np.ones(m)</span>
+<span id="cb10-24"><a href="regression-and-gradient-descent.html#cb10-24" tabindex="-1"></a>loss_store <span class="op">=</span> np.ones(m)</span>
+<span id="cb10-25"><a href="regression-and-gradient-descent.html#cb10-25" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="regression-and-gradient-descent.html#cb10-26" tabindex="-1"></a><span class="co"># loop </span></span>
+<span id="cb10-27"><a href="regression-and-gradient-descent.html#cb10-27" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(iter_val):</span>
+<span id="cb10-28"><a href="regression-and-gradient-descent.html#cb10-28" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> X_uni.T <span class="op">@</span> (y_uni <span class="op">-</span> beta<span class="op">*</span>X_uni)</span>
+<span id="cb10-29"><a href="regression-and-gradient-descent.html#cb10-29" tabindex="-1"></a>    loss <span class="op">=</span> <span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> (y_uni <span class="op">-</span> beta<span class="op">*</span>X_uni).T <span class="op">@</span> (y_uni <span class="op">-</span> beta<span class="op">*</span>X_uni)</span>
+<span id="cb10-30"><a href="regression-and-gradient-descent.html#cb10-30" tabindex="-1"></a>    beta <span class="op">=</span> beta <span class="op">-</span> eta<span class="op">*</span>gradient</span>
+<span id="cb10-31"><a href="regression-and-gradient-descent.html#cb10-31" tabindex="-1"></a>    beta_store[i] <span class="op">=</span> beta.item() <span class="co"># use .item to extract scalar</span></span>
+<span id="cb10-32"><a href="regression-and-gradient-descent.html#cb10-32" tabindex="-1"></a>    loss_store[i] <span class="op">=</span> loss.item() <span class="co"># use .item to extract scalar</span></span>
+<span id="cb10-33"><a href="regression-and-gradient-descent.html#cb10-33" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="regression-and-gradient-descent.html#cb10-34" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;gradient descent at work: </span><span class="sc">{</span>beta_store<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-35"><a href="regression-and-gradient-descent.html#cb10-35" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="regression-and-gradient-descent.html#cb10-36" tabindex="-1"></a><span class="co"># figure </span></span>
+<span id="cb10-37"><a href="regression-and-gradient-descent.html#cb10-37" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb10-38"><a href="regression-and-gradient-descent.html#cb10-38" tabindex="-1"></a>plt.scatter(beta_store, loss_store)</span>
+<span id="cb10-39"><a href="regression-and-gradient-descent.html#cb10-39" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;beta value&quot;</span>)</span>
+<span id="cb10-40"><a href="regression-and-gradient-descent.html#cb10-40" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;loss&quot;</span>)</span>
+<span id="cb10-41"><a href="regression-and-gradient-descent.html#cb10-41" tabindex="-1"></a>plt.title(<span class="st">&quot;Gradient Descent at Work&quot;</span>)</span>
+<span id="cb10-42"><a href="regression-and-gradient-descent.html#cb10-42" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<pre><code>The first five rows of X: [[ 0.19686124]
+ [ 0.35711257]
+ [-1.91328024]
+ [-0.03582604]
+ [ 0.76743473]] 
+ 
+
+The first five y values: [  8.21720459  14.90627167 -79.86242262  -1.49541829  32.03357001] 
+ 
+
+The coefficient of univariate model is: 41.7411003148779 
+ 
+
+gradient descent at work: [ 2.73384129  9.18803147 14.57430322 19.06935566 22.82065107 25.95125242
+ 28.56386053 30.74418321 32.56374696 34.0822434  35.3494875  36.4070518
+ 37.28963019 38.02617604 38.64085208 39.15382306 39.58191721 39.93917836
+ 40.23732664 40.48614292 40.69378975 40.86707908 41.01169573 41.13238393
+ 41.23310291 41.3171568  41.38730303 41.44584277 41.49469646 41.53546675
+ 41.56949114 41.59788581 41.62158226 41.64135787 41.65786138 41.6716342
+ 41.68312815 41.6927203  41.70072532 41.70740581 41.71298095 41.71763361
+ 41.72151644 41.72475682 41.72746103 41.7297178  41.73160117 41.73317291
+ 41.73448459 41.73557923 41.73649276 41.73725513 41.73789136 41.73842232
+ 41.73886542 41.73923521 41.73954381 41.73980135 41.74001628 41.74019565
+ 41.74034533 41.74047025 41.74057451 41.74066151 41.74073411 41.7407947
+ 41.74084527 41.74088747 41.74092269 41.74095208 41.74097661 41.74099708
+ 41.74101416 41.74102841 41.74104031 41.74105024 41.74105852 41.74106544
+ 41.74107121 41.74107603 41.74108004 41.7410834  41.7410862  41.74108853
+ 41.74109048 41.74109211 41.74109347 41.7410946  41.74109555 41.74109633
+ 41.74109699 41.74109754 41.741098   41.74109838 41.7410987  41.74109897
+ 41.74109919 41.74109938 41.74109953 41.74109966] 
+ </code></pre>
+<div class="float">
+<img src="01_Regression_Gradient_Descent_files/01_Regression_Gradient_Descent_16_1.png" alt="png" />
+<div class="figcaption">png</div>
+</div>
+<p>Here, we see that the algorithm converges at the estimated <span class="math inline">\(\beta\)</span> little over 40. Let’s print out the best beta from gradient descent and the true parameter for comparison.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="regression-and-gradient-descent.html#cb12-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;True parameter of the univariate model: </span><span class="sc">{</span>coef<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> &quot;</span>)</span>
+<span id="cb12-2"><a href="regression-and-gradient-descent.html#cb12-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Best estimate from gradient descent: </span><span class="sc">{</span>beta<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>) </span></code></pre></div>
+<pre><code>True parameter of the univariate model: 41.7411003148779 
+ 
+ 
+Best estimate from gradient descent: [[41.74109966]] 
+ </code></pre>
+<p>See that the estimate obtained from gradient descent is close to the true parameter.</p>
+<p><strong>Multivariate model</strong></p>
+<p>The gradient descent works similarly in case of multivariate model specification except that we’ll have a vector of partial derivatives. The multivariate model specified at the very begining is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i \\
+MSE(\theta) = \frac{1}{m} (Y - X \theta)^{T}(Y - X \theta)
+\end{aligned}
+\]</span></p>
+<p>I’ve expressed MSE in matrix form, where <span class="math inline">\(\theta\)</span> incorportates the vector of parameters: <span class="math inline">\(\theta = [\alpha, \; \beta_1, \; \beta_2]^{T}\)</span>.</p>
+<p>The gradient vector is given as:
+<span class="math display">\[
+\frac{\partial MSE}{\partial \theta} = \frac{1}{m} 2 X^{T}(Y - X \theta)
+\]</span></p>
+<p>The gradient vector is of dimension <span class="math inline">\(3 \times 1\)</span> and stacks all partials of MSE with respect to <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>.</p>
+<p>Let’s code the gradient descent algorithm and print out both the true parameters and their estimates.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="regression-and-gradient-descent.html#cb14-1" tabindex="-1"></a><span class="co"># Use the gradient descent algorithm</span></span>
+<span id="cb14-2"><a href="regression-and-gradient-descent.html#cb14-2" tabindex="-1"></a>m <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
+<span id="cb14-3"><a href="regression-and-gradient-descent.html#cb14-3" tabindex="-1"></a>y <span class="op">=</span> y.reshape((m, <span class="dv">1</span>))</span>
+<span id="cb14-4"><a href="regression-and-gradient-descent.html#cb14-4" tabindex="-1"></a>theta <span class="op">=</span> np.random.randn(<span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb14-5"><a href="regression-and-gradient-descent.html#cb14-5" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb14-6"><a href="regression-and-gradient-descent.html#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="regression-and-gradient-descent.html#cb14-7" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb14-8"><a href="regression-and-gradient-descent.html#cb14-8" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span> <span class="op">/</span> m <span class="op">*</span> X.T <span class="op">@</span> (y <span class="op">-</span> X <span class="op">@</span> theta)</span>
+<span id="cb14-9"><a href="regression-and-gradient-descent.html#cb14-9" tabindex="-1"></a>    theta <span class="op">=</span> theta <span class="op">-</span> eta <span class="op">*</span> gradient </span>
+<span id="cb14-10"><a href="regression-and-gradient-descent.html#cb14-10" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="regression-and-gradient-descent.html#cb14-11" tabindex="-1"></a><span class="co"># True coefficients </span></span>
+<span id="cb14-12"><a href="regression-and-gradient-descent.html#cb14-12" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;True coefficients: </span><span class="sc">{</span>np<span class="sc">.</span>hstack([<span class="dv">10</span>, coefficient])<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb14-13"><a href="regression-and-gradient-descent.html#cb14-13" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Coefficients from gradient descent: </span><span class="sc">{</span>theta<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>True coefficients: [10.         40.71064891  6.60098441]
+Coefficients from gradient descent: [[10.00156879]
+ [40.74650076]
+ [ 6.62076533]]</code></pre>
+<p>Note that these coefficients are exactly similar to those obtained from the normal equation method. We can also make sure that we’ve done the estimation correctly by comparing the estimates with those obtained from built in module in sklearn used for purposes of estimating linear regression models.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="regression-and-gradient-descent.html#cb16-1" tabindex="-1"></a><span class="co"># sklearn</span></span>
+<span id="cb16-2"><a href="regression-and-gradient-descent.html#cb16-2" tabindex="-1"></a>reg <span class="op">=</span> linear_model.LinearRegression(fit_intercept<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-3"><a href="regression-and-gradient-descent.html#cb16-3" tabindex="-1"></a>reg.fit(X, y)</span>
+<span id="cb16-4"><a href="regression-and-gradient-descent.html#cb16-4" tabindex="-1"></a>best_theta_coef <span class="op">=</span> reg.coef_</span>
+<span id="cb16-5"><a href="regression-and-gradient-descent.html#cb16-5" tabindex="-1"></a>best_int_coef <span class="op">=</span> reg.intercept_</span>
+<span id="cb16-6"><a href="regression-and-gradient-descent.html#cb16-6" tabindex="-1"></a>best_theta_coef <span class="op">=</span> np.concatenate([best_int_coef, best_theta_coef[:, <span class="dv">1</span>:<span class="dv">3</span>].ravel()], axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb16-7"><a href="regression-and-gradient-descent.html#cb16-7" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from sklearn: </span><span class="sc">{</span>best_theta_coef<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>coefficients from sklearn: [10.00156877 40.74650082  6.62076534]</code></pre>
+<p>Not too bad!!</p>
+<p><strong>Standard Error</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="regression-and-gradient-descent.html#cb18-1" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
+<span id="cb18-2"><a href="regression-and-gradient-descent.html#cb18-2" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="regression-and-gradient-descent.html#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="regression-and-gradient-descent.html#cb18-4" tabindex="-1"></a><span class="co"># Standard errors </span></span>
+<span id="cb18-5"><a href="regression-and-gradient-descent.html#cb18-5" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="regression-and-gradient-descent.html#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="regression-and-gradient-descent.html#cb18-7" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
+<span id="cb18-8"><a href="regression-and-gradient-descent.html#cb18-8" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="regression-and-gradient-descent.html#cb18-9" tabindex="-1"></a><span class="co"># 1. Get the standard error of the regression</span></span>
+<span id="cb18-10"><a href="regression-and-gradient-descent.html#cb18-10" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="regression-and-gradient-descent.html#cb18-11" tabindex="-1"></a>error <span class="op">=</span> (X <span class="op">@</span> theta <span class="op">-</span> y)</span>
+<span id="cb18-12"><a href="regression-and-gradient-descent.html#cb18-12" tabindex="-1"></a>error_sq <span class="op">=</span> error.T <span class="op">@</span> error</span>
+<span id="cb18-13"><a href="regression-and-gradient-descent.html#cb18-13" tabindex="-1"></a>sigma_sq <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (m <span class="op">-</span><span class="dv">3</span>) <span class="op">*</span> error_sq</span>
+<span id="cb18-14"><a href="regression-and-gradient-descent.html#cb18-14" tabindex="-1"></a>se_reg <span class="op">=</span> np.sqrt(sigma_sq)</span>
+<span id="cb18-15"><a href="regression-and-gradient-descent.html#cb18-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard error of the regression is: </span><span class="sc">{</span>se_reg<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb18-16"><a href="regression-and-gradient-descent.html#cb18-16" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="regression-and-gradient-descent.html#cb18-17" tabindex="-1"></a><span class="co"># 2. get standard errors of the respective coefficients </span></span>
+<span id="cb18-18"><a href="regression-and-gradient-descent.html#cb18-18" tabindex="-1"></a>var_cov <span class="op">=</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">*</span> sigma_sq</span>
+<span id="cb18-19"><a href="regression-and-gradient-descent.html#cb18-19" tabindex="-1"></a>manual_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
+<span id="cb18-20"><a href="regression-and-gradient-descent.html#cb18-20" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors of coefficients (manual estimation): </span><span class="sc">{</span>manual_se<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb18-21"><a href="regression-and-gradient-descent.html#cb18-21" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="regression-and-gradient-descent.html#cb18-22" tabindex="-1"></a><span class="co"># se from stats model</span></span>
+<span id="cb18-23"><a href="regression-and-gradient-descent.html#cb18-23" tabindex="-1"></a>X_sm <span class="op">=</span> sm.add_constant(X)   <span class="co"># add intercept</span></span>
+<span id="cb18-24"><a href="regression-and-gradient-descent.html#cb18-24" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X_sm).fit()</span>
+<span id="cb18-25"><a href="regression-and-gradient-descent.html#cb18-25" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="regression-and-gradient-descent.html#cb18-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>params<span class="sc">}</span><span class="ss">&quot;</span>)   <span class="co"># coefficients</span></span>
+<span id="cb18-27"><a href="regression-and-gradient-descent.html#cb18-27" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>bse<span class="sc">}</span><span class="ss">&quot;</span>)      <span class="co"># standard errors</span></span></code></pre></div>
+<pre><code>standard error of the regression is: [[0.98562573]]
+standard errors of coefficients (manual estimation): [0.03123574 0.03242909 0.03072431]
+coefficients from statmodels: [10.00156877 40.74650082  6.62076534]
+standard errors from statmodels: [0.03123574 0.03242909 0.03072431]</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+
 </div>
             </section>
 
@@ -324,7 +545,7 @@ target: [ 3.24877735  8.66339401 19.45702327 31.55545159  3.92293402]</code></pr
         </div>
       </div>
 <a href="an-exercise.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="normal-equation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="causal-inference.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

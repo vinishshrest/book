@@ -103,7 +103,7 @@ plt.show()
 
 # Now, we are ready to discuss two methods. Let's start with the Normal equation method.
 # 
-## i. Normal Equation  
+# **i. Normal Equation**  
 
 # Consider the following regression model specification: 
 
@@ -158,7 +158,7 @@ print(f"coefficients from normal equation: {theta_best}")
 
 
 # %% [markdown]
-## ii. Gradient Descent
+# **ii. Gradient Descent**
 
 # Imagine that you are standing at the top of a mountain and want to descend the mountain as quickly as possible. One simple way is to consider a few directions -- north, south, east, and west -- and evaluate the steepness (gradient). Then you'd want to take a small step towards the steepest direction, pause, and re-evaluate the steepness. Doing this repeatedly gets you to the bottom of the mountain as fast as possible.  
 # 
@@ -249,7 +249,7 @@ print(f"Best estimate from gradient descent: {beta} \n \n")
 # %% [markdown]
 # See that the estimate obtained from gradient descent is close to the true parameter.  
 
-## Multivariate model
+# **Multivariate model**
 
 # The gradient descent works similarly in case of multivariate model specification except that we'll have a vector of partial derivatives. The multivariate model specified at the very begining is:
 # 
@@ -305,7 +305,7 @@ print(f"coefficients from sklearn: {best_theta_coef}")
 
 # %% [markdown]
 
-## Standard Error
+# **Standard Error**
 
 # %%
 # ----------------------------------------------
