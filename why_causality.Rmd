@@ -23,9 +23,9 @@ This collection of lectures focuses on the challenge of causal inference in such
 knitr::opts_chunk$set(warning = FALSE)
 
 # declare paths and libraries
-user = 2
-if(user == 1){
-    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+user = Sys.info()["nodename"]
+if(user == "vinish-Legion-Pro-7-16IRX9H"){
+    source("/home/vinish/Dropbox/Medicaid_South/code/filepath.r")
 }else{
     source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
 }

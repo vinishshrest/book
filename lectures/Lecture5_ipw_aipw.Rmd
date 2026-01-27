@@ -1,0 +1,599 @@
+---
+title: "Lecture 5. IPW and AIPW"
+author: "Vinish Shrestha"
+date: 
+output:
+  beamer_presentation: default
+  binb::metropolis:
+#bibliography: bib.bib
+header-includes:
+    - \usepackage{dcolumn}  
+    - \usepackage{graphicx}  # Required for resizing tables with \resizebox
+    - \usepackage{booktabs}  # For professional table formatting
+    - \usepackage{longtable}
+#- \definecolor{cardinal}{RGB}{140,21,21}
+#- \setbeamercolor{frametitle}{bg=cardinal}
+institute: Towson University
+mainfont: IBM Plex Sans Condensed
+classoption: aspectratio=169
+theme: metropolis
+latex_engine: xelatex
+link-citations: yes
+bibliography: "../ML.bib"
+urlcolor: blue
+toc: yes
+---
+
+
+# Motivation 
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE, 
+fig.width = 5, fig.height = 3)
+
+# declare paths and libraries
+user = 2
+if(user == 1){
+    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+}else{
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+}
+
+
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow, stargazer, broom, knitr, kableExtra)
+theme_set(theme_minimal())
+library(caret)
+library(glmnet)
+library(splines)
+
+set.seed(12388)
+```
+
+## Motivation 
+
+- We've seen the importance of independence assumption $(W_i \perp Y_{i}(0) , \; Y_{i}(1))$ 
+
+- However, independence assumption is too strict 
+
+- Treatment assignment may depend on baseline characteristics due to selection or treatment target
+    - unconfoundedness assumption   $(W_i \perp Y_{i}(0) , \; Y_{i}(1) \; | \; X_i)$
+
+- Last lecture we estimated ATE for each strata (defined by *highwork*)
+
+- Then aggregated these conditional average treatment effect (CATE) estimates: aggregated estimate $\widehat{\tau}_{agg}$ 
+
+# Aggregated Estimator
+
+## Selection into treatment 
+
+- *Goal: To evaluate the effect of a tutoring program initiated following the first exam on grades at an introductory level course.* 
+
+- However, you are not able to completely randomize the treatment (unethical to force someone not to come)
+
+- For simplicity, possible outcomes are **A** and **B** (GRADES) 
+
+- **Treatment Assignment Mechanism: You know that students who received B on their first exam are more likely to attend the tutoring session**
+
+How do we proceed? 
+
+
+## Second exam grade conditional on first exam grade 
+
+```{r}
+# function to report grade breakdown by the first exam grade (A and B)
+grade_mat  <- function(grade_vec){
+    grade  <- matrix(0, nrow =2, ncol = 3)
+    grade[, 1]  <- c("Treat", "Control")
+    grade[ ,2]  <- c(grade_vec[1], grade_vec[2])
+    grade[ ,3]  <- c(grade_vec[3], grade_vec[4])
+    return(grade)
+}
+
+# Y_i(first exam) == A
+grade  <- grade_mat(c(5, 9, 2, 4))
+colnames(grade)  <- c(" ", "A (2nd Exam)", "B (2nd Exam)")
+
+# Table for grade in second exam | first exam == A
+grade_fe_A  <- grade  %>% kable()  %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")  %>% 
+    add_header_above(c("Table 1." = 1, "Grade in the 2nd exam | 1st exam = A" = 2))
+
+# Y_i(first exam) == A
+grade  <- grade_mat(c(15, 1, 5, 4))
+colnames(grade)  <- c(" ", "A (2nd Exam)", "B (2nd Exam)")
+
+# Table for grade in second exam | first exam == B
+grade_fe_B  <- grade  %>% kable()  %>% 
+    kable_styling(bootstrap_options = "striped", full_width = F, position = "left")  %>% 
+    add_header_above(c("Table 2." = 1, "Grade in the 2nd exam | 1st exam = B" = 2))
+
+grade_fe_A
+
+grade_fe_B
+```
+
+
+## Aggregating CATE estimates 
+
+1. CATE estimate| FE = A:
+
+ $\hat{\tau}_{FE=A} = \frac{5}{7} - \frac{9}{13} = 2.1 \; pp$
+
+2. CATE estimate| FE = B:
+
+ $\hat{\tau}_{FE=B} = \frac{15}{20} - \frac{1}{5} = 55 \; pp$
+
+3. Aggregated estimate:
+
+ $\hat{\tau}_{AGG} = \frac{20}{45} \times \hat{\tau}_{FE=A} - \frac{25}{45} \times \hat{\tau}_{FE=B} = 31.48 \; pp$. 
+
+
+## Aggregating CATE estimates 
+- The first two are CATE estimates for groups receiving grades A and B in the first exam.
+
+- Assumption: Once conditioned on first exam grade, treatment (attendance) is random.
+
+- This enables valid within-group causal effect estimation.
+
+- ATE estimate is formed by averaging CATEs with appropriate weights.
+
+- Example with discrete feature space (grades A or B) shows that if variables influencing treatment are observed, ATE can be estimated by weighting CATEs (group-wise ATEs).
+
+## Aggregated Estimator
+
+- The aggregated estimator is given as: 
+
+\begin{align}
+\hat{\tau}_{AGG} = \overbrace{\frac{n_{A}}{n}}^{\text{frac. A}} \bigg[\underbrace{\frac{1}{n_{A1}} \sum_{\substack{i \in A \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{n_{A0}} \sum_{\substack{i \in A \\ \textrm{W = 0}}} Y_i}_{\text{difference in mean for A}} \bigg] + 
+\overbrace{\frac{n_{B}}{n}}^{\text{frac. B}} \bigg[\underbrace{\frac{1}{n_{B1}} \sum_{\substack{i \in B \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{n_{B0}} \sum_{\substack{i \in B \\ \textrm{W = 0}}} Y_i}_{\text{difference in mean for B}} \bigg] 
+\end{align}
+
+\begin{align}
+\hat{\tau}_{AGG} = \frac{1}{n} \bigg[\frac{1}{\frac{n_{A1}}{n_A}} \sum_{\substack{i \in A \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{\frac{n_{A0}}{n_A}} \sum_{\substack{i \in A \\ \textrm{W = 0}}} Y_i \bigg] + 
+\frac{1}{n} \bigg[\frac{1}{\frac{n_{B1}}{n_B}} \sum_{\substack{i \in B \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{\frac{n_{B0}}{n_B}} \sum_{\substack{i \in B \\ \textrm{W = 0}}} Y_i \bigg] 
+\end{align}
+
+
+## where, 
+
+1. $\frac{n_{A1}}{n_A}:$ Represents the fraction of treated individuals who received $A$ on the first exam. 
+
+2. $\frac{n_{A0}}{n_A}:$ Represents the fraction of untreated individuals who received $A$ on the first exam. 
+
+3. $\frac{n_{B1}}{n_B}:$ Represents the fraction of treated individuals who received $B$ on the first exam. 
+
+4. $\frac{n_{B0}}{n_B}:$ Represents the fraction of untreated individuals who received $B$ on the first exam. 
+
+## Note that .. 
+
+- $\frac{n_{A1}}{n_A} \; =  \hat{e}(X_i = A) \; \approx P(W_i = 1 | X_i = A) \;$ 
+
+- $\frac{n_{A0}}{n_A} \;  = 1 - \hat{e}(X_i = A \; \approx 1 - P(W_i = 1 | X_i = A))$ 
+
+Also, 
+
+- $\frac{n_{B1}}{n_B} \; =  \hat{e}(X_i = B) \approx \; P(W_i = 1 | X_i = B)$ 
+
+- $\frac{n_{B0}}{n_B} \; = 1 - \hat{e}(X_i = B) \approx \; 1 - P(W_i = 1 | X_i = B)$ 
+
+## Probability of being treated conditional upon $X$ 
+
+- $P(W_i = 1| X_i) = e(X_i)$ *oracle propensity score*
+
+- re-write:
+
+\begin{align}
+\hat{\tau}_{AGG} = \frac{1}{n} \bigg[\frac{1}{\hat{e}(X_i = A)} \sum_{\substack{i \in A \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{1 - \hat{e}(X_i = A)} \sum_{\substack{i \in A \\ \textrm{W = 0}}} Y_i \bigg] + \\
+\frac{1}{n} \bigg[\frac{1}{\hat{e}(X_i = B)} \sum_{\substack{i \in B \\ \textrm{W = 1}}} Y_i -   
+                    \frac{1}{1 - \hat{e}(X_i = B)} \sum_{\substack{i \in B \\ \textrm{W = 0}}} Y_i \bigg] 
+\end{align}
+
+- We'll see that this can be written as the inverse probability weighted estimator. 
+
+# Inverse Probability Weighting (IPW)
+
+## IPW 
+
+- written as: 
+
+\begin{equation}
+\hat{\tau}_{IPW} = \frac{1}{N}\sum_{i = 1}^{N} \Bigg(\frac{Y_i . W_i}{\hat{e}(X_i)} - \frac{Y_i . (1-W_i)}{1 - \hat{e}(X_i)}\Bigg) 
+\end{equation}
+
+- propensity score, $e(X_i)$, does the balancing act
+
+## IPW 
+
+- Intuitively, observations with high propensity score within the treated group are weighted down
+
+-  Observations with higher propensity score in the control group are weighted more. 
+
+*In this way, propensity score is used to balance the differences in covariates across the treatment and control groups. Note that the validity of $\hat{\tau}$ still hinges on the unconfoundedness assumption. Any inference that you make is only good if your assumption holds.* 
+
+# Propensity Score
+
+## Propensity score
+
+- We saw that in discrete cases one can use aggregated estimator to apply unconfoundedness 
+    - strata specific ATE and average them 
+
+- As the number of covariates increases, this approach is prone to  the *curse of dimensionality* 
+
+- If features are continuous, we won't be able to estimate ATE at each value of $x \in \chi$ due to lack of enough sample size
+
+## Propensity score 
+
+**Propensity score: $e(x)$.** The probability of being treated given a set of covariates $X$s. 
+
+\begin{equation}
+e(x) = P(W_i = 1 | X_i = x)
+\end{equation}
+
+- Note that $x$ (grade A) is the realized value of the covariate $X$ (grade in the 1st exam)
+
+- If unconfoundedness assumption holds, we can write the following: 
+
+\begin{equation}
+W_i \perp \{Y_i(0), \; Y_i(1)\} | \; e(X_i) (\#eq:pconf) 
+\end{equation}
+
+- Instead of conditioning on multi-dimensional vector, we can just condition on $e(X_i)$
+
+## Propensity score 
+
+- In reality, we won't often know the propensity score 
+
+- We need to estimate it! 
+
+- Can use logit or machine learning methods to estimate propensity score 
+
+- We'll take a look at logit, lasso, and random forest approach
+
+
+# Estimating the propensity score 
+
+## Generate data 
+
+```{r, echo = TRUE}
+library(rsample) # for data splitting 
+library(caret) # for logistic regression modeling 
+library(vip) # Model interpretability 
+
+
+set.seed(194) # for replicability
+```
+
+## Generate data 
+
+```{r, echo = TRUE}
+# Generate simulated Data 
+n <- 2000 # number of obsevations
+p <- 10 # number of covariates
+
+fun_makedat  <- function(n, p) {
+X <- matrix(rnorm(n * p), n, p) # data matrix
+true_effect  <- 2.5
+
+W <- rbinom(n, 1, 0.1 + 0.4 * (X[, 1] < 0) + 0.2 * (X[, 2] > 0)) # X[, 1] is the score in the first exam
+prob  <- 0.1 + 0.4 * (X[, 1] < 0) + 0.2 * (X[, 2] > 0)  # oracle propensity score
+
+Y <- true_effect * W + 2 * X[, 2] + 4 * pmax(X[, 1], 0) + rnorm(n)
+#plot(X[, 1], X[, 2], col = as.factor(W))
+
+dat  <- data.frame(cbind(W, Y, X))
+colnames(dat)  <- c("W", "Y", paste0("X", seq(1, 10))) 
+dat  <- dat  %>% 
+        mutate(W = as.factor(W), 
+               W_num = as.numeric(as.character(W)))
+
+dat$prob  <- prob
+return(dat)
+}
+```
+
+## Glimpse data 
+
+```{r, echo = TRUE}
+dat  <- fun_makedat(n = n, p = p)
+head(dat)
+```
+
+## Let's start with the naive estimator 
+
+- $\hat{\tau}_{naive} = \frac{1}{n_{W=1}} \sum_{W_i = 1} Y_i -  \frac{1}{n_{W=0}} \sum_{W_i = 0} Y_i$ 
+
+```{r, echo = TRUE}
+repl  <- 1000
+store_naive  <- rep(0, repl)
+store_oracle  <- rep(0, repl)
+
+for(i in seq(repl)) {
+    dat  <- fun_makedat(n = n, p = p)
+    store_naive[i]  <- mean(dat$Y[dat$W == 1]) - mean(dat$Y[dat$W == 0])
+}
+
+```
+
+## Histogram of naive estimates
+```{r}
+hist(store_naive, freq = F, main = "", col= rgb(0, 0, 1, 1/8), xlab = "Naive estimates", las = 1)
+abline(v =  2.5, lwd = 3, lty = 2)
+legend("topright", "True effect", lwd = 3, lty = 2, bty = "n")
+```
+
+- This is quite off from the true effect of 2.5 
+
+## Let's then use the oracle propensity score and estimate IPW
+
+```{r, echo = TRUE}
+
+for(i in seq(repl)) {
+    dat  <- fun_makedat(n = n, p = p)
+    Z  <- (dat$W_num * dat$Y / dat$prob) -  ((1 - dat$W_num) * dat$Y / (1-dat$prob))
+    store_oracle[i]  <- mean(Z)
+}
+
+```
+
+## Histogram of IPW estimates using oracle propensity score 
+
+```{r}
+hist(store_oracle, freq = F, main = "", col= rgb(0, 0, 1, 1/8), xlab = "oracle IPW estimates", las = 1)
+abline(v =  2.5, lwd = 3, lty = 2)
+legend("topright", "True effect", lwd = 3, lty = 2, bty = "n")
+```
+
+- The histogram of IPW estimates using oracle propensity score is centered around the true effect.
+
+## Estimating propensity score: logistic regression 
+
+```{r, echo = TRUE}
+# declare covariates/features
+covariates  <- c("X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10")
+fmla  <- as.formula(paste0("~", paste0("bs(", covariates, ", df=3)", collapse="+"))) # assign formula
+W  <- dat[, "W"] # treatment
+Y  <- dat[, "Y"] # outcome
+XX  <- model.matrix(fmla, dat) # Xs or the features
+logit  <- cv.glmnet(x = XX, y = W, family = "binomial")
+e.hat  <- predict(logit, XX, s = "lambda.min", type = "response")
+```
+
+## Histogram of estimated propensity score 
+
+```{r}
+hist(e.hat)
+```
+
+## Get estimate for IPW estimator
+
+```{r, echo = TRUE}
+fun_ipw  <- function(W, Y, e.hat){
+    # @Arg W: treatment 
+    # @Arg Y: outcome 
+    # @Arg e.hat: estimated propensity score 
+    Z  <- (W * Y / e.hat) -  ((1 - W) * Y / (1-e.hat))
+    ipw.est  <- mean(Z)
+    ipw.se  <- sd(Z) / sqrt(length(Z))
+    ipw.tstat  <- ipw.est / ipw.se
+    ipw.results  <- c(estimate = ipw.est, std.error = ipw.se, t.stat = ipw.tstat)
+    return(ipw.results)
+}
+ipw.results  <- fun_ipw(W = dat$W_num, Y = dat$Y, e.hat = e.hat)
+```
+
+## Get estimate for IPW estimator
+
+```{r}
+print(ipw.results)
+```
+
+- propensity score is estimated using logistic regression
+
+
+## Estimate propensity score using lasso 
+
+```{r, echo = TRUE}
+lasso.mod  <- cv.glmnet(
+    x = XX, 
+    y = dat$W_num, 
+    alpha = 1 # default uses 10 fold cross validation
+)
+
+e.hat.lasso  <- predict(lasso.mod, XX, s = lasso.mod$lambda.1se)
+```
+
+## Histogram 
+
+```{r, echo = TRUE}
+hist(e.hat.lasso)
+```
+
+## Let's get an estimate for IPW
+
+```{r, echo = TRUE}
+# call the IPW function 
+ipw.results.lasso  <- fun_ipw(W = dat$W_num, Y = dat$Y, e.hat = e.hat.lasso)
+print(ipw.results.lasso)
+```
+
+## Estimate propensity score using random forest 
+
+```{r, echo = TRUE}
+library(grf) # lib for modeling
+
+rf.mod  <-  regression_forest(as.matrix(XX), 
+                              dat$W_num, 
+                              honesty = TRUE, 
+                              num.trees = 10000, 
+                              tune.parameters = "all")
+
+e.hat.rf  <- predict(rf.mod, XX)$predictions
+```
+
+## Histogram 
+
+```{r, echo = TRUE}
+hist(e.hat.rf)
+```
+
+## Let's get an estimate for IPW
+
+```{r, echo = TRUE}
+# call the IPW function 
+ipw.results.rf  <- fun_ipw(W = dat$W_num, Y = dat$Y, e.hat = e.hat.rf)
+print(ipw.results.rf)
+```
+
+
+# Cross-fitting 
+
+## Cross-fitting for training and prediction 
+
+- Idea is that the same observation shouldn't be used for training the model as well as making predictions 
+
+**A Generic Algorithm** 
+
+1. Divide the data into K folds randomly. 
+2. Train the model using $-k$ folds (all folds except the $k^{th}$ one).
+3. Generate a fit of *fold k* on the model trained using $-k$ folds
+4. Repeat steps 2 and 3 to generate fit for all $K$ number of folds.  
+
+## Cross-fitting illustration
+
+
+```{r}
+# cross-fitting illustration
+colorcode <- diag(5) # this creates a coding
+colorcode <- c(colorcode)
+
+# Create data for the boxes
+boxes <- data.frame(
+  x = rep(seq(2, 10, 2), 5),
+  y = rep(seq(5, 1, by = -1), each = 5),
+  label = rep(paste("fold", seq(1, 5), sep = " "), 5), 
+  colorcode = colorcode
+)
+
+boxes <- boxes  %>% 
+            mutate(fill = ifelse(colorcode == 1, "lightgreen", "lightblue"))  %>% 
+            dplyr::select(-c(colorcode))
+  
+
+
+# Create the plot
+ggplot() +
+    geom_rect(data = boxes, aes(xmin = x , xmax = x + 2, ymin = y - 0.3, ymax = y + 0.5, fill = fill), 
+            color = "black", alpha = 0.5) +   xlim(0, 14) +
+    ylim(-1, 6) + 
+    theme_void() +
+    scale_fill_identity() +
+    annotate("text", x = c(seq(3, 11, 2), rep(0.5, 5)), y = c(rep(0.3, 5), seq(5, 1, -1)), label = c(paste("fold", seq(1, 5, 1), sep = " "), paste("round", seq(1, 5, 1), sep = " ")), color = rep(c("red", "black"), each = 5)
+    )
+```
+
+
+## Estimating propensity score using cross-fitting
+
+```{r, echo = TRUE}
+dat.e.hat  <- data.frame()
+k  <- 10 # k-folds
+fold  <- sample(1:k, n, replace = TRUE)
+
+for(i in seq_along(1:k)){
+    index  <- which(fold == i)
+
+    lasso.mod  <- cv.glmnet(
+            x = XX[-index, ], 
+            y = dat$W_num[-index], 
+            alpha = 1 # default uses 10 fold cross validation
+    )
+    e.hat.lasso  <- predict(lasso.mod, XX[index, ], s = lasso.mod$lambda.1se)[,1]
+    dat.e.hat.new  <- data.frame(e.hat.lasso,index)
+    e.hat.dat  <- rbind(dat.e.hat, dat.e.hat.new)
+    dat.e.hat  <- e.hat.dat
+}
+
+e.hat.dat  <- e.hat.dat[order(e.hat.dat$index), ] # order from 1:n
+```
+
+
+## Estimate IPW using the cross-fitted propensity score estimates
+```{r, echo = TRUE}
+# call the IPW function but propensity scores are croff-fitted
+ipw.results.lasso2  <- fun_ipw(W = dat$W_num, 
+                               Y = dat$Y, 
+                               e.hat = e.hat.dat$e.hat.lasso)
+print(ipw.results.lasso2)
+```
+
+# Augmented Inverse Probability Weighting (AIPW)
+
+## AIPW
+
+- The other approach to estimate $\tau$ is to think of it from the conditional response approach. 
+
+- Write $\mu_{w}(x) = E[Y_i| \; X_i = x, W_i = w]$. 
+
+Then: 
+
+$\tau(x) = E[Y_i| \; X_i = x, W_i = 1] - E[Y_i| \; X_i = x, W_i = 0]$
+
+- The consistent estimator is formed using the sample counterparts
+
+$\hat{\tau}(x) = N^{-1} \sum_{i = 1}^{N} \hat{\mu}_{1}(X_i) - \hat{\mu}_{0}(X_i)$
+
+## AIPW 
+
+- AIPW approach combines both IPW approach as well as regression outcome approach to estimate $\tau$. 
+
+$\hat{\tau}_{AIPW} = \frac{1}{N} \sum_{i = 1}^{N} (\hat{\mu}_{1}(X_i) - \hat{\mu}_{0}(X_i) + 
+\frac{(Y_i - \hat{\mu}_1(X_i)). W_i}{\hat{e}(X_i)} - \frac{(Y_i - \hat{\mu}_0(X_i)). (1-W_i)}{1 - \hat{e}(X_i)})$
+
+*ML approach using cross-fitting is used to estimate both $\hat{e}(x)$ and $\hat{\mu}_{w}(x)$.*
+
+- AIPW approach can be thought of:
+
+1. Estimating ATE taking the difference across conditional responses. 
+
+2. Adjusting the residuals using weights given by the propensity score.
+
+## AIPW Advantage 
+
+1. $\hat{\tau}_{AIPW}$ is consistent as long as $\hat{e}(x)$ or $\hat{\mu}_{w}(x)$ is consistent. 
+    - This is because $E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0$. 
+
+
+2. $\hat{\tau}_{AIPW}$ is a good approximation to oracle $\hat{\tau}_{AIPW}^{*}$ as long as $\hat{\mu}(.)$ and $\hat{e}(.)$ are reasonably accurate. 
+    - *If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both $\hat{\mu}(.)$ and $\hat{e}(.)$ are $\sqrt{n}$-consistent, then the following holds.* 
+
+$\sqrt{n}(\hat{\tau}_{AIPW} - \hat{\tau}_{AIPW}^{*}) \rightarrow_p 0$.
+
+# Discussion
+
+## Discussion 
+
+- We took a look at experimental setting 
+    a. treatment is completely randomized 
+    b. treatment is correlated with $Xs$ 
+
+- We talked about assumptions 
+    a. independence, unconfoundedness
+    b. SUTVA 
+    c. overlap 
+
+- Took a look at IPW and AIPW
+
+- Discussed that instead of accounting for all $Xs$ for unconfoundedness, one can feasibly account for 
+propensity score $P(W_i = 1|Xs)$. 
+
+# References
+
+## References{.allowframebreaks} 

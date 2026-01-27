@@ -1,0 +1,635 @@
+---
+title: "Lecture 9: Difference in Differences in Multi-Period and Multi Group-Setting"
+author: "Vinish Shrestha"
+date: "`r Sys.Date()`"  #"`r format(Sys.Date(), '%B %d, %Y')`"
+output: 
+  beamer_presentation:
+    theme: "CambridgeUS"
+header-includes:
+  - \setbeamertemplate{navigation symbols}{}
+  - \date[]{\today}
+  - \author[lEc]{Vinish Shrestha}
+#output:
+#  beamer_presentation: default
+#  theme: "CambridgeUS"
+  #binb::metropolis:
+  #  citation_package: biblatex
+  #  dev: cairo_pdf
+  #  df_print: kable
+  #  fig_caption: yes
+  #  fig_height: 5
+  #  fig_width: 7
+  #  keep_tex: yes
+  #  latex_engine: xelatex
+#bibliography: bib.bib
+#header-includes:
+    #- \definecolor{cardinal}{RGB}{140,21,21}
+    #- \setbeamercolor{frametitle}{bg=cardinal}
+    #- \setbeamertemplate{navigation symbols}{}
+    #- \author[Smith]{Jack Smith}
+institute: Notes.
+mainfont: IBM Plex Sans Condensed
+classoption: aspectratio=169
+theme: metropolis
+biblio-style: authoryear
+toc: true
+---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library("ggplot2")
+library("janitor")
+library("tidyr")
+library(kableExtra)
+# %% ####################################################
+options(repr.plot.width=12, repr.plot.height=9)
+options(ggplot2.discrete.fill = RColorBrewer::brewer.pal(9, "Set2"))
+options(ggplot2.discrete.colour = RColorBrewer::brewer.pal(9, "Set2"))
+options(ggplot2.continuous.fill = "viridis"); options(ggplot2.continuous.colour = "viridis")
+set.seed(42)
+# %% ####################################################
+knitr::opts_chunk$set(echo=F, autodep=TRUE, cache.comments=FALSE,
+               message=FALSE, warning=FALSE)
+datapath  <- "~/Dropbox/Macroeconomics/Lectures"
+```
+
+# Multi period and multi group 
+
+## From canonical DiD to multi-period and multi-group 
+
+- Target: Simulate data for the following pooled cross sectional setting 
+
+
+1. groups (G) = 3
+
+2. T = 20 (20 periods)
+    - time period 
+
+3. n = 5000
+    - every time period we have a sample of 5000
+
+
+- num. of obs. in data: Group [1] $(T \times n)$ + Group [2] $(T \times n)$ + Group [3] $(T \times n)$
+
+
+## Multi-group and multi-time 
+
+- there are 3 groups (unlike 2 of canonical DiD) 
+
+- $T=20$ (unlike 2 of canonical DiD)
+
+- variation in treatment timing 
+    - set it up so that group 1 gets treated at 6 (early treated)
+    - group 2 gets treated at 16 (late treated)
+    - group 3 (untreated)
+
+# Simulating the data for Multi-group and multi-period setup
+
+## 
+```{r, echo = TRUE}
+# set seed
+set.seed(1256)
+# Set up true parameters
+trueeffect <- 10
+intercep <- 10
+N <- 5000
+T <- 20
+early <- 6
+late <- 16
+
+# A skeleton function  
+datagen <- function(T, N, group){
+  timeT <- rep(1:T, each = N)
+  treatT <- rep(1, length(timeT))
+  groupT <- rep(group, length(timeT))
+  df <- data.frame(time = timeT, treat = treatT, group = groupT)
+  return(df)
+}
+
+```
+
+## 
+
+```{r, echo = TRUE}
+# call the function 
+
+dftreat <- datagen(T, N, 1) # early treatment
+dftreat2 <- datagen(T, N, 2) # late treatment
+dfuntreat <- datagen(T, N, 3) # untreated
+```
+
+## Group 1
+```{r, echo  = TRUE}
+data <- rbind(dftreat, dftreat2, dfuntreat)
+data[1:20, ]
+
+```
+
+## Group 2
+```{r, echo  = TRUE}
+data[100001:100020, ]
+```
+
+## Group 3
+```{r, echo  = TRUE}
+data[200001:200020, ]
+```
+
+## 
+
+```{r, echo = TRUE}
+table(data$time[data$group == 1])
+
+table(data$time[data$group == 2])
+
+
+```
+
+## 
+
+```{r, echo = TRUE}
+table(data$time[data$group == 3])
+
+```
+
+## Staggered policy roll-out
+
+- policy can go into effect at different time periods (unlike canonical did)
+
+- once the policy is "on", it doesn't turn off 
+
+- In the simulated data 
+    - early group: 6th period 
+    - late group: 16th period
+
+
+## 
+```{r, echo = TRUE}
+# generating policy variables 
+data <- data %>% 
+        mutate(policy = 0, 
+        policy = ifelse(group == 1 & time >= early, 1, policy), 
+        policy = ifelse(group == 2 & time >= late, 1, policy),
+        dumtreat1 = ifelse(group == 1, 1, 0), 
+        dumtreat2 = ifelse(group == 2, 1, 0), 
+        dumtreat3 = ifelse(group == 3, 1, 0))
+
+```
+
+##
+
+```{r, echo = TRUE}
+# simulate the outcome 
+e <- rnorm(nrow(data), 0, 5)
+
+data <- data %>% mutate(Y = 1 + trueeffect*dumtreat1*policy + 
+                        trueeffect*dumtreat2*policy + 
+                        time + # common time trend
+                        dumtreat1*2 + dumtreat2*4 + # time invariant 
+                        #unobserved heterogeneity 
+                        e,  # error term
+                        Ypot = 1 + 
+                        time + 
+                        dumtreat1*2 + dumtreat2*4 + e)
+
+```
+
+## Group 1
+```{r, echo  = TRUE}
+data[1:20, ]
+
+```
+
+## Group 2
+```{r, echo  = TRUE}
+data[100001:100020, ]
+```
+
+## Group 3
+```{r, echo  = TRUE}
+data[200001:200020, ]
+```
+
+
+## Aggregate by group and time 
+
+```{r, echo = TRUE}
+datasum <- data.frame(data %>%
+            group_by(group, time) %>%
+            summarise(meanY = mean(Y), meanYpot = mean(Ypot), 
+            .groups = "drop")
+)
+```
+
+## View the simulated data 
+
+```{r, echo = TRUE}
+datasum
+```
+
+## Dimension of the simulated data 
+
+- 20 periods and 3 groups
+
+```{r, echo = TRUE}
+
+dim(datasum)
+
+```
+
+## Plot the outcome by group and time 
+
+
+```{r, echo = TRUE}
+# data for potential outcome
+datasumpot <- datasum %>% dplyr::select(c(group, 
+                                        time, 
+                                        meanYpot)) %>% 
+                             mutate(group = 10*group) # this would be the grouping for potential outcome 
+                             # 10 for the early group in absence of the treatment 
+                             # 20 for the late group in absence of the treatment 
+                             # 30 for the untreated group in absence of the treatment 
+
+datasum <- datasum %>% dplyr::select(-c(meanYpot))
+colnames(datasumpot) <- c("group", "time", "meanY")
+
+# bind the potential outcome
+datasum <- rbind(datasum, datasumpot)
+```
+
+## Plot
+```{r, echo = TRUE}
+vlines <- data.frame(xint = c(6, 16))
+
+datasum$group = factor(datasum$group)
+
+f0  <- ggplot(datasum, aes(x = time, y = meanY, group = group)) + 
+            geom_line(aes(linetype = group, color = group),size = 2) +  
+            scale_linetype_manual(name = "Linetype", 
+                values = c("1" = 1, "2" = 1, "3" = 1, "10" = 2, "20" = 2, "30" = 2), guide = "none") + 
+            theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(color = "black"), 
+            legend.position = "none") + xlab("period") + ylab("Outcome") + 
+            geom_vline(data = vlines, aes(xintercept = xint), linetype = "dashed") + 
+            annotate(x = c(5.2, 15.2, 2, 9, 17), y = c(0, 0, 35, 35, 35), 
+            label = c(bquote(t[k]^"*"), bquote(t[l]^"*"), "PRE(k)", "MID(k,l)", "POST(l)"), geom = "text", parse = TRUE)
+
+```
+
+## Plot 
+```{r, fig.align = "center", out.width = "60%"}
+f0
+```
+
+## Things to note 
+
+- Group 1 is treated at T = 6
+
+- Group 2 is treated at T = 16 
+
+- Group 3 is untreated 
+
+- True effect is 10 
+
+- In other words, treatment effect is homogeneous 
+
+# Estimating TWFE in case of homogeneous treatment effect
+## Let's use TWFE in this case 
+
+```{r, echo = TRUE}
+# first generate the necessary variables 
+
+datasum$treat1  <- ifelse(datasum$group == 1 & datasum$time >= early, 1, 0)
+datasum$treat2  <- ifelse(datasum$group == 2 & datasum$time >= late, 1, 0)
+datasum$twfe  <- datasum$treat1 + datasum$treat2 
+
+```
+
+## Group 1 
+
+```{r}
+datasum[1:20, ]
+```
+
+## Group 2 
+```{r}
+datasum[30:40, ]
+```
+
+## Group 3
+```{r}
+datasum[41:60, ]
+```
+
+## TWFE specification 
+
+```{r, echo = TRUE}
+reg_twfe  <- lm(meanY ~ twfe + factor(time) + factor(group), data = datasum)
+
+# extract TWFE coefficients for brevity 
+cat("TWFE estimate: ", coefficients(reg_twfe)[[2]])
+
+cat("Remember the true effect assigned: ", trueeffect)
+```
+
+# Heterogeneous treatment effects
+
+## Heterogeneous treatment effects 
+
+- So far, looked at homogeneous treatment effect 
+
+- What if treatment effects are heterogeneous?
+
+**Two kinds:** 
+
+1. consider when effects vary by groups 
+    - Early group, has a treatment effect of 20 and late group of 5
+2. effects vary by time 
+    - dynamic treatment effects
+
+## Effects vary by groups   
+
+```{r, echo = TRUE}
+trueeffect_early  <- 20 # treatment effect is high for early adopters
+trueeffect_late  <- 2   # low for late adopters
+
+
+# simulate the outcome 
+e <- rnorm(nrow(data), 0, 5)
+
+data <- data %>% mutate(Y = 1 + trueeffect_early*dumtreat1*policy + 
+                        trueeffect_late*dumtreat2*policy + 
+                        time + # common time trend
+                        dumtreat1*2 + dumtreat2*4 + # time invariant 
+                        #unobserved heterogeneity 
+                        e,  # error term
+                        Ypot = 1 + 
+                        time + 
+                        dumtreat1*2 + dumtreat2*4 + e)
+
+# aggregate by group and time
+datasum <- data.frame(data %>%
+            group_by(group, time) %>%
+            summarise(meanY = mean(Y), meanYpot = mean(Ypot), 
+            .groups = "drop")
+)
+
+```
+
+## Plot 
+
+```{r, echo = TRUE,  fig.align = "center"}
+vlines <- data.frame(xint = c(6, 16))
+
+datasum$group = factor(datasum$group)
+
+f0  <- ggplot(datasum, aes(x = time, y = meanY, group = group)) + 
+            geom_line(aes(linetype = group, color = group),size = 2) +  
+            scale_linetype_manual(name = "Linetype", 
+                values = c("1" = 1, "2" = 1, "3" = 1, "10" = 2, "20" = 2, "30" = 2), guide = "none") + 
+            theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(color = "black"), 
+            legend.position = "none") + xlab("period") + ylab("Outcome") + 
+            geom_vline(data = vlines, aes(xintercept = xint), linetype = "dashed") + 
+            annotate(x = c(5.2, 15.2, 2, 9, 17), y = c(0, 0, 35, 35, 35), 
+            label = c(bquote(t[k]^"*"), bquote(t[l]^"*"), "PRE(k)", "MID(k,l)", "POST(l)"), geom = "text", parse = TRUE)
+
+```
+
+
+## View the plot 
+
+```{r, out.width = "60%", fig.align = "center"}
+f0
+```
+
+## TWFE using all three groups 
+
+```{r, echo = TRUE}
+# first generate the necessary variables 
+
+datasum$treat1  <- ifelse(datasum$group == 1 & datasum$time >= early, 1, 0)
+datasum$treat2  <- ifelse(datasum$group == 2 & datasum$time >= late, 1, 0)
+datasum$twfe  <- datasum$treat1 + datasum$treat2 
+
+reg_twfe2  <- lm(meanY ~ twfe + factor(time) + factor(group), data = datasum)
+
+# extract TWFE coefficients for brevity 
+cat("TWFE estimate: ", coefficients(reg_twfe2)[[2]])
+```
+
+## TWFE group 1 (compare with untreated)
+
+```{r, echo = TRUE}
+
+twfe_group1  <- lm(meanY ~ twfe + factor(time) + factor(group), data = subset(datasum, group != 2))
+effect_group1  <- coefficients(twfe_group1)[[2]]
+# extract TWFE coefficients for brevity 
+cat("TWFE estimate (early treated only): ", effect_group1)
+
+```
+
+
+## TWFE group 2 (compare with untreated)
+
+```{r, echo = TRUE}
+
+twfe_group2  <- lm(meanY ~ twfe + factor(time) + factor(group), data = subset(datasum, group != 1))
+effect_group2  <- coefficients(twfe_group2)[[2]]
+# extract TWFE coefficients for brevity 
+cat("TWFE estimate (late treated only): ", effect_group2)
+
+```
+
+## weighted average of effects on group1 and group2
+
+```{r, echo = TRUE}
+num_treat_cell  <- (20 - early + 1) + (20 - late + 1)        # total instances of treatment 
+w_group1  <- (20 - early + 1) / num_treat_cell  # weight for group 1
+w_group2  <- (20 - late + 1)  / num_treat_cell  # weight for group 2
+cat("weight for early group:", w_group1)
+cat("weight for late group:", w_group2)
+
+
+```
+
+## TWFE estimate if far from the ATE estimate
+
+- In case of heterogeneous treatment effect by groups
+
+```{r, echo = TRUE}
+# print ate using weighted version of TWFE estimates
+ate  <- w_group1 * effect_group1 + w_group2 * effect_group2
+cat("ATE estimate: ", ate)
+
+# print TWFE with all three groups
+cat("TWFE estimate: ", coefficients(reg_twfe2)[[2]])
+```
+
+## Effects vary by time   
+
+```{r, echo = TRUE}
+# generate year dummies
+year_dummies <- model.matrix(~ factor(data$time) - 1)
+# True effects for early and late groups
+trueeffect_early  <- c(rep(0, (early - 1)), seq(10, length.out = 15)) 
+trueeffect_late  <- c(rep(0, (late - 1)), seq(5, length.out = 5)) 
+
+# interacting early and late groups with true effects
+early_int  <- sweep(year_dummies[1:100000, ], 2, trueeffect_early, "*") # year_dummies[1:100000, ] %*% diag(trueeffect_early)
+late_int  <- sweep(year_dummies[100001:200000, ], 2, trueeffect_late, "*") # year_dummies[100001:200000, ] %*% diag(trueeffect_late)
+untreated_int  <- year_dummies[200001:300000, ] * 0
+
+# stacking
+stack  <- rbind(early_int, late_int, untreated_int)
+colnames(stack)  <- paste0("dumeffect", seq(1, 20, 1))
+```
+
+## 
+```{r, echo = TRUE}
+head(stack)
+
+dim(stack)
+```
+
+##
+```{r, echo = TRUE}
+stack  <- rowSums(stack)
+data$stack  <- stack
+```
+
+```{r, echo = TRUE}
+# simulate the outcome 
+e <- rnorm(nrow(data), 0, 5)
+
+data <- data %>% mutate(Y = 1 + stack + 
+                        time + # common time trend
+                        dumtreat1*2 + dumtreat2*4 + # time invariant 
+                        #unobserved heterogeneity 
+                        e,  # error term
+                        Ypot = 1 + 
+                        time + 
+                        dumtreat1*2 + dumtreat2*4 + e)
+
+# aggregate by group and time
+datasum <- data.frame(data %>%
+            group_by(group, time) %>%
+            summarise(meanY = mean(Y), meanYpot = mean(Ypot), 
+            .groups = "drop")
+)
+
+vlines <- data.frame(xint = c(6, 16))
+datasum$group = factor(datasum$group)
+```
+
+## Plot 
+
+```{r, echo = TRUE}
+f0  <- ggplot(datasum, aes(x = time, y = meanY, group = group)) + 
+            geom_line(aes(linetype = group, color = group),size = 2) +  
+            scale_linetype_manual(name = "Linetype", 
+                values = c("1" = 1, "2" = 1, "3" = 1, "10" = 2, "20" = 2, "30" = 2), guide = "none") + 
+            theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(color = "black"), 
+            legend.position = "none") + xlab("period") + ylab("Outcome") + 
+            geom_vline(data = vlines, aes(xintercept = xint), linetype = "dashed") + 
+            annotate(x = c(5.2, 15.2, 2, 9, 17), y = c(0, 0, 35, 35, 35), 
+            label = c(bquote(t[k]^"*"), bquote(t[l]^"*"), "PRE(k)", "MID(k,l)", "POST(l)"), geom = "text", parse = TRUE)
+
+```
+
+
+## View plot 
+
+```{r, out.width = "60%", fig.align = "center"}
+f0
+```
+
+## Run the Twfe 
+
+```{r, echo = TRUE}
+datasum$treat1  <- ifelse(datasum$group == 1 & datasum$time >= early, 1, 0)
+datasum$treat2  <- ifelse(datasum$group == 2 & datasum$time >= late, 1, 0)
+datasum$twfe  <- datasum$treat1 + datasum$treat2 
+
+twfe  <- lm(meanY ~ twfe + factor(time) + factor(group), data = datasum)
+
+# extract TWFE coefficients for brevity 
+cat("TWFE estimate: ", coefficients(twfe)[[2]])
+```
+
+# Event study models
+## Event study specification
+
+$Y_{it} = \alpha + \sum_{j \in -5}^{10} \beta_j  I(t-\tilde(t) = j) + \sigma_s + \eta_t + \epsilon_{it}$
+
+
+## Event study: A handmade approach
+
+```{r, echo = TRUE}
+# assign group time
+datasum$group_time  <- ifelse(datasum$group == 1, 6, 0)
+datasum$group_time  <- ifelse(datasum$group == 2, 16, datasum$group_time)
+# generate policy and treatment dummies 
+datasum$policy  <- ifelse(datasum$group == 1 & datasum$time >= early, 1, 0)
+datasum$policy  <- ifelse(datasum$group == 2 & datasum$time >= late, 1, datasum$policy)
+datasum$treat  <- ifelse(datasum$group == 1 | datasum$group == 2, 1, 0)
+# generate relative time dummies
+datasum$r_time  <- datasum$time - datasum$group_time
+# bound the relative time (lower -5 and upper 10)
+datasum$r_time  <- ifelse(datasum$r_time < -5, -5, datasum$r_time)
+datasum$r_time  <- ifelse(datasum$r_time > 10, 10, datasum$r_time)
+
+#datasum$r_time  <- ifelse(datasum$group == 3, 999, datasum$r_time)
+```
+
+
+## 
+```{r, echo = TRUE}
+# generate relative time dummies 
+r_time_dummies  <- model.matrix(~ factor(datasum$r_time) - 1)
+# interact relative time with treatment indicator 
+r_time_dummies  <- apply(r_time_dummies, 2, function(x) x * datasum$treat)
+colnames(r_time_dummies)  <- c(paste0("nr.treat", seq(5, 1, -1)), paste0("r.treat", seq(0, 10, 1)))
+# bind with datasum
+datasum   <- cbind(datasum, r_time_dummies)
+```
+
+## Set the event study specification
+```{r, echo = TRUE}
+# set a regression formula 
+# omit the year prior to the policy "nr.treat1"
+form  <- meanY ~ nr.treat5+nr.treat4+nr.treat3+nr.treat2+ r.treat0 +
+                  r.treat1+r.treat2+r.treat3+r.treat4+r.treat5+
+                  r.treat6+r.treat7+r.treat8+r.treat9+r.treat10 + 
+                  factor(time) + factor(group)
+
+es_reg  <- lm(form, data = datasum)
+```
+
+## Display results 
+```{r, echo = TRUE}
+coefficients(es_reg)[2:16]
+```
+
+
+
+## Compare results with feols
+```{r, echo = TRUE}
+library(fixest)
+mod  <- feols(meanY ~ i(r_time, treat, (-1)) | time + group , data = datasum)
+```
+
+## Display results from feols
+```{r, echo = TRUE}
+mod
+```
+
+## Plot event study coefficients 
+```{r, echo = TRUE, out.width = "60%", fig.align = "center"}
+coefplot(mod)
+```
+
+
+
+

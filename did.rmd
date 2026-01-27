@@ -84,11 +84,11 @@ reflect on this topic later.
 For now, let's take a quick look at the data.
 
 ```{r}
-user = 2
-if(user == 1){
-    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+user = Sys.info()["nodename"]
+if(user == "vinish-Legion-Pro-7-16IRX9H"){
+    source("/home/vinish/Dropbox/Medicaid_South/code/filepath.r")
 }else{
-    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+    source("/Users/user1/Dropbox/Medicaid_South/code/filepath.r")
 }
 
 

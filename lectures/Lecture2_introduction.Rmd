@@ -1,0 +1,543 @@
+---
+title: "Lecture 2. Introduction"
+author: "Vinish Shrestha"
+date: 
+output:
+  beamer_presentation: default
+  binb::metropolis:
+#bibliography: bib.bib
+header-includes:
+    - \usepackage{dcolumn}  
+    - \usepackage{graphicx}  # Required for resizing tables with \resizebox
+    - \usepackage{booktabs}  # For professional table formatting
+#- \definecolor{cardinal}{RGB}{140,21,21}
+#- \setbeamercolor{frametitle}{bg=cardinal}
+institute: Towson University
+mainfont: IBM Plex Sans Condensed
+classoption: aspectratio=169
+theme: metropolis
+latex_engine: xelatex
+link-citations: yes
+bibliography: "../ML.bib"
+urlcolor: blue
+toc: yes
+---
+
+# Motivation
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE, 
+fig.width = 5, fig.height = 3)
+
+# declare paths and libraries
+user = 2
+if(user == 1){
+    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+}else{
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+}
+
+
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow, stargazer, broom, knitr)
+theme_set(theme_minimal())
+
+set.seed(125789)
+```
+
+## Cause and Effect 
+
+- A fundamental pursuit in science 
+
+- theory 
+
+- experiments
+
+- computational models
+
+## Examples 
+
+1. Does increasing the mass of an object cause it to fall faster under gravity in the absence of air resistance?
+
+2. Does light (sound) travel in a vaccum?  
+
+3. Intensity:
+    - What's the magnitude of gravitational force?
+
+4. Can tarrif reduce inflation? 
+
+
+## Experimental setting
+
+- The researcher has control over key aspects of the approach 
+
+1. Assignment of the treatment
+
+2. Controls 
+
+3. Measurement of outcomes 
+
+- Limited luxury of conducting controlled experiments
+
+## The purpose of lectures 
+
+- Focus on challenges concerned with causal inference 
+
+- Address experimental and Observational setting 
+
+- Emphasis on empirical approach, simulations, and application to the real world data 
+
+
+# A Lab Experiment 
+
+## Jade: A thought experiment
+
+- Suppose you want to investigate the importance of sunlight for the growth of a jade plant
+
+**You might**
+
+1. Obtain two baby jade plants from the same seller
+
+2. Place jade plant A near the window sill, where it can receive ample sunlight, and place jade plant B in a closet within the same room
+
+3. Keep the room temperature uniform and water both plants equally, once a week
+
+4. After some time, you evaluate the growth of both plants
+
+*you wouldn't actually do this because we already know the plant in the closet would not survive* 
+
+
+## The construct of the throught experiment 
+
+1. Treatment assignment: exposure to sunlight 
+
+2. Controlling for other variables: water, humidity 
+
+3. Measurement: growth, number of leaves  
+
+# Challenges 
+
+## A fundamental challenge 
+
+- Say, we want to study the relationship between having a college degree and health outcomes
+
+- Ideally, you'd want to observe an individual, say person A, in two states *(potential outcomes)*
+    - with college level education
+    - without college level education
+
+- Measure her health outcomes in these two states and make comparison
+
+**Another challenge** 
+
+- Limited lab experiments. 
+
+## Observational data 
+
+- You'll have to tackle your research questions with observational data
+    - surveys
+    - administrative data 
+
+- Let's use the county level data for 2010:
+
+a. **Dependent variable.** prevalence of poor health, life expectancy 
+
+b. **Independent variable.** percentage of population with a college degree 
+
+c. What about controls?
+
+
+## Relationship between percent college and per capita income 
+
+```{r}
+
+# load in county level uninsured rate data merged with other variables 
+mort_allcauses <-  read_feather( file.path(datapath, "NVSS_data_county_2010to2017_merged_allcauses.feather"))  %>% 
+                    filter(year == 2010 & age == 0 & race_name == "black")  %>% 
+                    dplyr::select("countyfips", "year", "state.abb", "expand", "yearexpand", "sahieunins_allinc", "GovernorisDemocrat1Yes", "mortality_rate1000", "percap_income_2010", 
+                    "rural_urban_code2013a", "p_college2010", 
+                    "prop_black_2010", "prop_white_2010", "infant.mort", 
+                    "poor.health", "low.birthweight")  %>% 
+                    filter(duplicated(.))   %>%  
+                    arrange(countyfips, year)
+
+f0  <- ggplot(subset(mort_allcauses), aes(y = poor.health, x = p_college2010)) + geom_point() +
+            geom_smooth(method = "lm", se  = FALSE) + 
+            xlab("percent college 2010") + ylab("fraction poor health 2010")
+f1  <- ggplot(subset(mort_allcauses), aes(y = percap_income_2010, x = p_college2010)) + geom_point() +
+            geom_smooth(method = "lm", se  = FALSE) + 
+            xlab("percent college 2010") + ylab("per capita income 2010")
+f3  <- ggplot(subset(mort_allcauses), aes(y = sahieunins_allinc, x = p_college2010)) + geom_point() +
+            geom_smooth(method = "lm", se  = FALSE) + 
+            xlab("uninsured rate in 2010") + ylab("fraction poor health 2010")
+f1
+```
+
+## Let's take a look at more wholesome illustrations.
+
+```{r}
+f0 + f1 + f3
+```
+
+# Directed Acyclic Graph (DAG)
+
+## DAG
+
+- Causal diagram: A simple way to keep track of whats going on. 
+
+- Directed Acyclic Graph (DAG): in various fields like statistics, computer science, and epidemiology
+
+- Used to depict the relationship between variables
+
+## Before we move on let's discuss the DGP 
+
+- **Data Generating Process.** *represents the underlying set of mechanisms or laws of the universe that produce the data we observe.*
+
+- These mechanisms are not immediately apparent to us 
+
+- Our goal is to uncover and understand the phenomena governing the DGP
+
+- DAG can be used to depict the DGP
+
+## A first causal diagram 
+
+```{r}
+library(dagitty) # libraries for DAG
+library(ggdag)
+
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  college -> income     
+  college -> ins     
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example A.") + theme_void()
+```
+
+## In the DGP as illustrated by DAG
+
+1. College affects Health
+
+2. College affects insurance status. Insurance affects health. (mechanism through how college affects health).
+
+3. College affects income. Income then affects health. (another mechanism through which college affects health).
+
+- Mechanisms through which college affects health are *good pathways*
+
+- *DAG in this example falls way too short in explaining the actual DGP. WHY?* 
+
+
+## DAG: Allow income to cause health 
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  income -> college   
+  college -> ins     
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example B.") + theme_void()
+```
+
+## How to identify the effect of college education on health?
+
+- Income causes both health and education 
+    - creates confounding effects
+
+- Need to isolate the effect of college education on health
+
+- Look at individuals with the same income and utilize the variation in college education
+    - income of $50,000
+    - some will have college education and some won't
+
+- This variation in college education can be fruitful in identification
+
+*We've accounted (controlled) for income. However, we'r agnostic about the functional form.*
+
+## Another DAG 
+
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  college -> income 
+  health -> income 
+  income -> college
+  health -> college    
+  college -> ins     
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example C.") + theme_void()
+```
+
+## Description of the new DAG 
+
+
+
+*Note that now arrows are facing both ways for income, health, and college. We have a feedback loop between income, health, and college.*
+
+This means:
+
+1. Income can affect health; health can affect income.
+
+2. Income can affect college education; college can affect income.
+
+3. College education can affect health; health can affect college education.
+    - **reverse causality**
+
+- Block unnecessary backdoors: i) income to college; ii) health to income; iii) health to college
+
+## DAG with unobserved component 
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  college -> income 
+  health -> income 
+  income -> college
+  health -> college    
+  college -> ins     
+  income -> health
+  ins -> health  
+  unobs -> college 
+  unobs -> health
+  unobs -> ins
+  unobs -> income   
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Example D.") + theme_void()
+```
+
+
+## DAG with unobserved component 
+
+- This DAG perhaps most closely represent the DGP?
+
+**There are two limitations here**
+
+1. Don't have data for unobserved variables
+    - Belongs to the data generating process; but you don't have data for them 
+    - Data limitations $\rightarrow$ **omitted variables**
+
+2. **Reverse causality**
+    - the effect runs borth from health to college and college to health
+
+- A significant portion of causal inference is about alleviating the concerns of omitted varables and reverse causality.
+
+# A simulated DGP 
+
+## Let's simulate a DGP 
+
+**For our understanding** 
+
+
+1. College education boosts health by 10 percent.
+
+2. Income boosts health by 20 percent.
+
+3. 40 percent more people from higher income households have college education.
+
+4. Having insurance boosts health by 5 percent.
+
+## DAG for the simulated DGP 
+
+```{r}
+# Define a causal diagram
+dag <- dagitty("
+dag {
+  college -> health     
+  income -> college    
+  income -> health
+  ins -> health     
+}
+")
+
+# Visualize the DAG
+ggdag(dag) +
+  theme_minimal() +
+  ggtitle("Causal Diagram Representing the Made-up DGP.") + theme_void()
+```
+
+
+## Code to simulate the DGP 
+
+- Let's start with generating Log normal income
+```{r, echo = TRUE}
+# number of observations
+n   <- 100000
+
+# income follows the log normal distributing
+income  <- rlnorm(n, meanlog = 1, sdlog = 0.5)
+
+# multiplying the log normal dist with 20000
+income  <-  income * 20000
+```
+
+## Histogram of income 
+```{r, echo = TRUE}
+# a right skewed distribution
+hist(income)
+```
+
+## Histogram of log income 
+
+```{r, echo = TRUE}
+# a log normal distribution
+hist(log(income))
+```
+
+
+## A code to simulate DGP
+
+```{r, echo = TRUE}
+# high income 
+high_income  <- ifelse(income > median(income), 1, 0)
+
+# college education 
+college  <-  rbinom(n, 1, 0.3 + 0.4 * high_income)
+
+# proportion of college graduates by income status
+college_lowinc  <- table(college[high_income == 0])
+college_highinc  <-  table(college[high_income == 1])
+```
+
+## College graduates by income status 
+
+```{r, echo = TRUE}
+cat(paste("Number with no college for low income:", college_lowinc[[1]]))
+cat(paste("Number with college for low income:", college_lowinc[[2]]))
+cat(paste("Number with no college for high income:", college_highinc[[1]]))
+cat(paste("Number with college for high income:", college_highinc[[2]]))
+```
+
+## A code to simulate DGP (treatment effect = 0.1 or 10 pp)
+
+```{r, echo = TRUE}
+# insurance status
+ins  <-  rbinom(n, 1, 0.5)
+
+# health (good health 1, poor health 0)
+# 60 percent of people with no college, low income, and no insurance have good health
+# 10 percent more of people with college have good health and so on.
+health  <- rbinom(n, 1, 0.6 + 0.1 * college + 0.2 * 
+            high_income + 0.05 * ins)
+
+table(health)
+```
+
+## A glimpse of the dataframe 
+
+```{r, echo = TRUE}
+data  <- data.frame(good_health = health, income = income, highincome = high_income, 
+                    college = college, insurance = ins)
+head(data)
+```
+
+## Building Models 
+
+```{r, echo = TRUE}
+reg1  <- lm(good_health ~ college, data = data)
+
+reg2  <- lm(good_health ~ college + income, data = data)
+
+reg3  <- lm(good_health ~ college + highincome, data = data)
+
+reg4  <- lm(good_health ~ college + income + highincome, data = data)
+
+reg5  <- lm(good_health ~ college + highincome + ins, data = data)
+```
+
+
+## Results
+```{r}
+# Tidy the model outputs using broom
+tidy_model1 <- tidy(reg1)
+tidy_model2 <- tidy(reg2)
+tidy_model3 <- tidy(reg3)
+tidy_model4 <- tidy(reg4)
+tidy_model5 <- tidy(reg5)
+
+# Combine all model results into one data frame
+all_models <- bind_rows(
+  mutate(tidy_model1, model = "Model 1"),
+  mutate(tidy_model2, model = "Model 2"),
+  mutate(tidy_model3, model = "Model 3"),
+  mutate(tidy_model4, model = "Model 4"),
+  mutate(tidy_model5, model = "Model 5")
+)
+
+# Display the results in a table
+#kable(all_models, format = "markdown", caption = "Regression Results")
+```
+
+## Results
+
+
+```{r table, results='asis'}
+# Generate LaTeX code for the table
+stargazer(
+  reg1, reg2, reg3, reg4, reg5,
+  type = "latex",
+  title = "Regression Results",
+  out.header = FALSE,     # Prevent adding LaTeX document header
+  column.sep.width = "0.001pt", 
+  label = "tab:reg_results",  # Label for referencing in LaTeX
+  font.size = "tiny",
+  align = TRUE,           # Align columns
+  no.space = TRUE,        # Remove spaces between columns
+  dep.var.labels = "good health", # Dependent variable label
+  covariate.labels = c("college", "income", "high income", "insurance"),
+  star.cutoffs = c(0.1, 0.05, 0.01), # Levels of significance
+  digits = 3, 
+  notes = NULL, 
+  header = FALSE, 
+  omit.stat = c("LL", "f", "ser", "rsq", "adj.rsq")
+)
+
+```
+
+
+# Discussion 
+
+## Discussion
+
+- Discussed some fundamental blocks for starting a research project
+
+- DGP might be constructed in the real world 
+
+- *good* versus *bad* pathways 
+
+- omitted variable bias and reverse causality 
+
+**Ultimately, we are trying to understand something (new) about the DGP. In reality, the laws governing the DGP may not be that simple. That means we should try harder with persistence and creativity.**
+

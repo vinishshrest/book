@@ -1,0 +1,570 @@
+---
+title: "Lecture 4. The Potential Outcome Framework"
+author: "Vinish Shrestha"
+date: 
+output:
+  beamer_presentation: default
+  binb::metropolis:
+#bibliography: bib.bib
+header-includes:
+    - \usepackage{dcolumn}  
+    - \usepackage{graphicx}  # Required for resizing tables with \resizebox
+    - \usepackage{booktabs}  # For professional table formatting
+#- \definecolor{cardinal}{RGB}{140,21,21}
+#- \setbeamercolor{frametitle}{bg=cardinal}
+institute: Towson University
+mainfont: IBM Plex Sans Condensed
+classoption: aspectratio=169
+theme: metropolis
+latex_engine: xelatex
+link-citations: yes
+bibliography: "../ML.bib"
+urlcolor: blue
+toc: yes
+---
+
+# Motivation
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE, 
+fig.width = 5, fig.height = 3)
+
+# declare paths and libraries
+user = 2
+if(user == 1){
+    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+}else{
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+}
+
+
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow, stargazer, broom, knitr, kableExtra)
+theme_set(theme_minimal())
+
+set.seed(123)
+```
+
+## Motivation
+
+- By now, we know are tired of hearing that **correlation is not causality** 
+    - WE KNOW!!!
+
+- A researcher can perform controlled experiments to determine whether A causes B by controlling for confounders
+
+- The complexities and interrelations of human behavior create a setting starkly different from the controlled environment of a lab
+
+- This complicates things 
+
+## Motivation 
+
+- Causal Inference: A process to determine whether A causes B in both lab settings and out-of-lab scenarios.
+
+- We'll be focusing on out-of-lab situations in both experimental and non-experimental settings. 
+
+# A simple example 
+
+## A simple example
+
+- Say, we are interested in evaluating the effects of a tutoring program on exam scores for an introductory course.
+
+- For now, we'll assume that the treatment is completely random. 
+
+- The class is randomly divided into two groups 
+
+1. treatment 
+
+2. control 
+
+## Complete randomization 
+
+- Each individual has an equal probability of receiving the treatment 
+
+- Likely to achieve balance in baseline characteristics (with an arbitrarily high probability) 
+as sample size increases 
+
+- Balance: An instance when all pre-treatment covariates between the treatment and control groups are similar. 
+
+- If this is attained then it increases confidence that the treatment and the control units are comparable.
+
+## Example 
+
+```{r, echo = TRUE}
+set.seed(12577)
+n  <- 100000 # observations
+gender  <- rbinom(n, 1, 0.5) # female 1 
+ability  <- rnorm(n, 0, 1)
+# income follows the log normal distributing
+income  <- rlnorm(n, meanlog = 1, sdlog = 0.5)
+# multiplying the log normal dist with 20000
+income  <-  income * 20000
+lowincome  <- ifelse(income < median(income), 1, 0)
+highwork  <- rbinom(n, 1, 0.3 + 0.2 * lowincome + 0.1 * gender)
+# score
+score  <- 65 - (highwork * 20) - (lowincome * 5) + gender * 10 + ability*10 +  rnorm(n, 0, 10) 
+score  <- ifelse(score > 100, 100, score)
+```
+
+## Histogram of score
+
+```{r, echo = TRUE}
+hist(score)
+```
+
+## Data
+
+```{r, echo = TRUE}
+data  <- data.frame(score, lowincome, gender, highwork, ability)
+head(data)
+```
+
+## Score by baseline characteristics 
+
+```{r, echo = TRUE}
+reg  <- lm(score ~ lowincome + gender + highwork + ability, data)
+# Print the summary output cleanly
+print(summary(reg))
+```
+
+## Random assignment of treatment (flipping of a coin)
+```{r, echo = TRUE}
+treat  <- rbinom(n, 1, 0.5) # random assignment of treatment 
+data  <- cbind(treat, data)
+
+# get summary by treatment
+data_sum  <- data  %>%  
+                group_by(treat)  %>% 
+                summarize(lowincome = mean(lowincome), 
+                          gender = mean(gender), 
+                          highwork = mean(highwork), 
+                          ability = mean(ability), 
+                          score = mean(score))
+
+```
+
+## Summary of baseline characteristics by treatment 
+
+```{r, echo = TRUE}
+data_sum  %>% 
+kable()   
+```
+
+# Potential Outcome Framework
+
+## Setup 
+
+- $W$ denotes the treatment status 
+    - $W_i \in \{0, \; 1\}$
+    
+- $Y_i$ is the exam score following the treatment Assignment
+
+-  $X_i$ are the covariates (e.g., gender, race). 
+
+- The subscript $i$ indicates an individual or unit of observation
+
+## Potential Outcome Framework: Neyman-Rubin Causal Model 
+
+- Use the potential outcome framework to describe treatment effects 
+
+- Follow the Neyman-Rubin causal model [@splawa1990; @rubin1974]
+
+**More Notations**
+
+- $Y_i(0)$: the potential outcomes for an individual $i$ in the case of no treatment
+
+- $Y_i(1)$ as the potential outcomes for an individual $i$ in the case of treatment 
+
+- Potential outcomes are not realized yet
+
+## What is observed and what isn't?
+
+a) $[Y_{i}(0)|W_i = 0].$ The potential outcome of an unit $i$ in the no-treatment state conditional upon $i$ actually not receiving the treatment. *observed outcome*  
+
+b) $[Y_{i}(0)|W_i = 1].$ The potential outcome of an unit $i$ who received the treatment $(W_i = 1)$ would be in absence of the treatment. This is not observed.
+
+Similarly,
+
+c) $[Y_{i}(1)|W_i = 1].$ The potential outcome of an unit $i$ in the treatment state conditional upon $i$ receiving treatment. 
+
+d) $[Y_{i}(1)|W_i = 0].$ The potential outcome of an unit $i$ in the treatment state conditional upon $i$ not receiving treatment. This is not observed. 
+
+## Illustration of the Potential Outcome Framework
+
+```{r, fig.width = 6, fig.height = 3}
+
+# Create example data
+data <- data.frame(
+  id = 1:10,                        # Individual IDs
+  treatment = c(1, 1, 0, 0, 1, 1, 0, 0, 1, 1),  # 1 = Treatment, 0 = No Treatment
+  fill_status = c("filled", "empty", "empty", "filled", "filled", "empty", 
+                  "filled", "empty", "empty", "filled"),  # Whether the circle is filled
+  name = c("A", "A0", "B0", "B", "C", "C0", "D", "D0", "E", "E0")
+)
+
+data  <- data  %>%  
+            mutate(poutcome = NA, 
+                   poutcome = ifelse(treatment == 1 & fill_status == "filled", "treated observed", poutcome), 
+                   poutcome = ifelse(treatment == 1 & fill_status == "empty", "treated cf", poutcome), 
+                   poutcome = ifelse(treatment == 0 & fill_status == "filled", "no treated observed", poutcome), 
+                   poutcome = ifelse(treatment == 0 & fill_status == "empty", "no treated cf", poutcome)
+                   )
+
+# Map treatment to outline color and fill_status to fill color
+ggplot(data, aes(x = id, y = 1, color = poutcome, fill = poutcome)) +
+  geom_point(size = 7, shape = 21, stroke = 2) +  # Circle points with a border
+  scale_color_manual(
+    values = c("treated observed" = "red", 
+                "treated cf" = "red", 
+                "no treated observed" = "green", 
+                "no treated cf" = "green")) +
+  scale_fill_manual(
+    values = c("treated observed" = "red", 
+                "treated cf" = "white", 
+                "no treated observed" = "green", 
+                "no treated cf" = "white")  # Fill red if "filled", otherwise empty
+  ) +
+  ylim(c(0.95, 1.05)) +
+  theme_void() +
+  ggtitle("Potential Outcome") +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  theme(legend.position = "bottom", size = 3) +
+  geom_text(aes(label = name), vjust = -1.8, size = 3) + 
+  # Add annotation
+  annotate("text", x = 5, y = 0.975, label = "The potential outcomes in  filled circles are observed. \n 
+  The respective counterfactual outcomes are in empty circles.", 
+  size = 3, color = "black") 
+
+```
+
+## Counterfactual outcomes 
+
+- What would've been the outcome for an observed unit $i$ in a different treatment state. 
+
+**Using the illustration**
+
+- Note that person A is treated 
+
+- Outcome for person A is observed in the treatment state 
+    - $Y_{A}(1)|W_{A} = 1$
+
+- The ideal *counterfactual* for $A$ is $A0$: the outcome for person A in the state of no treatment  
+    - $Y_{A}(0)|W_{A} = 1$
+
+
+## Fundamental Problem in causal inference
+
+- Write the observed variable $Y_i$, can be written as a function 
+of the potential outcomes as follows:
+
+\begin{equation}
+Y_i = W \times \underbrace{Y_i(1)}_{outcome \; in \; treatment \; state} + 
+                (1-W)\times \underbrace{Y_i(0)}_{outcome \; in \; no-treatment \; state}
+\end{equation} 
+
+
+- The problem is that one cannot observe both $Y_i(0)$ and $Y_i(1)$ at the same time. 
+
+- The causal inference through the lens of Neyman-Rubin causal framework can be seen as the missing data problem
+
+*If one has the data for $Y_{i}(1)$ then the $Y_{i}(0)$ counterpart is missing and vice-versa. Much of causal inference is finding ways to deal with the missing-data problem.*
+
+
+## To proceed further: we need assumptions 
+
+- **A1. Independence assumption.** States that the treatment is independent of potential outcomes. 
+
+- $W_i \perp Y_i(0), Y_i(1)$
+
+- Quite literally it means that the person A has 50% chance for being in the treatment and no-treatment state each. 
+
+- Also, states that the treatment assignment is independent of any covariates $X_i$.
+    - male and female; 
+    - high income and low income; 
+    - employed vs. not working 
+
+
+## Other assumptions
+
+**A2. Overlap.** States that observations in both the treatment and control groups fall within the common support. 
+
+- For instance, this assumption is violated if the treatment group consist of all females and the control group consist of all males as one would not be able to attain balance in covariates.
+
+**A3. Stable Unit Treatment Value Assumption (SUTVA).**  no interference assumption 
+
+- Treatment status of one unit should not affect the potential outcome for other units
+
+- This assumption breaks down if there are spillover effects. 
+
+# Average Treatment Effect (ATE)
+
+## Individual specific treatment effect
+
+- Say, parallel universes exist 
+
+- Say, you can observe unit A in treatment and no-treatment states 
+
+- You can evaluate the treatment effect specific to person A 
+
+- Do the same for B, C, ...
+
+*This is (not yet) possible. However, one can identify ATE under the governing assumptions.* 
+
+## ATE 
+
+- Let's start with individual treatment effect 
+
+\begin{equation} 
+ITE_i = Y_i(1)) - Y_i(0)
+\end{equation}
+
+- not feasible 
+
+- New Target: 
+
+\begin{equation} 
+ATE = E(Y_i(1)) - E(Y_i(0))
+\end{equation}
+
+- $Y_i(1)$: outcome for an unit $i$ in the treatment state, 
+
+- $Y_i(0)$: outcome for the same unit $i$ in absence of the treatment.
+
+## ATE 
+
+**Using the independence assumption: $W_i \perp Y_i(0), \; Y_i(1)$**
+
+\begin{align} 
+ATE = E(Y_i(1)) - E(Y_i(0)) \\
+    = E(Y_i|W_i = 1) - E(Y_i | W_i = 0) 
+\end{align}
+
+- $E(Y_i(1)) = E(Y_i | W_i = 1)$ & $E(Y_i(0)) = E(Y_i | W_i = 0)$
+
+- We have expressed expected potential outcome as observed outcome using the independence assumption
+
+- ATE is concerned with the whole population 
+
+
+# A completely randomized experiment 
+
+## Randomized Controlled Trials (RCT) 
+
+- Is the cornerstone of causal inference 
+
+- Often referred to as a gold standard 
+
+- ATE is identified through the randomization of treatment assignment 
+
+- $W \perp Y_i(0), \; Y_i(1)$ ensures that treatment and control groups are comparable in expectation 
+
+- RCT a straightforward yet immensely powerful 
+
+## A complete random assignment 
+
+- The probability of treatment $e$ is same for all units 
+
+- coin toss or a bernoulli trail 
+
+- In an RCT setting, the difference-in-means estimator is given as: 
+
+\begin{equation} 
+\hat{\tau} = \frac{1}{N_t}\sum_{W_i =1} Y_i - \frac{1}{N_c}\sum_{W_i =0} Y_i
+\end{equation}
+
+*The difference-in-mean estimator is unbiased and consistent for the average treatment effect.*
+
+## Example (ATE = 5)
+
+```{r, echo = TRUE}
+set.seed(12577)
+n  <- 100000 # observations
+gender  <- rbinom(n, 1, 0.5) # female 1 
+ability  <- rnorm(n, 0, 1)
+# income follows the log normal distributing
+income  <- rlnorm(n, meanlog = 1, sdlog = 0.5)
+# multiplying the log normal dist with 20000
+income  <-  income * 20000
+lowincome  <- ifelse(income < median(income), 1, 0)
+highwork  <- rbinom(n, 1, 0.3 + 0.2 * lowincome + 0.1 * gender)
+# score
+score  <- 65 - (highwork * 20) - (lowincome * 5) + gender * 10 + ability*10 +  rnorm(n, 0, 10) 
+```
+
+## Histogram of score
+
+```{r, echo = TRUE}
+hist(score)
+```
+
+## Data
+
+```{r, echo = TRUE}
+data  <- data.frame(score, lowincome, gender, highwork, ability)
+head(data)
+```
+
+## Score by baseline characteristics 
+
+```{r, echo = TRUE}
+reg  <- lm(score ~ lowincome + gender + highwork + ability, data)
+# Print the summary output cleanly
+print(summary(reg))
+```
+
+## Random assignment of treatment (flipping of a coin)
+```{r, echo = TRUE}
+treat  <- rbinom(n, 1, 0.5) # random assignment of treatment 
+data  <- cbind(treat, data)
+score_later  <- score + (5 * treat) + rnorm(n, 5, 2.5)
+data  <- cbind(data, score_later)
+
+# get summary by treatment
+data_sum  <- data  %>%  
+                group_by(treat)  %>% 
+                summarize(lowincome = mean(lowincome), 
+                          gender = mean(gender), 
+                          highwork = mean(highwork), 
+                          ability = mean(ability), 
+                          score = mean(score))
+
+```
+
+## Summary of baseline characteristics by treatment 
+
+```{r, echo = TRUE}
+data_sum  %>% 
+kable()   
+```
+
+## ATE (when treatment is independent of baseline)
+
+```{r, echo = TRUE}
+tau <- mean(data$score_later[data$treat == 1]) - 
+mean(data$score_later[data$treat == 0]) 
+
+cat("The ATE estimate is:", tau)
+```
+
+## Case when treatment depends on baseline 
+```{r, echo = TRUE}
+
+treat2  <- rbinom(n, 1, 0.5  - 0.3 * data$highwork) # dependent on baseline 
+data  <- cbind(data, treat2) 
+data$score_later2  <- data$score + (5 *data$treat2) + rnorm(n, 5, 2.5)
+```
+
+## ATE (when treatment is dependent of baseline)
+
+```{r, echo = TRUE}
+tau2 <- mean(data$score_later2[data$treat2 == 1]) - 
+mean(data$score_later2[data$treat2 == 0]) 
+
+cat("The ATE estimate when \n treatment is dependent:", tau2)
+```
+
+## Realizations 
+
+- Simple difference in means across the treatment and no-treatment group will be enough to 
+recover the ATE if independence assumption holds 
+
+- The difference in means will generate unbiased estimate of ATE 
+
+- However, if the treatment depends on baseline characteristics, then the simple difference in means 
+estimate will likely be biased 
+
+- In the upcoming lecture we will see how to alleviate these bias. 
+
+# Average Treatment Effect on the Treated (ATT)
+
+## ATT 
+
+- ATT pertains to the evaluation of treatment effects for only those units that are treated. 
+
+Formally, it is defined as: 
+
+\begin{equation}
+ATT = E(Y_i(1) - Y_i(0) | W_i = 1)
+\end{equation}
+
+
+## ATT (using the independence assumption) 
+
+- Re-write expected potential outcomes as observed outcomes using the independence assumption:
+
+\begin{align}
+ATT = E(Y_i(1) - Y_i(0) | W_i = 1) \\
+    = E(Y_i(1)| W_i = 1) - \underbrace{E(Y_i(0)| W_i = 1)}_{= E(Y_i(0)| W_i = 0)} \\
+    = E(Y_i(1)| W_i = 1) - E(Y_i(0)| W_i = 0) \\
+    = E(Y_i| W_i = 1) - E(Y_i| W_i = 0) 
+\end{align}
+
+
+# Unconfoundedness assumption 
+
+## Independence Assumption is too strict 
+
+- Treatment assignment being fully random is very rare 
+
+- Assignment is driven by some selective covariates 
+
+- Referring to the tutoring example, it may be unethical to disallow someone in the control group who wants to attend the tutoring sessions.
+
+- Tutoring sessions may be voluntarily held 
+
+## Other times treatment targets specific subgroup 
+
+- Say, low income subgroups are more likely to be treated 
+
+- Here, the treatment assignment is not completely random by systematically depends on the baseline characteristics
+
+- We require adjustments before being able to estimate treatment effects in such cases
+
+- As long as: i) treatment assignment mechanism is known; and ii) variables governing assignment are observed, we can proceed head with **unconfoundedness assumption** 
+
+## Unconfoundedness assumption 
+
+- Sometimes called the conditional independence assumption 
+
+- Formally, this states that $Y_i(0), \; Y_i(1) \perp W_i  | X_i$. 
+
+- This means that conditional upon the covariates the treatment assignment is random. 
+
+- To estimate ATT 
+    - estimate ATT within each strata (high and low income groupings)
+    - ATT estimate = weighted average of the strata-estimates 
+    - weights = proportion of high vs. low income in the sample 
+
+## ATT estimation with unconfoundedness assumption 
+
+- We **know** that people people who work more are less likely to receive treatment 
+
+```{r, echo = TRUE}
+## ATT estimate within highwork group
+tau1  <- mean(data$score_later2[data$treat2 == 1 & data$highwork == 1]) - 
+        mean(data$score_later2[data$treat2 == 0 & data$highwork == 1]) 
+
+## ATT estimate within no-highwork (low work) group
+tau2  <- mean(data$score_later2[data$treat2 == 1 & data$highwork == 0]) - 
+        mean(data$score_later2[data$treat2 == 0 & data$highwork == 0]) 
+
+# weight
+wgt  <- mean(data$highwork)
+
+# weighted average
+tau2  <- (wgt * tau1) + (1 - wgt) * (tau2)  
+```
+
+## ATT estimation with unconfoundedness assumption 
+
+```{r}
+cat("The ATE estimate under unconfoundedness is:", tau2)
+```
+
+# References
+
+## References{.allowframebreaks} 
+
+
+
+

@@ -27,11 +27,12 @@ First, let's discuss some fundamentals of regression.
 
 ```{r}
 # declare paths and libraries
-user = 2
-if(user == 1){
-    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
+user = Sys.info()["nodename"]
+if(user == "vinish-Legion-Pro-7-16IRX9H"){
+    source("/home/vinish/Dropbox/Medicaid_South/code/filepath.r")
+    root_dir <- "/home/vinish/Dropbox/Machine Learning/book"
 }else{
-    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+    source("/Users/user1/Dropbox/Medicaid_South/code/filepath.r")
 }
 
 
@@ -138,7 +139,7 @@ mean 0 and variance $\sigma^2$, i.e., $\epsilon \sim (0, \; \sigma^2)$. This is 
 strong assumption for two reasons. First, the error terms might be correlated. For example, individuals who live close each other in terms of spatial proximity might share something in common. Second, variance in the error term might vary with values on $Xs$. To see this, earnings may have larger variance for individuals with higher levels of education, compared to those with lower levels of education. When the variance of the error term is not constant across all levels of the explanatory variables, this condition is known as *heteroskedasticity*. It violates one of the key assumptions of the Ordinary Least Squares (OLS) regression model, which assumes *homoskedasticity*, i.e., the error term has a constant variance.
 
 
-Instead of assuming that $E(\epsilon) = 0 $, we'll utilize the *exogeneity* assumption to make sense of regression. This assumption implicitly states that we've closed all of the backdoors to "bad pathways" in the DGP. Let's say that we've got the following DGP. 
+Instead of assuming that $E(\epsilon) = 0$, we'll utilize the *exogeneity* assumption to make sense of regression. This assumption implicitly states that we've closed all of the backdoors to "bad pathways" in the DGP. Let's say that we've got the following DGP. 
 
 
 ```{r}
@@ -163,23 +164,23 @@ ggdag(dag) +
   ggtitle("Causal Diagram Example A.") + theme_void()
 ```
 
-In this DGP, channels from health and race are *bad pathways* and need to be accounted for in order to evaluate the causal effect of education on earnings. Once we have accounted for all of the *bad* and of course *good* pathways, we can see that height only affects earnings but no other variables. Since, height is not correlated to the explanatory variables $(Xs)$, we term height as an exogeneous variable. The *exogeneity assumption* states that the error term $(\epsilon$)$ is uncorrelated with the explanatory variables $Xs$ included in the model. This means that after accounting for $Xs$, the error term is independent of $Xs$. For instance, in the given DGP process, once accounting for education, health, and race, the unaccounted variation in earnings is not correlated with these variables. This conditional independence of error term implies that 
+In this DGP, channels from health and race are *bad pathways* and need to be accounted for in order to evaluate the causal effect of education on earnings. Once we have accounted for all of the *bad* and of course *good* pathways, we can see that height only affects earnings but no other variables. Since, height is not correlated to the explanatory variables $(Xs)$, we term height as an exogeneous variable. The *exogeneity assumption* states that the error term $(\epsilon)$ is uncorrelated with the explanatory variables $Xs$ included in the model. This means that after accounting for $Xs$, the error term is independent of $Xs$. For instance, in the given DGP process, once accounting for education, health, and race, the unaccounted variation in earnings is not correlated with these variables. This conditional independence of error term implies that 
 
-$E(u|Xs) = 0$. 
+$E(\epsilon |Xs) = 0$. 
 
 Next, we can establish this following using the Law of Iterated Expectation:
 
 \begin{align}
-E(uX) = E[E[uX|X]] = E[X\underbrace{E[u|X]}_{=0}] \\
+E(\epsilon X) = E[E[\epsilon X|X]] = E[X\underbrace{E[\epsilon |X]}_{=0}] \\
        = 0
 \end{align}
 
 
 So we've got two population-related assumptions:
 
-i) $E(u) = 0$ 
+i) $E(\epsilon) = 0$ 
 
-ii) $E(uX) = 0$
+ii) $E(\epsilon X) = 0$
 
 Note that there are two unknowns ($\alpha$ and $\beta$). Let's first 
 set-up the sample counterparts: 
@@ -218,7 +219,7 @@ is written as:
 E(Y_i|X_i) = \alpha + \beta X_i (\#eq:reg2)
 \end{equation}
 
-The above equality directly comes from the underlying assumption $E(u|X)=0$, or the independence of error term once conditioned on $X$.
+The above equality directly comes from the underlying assumption $E(\epsilon |X)=0$, or the independence of error term once conditioned on $X$.
 
 We can rewrite the regression specification as: 
 
@@ -389,10 +390,11 @@ Let's break down what the coefficients are capturing:
 
 - $\beta_3$: tells us whether the impact of an additional year of education for female is different than for female. To see this: the expected returns to education for: 
 
-    a. male = $\alpha + \beta_1 E(education_i)$. 
+    a. male = $\underbrace{\alpha}_{incercept\; male} + \underbrace{\beta_1}_{slope\; male} E(education_i)$. 
     
-    b. female: $\alpha + E(education_i) \times (\beta_1 + \beta_3) + \beta_2$.  
+    b. female: $\underbrace{\alpha + \beta_2}_{intercept\; female} + \underbrace{(\beta_1 + \beta_3)}_{slope\; female} \times E(education_i)$.  
 
+The model allows for both intercept shift as well as changes in slope across gender.
 
 Let's run the specification that tests our alternative hypothesis. 
 
@@ -483,7 +485,7 @@ se(reg_model)[[2]]
 ## An exercise
 
 ```{r}
-setwd("/Users/vshrestha/Dropbox/Machine Learning/book/data")
+setwd(file.path(root_dir, "data"))
 
 # arrow to open large data sets
 library(arrow)

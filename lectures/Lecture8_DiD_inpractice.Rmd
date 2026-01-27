@@ -1,0 +1,552 @@
+---
+title: "Lecture 8. DiD in Practice"
+author: "Vinish Shrestha"
+date: 
+output:
+  beamer_presentation: default
+  binb::metropolis:
+#bibliography: bib.bib
+header-includes:
+    - \usepackage{dcolumn}  
+    - \usepackage{graphicx}  # Required for resizing tables with \resizebox
+    - \usepackage{booktabs}  # For professional table formatting
+    - \usepackage{longtable}
+#- \definecolor{cardinal}{RGB}{140,21,21}
+#- \setbeamercolor{frametitle}{bg=cardinal}
+institute: Towson University
+mainfont: IBM Plex Sans Condensed
+classoption: aspectratio=169
+theme: metropolis
+latex_engine: xelatex
+link-citations: yes
+bibliography: "../ML.bib"
+urlcolor: blue
+toc: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE, 
+fig.width = 5, fig.height = 3)
+
+# declare paths and libraries
+user = Sys.info()["nodename"]
+
+if (user == "vinish-Legion-Pro-7-16IRX9H"){
+  
+    setwd("/home/vinish/Dropbox/Machine Learning/book/data/")
+
+} else {
+    
+    setwd("/Users/vshrestha/Dropbox/Machine Learning/book/data/")
+
+}
+
+
+library("dagitty") # libraries for DAG
+library(ggdag)
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow, stargazer, broom, knitr)
+theme_set(theme_minimal())
+
+set.seed(125789)
+```
+
+# Canonical DiD in practice 
+
+## Evaluating the impact of Medicaid Expansion 
+- We are interested in evaluating the impacts of Medicaid expansion on insurance outcomes 
+
+## Some context 
+
+- Part of the Patient Protection and Affordable Care Act (ACA, Obama Care)
+
+- Original bill had Medicaid expansion: 138% of the FPL 
+
+- Supreme court decision in 2012 deemed this as unconstitutional 
+
+- Bill was reformated; expansion was then voluntary 
+
+## Expansion status 
+
+- 26 states expanded Medicaid in 2014
+
+- 19 states did not expand until 2018 
+
+- Data comes from my projects 
+
+- Uninsured data from Small Area Health Insurance Estimates (SAHIE)
+
+## Load the data (those that expanded later than 2014)
+
+```{r, echo = FALSE}
+user = Sys.info()["nodename"]
+
+
+if(user == "vinish-Legion-Pro-7-16IRX9H"){
+
+    source("/home/vinish/Dropbox/Medicaid_South/code/filepath.r")
+
+}else{
+    
+    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+
+}
+```
+
+
+
+```{r, echo = TRUE}
+
+# load data
+library(pacman)
+p_load(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow, janitor)
+
+
+# load in county level uninsured rate data merged with other variables 
+mort_allcauses <-  read_feather( file.path(datapath, "NVSS_data_county_2010to2017_merged_allcauses.feather"))  %>% 
+                    mutate(treat = ifelse(is.na(treat) == T, "control 3", treat))  %>% 
+                    filter(yearexpand == 2014 & age == 0 & race_name == "white")  %>% 
+                    dplyr::select("countyfips", "year", "state.abb", "expand", "yearexpand", "sahieunins138", "GovernorisDemocrat1Yes")  %>% 
+                    filter(duplicated(.))   %>%  
+                    arrange(countyfips, year) # sort by countyfips and year
+                     # the select() function is masked 
+                    # by other packages, so use dplyr::select() instead 
+
+
+
+```
+
+## Head the data 
+
+```{r, echo = TRUE}
+# only keep the years 2013 and 2014 for the canonical case
+dat_canonical  <- mort_allcauses  %>% 
+                    filter(year %in% c(2013, 2014))
+head(dat_canonical)
+```
+
+
+
+## Expansion and non-expansion states 
+```{r}
+#dat_canonical  %>% tabyl(state.abb, expand)
+
+cat("The expansion states are: \n")
+table(dat_canonical$state.abb[dat_canonical$expand == 1])
+
+cat("The non-expansion states are: \n")
+table(dat_canonical$state.abb[dat_canonical$expand == 0])
+
+```
+
+
+## Count of expansion vs non-expansion states 
+
+```{r, echo = TRUE}
+length(table(dat_canonical$state.abb[dat_canonical$expand == 1]))
+length(table(dat_canonical$state.abb[dat_canonical$expand == 0]))
+```
+
+## Expansion and non-expansion states 
+
+
+The two groups are as follows: 
+
+i) **Expansion states (treated)**: AR, AZ, CA, CO, CT, DE, HI, IA, IL, KY, MA, MD, MI, MN, ND, NH, NJ, NM, NV, NY, OH, OR, RI, VT, WA, WV 
+
+ii) **Non-expansion states (control)**: AL, FL, GA, ID, KS, ME, MO, MS, NC, NE, OK, SC, SD, TN, TX, UT, VA, WI, WY
+
+
+# Naive estimator 
+
+## Naive estimator
+- A naive estimate of ATT: difference in means between the treated and control groups in the period following the expansion. 
+
+ ```{r, echo = TRUE}
+ naive  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & dat_canonical$year >= 2014]) - 
+           mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & dat_canonical$year >= 2014])
+
+ print(naive)
+
+ ```
+
+
+## Can we trust the naive estimator?
+
+- naive estimate: uninsured rate dropped by -13.66 percentage points following the Medicaid expansion in 2014. 
+
+- But can we trust this estimate? Not really!
+
+- Note that the estimation approach here is similar to the RTC 
+
+- But is the treatment assignment random?
+
+## Reasons why naive estimator fails 
+
+i) One way to assess the validity of naive estimate is to compare the (natural) experiment on hand with the randomized control case.  
+    - Note that we are very far away from the randomized controlled trial in this case. 
+    - The treatment (decision to expand Medicaid) is not random. 
+    - Note that states voluntarily decided to expand Medicaid.
+    - For example, many of the southern states did not expand Medicaid. 
+    - Also, pre-treatment uninsured rates of southern states are generally higher compared to non-southern states. 
+
+ **The naive comparison can simply be capturing the difference in pre-treatment characteristics correlated with the treatment assignment.**
+   
+ii) The baseline characteristics among the expansion vs non-expansion states differs dramatically. 
+    - For example, southern states have higher population of Blacks compared to non-South. 
+    - uninsured rate is higher among Blacks. 
+
+**Simply capturing differences in uninsured rates due to demographic differences.** 
+
+## Evaluating differences in uninsured rate in 2013 (pre-treatment year) 
+
+```{r, echo = TRUE}
+
+naive_pre  <- mean(dat_canonical$sahieunins138[dat_canonical$expand == 1 & 
+                dat_canonical$year < 2014]) - 
+           mean(dat_canonical$sahieunins138[dat_canonical$expand == 0 & 
+                dat_canonical$year < 2014])
+
+print(naive_pre)
+```
+
+# Canonical Difference in Differences Framework 
+
+## Canonical DiD 
+
+- We would like to alleviate the aforementioned concerns. 
+
+- One way to address the second concern, i.e., outcomes in pre-treatment period may differ significantly between the treatment and control groups, is to take out the mean difference in outcome during the pre-treatment period from the mean difference in outcome post treatment. This approach uses two groups and two periods, which is termed as the canonical DiD case. 
+
+## Canonical DiD $2\times 2$ matrix.
+
+```{r}
+
+# Create the data for the 2x2 matrix
+data <- data.frame(
+  group = rep(c("Control", "Treated"), each = 2),
+  time = rep(c("Pre", "Post"), times = 2),
+  outcome = c(5, 5, 5, 7), # Example outcomes
+  label = c("Y_11", "Y_01", "Y_10", "Y_00") # Labels for matrix cells
+)
+
+# Base plot
+ggplot(data, aes(x = time, y = group)) +
+  geom_tile(fill = "lightblue", color = "black") + # Create the matrix grid
+  geom_text(aes(label = label), size = 4, fontface = "bold") + # Add cell labels
+  annotate("text", x = 1, y = 2.55, label = "Pre-Treatment", size = 3, fontface = "italic") +
+  annotate("text", x = 2, y = 2.55, label = "Post-Treatment", size = 3, fontface = "italic") +
+  annotate("text", x = 0.45, y = 2, label = "Control Group", angle = 90, size = 3, fontface = "italic") +
+  annotate("text", x = 0.45, y = 1, label = "Treated Group", angle = 90, size = 3, fontface = "italic") +
+  labs(
+    title = "2x2 Difference-in-Differences Matrix Illustration",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5, size = 10)
+  )
+```
+
+## Canonical DiD estimate (unconditional)
+In the ACA-Medicaid expansion example that involves two groups and two time periods:
+
+```{r, echo = TRUE}
+
+cat("did estimate: \n", naive - naive_pre)
+
+```
+
+## Canonical DiD estimate 
+
+- suggests that uninsured rate dropped by 5.81 percentage points following the Medicaid expansion in year 2014. 
+
+- let's formally visit the DiD approach to appreciate some necessary assumptions while connecting it with ATT. 
+
+
+# Parallel trend assumption 
+
+## Parallel trend assumption 
+
+\begin{equation}
+E(Y^0(1) - Y^0(0)| D = 1) = E(Y^0(1) - Y^0(0)| D = 0)  (\#eq:ptrend1)
+\end{equation}
+
+-*In absence of the expansion, trends in uninsured rate would evolve parallely across the expansion and non-expansion states*
+
+## The role of parallel trend in indentification of ATT 
+
+
+\begin{align}
+\delta = E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) \\ \nonumber
+= E(Y^1(1)| D = 1) - E(Y^0(1)| D = 1) + E(Y^0(0)| D = 1) - E(Y^0(0)| D = 1) \\ \nonumber
+= \{E(Y^1(1)| D = 1) - E(Y^0(0)| D = 1)\} - \{E(Y^0(1)| D = 1) - E(Y^0(0)| D = 1)\}  \\ \nonumber
+= \{E(Y^1(1)| D = 1) - E(Y^0(0)| D = 1)\} - \{E(Y^0(1)| D = 0) - E(Y^0(0)| D = 0)\}  \\ \nonumber
+= \{E(Y(1)| D = 1) - E(Y(0)| D = 1)\} - \{E(Y(1)| D = 0) - E(Y(0)| D = 0)\}  
+\end{align}
+
+
+# Canonical DiD using regression 
+
+
+## The $2 \times 2$ Difference-in-Differences Estimate
+
+
+- Let's begin with the canonical DiD framework using the regression format. 
+
+- I'm going to set it up as the following:
+
+\begin{equation}
+\label{eq:DiD_reg}
+Y_{it} = \alpha + \tau Post_{it} \times D_{i} + \sigma Post_{it} + \eta D_{i} + \epsilon_{it} 
+\end{equation}
+
+- Let's rewrite the DiD estimator from before as:
+
+$\tau_{did} = \underbrace{E[Y_{11} - Y_{10} | D = 1]}_{first\; difference} - \underbrace{E[Y_{01} - Y_{00} | D = 0]}_{second\; difference}$
+
+
+## What's the specification about? 
+
+- Let's look at 
+the following conditional expectations. 
+
+1). expected outcome for treated group post treatment: $E(Y | D = 1, Post = 1) = \alpha + \tau + \sigma + \eta$
+
+2). expected outcome for treated group pre treatment: $E(Y | D = 1, Post = 0) = \alpha +  \eta$
+
+3). expected outcome for control group post treatment: $E(Y | D = 0, Post = 1) = \alpha + \sigma$
+
+4). expected outcome for control group pre treatment: $E(Y | D = 0, Post = 0) = \alpha$
+
+
+## Let's apply this to our ACA-Medicaid example. 
+
+```{r, echo = TRUE}
+
+# lets create the post, treat, and the interaction between the post 
+#  and treat (labeled as did)
+dat_canonical  <- dat_canonical  %>% 
+                      mutate(post = ifelse(year >= 2014, 1, 0), 
+                             treat = ifelse(expand == 1, 1, 0), 
+                             did = post * treat)
+
+reg_did  <- lm(sahieunins138 ~ did + post + treat, data = dat_canonical)
+
+```
+
+## Output (extract coefficient)
+
+```{r, echo = TRUE}
+cat("DiD estimate from regression:", "\n", 
+            coefficients(summary(reg_did))[2])
+```
+
+## The whole of output 
+
+```{r, echo = TRUE}
+summary(reg_did)
+```
+
+
+
+## Compare it with difference in means estimator 
+
+```{r, echo = TRUE }
+did  <- naive - naive_pre
+print(did)
+```
+
+# Two-way fixed effects estimator (TWFE)
+
+## Two way fixed effect (TWFE) Revisited
+
+- We have already seen the TWFE and its importance in accounting for unobserved heterogeneity.
+
+- The TWFE is linked to the difference-in-differences setting (perhaps mistakenly). 
+
+- However, note that the TWFE estimator is not equal to the DiD estimator unless the treatment effects are homogeneous across both units and time. 
+
+
+## TWFE estimator
+\begin{align}
+\label{eq:TWFE}
+Y_{it} = \theta_{t} + \eta_{i} + \alpha D_{it} + v_{it} \;.....TWFE
+\end{align}
+
+- Here, $Y_{it}$ is the outcome of individual $i$ in period $t$ ($t \in \{1,\;2,\;...,\;T\}$)
+
+- $\theta_{t}$ is the time fixed effects; $\eta_{i}$ is the unit fixed effect
+
+- $D_{it}$ captures whether individual $i$ is treated in time $t$
+
+- Equation above is the TWFE. 
+
+
+## TWFE: Using Within Estimator 
+
+**Data Arrange 1: Demeaning to get rid of $\eta_i$ from TWFE equation (Within Estimator)**
+
+- Let's look at the concept behind the within estimator.
+
+- In the two-period two-group case, TWFE can be written as:
+
+\begin{align}
+Y_{i1} = \theta_{1} + \eta_{i} + \alpha D_{i1} + v_{i1} \nonumber
+\\
+Y_{i2} = \theta_{2} + \eta_{i} + \alpha D_{i2} + v_{i2}
+\end{align}
+
+- where, $i$ is represented by 1 (treatment group) and 0 (untreated group). 
+
+
+## Within estimator
+- Adding the sub-equations and dividing by the number of time period $(T=2)$ yields:
+
+\begin{align}
+\frac{Y_{i1}+Y_{i2}}{2}  = \frac{\theta_{1}+\theta_{2}}{2} + \frac{2\eta_{i}}{2} + \frac{\alpha (D_{i1}+D_{i2})}{2} 
++ \frac{v_{i1}+v_{i2}}{2} \\
+Y_{i}  = \frac{\theta_{1}+\theta_{2}}{2} + \eta_{i} + \alpha D_{i} + v_{i} \nonumber
+\end{align}
+
+## Within estimator 
+
+
+- Substracting the above equation from the TWFE yields the following:
+
+
+\begin{align}
+Y_{it}-Y_{i} = \theta_{t} - \frac{\theta_{1}+\theta_{2}}{2} + \alpha (D_{it}-D_i) + (v_{it}-v_i)
+\end{align}
+
+*The code shows data arranging for the within estimator.* 
+
+
+## Data arranging for Within-estimator 
+
+```{r, echo = TRUE}
+###########################
+# Treatment group
+###########################
+treat_t <- rep(1, 1000)
+period_t <- rep(c(0, 1), each = 500)
+id <- rep(seq(1, 500, 1), 2) #for the panel nature of data
+y_treat <- 20 * period_t + 7  + rnorm(1000, 0, 5) 
+treatdata <- data.frame(treat = treat_t, period = period_t, Y = y_treat, id = id)
+treatdata <- treatdata %>% mutate(Ytrans = Y - mean(Y),
+                                  D = treat * period - mean(treat * period))
+
+```
+
+
+## Data arranging for Within-estimator (control)
+
+```{r, echo = TRUE}
+##########################
+# control group
+##########################
+control_t <- rep(0, 1000)  
+period_c <- rep(c(0, 1), each = 500)
+id <- rep(seq(501, 1000, 1), 2)
+y_control <- 3 +  rnorm(1000, 0, 5) 
+controldata = data.frame(treat = control_t, period = period_c, Y = y_control, id = id)
+controldata <- controldata %>% mutate(Ytrans = Y - mean(Y),
+                                  D = treat * period - mean(treat * period))
+
+data = rbind(treatdata, controldata)
+```
+
+## TWFE: As the first difference 
+
+**Data Arrange 2: First differencing**
+
+- Let's briefly look at the concept behind first differencing.
+
+Write TWFE as: 
+
+\begin{align}
+Y_{i1} = \theta_{1} + \eta_{i} + \alpha D_{i1} + v_{i1} \nonumber
+\\
+Y_{i2} = \theta_{2} + \eta_{i} + \alpha D_{i2} + v_{i2}
+\end{align}
+
+for $i \in \{0,\;1\}$. 
+
+
+## TWFE: As the first difference 
+- Then, 
+
+\begin{align}
+Y_{i2} - Y_{i1} = \theta_{2} - \theta_{1} + \alpha (D_{i2}-D_{i1}) + (v_{i2} - v_{i1}) 
+\end{align}
+
+## Data arranging for First diff.
+```{r, echo = TRUE}
+# First the treated group
+fd_treat1 <- treatdata %>% filter(period == 0) %>% dplyr::select(-c("Ytrans"))
+colnames(fd_treat1) <- c("treat1", "period1", "Y1", "id")
+fd_treat2 <- treatdata %>% filter(period == 1)%>% dplyr::select(-c("Ytrans"))
+colnames(fd_treat2) <- c("treat2", "period2", "Y2", "id")
+fd_treat <- merge(fd_treat1, fd_treat2, by = "id", all.x = T)
+fd_treat <- fd_treat %>% mutate(Y_FD = Y2 - Y1,
+                                D = (period2 * treat2) - (period1 * treat1)) 
+
+```
+
+## 
+
+```{r, echo = TRUE}
+# Then the control group
+fd_control1 <- controldata %>% filter(period == 0) %>% dplyr::select(-c("Ytrans"))
+colnames(fd_control1) <- c("treat1", "period1", "Y1", "id")
+fd_control2 <- controldata %>% filter(period == 1)%>% dplyr::select(-c("Ytrans"))
+colnames(fd_control2) <- c("treat2", "period2", "Y2", "id")
+fd_control <- merge(fd_control1, fd_control2, by = "id", all.x = T)
+fd_control <- fd_control %>% mutate(Y_FD = Y2 - Y1,
+                                D = (period2 * treat2) - (period1 * treat1)) 
+
+FDdata = rbind(fd_treat, fd_control)
+```
+
+# Various ways of estimating 
+
+## 1. Typical Estimation
+```{r}
+reg1 <- lm(Y ~ treat:period + treat + period, data)
+summary(reg1)
+
+```
+
+## 2. Within Estimator
+
+```{r}
+reg2 <- lm(Ytrans ~ D + period, data)
+summary(reg2)
+```
+
+## 3. First Difference
+```{r}
+reg3 <- lm(Y_FD ~ D, FDdata)
+summary(reg3)
+```
+
+
+# Discussion 
+
+## Questions 
+
+- Does the parallel trend hold? 
+
+- We don't know for sure.
+
+- Can we provide some suggestive evidence?
+
+
+# References
+
+## References{.allowframebreaks} 

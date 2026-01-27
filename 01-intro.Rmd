@@ -10,7 +10,7 @@ link-citations: yes
 bibliography: ML.bib
 ---
 
-# Causal Inference: An Introduction
+# Causal Inference
 
 "Correlation is not causality" is one of the most frequently used lines in social science. In a lab experiment, a researcher can perform controlled experiments to determine whether A causes B by controlling for confounders. However, the complexities and interrelations of human behavior create a setting starkly different from the controlled environment of a lab, making things much more convoluted. Causal inference, therefore, can be seen as a process to determine whether A causes B in both lab settings and out-of-lab scenarios. 
 
@@ -71,7 +71,7 @@ $Y_i(1)$ denotes the outcome for an unit $i$ in presence of treatment, whereas $
 A major difficulty is that one cannot observe units simultaneously with and without treatment in reality. This means that the perfect counterfactual does not really exist.
 This again emphasizes causal inference as a missing data problem -- when estimating the treatment effect of an unit $i$, $Y_i(0)$ is not observed if $Y_i(1)$ is and vice-versa. This unfortunately does not allow us to estimate individualized treatment effect. The best we can do (as of yet) is use the **independence assumption** as well as **overlap** assumption together and evalute ATE. 
 
-Note that the independence condition, $ W_i \perp Y_i(0), \; Y_i(1)$, gives: $E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)$. The term, $E(Y_i(0))$, in ATE equation is replaced by $E(Y_i|W_i = 0)$.  
+Note that the independence condition, $W_i \perp Y_i(0), \; Y_i(1)$, gives: $E(Y_i(0)|W_i = 1) = E(Y_i(0)|W_i = 0)$. The term, $E(Y_i(0))$, in ATE equation is replaced by $E(Y_i|W_i = 0)$.  
 
 
 In the case of a pure randomized experiment, the ATE is given as: 

@@ -830,10 +830,10 @@ $\hat{\tau}_{AIPW} = \frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}(X_i) - \mu_{0}(X_i) +
 
 ML approach using cross-fitting is used to estimate both $\hat{e}(x)$ and $\hat{\mu}_{w}(x)$. Following the cross-fitting structure, we can formally write the estimate for $\tau$ as: 
 
-$\hat{\tau}_{AIPW} = \lowerbracket{\frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}^{-k(i)}(X_i) - \mu_{0}^{-k(i)}(X_i)}_{consistent \; estimate \; of \; \tau} + 
+$\hat{\tau}_{AIPW} = \underbrace{\frac{1}{N} \sum_{i = 1}^{N} (\mu_{1}^{-k(i)}(X_i) - \mu_{0}^{-k(i)}(X_i)}_{consistent \; estimate \; of \; \tau} + 
 \frac{(Y_i - \hat{\mu}_1^{-k(i)}(X_i)). W_i}{\hat{e}^{-k(i)}(X_i)} - \frac{(Y_i - \hat{\mu}_0^{-k(i)}(X_i)). (1-W_i)}{1 - \hat{e}^{-k(i)}(X_i)})$
 
-The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights  given by the propensity score. There are two attractive features of AIPW estimate. First, $\hat{\tau}_{AIPW} is consistent as long as $\hat{e}(x)$ or $\hat{\mu}_{w}(x)$ is consistent. This is because $E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0$. Second, $\hat{\tau}_{AIPW}$ is a good approximation to oracle $\hat{\tau}_{AIPW}^{*}$ as long as $\hat{\mu}(.)$ and $\hat{e}(.)$ are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both $\hat{\mu}(.)$ and $\hat{e}(.)$ are $\sqrt{n}$-consistent^[This means that $\hat{\mu}(.)$ converges to $\hat{\mu}$ at the ], then the following holds. 
+The AIPW approach can be thought of estimating ATE taking the difference across conditional responses. Next, the residuals are adjusted using weights  given by the propensity score. There are two attractive features of AIPW estimate. First, $\hat{\tau}_{AIPW}$ is consistent as long as $\hat{e}(x)$ or $\hat{\mu}_{w}(x)$ is consistent. This is because $E[(Y_i - \hat{\mu}_{W_i}(X_i)) \approx 0$. Second, $\hat{\tau}_{AIPW}$ is a good approximation to oracle $\hat{\tau}_{AIPW}^{*}$ as long as $\hat{\mu}(.)$ and $\hat{e}(.)$ are reasonably accurate. If one estimate is highly accurate, then it can compensate lack of accuracy on the other estimate. If both $\hat{\mu}(.)$ and $\hat{e}(.)$ are $\sqrt{n}$-consistent^[This means that $\hat{\mu}(.)$ converges to $\hat{\mu}$ at the ], then the following holds. 
 
 $\sqrt{n}(\hat{\tau}_{AIPW} - \hat{\tau}_{AIPW}^{*}) \rightarrow_p 0$.
 
