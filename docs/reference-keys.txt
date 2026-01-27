@@ -35,10 +35,6 @@ running-a-regression
 standard-errors
 an-exercise
 regression-and-gradient-descent
-i.-normal-equation
-ii.-gradient-descent
-multivariate-model
-standard-error
 causal-inference
 potential-outcome-framework-neyman-rubin-causal-model
 average-treatment-effect-ate
@@ -88,5 +84,3 @@ heterogeneous-treatment-effects
 some-ways-to-estimate-cate
 estimation-1
 some-remarks-and-questions
-normal-equation
-gradient-descent
