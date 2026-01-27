@@ -52,8 +52,6 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -124,28 +122,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 </head>
@@ -264,34 +240,38 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="standard-error" class="section level1 hasAnchor" number="8">
 <h1><span class="header-section-number">8</span> Standard Error<a href="standard-error.html#standard-error" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<pre><code># ----------------------------------------------
-
-
-# Standard errors 
-
-
-# ----------------------------------------------
-
-# 1. Get the standard error of the regression
-
-error = (X @ theta - y)
-error_sq = error.T @ error
-sigma_sq = 1 / (m -3) * error_sq
-se_reg = np.sqrt(sigma_sq)
-print(f&quot;standard error of the regression is: {se_reg}&quot;)
-
-# 2. get standard errors of the respective coefficients 
-var_cov = np.linalg.inv(X.T @ X) * sigma_sq
-manual_se = np.sqrt(np.diag(var_cov))
-print(f&quot;standard errors of coefficients (manual estimation): {manual_se}&quot;)
-
-# se from stats model
-X_sm = sm.add_constant(X)   # add intercept
-model = sm.OLS(y, X_sm).fit()
-
-print(f&quot;coefficients from statmodels: {model.params}&quot;)   # coefficients
-print(f&quot;standard errors from statmodels: {model.bse}&quot;)      # standard errors</code></pre>
-<pre><code></code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="standard-error.html#cb18-1" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
+<span id="cb18-2"><a href="standard-error.html#cb18-2" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="standard-error.html#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="standard-error.html#cb18-4" tabindex="-1"></a><span class="co"># Standard errors </span></span>
+<span id="cb18-5"><a href="standard-error.html#cb18-5" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="standard-error.html#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="standard-error.html#cb18-7" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
+<span id="cb18-8"><a href="standard-error.html#cb18-8" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="standard-error.html#cb18-9" tabindex="-1"></a><span class="co"># 1. Get the standard error of the regression</span></span>
+<span id="cb18-10"><a href="standard-error.html#cb18-10" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="standard-error.html#cb18-11" tabindex="-1"></a>error <span class="op">=</span> (X <span class="op">@</span> theta <span class="op">-</span> y)</span>
+<span id="cb18-12"><a href="standard-error.html#cb18-12" tabindex="-1"></a>error_sq <span class="op">=</span> error.T <span class="op">@</span> error</span>
+<span id="cb18-13"><a href="standard-error.html#cb18-13" tabindex="-1"></a>sigma_sq <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (m <span class="op">-</span><span class="dv">3</span>) <span class="op">*</span> error_sq</span>
+<span id="cb18-14"><a href="standard-error.html#cb18-14" tabindex="-1"></a>se_reg <span class="op">=</span> np.sqrt(sigma_sq)</span>
+<span id="cb18-15"><a href="standard-error.html#cb18-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard error of the regression is: </span><span class="sc">{</span>se_reg<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb18-16"><a href="standard-error.html#cb18-16" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="standard-error.html#cb18-17" tabindex="-1"></a><span class="co"># 2. get standard errors of the respective coefficients </span></span>
+<span id="cb18-18"><a href="standard-error.html#cb18-18" tabindex="-1"></a>var_cov <span class="op">=</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">*</span> sigma_sq</span>
+<span id="cb18-19"><a href="standard-error.html#cb18-19" tabindex="-1"></a>manual_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
+<span id="cb18-20"><a href="standard-error.html#cb18-20" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors of coefficients (manual estimation): </span><span class="sc">{</span>manual_se<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb18-21"><a href="standard-error.html#cb18-21" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="standard-error.html#cb18-22" tabindex="-1"></a><span class="co"># se from stats model</span></span>
+<span id="cb18-23"><a href="standard-error.html#cb18-23" tabindex="-1"></a>X_sm <span class="op">=</span> sm.add_constant(X)   <span class="co"># add intercept</span></span>
+<span id="cb18-24"><a href="standard-error.html#cb18-24" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X_sm).fit()</span>
+<span id="cb18-25"><a href="standard-error.html#cb18-25" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="standard-error.html#cb18-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>params<span class="sc">}</span><span class="ss">&quot;</span>)   <span class="co"># coefficients</span></span>
+<span id="cb18-27"><a href="standard-error.html#cb18-27" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>bse<span class="sc">}</span><span class="ss">&quot;</span>)      <span class="co"># standard errors</span></span></code></pre></div>
+<pre><code>standard error of the regression is: [[0.98562573]]
+standard errors of coefficients (manual estimation): [0.03123574 0.03242909 0.03072431]
+coefficients from statmodels: [10.00156877 40.74650082  6.62076534]
+standard errors from statmodels: [0.03123574 0.03242909 0.03072431]</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
 
 </div>
             </section>

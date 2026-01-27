@@ -35,7 +35,7 @@ results using python libraries to see whether we've done it correctly.
 Lets first load the necessary libraries.
 
 
-```
+```python
 import numpy as np 
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_regression
@@ -62,7 +62,7 @@ iii) intercept with the coefficient of 10
 Let's use make_regression() to simulate our data. 
 
 
-```
+```python
 X, y, coefficient = make_regression(n_samples = 1000,
                        n_features = 2,
                        n_informative = 2,
@@ -80,27 +80,44 @@ Note that I've set coef = True. This will return the model parameters and the in
 We take a look at the first five rows. 
 
 
-```
+```python
 print(f"print features: {X[0:5, :]}")
 print(f"target: {y[0:5]}")
 ```
 
+    print features: [[-0.16711808  0.14671369]
+     [-0.02090159  0.11732738]
+     [ 0.15041891  0.364961  ]
+     [ 0.55560447  0.08958068]
+     [ 0.05820872 -1.1429703 ]]
+    target: [ 3.24877735  8.66339401 19.45702327 31.55545159  3.92293402]
+
+
 And let's print out the model parameters. Note these are the true coefficients that are used to generate data.
 
 
-```
+```python
 print(f"coefficients: {coefficient}")
 ```
+
+    coefficients: [40.71064891  6.60098441]
+
 
 Plot the relationship between $X1$ and $Y$.
 
 
-```
+```python
 plt.figure(figsize=(8, 5))
 plt.scatter(X[:,1], y)
 plt.show()
 #plt.savefig(root_dir + "/Codes/Output/make_data_scatter.pdf")
 ```
+
+
+    
+![png](01_Regression_Gradient_Descent_files/01_Regression_Gradient_Descent_12_0.png)
+    
+
 
 
 Now, we are ready to discuss two methods. Let's start with the Normal equation method.
@@ -153,12 +170,15 @@ Let's code the normal equation and print out the estimates. Before jumping into 
 normal equation, we've got to be careful and add the intercept term (all ones) on X as the simulated data from make_regression comes without it. We'll do this using add_dummy_feature() in sklearn.
 
 
-```
+```python
 # The normal equation
 X = add_dummy_feature(X)
 theta_best = np.linalg.inv((X.T @ X)) @ (X.T @ y)
 print(f"coefficients from normal equation: {theta_best}")
 ```
+
+    coefficients from normal equation: [10.00156877 40.74650082  6.62076534]
+
 
 # ii. Gradient Descent
 
@@ -198,7 +218,7 @@ Now that we have the gradient, the gradient descent algorithm can be set up as f
 Let's simulate data for univariate model specification to visually see what this looks like. 
 
 
-```
+```python
 dat_uni = make_regression(
                 n_samples=100,
                 n_features=1,
@@ -243,14 +263,62 @@ plt.title("Gradient Descent at Work")
 plt.show()
 ```
 
+    The first five rows of X: [[ 0.19686124]
+     [ 0.35711257]
+     [-1.91328024]
+     [-0.03582604]
+     [ 0.76743473]] 
+     
+    
+    The first five y values: [  8.21720459  14.90627167 -79.86242262  -1.49541829  32.03357001] 
+     
+    
+    The coefficient of univariate model is: 41.7411003148779 
+     
+    
+    gradient descent at work: [ 2.73384129  9.18803147 14.57430322 19.06935566 22.82065107 25.95125242
+     28.56386053 30.74418321 32.56374696 34.0822434  35.3494875  36.4070518
+     37.28963019 38.02617604 38.64085208 39.15382306 39.58191721 39.93917836
+     40.23732664 40.48614292 40.69378975 40.86707908 41.01169573 41.13238393
+     41.23310291 41.3171568  41.38730303 41.44584277 41.49469646 41.53546675
+     41.56949114 41.59788581 41.62158226 41.64135787 41.65786138 41.6716342
+     41.68312815 41.6927203  41.70072532 41.70740581 41.71298095 41.71763361
+     41.72151644 41.72475682 41.72746103 41.7297178  41.73160117 41.73317291
+     41.73448459 41.73557923 41.73649276 41.73725513 41.73789136 41.73842232
+     41.73886542 41.73923521 41.73954381 41.73980135 41.74001628 41.74019565
+     41.74034533 41.74047025 41.74057451 41.74066151 41.74073411 41.7407947
+     41.74084527 41.74088747 41.74092269 41.74095208 41.74097661 41.74099708
+     41.74101416 41.74102841 41.74104031 41.74105024 41.74105852 41.74106544
+     41.74107121 41.74107603 41.74108004 41.7410834  41.7410862  41.74108853
+     41.74109048 41.74109211 41.74109347 41.7410946  41.74109555 41.74109633
+     41.74109699 41.74109754 41.741098   41.74109838 41.7410987  41.74109897
+     41.74109919 41.74109938 41.74109953 41.74109966] 
+     
+    
+
+
+
+    
+![png](01_Regression_Gradient_Descent_files/01_Regression_Gradient_Descent_16_1.png)
+    
+
+
 Here, we see that the algorithm converges at the estimated $\beta$ little over 40. Let's print out the best beta from gradient descent and the true parameter for comparison.
 
 
 
-```
+```python
 print(f"True parameter of the univariate model: {coef} \n \n ")
 print(f"Best estimate from gradient descent: {beta} \n \n") 
 ```
+
+    True parameter of the univariate model: 41.7411003148779 
+     
+     
+    Best estimate from gradient descent: [[41.74109966]] 
+     
+    
+
 
 See that the estimate obtained from gradient descent is close to the true parameter.  
 
@@ -278,7 +346,7 @@ The gradient vector is of dimension $3 \times 1$ and stacks all partials of MSE 
 Let's code the gradient descent algorithm and print out both the true parameters and their estimates.   
 
 
-```
+```python
 # Use the gradient descent algorithm
 m = X.shape[0]
 y = y.reshape((m, 1))
@@ -294,10 +362,16 @@ print(f"True coefficients: {np.hstack([10, coefficient])}")
 print(f"Coefficients from gradient descent: {theta}")
 ```
 
+    True coefficients: [10.         40.71064891  6.60098441]
+    Coefficients from gradient descent: [[10.0015688 ]
+     [40.74650075]
+     [ 6.62076533]]
+
+
 Note that these coefficients are exactly similar to those obtained from the normal equation method. We can also make sure that we've done the estimation correctly by comparing the estimates with those obtained from built in module in sklearn used for purposes of estimating linear regression models.
 
 
-```
+```python
 # sklearn
 reg = linear_model.LinearRegression(fit_intercept=True)
 reg.fit(X, y)
@@ -307,13 +381,16 @@ best_theta_coef = np.concatenate([best_int_coef, best_theta_coef[:, 1:3].ravel()
 print(f"coefficients from sklearn: {best_theta_coef}")
 ```
 
+    coefficients from sklearn: [10.00156877 40.74650082  6.62076534]
+
+
 Pretty close.
 
 
 # Standard Error
 
 
-```
+```python
 # ----------------------------------------------
 
 
@@ -343,7 +420,13 @@ print(f"coefficients from statmodels: {model.params}")   # coefficients
 print(f"standard errors from statmodels: {model.bse}")      # standard errors
 ```
 
+    standard error of the regression is: [[0.98562573]]
+    standard errors of coefficients (manual estimation): [0.03123574 0.03242909 0.03072431]
+    coefficients from statmodels: [10.00156877 40.74650082  6.62076534]
+    standard errors from statmodels: [0.03123574 0.03242909 0.03072431]
 
-```
+
+
+```python
 
 ```

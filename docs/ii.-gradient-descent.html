@@ -52,8 +52,6 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -124,28 +122,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 </head>
@@ -290,51 +266,91 @@ where, <span class="math inline">\(\eta\)</span> is the <em>learning rate</em>.
 3. Re-evaluate the gradient using <span class="math inline">\(\beta_{new}\)</span>.
 4. Repeat steps 2 and 3 for a given number of times or until convergence is reached.</p>
 <p>Let’s simulate data for univariate model specification to visually see what this looks like.</p>
-<pre><code>dat_uni = make_regression(
-                n_samples=100,
-                n_features=1,
-                n_informative=1,
-                n_targets=1,
-                bias=0,
-                noise=0,
-                random_state=42, 
-                coef=True
-)
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="ii.-gradient-descent.html#cb10-1" tabindex="-1"></a>dat_uni <span class="op">=</span> make_regression(</span>
+<span id="cb10-2"><a href="ii.-gradient-descent.html#cb10-2" tabindex="-1"></a>                n_samples<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb10-3"><a href="ii.-gradient-descent.html#cb10-3" tabindex="-1"></a>                n_features<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-4"><a href="ii.-gradient-descent.html#cb10-4" tabindex="-1"></a>                n_informative<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-5"><a href="ii.-gradient-descent.html#cb10-5" tabindex="-1"></a>                n_targets<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-6"><a href="ii.-gradient-descent.html#cb10-6" tabindex="-1"></a>                bias<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb10-7"><a href="ii.-gradient-descent.html#cb10-7" tabindex="-1"></a>                noise<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb10-8"><a href="ii.-gradient-descent.html#cb10-8" tabindex="-1"></a>                random_state<span class="op">=</span><span class="dv">42</span>, </span>
+<span id="cb10-9"><a href="ii.-gradient-descent.html#cb10-9" tabindex="-1"></a>                coef<span class="op">=</span><span class="va">True</span></span>
+<span id="cb10-10"><a href="ii.-gradient-descent.html#cb10-10" tabindex="-1"></a>)</span>
+<span id="cb10-11"><a href="ii.-gradient-descent.html#cb10-11" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="ii.-gradient-descent.html#cb10-12" tabindex="-1"></a>X_uni, y_uni, coef <span class="op">=</span> dat_uni</span>
+<span id="cb10-13"><a href="ii.-gradient-descent.html#cb10-13" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The first five rows of X: </span><span class="sc">{</span>X_uni[<span class="dv">0</span>:<span class="dv">5</span>,:]<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-14"><a href="ii.-gradient-descent.html#cb10-14" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The first five y values: </span><span class="sc">{</span>y_uni[<span class="dv">0</span>:<span class="dv">5</span>]<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-15"><a href="ii.-gradient-descent.html#cb10-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The coefficient of univariate model is: </span><span class="sc">{</span>coef<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-16"><a href="ii.-gradient-descent.html#cb10-16" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="ii.-gradient-descent.html#cb10-17" tabindex="-1"></a><span class="co"># set up gradient descent </span></span>
+<span id="cb10-18"><a href="ii.-gradient-descent.html#cb10-18" tabindex="-1"></a>beta <span class="op">=</span> <span class="op">-</span><span class="dv">5</span> <span class="co"># initialize beta</span></span>
+<span id="cb10-19"><a href="ii.-gradient-descent.html#cb10-19" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.1</span> <span class="co"># learning rate</span></span>
+<span id="cb10-20"><a href="ii.-gradient-descent.html#cb10-20" tabindex="-1"></a>m <span class="op">=</span> X_uni.shape[<span class="dv">0</span>] <span class="co"># number of observations</span></span>
+<span id="cb10-21"><a href="ii.-gradient-descent.html#cb10-21" tabindex="-1"></a>iter_val <span class="op">=</span> <span class="dv">100</span> <span class="co"># number of iteration steps</span></span>
+<span id="cb10-22"><a href="ii.-gradient-descent.html#cb10-22" tabindex="-1"></a>y_uni <span class="op">=</span> y_uni.reshape((m,<span class="dv">1</span>)) <span class="co"># reshape into m*1 vector</span></span>
+<span id="cb10-23"><a href="ii.-gradient-descent.html#cb10-23" tabindex="-1"></a>beta_store <span class="op">=</span> np.ones(m)</span>
+<span id="cb10-24"><a href="ii.-gradient-descent.html#cb10-24" tabindex="-1"></a>loss_store <span class="op">=</span> np.ones(m)</span>
+<span id="cb10-25"><a href="ii.-gradient-descent.html#cb10-25" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="ii.-gradient-descent.html#cb10-26" tabindex="-1"></a><span class="co"># loop </span></span>
+<span id="cb10-27"><a href="ii.-gradient-descent.html#cb10-27" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(iter_val):</span>
+<span id="cb10-28"><a href="ii.-gradient-descent.html#cb10-28" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> X_uni.T <span class="op">@</span> (y_uni <span class="op">-</span> beta<span class="op">*</span>X_uni)</span>
+<span id="cb10-29"><a href="ii.-gradient-descent.html#cb10-29" tabindex="-1"></a>    loss <span class="op">=</span> <span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> (y_uni <span class="op">-</span> beta<span class="op">*</span>X_uni).T <span class="op">@</span> (y_uni <span class="op">-</span> beta<span class="op">*</span>X_uni)</span>
+<span id="cb10-30"><a href="ii.-gradient-descent.html#cb10-30" tabindex="-1"></a>    beta <span class="op">=</span> beta <span class="op">-</span> eta<span class="op">*</span>gradient</span>
+<span id="cb10-31"><a href="ii.-gradient-descent.html#cb10-31" tabindex="-1"></a>    beta_store[i] <span class="op">=</span> beta.item() <span class="co"># use .item to extract scalar</span></span>
+<span id="cb10-32"><a href="ii.-gradient-descent.html#cb10-32" tabindex="-1"></a>    loss_store[i] <span class="op">=</span> loss.item() <span class="co"># use .item to extract scalar</span></span>
+<span id="cb10-33"><a href="ii.-gradient-descent.html#cb10-33" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="ii.-gradient-descent.html#cb10-34" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;gradient descent at work: </span><span class="sc">{</span>beta_store<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-35"><a href="ii.-gradient-descent.html#cb10-35" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="ii.-gradient-descent.html#cb10-36" tabindex="-1"></a><span class="co"># figure </span></span>
+<span id="cb10-37"><a href="ii.-gradient-descent.html#cb10-37" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb10-38"><a href="ii.-gradient-descent.html#cb10-38" tabindex="-1"></a>plt.scatter(beta_store, loss_store)</span>
+<span id="cb10-39"><a href="ii.-gradient-descent.html#cb10-39" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;beta value&quot;</span>)</span>
+<span id="cb10-40"><a href="ii.-gradient-descent.html#cb10-40" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;loss&quot;</span>)</span>
+<span id="cb10-41"><a href="ii.-gradient-descent.html#cb10-41" tabindex="-1"></a>plt.title(<span class="st">&quot;Gradient Descent at Work&quot;</span>)</span>
+<span id="cb10-42"><a href="ii.-gradient-descent.html#cb10-42" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<pre><code>The first five rows of X: [[ 0.19686124]
+ [ 0.35711257]
+ [-1.91328024]
+ [-0.03582604]
+ [ 0.76743473]] 
+ 
 
-X_uni, y_uni, coef = dat_uni
-print(f&quot;The first five rows of X: {X_uni[0:5,:]} \n \n&quot;)
-print(f&quot;The first five y values: {y_uni[0:5]} \n \n&quot;)
-print(f&quot;The coefficient of univariate model is: {coef} \n \n&quot;)
+The first five y values: [  8.21720459  14.90627167 -79.86242262  -1.49541829  32.03357001] 
+ 
 
-# set up gradient descent 
-beta = -5 # initialize beta
-eta = 0.1 # learning rate
-m = X_uni.shape[0] # number of observations
-iter_val = 100 # number of iteration steps
-y_uni = y_uni.reshape((m,1)) # reshape into m*1 vector
-beta_store = np.ones(m)
-loss_store = np.ones(m)
+The coefficient of univariate model is: 41.7411003148779 
+ 
 
-# loop 
-for i in range(iter_val):
-    gradient = -2/m * X_uni.T @ (y_uni - beta*X_uni)
-    loss = 2/m * (y_uni - beta*X_uni).T @ (y_uni - beta*X_uni)
-    beta = beta - eta*gradient
-    beta_store[i] = beta.item() # use .item to extract scalar
-    loss_store[i] = loss.item() # use .item to extract scalar
-
-print(f&quot;gradient descent at work: {beta_store} \n \n&quot;)
-
-# figure 
-plt.figure(figsize=(8,5))
-plt.scatter(beta_store, loss_store)
-plt.xlabel(&quot;beta value&quot;)
-plt.ylabel(&quot;loss&quot;)
-plt.title(&quot;Gradient Descent at Work&quot;)
-plt.show()</code></pre>
+gradient descent at work: [ 2.73384129  9.18803147 14.57430322 19.06935566 22.82065107 25.95125242
+ 28.56386053 30.74418321 32.56374696 34.0822434  35.3494875  36.4070518
+ 37.28963019 38.02617604 38.64085208 39.15382306 39.58191721 39.93917836
+ 40.23732664 40.48614292 40.69378975 40.86707908 41.01169573 41.13238393
+ 41.23310291 41.3171568  41.38730303 41.44584277 41.49469646 41.53546675
+ 41.56949114 41.59788581 41.62158226 41.64135787 41.65786138 41.6716342
+ 41.68312815 41.6927203  41.70072532 41.70740581 41.71298095 41.71763361
+ 41.72151644 41.72475682 41.72746103 41.7297178  41.73160117 41.73317291
+ 41.73448459 41.73557923 41.73649276 41.73725513 41.73789136 41.73842232
+ 41.73886542 41.73923521 41.73954381 41.73980135 41.74001628 41.74019565
+ 41.74034533 41.74047025 41.74057451 41.74066151 41.74073411 41.7407947
+ 41.74084527 41.74088747 41.74092269 41.74095208 41.74097661 41.74099708
+ 41.74101416 41.74102841 41.74104031 41.74105024 41.74105852 41.74106544
+ 41.74107121 41.74107603 41.74108004 41.7410834  41.7410862  41.74108853
+ 41.74109048 41.74109211 41.74109347 41.7410946  41.74109555 41.74109633
+ 41.74109699 41.74109754 41.741098   41.74109838 41.7410987  41.74109897
+ 41.74109919 41.74109938 41.74109953 41.74109966] 
+ </code></pre>
+<div class="float">
+<img src="01_Regression_Gradient_Descent_files/01_Regression_Gradient_Descent_16_1.png" alt="png" />
+<div class="figcaption">png</div>
+</div>
 <p>Here, we see that the algorithm converges at the estimated <span class="math inline">\(\beta\)</span> little over 40. Let’s print out the best beta from gradient descent and the true parameter for comparison.</p>
-<pre><code>print(f&quot;True parameter of the univariate model: {coef} \n \n &quot;)
-print(f&quot;Best estimate from gradient descent: {beta} \n \n&quot;) </code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="ii.-gradient-descent.html#cb12-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;True parameter of the univariate model: </span><span class="sc">{</span>coef<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> &quot;</span>)</span>
+<span id="cb12-2"><a href="ii.-gradient-descent.html#cb12-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Best estimate from gradient descent: </span><span class="sc">{</span>beta<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>) </span></code></pre></div>
+<pre><code>True parameter of the univariate model: 41.7411003148779 
+ 
+ 
+Best estimate from gradient descent: [[41.74109966]] 
+ </code></pre>
 <p>See that the estimate obtained from gradient descent is close to the true parameter.</p>
 </div>
             </section>

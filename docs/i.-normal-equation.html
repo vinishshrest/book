@@ -52,8 +52,6 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -124,28 +122,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 </head>
@@ -296,10 +272,11 @@ SSE(X, \theta) = y^Ty - 2\theta^{T} X^Ty + \theta^{T}X^{T}X\theta \\
 \]</span></p>
 <p>Let’s code the normal equation and print out the estimates. Before jumping into estimating the
 normal equation, we’ve got to be careful and add the intercept term (all ones) on X as the simulated data from make_regression comes without it. We’ll do this using add_dummy_feature() in sklearn.</p>
-<pre><code># The normal equation
-X = add_dummy_feature(X)
-theta_best = np.linalg.inv((X.T @ X)) @ (X.T @ y)
-print(f&quot;coefficients from normal equation: {theta_best}&quot;)</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="i.-normal-equation.html#cb8-1" tabindex="-1"></a><span class="co"># The normal equation</span></span>
+<span id="cb8-2"><a href="i.-normal-equation.html#cb8-2" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X)</span>
+<span id="cb8-3"><a href="i.-normal-equation.html#cb8-3" tabindex="-1"></a>theta_best <span class="op">=</span> np.linalg.inv((X.T <span class="op">@</span> X)) <span class="op">@</span> (X.T <span class="op">@</span> y)</span>
+<span id="cb8-4"><a href="i.-normal-equation.html#cb8-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from normal equation: </span><span class="sc">{</span>theta_best<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>coefficients from normal equation: [10.00156877 40.74650082  6.62076534]</code></pre>
 </div>
             </section>
 

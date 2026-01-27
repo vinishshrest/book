@@ -52,8 +52,6 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -124,28 +122,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 </head>
@@ -278,27 +254,32 @@ MSE(\theta) = \frac{1}{m} (Y - X \theta)^{T}(Y - X \theta)
 \]</span></p>
 <p>The gradient vector is of dimension <span class="math inline">\(3 \times 1\)</span> and stacks all partials of MSE with respect to <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>.</p>
 <p>Let’s code the gradient descent algorithm and print out both the true parameters and their estimates.</p>
-<pre><code># Use the gradient descent algorithm
-m = X.shape[0]
-y = y.reshape((m, 1))
-theta = np.random.randn(3, 1)
-eta = 0.1
-
-for i in range(100):
-    gradient = -2 / m * X.T @ (y - X @ theta)
-    theta = theta - eta * gradient 
-
-# True coefficients 
-print(f&quot;True coefficients: {np.hstack([10, coefficient])}&quot;)
-print(f&quot;Coefficients from gradient descent: {theta}&quot;)</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="multivariate-model.html#cb14-1" tabindex="-1"></a><span class="co"># Use the gradient descent algorithm</span></span>
+<span id="cb14-2"><a href="multivariate-model.html#cb14-2" tabindex="-1"></a>m <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
+<span id="cb14-3"><a href="multivariate-model.html#cb14-3" tabindex="-1"></a>y <span class="op">=</span> y.reshape((m, <span class="dv">1</span>))</span>
+<span id="cb14-4"><a href="multivariate-model.html#cb14-4" tabindex="-1"></a>theta <span class="op">=</span> np.random.randn(<span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb14-5"><a href="multivariate-model.html#cb14-5" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb14-6"><a href="multivariate-model.html#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="multivariate-model.html#cb14-7" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb14-8"><a href="multivariate-model.html#cb14-8" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span> <span class="op">/</span> m <span class="op">*</span> X.T <span class="op">@</span> (y <span class="op">-</span> X <span class="op">@</span> theta)</span>
+<span id="cb14-9"><a href="multivariate-model.html#cb14-9" tabindex="-1"></a>    theta <span class="op">=</span> theta <span class="op">-</span> eta <span class="op">*</span> gradient </span>
+<span id="cb14-10"><a href="multivariate-model.html#cb14-10" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="multivariate-model.html#cb14-11" tabindex="-1"></a><span class="co"># True coefficients </span></span>
+<span id="cb14-12"><a href="multivariate-model.html#cb14-12" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;True coefficients: </span><span class="sc">{</span>np<span class="sc">.</span>hstack([<span class="dv">10</span>, coefficient])<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb14-13"><a href="multivariate-model.html#cb14-13" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Coefficients from gradient descent: </span><span class="sc">{</span>theta<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>True coefficients: [10.         40.71064891  6.60098441]
+Coefficients from gradient descent: [[10.0015688 ]
+ [40.74650075]
+ [ 6.62076533]]</code></pre>
 <p>Note that these coefficients are exactly similar to those obtained from the normal equation method. We can also make sure that we’ve done the estimation correctly by comparing the estimates with those obtained from built in module in sklearn used for purposes of estimating linear regression models.</p>
-<pre><code># sklearn
-reg = linear_model.LinearRegression(fit_intercept=True)
-reg.fit(X, y)
-best_theta_coef = reg.coef_
-best_int_coef = reg.intercept_
-best_theta_coef = np.concatenate([best_int_coef, best_theta_coef[:, 1:3].ravel()], axis = 0)
-print(f&quot;coefficients from sklearn: {best_theta_coef}&quot;)</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="multivariate-model.html#cb16-1" tabindex="-1"></a><span class="co"># sklearn</span></span>
+<span id="cb16-2"><a href="multivariate-model.html#cb16-2" tabindex="-1"></a>reg <span class="op">=</span> linear_model.LinearRegression(fit_intercept<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-3"><a href="multivariate-model.html#cb16-3" tabindex="-1"></a>reg.fit(X, y)</span>
+<span id="cb16-4"><a href="multivariate-model.html#cb16-4" tabindex="-1"></a>best_theta_coef <span class="op">=</span> reg.coef_</span>
+<span id="cb16-5"><a href="multivariate-model.html#cb16-5" tabindex="-1"></a>best_int_coef <span class="op">=</span> reg.intercept_</span>
+<span id="cb16-6"><a href="multivariate-model.html#cb16-6" tabindex="-1"></a>best_theta_coef <span class="op">=</span> np.concatenate([best_int_coef, best_theta_coef[:, <span class="dv">1</span>:<span class="dv">3</span>].ravel()], axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb16-7"><a href="multivariate-model.html#cb16-7" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients from sklearn: </span><span class="sc">{</span>best_theta_coef<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>coefficients from sklearn: [10.00156877 40.74650082  6.62076534]</code></pre>
 <p>Pretty close.</p>
 </div>
             </section>

@@ -52,8 +52,6 @@
 <link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -124,28 +122,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 </head>
@@ -290,13 +266,13 @@ Today let’s take a look at two other ways of estimating a linear regression sp
 i) Normal equation method, and ii) Gradient descent. We’ll do these manually and compare our
 results using python libraries to see whether we’ve done it correctly.</p>
 <p>Lets first load the necessary libraries.</p>
-<pre><code>import numpy as np 
-import matplotlib.pyplot as plt
-from sklearn.datasets import make_regression
-from sklearn.preprocessing import add_dummy_feature
-from sklearn import linear_model
-import statsmodels.api as sm
-root_dir = &quot;/home/vinish/Dropbox/Machine Learning&quot;</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="regression-and-gradient-descent.html#cb1-1" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb1-2"><a href="regression-and-gradient-descent.html#cb1-2" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="regression-and-gradient-descent.html#cb1-3" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
+<span id="cb1-4"><a href="regression-and-gradient-descent.html#cb1-4" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> add_dummy_feature</span>
+<span id="cb1-5"><a href="regression-and-gradient-descent.html#cb1-5" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
+<span id="cb1-6"><a href="regression-and-gradient-descent.html#cb1-6" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-7"><a href="regression-and-gradient-descent.html#cb1-7" tabindex="-1"></a>root_dir <span class="op">=</span> <span class="st">&quot;/home/vinish/Dropbox/Machine Learning&quot;</span></span></code></pre></div>
 <p>sklearn is an open sourced library in python that is mainly built for predictive data analysis, which is
 built on top of NumPy, SciPy, and matplotlib. You can get more information about this package on
 <a href="https://scikit-learn.org/stable/index.html">sklearn</a>.</p>
@@ -306,27 +282,38 @@ i) 2 informative features (X)<br />
 ii) 1 target (Y)<br />
 iii) intercept with the coefficient of 10</p>
 <p>Let’s use make_regression() to simulate our data.</p>
-<pre><code>X, y, coefficient = make_regression(n_samples = 1000,
-                       n_features = 2,
-                       n_informative = 2,
-                       n_targets = 1, 
-                       noise = 1, 
-                       bias = 10,
-                       random_state = 42, 
-                       coef = True
-
-)</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="regression-and-gradient-descent.html#cb2-1" tabindex="-1"></a>X, y, coefficient <span class="op">=</span> make_regression(n_samples <span class="op">=</span> <span class="dv">1000</span>,</span>
+<span id="cb2-2"><a href="regression-and-gradient-descent.html#cb2-2" tabindex="-1"></a>                       n_features <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb2-3"><a href="regression-and-gradient-descent.html#cb2-3" tabindex="-1"></a>                       n_informative <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb2-4"><a href="regression-and-gradient-descent.html#cb2-4" tabindex="-1"></a>                       n_targets <span class="op">=</span> <span class="dv">1</span>, </span>
+<span id="cb2-5"><a href="regression-and-gradient-descent.html#cb2-5" tabindex="-1"></a>                       noise <span class="op">=</span> <span class="dv">1</span>, </span>
+<span id="cb2-6"><a href="regression-and-gradient-descent.html#cb2-6" tabindex="-1"></a>                       bias <span class="op">=</span> <span class="dv">10</span>,</span>
+<span id="cb2-7"><a href="regression-and-gradient-descent.html#cb2-7" tabindex="-1"></a>                       random_state <span class="op">=</span> <span class="dv">42</span>, </span>
+<span id="cb2-8"><a href="regression-and-gradient-descent.html#cb2-8" tabindex="-1"></a>                       coef <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb2-9"><a href="regression-and-gradient-descent.html#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="regression-and-gradient-descent.html#cb2-10" tabindex="-1"></a>)</span></code></pre></div>
 <p>Note that I’ve set coef = True. This will return the model parameters and the intercept is set at 10.</p>
 <p>We take a look at the first five rows.</p>
-<pre><code>print(f&quot;print features: {X[0:5, :]}&quot;)
-print(f&quot;target: {y[0:5]}&quot;)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="regression-and-gradient-descent.html#cb3-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;print features: </span><span class="sc">{</span>X[<span class="dv">0</span>:<span class="dv">5</span>, :]<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb3-2"><a href="regression-and-gradient-descent.html#cb3-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;target: </span><span class="sc">{</span>y[<span class="dv">0</span>:<span class="dv">5</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>print features: [[-0.16711808  0.14671369]
+ [-0.02090159  0.11732738]
+ [ 0.15041891  0.364961  ]
+ [ 0.55560447  0.08958068]
+ [ 0.05820872 -1.1429703 ]]
+target: [ 3.24877735  8.66339401 19.45702327 31.55545159  3.92293402]</code></pre>
 <p>And let’s print out the model parameters. Note these are the true coefficients that are used to generate data.</p>
-<pre><code>print(f&quot;coefficients: {coefficient}&quot;)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="regression-and-gradient-descent.html#cb5-1" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;coefficients: </span><span class="sc">{</span>coefficient<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>coefficients: [40.71064891  6.60098441]</code></pre>
 <p>Plot the relationship between <span class="math inline">\(X1\)</span> and <span class="math inline">\(Y\)</span>.</p>
-<pre><code>plt.figure(figsize=(8, 5))
-plt.scatter(X[:,1], y)
-plt.show()
-#plt.savefig(root_dir + &quot;/Codes/Output/make_data_scatter.pdf&quot;)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="regression-and-gradient-descent.html#cb7-1" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb7-2"><a href="regression-and-gradient-descent.html#cb7-2" tabindex="-1"></a>plt.scatter(X[:,<span class="dv">1</span>], y)</span>
+<span id="cb7-3"><a href="regression-and-gradient-descent.html#cb7-3" tabindex="-1"></a>plt.show()</span>
+<span id="cb7-4"><a href="regression-and-gradient-descent.html#cb7-4" tabindex="-1"></a><span class="co">#plt.savefig(root_dir + &quot;/Codes/Output/make_data_scatter.pdf&quot;)</span></span></code></pre></div>
+<div class="float">
+<img src="01_Regression_Gradient_Descent_files/01_Regression_Gradient_Descent_12_0.png" alt="png" />
+<div class="figcaption">png</div>
+</div>
 <p>Now, we are ready to discuss two methods. Let’s start with the Normal equation method.</p>
 </div>
             </section>
