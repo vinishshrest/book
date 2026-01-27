@@ -72,7 +72,7 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Work in Progress</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="a-lab-experiment.html"><a href="a-lab-experiment.html"><i class="fa fa-check"></i><b>2.1</b> A lab experiment</a></li>
@@ -174,11 +174,17 @@
 <p class="author"><em>Vinish Shrestha</em></p>
 <p class="date"><em>2026-01-27</em></p>
 </div>
-<div id="work-in-progress" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> Work in Progress<a href="index.html#work-in-progress" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="preface" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Preface<a href="index.html#preface" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This is a work in progress.</p>
-<p>Simply put, causal inference is a field that provides inference on whether <em>X</em> causes <em>Y</em> – perhaps a
-one of the fundamental approach to modern day science. Causal inference, like everything else, is ever-evolving. It is a topic that spans across disciplines and has established roots in machine learning literature. For the most part, we are trying to figure out whether X causes Y. Isn’t that essentially what science does – cause and effect?</p>
+<p>Simply put, causal inference is about answering the question: * Does X cause Y*? It’s one of the fundamental approaches in modern-day science. Like everything else, the field is ever-evolving and spans across multiple disciplines.</p>
+<p>For example, say you are interested in evaluating the efficacy of a new vaccine. Or, you are trying to analyze the long-run impacts of school shooting on mental health. Or might be intrigued by how an intervention by U.S. Immigration and Customs Enforcement in Minnesotta affects mental health of Minnesotians. In all these instances, causal inference has a role to play.</p>
+<p>The gold standard of causal inference is an experimental setting where treatment assignment is randomly allocated. However, experimental designs are not always available and are restricted due to practical constraints such as cost, time, and effort. For instance, it
+is highly unlikely that you will be using an experimental design for your thesis. In such cases researchers need to rely on non-experimental identification techniques as an alternative.</p>
+<p>In this write-up, I’ll discuss techniques used to understand causal relationship in non-experimental settings using the potential outcome framework. The general idea is as such: if person “A” is treated, the ideal comparison to person “A” would be person “A” herself, but during the untreated state. However, it is impossible to observe person “A” in both
+treated and untreated states simultaneously. Hence, we need to find suitable comparisons to person “A” to be able to evaluate the effect of the treatment. In summary, the idea is to form counterfactual outcomes which is used in comparison to the treated unit to estimate the effect of a treatment.</p>
+<p>This impossibility of observing both potential outcomes for the same individual is often referred to as the fundamental problem of causal inference. Because we can never directly observe the counterfactual outcome, estimating causal effects necessarily requires assumptions. These assumptions allow us to argue that certain observed units can serve as reasonable stand-ins for the missing counterfactuals. Much of causal inference, therefore, is not about finding perfect comparisons, but about carefully justifying why particular comparisons are credible.</p>
+<p>Causal inference has also benefited massively from modern ML methods, which have opened doors for many possibilities. Where appropriate, I will attempt to combine ML techniques to aid causal inference.</p>
 
 </div>
             </section>
