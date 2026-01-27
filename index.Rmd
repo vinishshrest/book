@@ -19,7 +19,5 @@ link-citations: yes
 
 This is a work in progress. 
 
-Causal inference, like everything else, is ever-evolving. 
-It is a topic that spans across disciplines and has established roots in machine 
-learning literature. For the most part, we are trying to figure out whether *X* causes *Y*.
-Isn't that essentially what science does -- cause and effect?
+Simply put, causal inference is a field that provides inference on whether *X* causes *Y* -- perhaps a 
+one of the fundamental approach to modern day science.   
