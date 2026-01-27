@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>12 Causal Forest | Causal Inference</title>
-  <meta name="description" content="12 Causal Forest | Causal Inference" />
+  <title>5 i. Normal Equation | Causal Inference</title>
+  <meta name="description" content="5 i. Normal Equation | Causal Inference" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="12 Causal Forest | Causal Inference" />
+  <meta property="og:title" content="5 i. Normal Equation | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="12 Causal Forest | Causal Inference" />
+  <meta name="twitter:title" content="5 i. Normal Equation | Causal Inference" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"/>
-<link rel="next" href="introduction-1.html"/>
+<link rel="prev" href="regression-and-gradient-descent.html"/>
+<link rel="next" href="ii.-gradient-descent.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -262,16 +262,52 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="causal-forest" class="section level1 hasAnchor" number="12">
-<h1><span class="header-section-number">12</span> Causal Forest<a href="causal-forest.html#causal-forest" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="i.-normal-equation" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> i. Normal Equation<a href="i.-normal-equation.html#i.-normal-equation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Consider the following regression model specification:</p>
+<p><span class="math display">\[
+Y_i = \alpha + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i
+\]</span></p>
+<p>The job is to estimate model parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>.</p>
+<p>Note that <span class="math inline">\(\epsilon_i\)</span> is the error term and we’d want to minimize some version of this. Let’s write out the
+error as:</p>
+<p><span class="math display">\[
+\epsilon_i = Y_i - \alpha - \beta_1 X_{1i} -\beta_2 X_{2i}
+\]</span></p>
+<p>We know that the error term <span class="math inline">\(\epsilon\)</span> is a <span class="math inline">\(n \times 1\)</span> vector. We can obtain residuals by using estimates of model parameters. Of course, we don’t want to pick any parameters – the estimates should follow some objective.</p>
+<p>One idea is to estimate the model parameters with an objective of minimizing the mean of the error. However, this is 0 by construction. So what we’d want to do instead is minimize the mean squared error.</p>
+<p><span class="math display">\[
+MSE(X, h_{\theta}) = \frac{1}{m} \sum_{i=1}^{m} (\theta^{T} x_i - y_i)^2
+\]</span></p>
+<p>From the equation above, we know that the MSE is just the mean of the sum of the squared errors. We can write the sum of the squared of errors using the matrix version as:</p>
+<p><span class="math display">\[
+SSE(X, \theta) = (y - X\theta)^T(y-X\theta)
+\]</span></p>
+<p>Expanding this and setting the derivatives w.r.t. <span class="math inline">\(\theta\)</span> equal to zero gives:
+<span class="math display">\[
+\begin{aligned}
+SSE(X, \theta) = y^Ty - 2\theta^{T} X^Ty + \theta^{T}X^{T}X\theta \\
+\frac{\partial(SSE)}{\partial{\theta}} = -2X^{T}y + 2X^{T}X\theta = 0
+\end{aligned}
+\]</span></p>
+<p>Now solving for <span class="math inline">\(\theta\)</span> gives the normal equation:
+<span class="math display">\[
+\hat{\theta} = (X^TX)^{-1}X^{T}y
+\]</span></p>
+<p>Let’s code the normal equation and print out the estimates. Before jumping into estimating the
+normal equation, we’ve got to be careful and add the intercept term (all ones) on X as the simulated data from make_regression comes without it. We’ll do this using add_dummy_feature() in sklearn.</p>
+<pre><code># The normal equation
+X = add_dummy_feature(X)
+theta_best = np.linalg.inv((X.T @ X)) @ (X.T @ y)
+print(f&quot;coefficients from normal equation: {theta_best}&quot;)</code></pre>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="regression-and-gradient-descent.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ii.-gradient-descent.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5.4 Estimation of propensity score | Causal Inference</title>
-  <meta name="description" content="5.4 Estimation of propensity score | Causal Inference" />
+  <title>10.4 Estimation of propensity score | Causal Inference</title>
+  <meta name="description" content="10.4 Estimation of propensity score | Causal Inference" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5.4 Estimation of propensity score | Causal Inference" />
+  <meta property="og:title" content="10.4 Estimation of propensity score | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5.4 Estimation of propensity score | Causal Inference" />
+  <meta name="twitter:title" content="10.4 Estimation of propensity score | Causal Inference" />
   
   
   
@@ -160,7 +160,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Work in Progress</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="a-lab-experiment.html"><a href="a-lab-experiment.html"><i class="fa fa-check"></i><b>2.1</b> A lab experiment</a></li>
@@ -181,64 +181,69 @@ div.csl-indent {
 <li class="chapter" data-level="3.8" data-path="standard-errors.html"><a href="standard-errors.html"><i class="fa fa-check"></i><b>3.8</b> Standard Errors</a></li>
 <li class="chapter" data-level="3.9" data-path="an-exercise.html"><a href="an-exercise.html"><i class="fa fa-check"></i><b>3.9</b> An exercise</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="causal-inference.html"><a href="causal-inference.html"><i class="fa fa-check"></i><b>4</b> Causal Inference</a>
+<li class="chapter" data-level="4" data-path="regression-and-gradient-descent.html"><a href="regression-and-gradient-descent.html"><i class="fa fa-check"></i><b>4</b> Regression and Gradient Descent</a></li>
+<li class="chapter" data-level="5" data-path="i.-normal-equation.html"><a href="i.-normal-equation.html"><i class="fa fa-check"></i><b>5</b> i. Normal Equation</a></li>
+<li class="chapter" data-level="6" data-path="ii.-gradient-descent.html"><a href="ii.-gradient-descent.html"><i class="fa fa-check"></i><b>6</b> ii. Gradient Descent</a></li>
+<li class="chapter" data-level="7" data-path="multivariate-model.html"><a href="multivariate-model.html"><i class="fa fa-check"></i><b>7</b> Multivariate model</a></li>
+<li class="chapter" data-level="8" data-path="standard-error.html"><a href="standard-error.html"><i class="fa fa-check"></i><b>8</b> Standard Error</a></li>
+<li class="chapter" data-level="9" data-path="causal-inference.html"><a href="causal-inference.html"><i class="fa fa-check"></i><b>9</b> Causal Inference</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>4.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
-<li class="chapter" data-level="4.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>4.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="4.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>4.3</b> RCT</a></li>
-<li class="chapter" data-level="4.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>4.4</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="4.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>4.5</b> An estimation example</a></li>
-<li class="chapter" data-level="4.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>4.6</b> Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="4.7" data-path="discussion-1.html"><a href="discussion-1.html"><i class="fa fa-check"></i><b>4.7</b> Discussion</a></li>
-<li class="chapter" data-level="4.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>4.8</b> Reference</a></li>
+<li class="chapter" data-level="9.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>9.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
+<li class="chapter" data-level="9.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>9.2</b> Average treatment effect (ATE)</a></li>
+<li class="chapter" data-level="9.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>9.3</b> RCT</a></li>
+<li class="chapter" data-level="9.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>9.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="9.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>9.5</b> An estimation example</a></li>
+<li class="chapter" data-level="9.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>9.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="9.7" data-path="discussion-1.html"><a href="discussion-1.html"><i class="fa fa-check"></i><b>9.7</b> Discussion</a></li>
+<li class="chapter" data-level="9.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>9.8</b> Reference</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>5</b> IPW and AIPW</a>
+<li class="chapter" data-level="10" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>10</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>5.1</b> A simple example</a></li>
-<li class="chapter" data-level="5.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>5.2</b> Aggregated Estimator</a></li>
-<li class="chapter" data-level="5.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>5.3</b> Propensity score</a></li>
-<li class="chapter" data-level="5.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>5.4</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="5.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>5.5</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="5.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>5.6</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="5.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>5.7</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="5.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>5.8</b> Comparing IPW with Aggregated Estimate</a></li>
-<li class="chapter" data-level="5.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>5.9</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="5.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>5.10</b> Assessing Balance</a></li>
-<li class="chapter" data-level="5.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>5.11</b> Cross-fitting</a></li>
+<li class="chapter" data-level="10.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>10.1</b> A simple example</a></li>
+<li class="chapter" data-level="10.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>10.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="10.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>10.3</b> Propensity score</a></li>
+<li class="chapter" data-level="10.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>10.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="10.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>10.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="10.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>10.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="10.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>10.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="10.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>10.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="10.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>10.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="10.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>10.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="10.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>10.11</b> Cross-fitting</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>6</b> Difference in Differences</a>
+<li class="chapter" data-level="11" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>11</b> Difference in Differences</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>6.1</b> A Quick Introduction</a></li>
-<li class="chapter" data-level="6.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>6.2</b> Set up</a></li>
-<li class="chapter" data-level="6.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>6.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
-<li class="chapter" data-level="6.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>6.4</b> Naive estimator</a></li>
-<li class="chapter" data-level="6.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>6.5</b> Canonical Difference in Differences Framework</a></li>
-<li class="chapter" data-level="6.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>6.6</b> DiD in multi-period set up</a></li>
-<li class="chapter" data-level="6.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>6.7</b> Conditional Parallel Trend Assumption</a></li>
-<li class="chapter" data-level="6.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>6.8</b> Some concerns with controls</a></li>
-<li class="chapter" data-level="6.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>6.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
-<li class="chapter" data-level="6.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>6.10</b> Event study model</a></li>
-<li class="chapter" data-level="6.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>6.11</b> Two way fixed effect (TWFE) Revisited</a></li>
-<li class="chapter" data-level="6.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>6.12</b> Various ways of estimation</a></li>
-<li class="chapter" data-level="6.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>6.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
-<li class="chapter" data-level="6.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>6.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
-<li class="chapter" data-level="6.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>6.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
-<li class="chapter" data-level="6.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>6.16</b> Assumptions governing TWFEDD estimate</a></li>
-<li class="chapter" data-level="6.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>6.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+<li class="chapter" data-level="11.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>11.1</b> A Quick Introduction</a></li>
+<li class="chapter" data-level="11.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>11.2</b> Set up</a></li>
+<li class="chapter" data-level="11.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>11.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+<li class="chapter" data-level="11.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>11.4</b> Naive estimator</a></li>
+<li class="chapter" data-level="11.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>11.5</b> Canonical Difference in Differences Framework</a></li>
+<li class="chapter" data-level="11.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>11.6</b> DiD in multi-period set up</a></li>
+<li class="chapter" data-level="11.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>11.7</b> Conditional Parallel Trend Assumption</a></li>
+<li class="chapter" data-level="11.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>11.8</b> Some concerns with controls</a></li>
+<li class="chapter" data-level="11.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>11.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="11.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>11.10</b> Event study model</a></li>
+<li class="chapter" data-level="11.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>11.11</b> Two way fixed effect (TWFE) Revisited</a></li>
+<li class="chapter" data-level="11.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>11.12</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="11.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>11.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
+<li class="chapter" data-level="11.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>11.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="11.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>11.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="11.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>11.16</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="11.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>11.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>7</b> Causal Forest</a>
+<li class="chapter" data-level="12" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>12</b> Causal Forest</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
-<li class="chapter" data-level="7.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>7.2</b> Summary of GRF</a></li>
-<li class="chapter" data-level="7.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>7.3</b> Motivation for Causal Forests</a></li>
-<li class="chapter" data-level="7.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>7.4</b> Causal Forest</a></li>
-<li class="chapter" data-level="7.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>7.5</b> An example of causal forest</a></li>
+<li class="chapter" data-level="12.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>12.2</b> Summary of GRF</a></li>
+<li class="chapter" data-level="12.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>12.3</b> Motivation for Causal Forests</a></li>
+<li class="chapter" data-level="12.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>12.4</b> Causal Forest</a></li>
+<li class="chapter" data-level="12.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>12.5</b> An example of causal forest</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>8</b> Heterogeneous Treatment Effects</a>
+<li class="chapter" data-level="13" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>13</b> Heterogeneous Treatment Effects</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>8.1</b> Some ways to estimate CATE</a></li>
-<li class="chapter" data-level="8.2" data-path="estimation-1.html"><a href="estimation-1.html"><i class="fa fa-check"></i><b>8.2</b> Estimation</a></li>
-<li class="chapter" data-level="8.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>8.3</b> Some Remarks and Questions</a></li>
+<li class="chapter" data-level="13.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>13.1</b> Some ways to estimate CATE</a></li>
+<li class="chapter" data-level="13.2" data-path="estimation-1.html"><a href="estimation-1.html"><i class="fa fa-check"></i><b>13.2</b> Estimation</a></li>
+<li class="chapter" data-level="13.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>13.3</b> Some Remarks and Questions</a></li>
 </ul></li>
 </ul>
 
@@ -257,8 +262,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="estimation-of-propensity-score" class="section level2 hasAnchor" number="5.4">
-<h2><span class="header-section-number">5.4</span> Estimation of propensity score<a href="estimation-of-propensity-score.html#estimation-of-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="estimation-of-propensity-score" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> Estimation of propensity score<a href="estimation-of-propensity-score.html#estimation-of-propensity-score" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li><p>Propensity scores can be estimated using various statistical or machine learning models.</p></li>
 <li><p>We will first estimate propensity score using a logistic regression model, where the treatment assignment <span class="math inline">\(W\)</span> is regressed on the covariates <span class="math inline">\(X\)</span>.</p></li>
@@ -268,116 +273,108 @@ div.csl-indent {
 <p>Using a linear regression framework to predict probabilities when the outcome is binary <span class="math inline">\(\{0, \; 1\}\)</span> falls short since the predicted values can go beyond 0 and 1. Many models contain
 values within the range of 0 and 1, which can be used to model a binary response. The logistic regression uses a logistic function given as:</p>
 <p><span class="math display" id="eq:logit">\[\begin{equation}
-p(X) = \frac{e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}}{1 + e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}} \tag{5.9}  
+p(X) = \frac{e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}}{1 + e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p}} \tag{10.9}  
 \end{equation}\]</span></p>
 <p>It is easy to see that <span class="math inline">\(lim_{a \rightarrow - \inf}[\frac{e^a}{1+e^a}] = 0\)</span> and <span class="math inline">\(lim_{a \rightarrow \inf}[\frac{e^a}{1+e^a}] = 1\)</span>. Equation @ref{eq:logit} can be transformed using the <em>logit transformation</em> given as:</p>
 <p><span class="math display">\[\begin{equation}
 g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \beta_p X_p
 \end{equation}\]</span></p>
 <p>We want to fit a logistic regression in order to predict the probability. For now, we will use simulated data.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="estimation-of-propensity-score.html#cb94-1" tabindex="-1"></a><span class="co"># helper packages</span></span>
-<span id="cb94-2"><a href="estimation-of-propensity-score.html#cb94-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># data wrangling </span></span>
-<span id="cb94-3"><a href="estimation-of-propensity-score.html#cb94-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># plots</span></span>
-<span id="cb94-4"><a href="estimation-of-propensity-score.html#cb94-4" tabindex="-1"></a><span class="fu">library</span>(rsample) <span class="co"># data splitting</span></span></code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;rsample&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:caret&#39;:
-## 
-##     calibration</code></pre>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="estimation-of-propensity-score.html#cb97-1" tabindex="-1"></a><span class="fu">library</span>(tidyr) <span class="co"># for reshaping, pivot_wider</span></span>
-<span id="cb97-2"><a href="estimation-of-propensity-score.html#cb97-2" tabindex="-1"></a></span>
-<span id="cb97-3"><a href="estimation-of-propensity-score.html#cb97-3" tabindex="-1"></a><span class="co"># Modeling package </span></span>
-<span id="cb97-4"><a href="estimation-of-propensity-score.html#cb97-4" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co"># for logistic regression modeling </span></span>
-<span id="cb97-5"><a href="estimation-of-propensity-score.html#cb97-5" tabindex="-1"></a></span>
-<span id="cb97-6"><a href="estimation-of-propensity-score.html#cb97-6" tabindex="-1"></a><span class="co"># Model interpretability </span></span>
-<span id="cb97-7"><a href="estimation-of-propensity-score.html#cb97-7" tabindex="-1"></a><span class="fu">library</span>(vip)</span></code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;vip&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:utils&#39;:
-## 
-##     vi</code></pre>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="estimation-of-propensity-score.html#cb100-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>) <span class="co"># for replicability</span></span>
-<span id="cb100-2"><a href="estimation-of-propensity-score.html#cb100-2" tabindex="-1"></a></span>
-<span id="cb100-3"><a href="estimation-of-propensity-score.html#cb100-3" tabindex="-1"></a><span class="co"># Generate simulated Data </span></span>
-<span id="cb100-4"><a href="estimation-of-propensity-score.html#cb100-4" tabindex="-1"></a></span>
-<span id="cb100-5"><a href="estimation-of-propensity-score.html#cb100-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span> <span class="co"># number of obsevations</span></span>
-<span id="cb100-6"><a href="estimation-of-propensity-score.html#cb100-6" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of covariates</span></span>
-<span id="cb100-7"><a href="estimation-of-propensity-score.html#cb100-7" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p) <span class="co"># data matrix</span></span>
-<span id="cb100-8"><a href="estimation-of-propensity-score.html#cb100-8" tabindex="-1"></a>true_effect  <span class="ot">&lt;-</span> <span class="fl">2.5</span></span>
-<span id="cb100-9"><a href="estimation-of-propensity-score.html#cb100-9" tabindex="-1"></a></span>
-<span id="cb100-10"><a href="estimation-of-propensity-score.html#cb100-10" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb100-11"><a href="estimation-of-propensity-score.html#cb100-11" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)  <span class="co"># oracle propensity score</span></span>
-<span id="cb100-12"><a href="estimation-of-propensity-score.html#cb100-12" tabindex="-1"></a></span>
-<span id="cb100-13"><a href="estimation-of-propensity-score.html#cb100-13" tabindex="-1"></a>Y <span class="ot">&lt;-</span> true_effect <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb100-14"><a href="estimation-of-propensity-score.html#cb100-14" tabindex="-1"></a><span class="co">#plot(X[, 1], X[, 2], col = as.factor(W))</span></span>
-<span id="cb100-15"><a href="estimation-of-propensity-score.html#cb100-15" tabindex="-1"></a></span>
-<span id="cb100-16"><a href="estimation-of-propensity-score.html#cb100-16" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(W, Y, X))</span>
-<span id="cb100-17"><a href="estimation-of-propensity-score.html#cb100-17" tabindex="-1"></a><span class="fu">colnames</span>(dat)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;W&quot;</span>, <span class="st">&quot;Y&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>))) </span>
-<span id="cb100-18"><a href="estimation-of-propensity-score.html#cb100-18" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
-<span id="cb100-19"><a href="estimation-of-propensity-score.html#cb100-19" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">W =</span> <span class="fu">as.factor</span>(W))</span>
-<span id="cb100-20"><a href="estimation-of-propensity-score.html#cb100-20" tabindex="-1"></a></span>
-<span id="cb100-21"><a href="estimation-of-propensity-score.html#cb100-21" tabindex="-1"></a><span class="co"># create 70% training and 30% test data </span></span>
-<span id="cb100-22"><a href="estimation-of-propensity-score.html#cb100-22" tabindex="-1"></a>churn_split  <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dat, <span class="at">prop =</span> <span class="fl">0.7</span>)</span>
-<span id="cb100-23"><a href="estimation-of-propensity-score.html#cb100-23" tabindex="-1"></a>dat_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(churn_split)</span>
-<span id="cb100-24"><a href="estimation-of-propensity-score.html#cb100-24" tabindex="-1"></a>dat_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(churn_split)</span>
-<span id="cb100-25"><a href="estimation-of-propensity-score.html#cb100-25" tabindex="-1"></a></span>
-<span id="cb100-26"><a href="estimation-of-propensity-score.html#cb100-26" tabindex="-1"></a><span class="co"># dimension of training and testing data</span></span>
-<span id="cb100-27"><a href="estimation-of-propensity-score.html#cb100-27" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_train))</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="estimation-of-propensity-score.html#cb106-1" tabindex="-1"></a><span class="co"># helper packages</span></span>
+<span id="cb106-2"><a href="estimation-of-propensity-score.html#cb106-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># data wrangling </span></span>
+<span id="cb106-3"><a href="estimation-of-propensity-score.html#cb106-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># plots</span></span>
+<span id="cb106-4"><a href="estimation-of-propensity-score.html#cb106-4" tabindex="-1"></a><span class="fu">library</span>(rsample) <span class="co"># data splitting</span></span>
+<span id="cb106-5"><a href="estimation-of-propensity-score.html#cb106-5" tabindex="-1"></a><span class="fu">library</span>(tidyr) <span class="co"># for reshaping, pivot_wider</span></span>
+<span id="cb106-6"><a href="estimation-of-propensity-score.html#cb106-6" tabindex="-1"></a></span>
+<span id="cb106-7"><a href="estimation-of-propensity-score.html#cb106-7" tabindex="-1"></a><span class="co"># Modeling package </span></span>
+<span id="cb106-8"><a href="estimation-of-propensity-score.html#cb106-8" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co"># for logistic regression modeling </span></span>
+<span id="cb106-9"><a href="estimation-of-propensity-score.html#cb106-9" tabindex="-1"></a></span>
+<span id="cb106-10"><a href="estimation-of-propensity-score.html#cb106-10" tabindex="-1"></a><span class="co"># Model interpretability </span></span>
+<span id="cb106-11"><a href="estimation-of-propensity-score.html#cb106-11" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
+<span id="cb106-12"><a href="estimation-of-propensity-score.html#cb106-12" tabindex="-1"></a></span>
+<span id="cb106-13"><a href="estimation-of-propensity-score.html#cb106-13" tabindex="-1"></a></span>
+<span id="cb106-14"><a href="estimation-of-propensity-score.html#cb106-14" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>) <span class="co"># for replicability</span></span>
+<span id="cb106-15"><a href="estimation-of-propensity-score.html#cb106-15" tabindex="-1"></a></span>
+<span id="cb106-16"><a href="estimation-of-propensity-score.html#cb106-16" tabindex="-1"></a><span class="co"># Generate simulated Data </span></span>
+<span id="cb106-17"><a href="estimation-of-propensity-score.html#cb106-17" tabindex="-1"></a></span>
+<span id="cb106-18"><a href="estimation-of-propensity-score.html#cb106-18" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span> <span class="co"># number of obsevations</span></span>
+<span id="cb106-19"><a href="estimation-of-propensity-score.html#cb106-19" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># number of covariates</span></span>
+<span id="cb106-20"><a href="estimation-of-propensity-score.html#cb106-20" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p) <span class="co"># data matrix</span></span>
+<span id="cb106-21"><a href="estimation-of-propensity-score.html#cb106-21" tabindex="-1"></a>true_effect  <span class="ot">&lt;-</span> <span class="fl">2.5</span></span>
+<span id="cb106-22"><a href="estimation-of-propensity-score.html#cb106-22" tabindex="-1"></a></span>
+<span id="cb106-23"><a href="estimation-of-propensity-score.html#cb106-23" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb106-24"><a href="estimation-of-propensity-score.html#cb106-24" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.4</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">2</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)  <span class="co"># oracle propensity score</span></span>
+<span id="cb106-25"><a href="estimation-of-propensity-score.html#cb106-25" tabindex="-1"></a></span>
+<span id="cb106-26"><a href="estimation-of-propensity-score.html#cb106-26" tabindex="-1"></a>Y <span class="ot">&lt;-</span> true_effect <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb106-27"><a href="estimation-of-propensity-score.html#cb106-27" tabindex="-1"></a><span class="co">#plot(X[, 1], X[, 2], col = as.factor(W))</span></span>
+<span id="cb106-28"><a href="estimation-of-propensity-score.html#cb106-28" tabindex="-1"></a></span>
+<span id="cb106-29"><a href="estimation-of-propensity-score.html#cb106-29" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(W, Y, X))</span>
+<span id="cb106-30"><a href="estimation-of-propensity-score.html#cb106-30" tabindex="-1"></a><span class="fu">colnames</span>(dat)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;W&quot;</span>, <span class="st">&quot;Y&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;X&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>))) </span>
+<span id="cb106-31"><a href="estimation-of-propensity-score.html#cb106-31" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
+<span id="cb106-32"><a href="estimation-of-propensity-score.html#cb106-32" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">W =</span> <span class="fu">as.factor</span>(W))</span>
+<span id="cb106-33"><a href="estimation-of-propensity-score.html#cb106-33" tabindex="-1"></a></span>
+<span id="cb106-34"><a href="estimation-of-propensity-score.html#cb106-34" tabindex="-1"></a><span class="co"># create 70% training and 30% test data </span></span>
+<span id="cb106-35"><a href="estimation-of-propensity-score.html#cb106-35" tabindex="-1"></a>churn_split  <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dat, <span class="at">prop =</span> <span class="fl">0.7</span>)</span>
+<span id="cb106-36"><a href="estimation-of-propensity-score.html#cb106-36" tabindex="-1"></a>dat_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(churn_split)</span>
+<span id="cb106-37"><a href="estimation-of-propensity-score.html#cb106-37" tabindex="-1"></a>dat_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(churn_split)</span>
+<span id="cb106-38"><a href="estimation-of-propensity-score.html#cb106-38" tabindex="-1"></a></span>
+<span id="cb106-39"><a href="estimation-of-propensity-score.html#cb106-39" tabindex="-1"></a><span class="co"># dimension of training and testing data</span></span>
+<span id="cb106-40"><a href="estimation-of-propensity-score.html#cb106-40" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_train))</span></code></pre></div>
 <pre><code>## [1] 1400   12</code></pre>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="estimation-of-propensity-score.html#cb102-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_test))</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="estimation-of-propensity-score.html#cb108-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dat_test))</span></code></pre></div>
 <pre><code>## [1] 600  12</code></pre>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="estimation-of-propensity-score.html#cb104-1" tabindex="-1"></a><span class="co"># let&#39;s compare two different models</span></span>
-<span id="cb104-2"><a href="estimation-of-propensity-score.html#cb104-2" tabindex="-1"></a></span>
-<span id="cb104-3"><a href="estimation-of-propensity-score.html#cb104-3" tabindex="-1"></a><span class="co"># using X1 as the predictor</span></span>
-<span id="cb104-4"><a href="estimation-of-propensity-score.html#cb104-4" tabindex="-1"></a>cv_model1  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb104-5"><a href="estimation-of-propensity-score.html#cb104-5" tabindex="-1"></a>     W <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
-<span id="cb104-6"><a href="estimation-of-propensity-score.html#cb104-6" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
-<span id="cb104-7"><a href="estimation-of-propensity-score.html#cb104-7" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
-<span id="cb104-8"><a href="estimation-of-propensity-score.html#cb104-8" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
-<span id="cb104-9"><a href="estimation-of-propensity-score.html#cb104-9" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb104-10"><a href="estimation-of-propensity-score.html#cb104-10" tabindex="-1"></a>)</span>
-<span id="cb104-11"><a href="estimation-of-propensity-score.html#cb104-11" tabindex="-1"></a></span>
-<span id="cb104-12"><a href="estimation-of-propensity-score.html#cb104-12" tabindex="-1"></a><span class="co"># misses out on X1</span></span>
-<span id="cb104-13"><a href="estimation-of-propensity-score.html#cb104-13" tabindex="-1"></a>cv_model2  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb104-14"><a href="estimation-of-propensity-score.html#cb104-14" tabindex="-1"></a>     W <span class="sc">~</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
-<span id="cb104-15"><a href="estimation-of-propensity-score.html#cb104-15" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
-<span id="cb104-16"><a href="estimation-of-propensity-score.html#cb104-16" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
-<span id="cb104-17"><a href="estimation-of-propensity-score.html#cb104-17" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
-<span id="cb104-18"><a href="estimation-of-propensity-score.html#cb104-18" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb104-19"><a href="estimation-of-propensity-score.html#cb104-19" tabindex="-1"></a>)</span>
-<span id="cb104-20"><a href="estimation-of-propensity-score.html#cb104-20" tabindex="-1"></a></span>
-<span id="cb104-21"><a href="estimation-of-propensity-score.html#cb104-21" tabindex="-1"></a></span>
-<span id="cb104-22"><a href="estimation-of-propensity-score.html#cb104-22" tabindex="-1"></a><span class="co"># print the sample performance measures </span></span>
-<span id="cb104-23"><a href="estimation-of-propensity-score.html#cb104-23" tabindex="-1"></a></span>
-<span id="cb104-24"><a href="estimation-of-propensity-score.html#cb104-24" tabindex="-1"></a>sum_performance  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(</span>
-<span id="cb104-25"><a href="estimation-of-propensity-score.html#cb104-25" tabindex="-1"></a>    <span class="fu">resamples</span>(</span>
-<span id="cb104-26"><a href="estimation-of-propensity-score.html#cb104-26" tabindex="-1"></a>        <span class="fu">list</span>(</span>
-<span id="cb104-27"><a href="estimation-of-propensity-score.html#cb104-27" tabindex="-1"></a>            model1  <span class="ot">&lt;-</span> cv_model1, </span>
-<span id="cb104-28"><a href="estimation-of-propensity-score.html#cb104-28" tabindex="-1"></a>            model2  <span class="ot">&lt;-</span> cv_model2</span>
-<span id="cb104-29"><a href="estimation-of-propensity-score.html#cb104-29" tabindex="-1"></a>        )</span>
-<span id="cb104-30"><a href="estimation-of-propensity-score.html#cb104-30" tabindex="-1"></a>    )</span>
-<span id="cb104-31"><a href="estimation-of-propensity-score.html#cb104-31" tabindex="-1"></a>)</span>
-<span id="cb104-32"><a href="estimation-of-propensity-score.html#cb104-32" tabindex="-1"></a></span>
-<span id="cb104-33"><a href="estimation-of-propensity-score.html#cb104-33" tabindex="-1"></a>sum_performance<span class="sc">$</span>statistics<span class="sc">$</span>Accuracy</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="estimation-of-propensity-score.html#cb110-1" tabindex="-1"></a><span class="co"># let&#39;s compare two different models</span></span>
+<span id="cb110-2"><a href="estimation-of-propensity-score.html#cb110-2" tabindex="-1"></a></span>
+<span id="cb110-3"><a href="estimation-of-propensity-score.html#cb110-3" tabindex="-1"></a><span class="co"># using X1 as the predictor</span></span>
+<span id="cb110-4"><a href="estimation-of-propensity-score.html#cb110-4" tabindex="-1"></a>cv_model1  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb110-5"><a href="estimation-of-propensity-score.html#cb110-5" tabindex="-1"></a>     W <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
+<span id="cb110-6"><a href="estimation-of-propensity-score.html#cb110-6" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
+<span id="cb110-7"><a href="estimation-of-propensity-score.html#cb110-7" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
+<span id="cb110-8"><a href="estimation-of-propensity-score.html#cb110-8" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
+<span id="cb110-9"><a href="estimation-of-propensity-score.html#cb110-9" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb110-10"><a href="estimation-of-propensity-score.html#cb110-10" tabindex="-1"></a>)</span>
+<span id="cb110-11"><a href="estimation-of-propensity-score.html#cb110-11" tabindex="-1"></a></span>
+<span id="cb110-12"><a href="estimation-of-propensity-score.html#cb110-12" tabindex="-1"></a><span class="co"># misses out on X1</span></span>
+<span id="cb110-13"><a href="estimation-of-propensity-score.html#cb110-13" tabindex="-1"></a>cv_model2  <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb110-14"><a href="estimation-of-propensity-score.html#cb110-14" tabindex="-1"></a>     W <span class="sc">~</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, </span>
+<span id="cb110-15"><a href="estimation-of-propensity-score.html#cb110-15" tabindex="-1"></a>    <span class="at">data =</span> dat_train, </span>
+<span id="cb110-16"><a href="estimation-of-propensity-score.html#cb110-16" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">&quot;glm&quot;</span>, </span>
+<span id="cb110-17"><a href="estimation-of-propensity-score.html#cb110-17" tabindex="-1"></a>    <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, </span>
+<span id="cb110-18"><a href="estimation-of-propensity-score.html#cb110-18" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">&quot;cv&quot;</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb110-19"><a href="estimation-of-propensity-score.html#cb110-19" tabindex="-1"></a>)</span>
+<span id="cb110-20"><a href="estimation-of-propensity-score.html#cb110-20" tabindex="-1"></a></span>
+<span id="cb110-21"><a href="estimation-of-propensity-score.html#cb110-21" tabindex="-1"></a></span>
+<span id="cb110-22"><a href="estimation-of-propensity-score.html#cb110-22" tabindex="-1"></a><span class="co"># print the sample performance measures </span></span>
+<span id="cb110-23"><a href="estimation-of-propensity-score.html#cb110-23" tabindex="-1"></a></span>
+<span id="cb110-24"><a href="estimation-of-propensity-score.html#cb110-24" tabindex="-1"></a>sum_performance  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(</span>
+<span id="cb110-25"><a href="estimation-of-propensity-score.html#cb110-25" tabindex="-1"></a>    <span class="fu">resamples</span>(</span>
+<span id="cb110-26"><a href="estimation-of-propensity-score.html#cb110-26" tabindex="-1"></a>        <span class="fu">list</span>(</span>
+<span id="cb110-27"><a href="estimation-of-propensity-score.html#cb110-27" tabindex="-1"></a>            model1  <span class="ot">&lt;-</span> cv_model1, </span>
+<span id="cb110-28"><a href="estimation-of-propensity-score.html#cb110-28" tabindex="-1"></a>            model2  <span class="ot">&lt;-</span> cv_model2</span>
+<span id="cb110-29"><a href="estimation-of-propensity-score.html#cb110-29" tabindex="-1"></a>        )</span>
+<span id="cb110-30"><a href="estimation-of-propensity-score.html#cb110-30" tabindex="-1"></a>    )</span>
+<span id="cb110-31"><a href="estimation-of-propensity-score.html#cb110-31" tabindex="-1"></a>)</span>
+<span id="cb110-32"><a href="estimation-of-propensity-score.html#cb110-32" tabindex="-1"></a></span>
+<span id="cb110-33"><a href="estimation-of-propensity-score.html#cb110-33" tabindex="-1"></a>sum_performance<span class="sc">$</span>statistics<span class="sc">$</span>Accuracy</span></code></pre></div>
 <pre><code>##             Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
 ## Model1 0.6043165 0.6446429 0.6678571 0.6706292 0.6964286 0.7285714    0
 ## Model2 0.5642857 0.5785714 0.5892392 0.5935621 0.6160714 0.6285714    0</code></pre>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="estimation-of-propensity-score.html#cb106-1" tabindex="-1"></a><span class="co"># use the confusion matrix </span></span>
-<span id="cb106-2"><a href="estimation-of-propensity-score.html#cb106-2" tabindex="-1"></a></span>
-<span id="cb106-3"><a href="estimation-of-propensity-score.html#cb106-3" tabindex="-1"></a><span class="co"># predict class </span></span>
-<span id="cb106-4"><a href="estimation-of-propensity-score.html#cb106-4" tabindex="-1"></a></span>
-<span id="cb106-5"><a href="estimation-of-propensity-score.html#cb106-5" tabindex="-1"></a>threshold  <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb106-6"><a href="estimation-of-propensity-score.html#cb106-6" tabindex="-1"></a>pred_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
-<span id="cb106-7"><a href="estimation-of-propensity-score.html#cb106-7" tabindex="-1"></a>pred_class_manual  <span class="ot">&lt;-</span>  <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1400</span>)</span>
-<span id="cb106-8"><a href="estimation-of-propensity-score.html#cb106-8" tabindex="-1"></a>pred_class_manual[pred_prob[, <span class="dv">2</span>] <span class="sc">&gt;=</span> <span class="fl">0.5</span>]  <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb106-9"><a href="estimation-of-propensity-score.html#cb106-9" tabindex="-1"></a></span>
-<span id="cb106-10"><a href="estimation-of-propensity-score.html#cb106-10" tabindex="-1"></a>pred_class  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train)</span>
-<span id="cb106-11"><a href="estimation-of-propensity-score.html#cb106-11" tabindex="-1"></a></span>
-<span id="cb106-12"><a href="estimation-of-propensity-score.html#cb106-12" tabindex="-1"></a><span class="co"># print the confusion matrix </span></span>
-<span id="cb106-13"><a href="estimation-of-propensity-score.html#cb106-13" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
-<span id="cb106-14"><a href="estimation-of-propensity-score.html#cb106-14" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># predictions</span></span>
-<span id="cb106-15"><a href="estimation-of-propensity-score.html#cb106-15" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_train<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># reference or the true value</span></span>
-<span id="cb106-16"><a href="estimation-of-propensity-score.html#cb106-16" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="estimation-of-propensity-score.html#cb112-1" tabindex="-1"></a><span class="co"># use the confusion matrix </span></span>
+<span id="cb112-2"><a href="estimation-of-propensity-score.html#cb112-2" tabindex="-1"></a></span>
+<span id="cb112-3"><a href="estimation-of-propensity-score.html#cb112-3" tabindex="-1"></a><span class="co"># predict class </span></span>
+<span id="cb112-4"><a href="estimation-of-propensity-score.html#cb112-4" tabindex="-1"></a></span>
+<span id="cb112-5"><a href="estimation-of-propensity-score.html#cb112-5" tabindex="-1"></a>threshold  <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb112-6"><a href="estimation-of-propensity-score.html#cb112-6" tabindex="-1"></a>pred_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb112-7"><a href="estimation-of-propensity-score.html#cb112-7" tabindex="-1"></a>pred_class_manual  <span class="ot">&lt;-</span>  <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1400</span>)</span>
+<span id="cb112-8"><a href="estimation-of-propensity-score.html#cb112-8" tabindex="-1"></a>pred_class_manual[pred_prob[, <span class="dv">2</span>] <span class="sc">&gt;=</span> <span class="fl">0.5</span>]  <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb112-9"><a href="estimation-of-propensity-score.html#cb112-9" tabindex="-1"></a></span>
+<span id="cb112-10"><a href="estimation-of-propensity-score.html#cb112-10" tabindex="-1"></a>pred_class  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train)</span>
+<span id="cb112-11"><a href="estimation-of-propensity-score.html#cb112-11" tabindex="-1"></a></span>
+<span id="cb112-12"><a href="estimation-of-propensity-score.html#cb112-12" tabindex="-1"></a><span class="co"># print the confusion matrix </span></span>
+<span id="cb112-13"><a href="estimation-of-propensity-score.html#cb112-13" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb112-14"><a href="estimation-of-propensity-score.html#cb112-14" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># predictions</span></span>
+<span id="cb112-15"><a href="estimation-of-propensity-score.html#cb112-15" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_train<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># reference or the true value</span></span>
+<span id="cb112-16"><a href="estimation-of-propensity-score.html#cb112-16" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -405,8 +402,8 @@ g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \bet
 ##                                          
 ##        &#39;Positive&#39; Class : 1              
 ## </code></pre>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="estimation-of-propensity-score.html#cb108-1" tabindex="-1"></a><span class="co"># if predict all yes still get an accuracy of 0.5936</span></span>
-<span id="cb108-2"><a href="estimation-of-propensity-score.html#cb108-2" tabindex="-1"></a><span class="fu">table</span>(dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> <span class="fu">prop.table</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="estimation-of-propensity-score.html#cb114-1" tabindex="-1"></a><span class="co"># if predict all yes still get an accuracy of 0.5936</span></span>
+<span id="cb114-2"><a href="estimation-of-propensity-score.html#cb114-2" tabindex="-1"></a><span class="fu">table</span>(dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> <span class="fu">prop.table</span>()</span></code></pre></div>
 <pre><code>## 
 ##         0         1 
 ## 0.5935714 0.4064286</code></pre>
@@ -418,43 +415,43 @@ g(X) = ln[\frac{p(X)}{1-p(X)}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + .... \bet
 </ul>
 <p><strong>How are the observations classified?</strong>
 A threshold value is used to transform the raw prediction of probabilities into classification such that <span class="math inline">\(P(Y_{i} &gt; p_{threshold})=1.\)</span> The implicit <span class="math inline">\(p_{threshold}\)</span> used is 0.5. Varying the threshold from 0 to 1, one can calculate the relationship between the False Positive Rate (the prediction is positive when in actual the outcome is negative) and True Positive Rate at each threshold value. If the threshold value <span class="math inline">\((p_{threshold})\)</span> is 1, then all observations are classified as 0, which means that the False Positive Rate is 0 but so is the True Positive Rate. Similarly, if the threshold is 0, then both True and False positive rates are 1. This gives the Receiver Operating Characteristic (ROC).</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="estimation-of-propensity-score.html#cb110-1" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
-<span id="cb110-2"><a href="estimation-of-propensity-score.html#cb110-2" tabindex="-1"></a></span>
-<span id="cb110-3"><a href="estimation-of-propensity-score.html#cb110-3" tabindex="-1"></a><span class="co"># compute probabilities </span></span>
-<span id="cb110-4"><a href="estimation-of-propensity-score.html#cb110-4" tabindex="-1"></a>m1_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
-<span id="cb110-5"><a href="estimation-of-propensity-score.html#cb110-5" tabindex="-1"></a>m2_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model2, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
-<span id="cb110-6"><a href="estimation-of-propensity-score.html#cb110-6" tabindex="-1"></a></span>
-<span id="cb110-7"><a href="estimation-of-propensity-score.html#cb110-7" tabindex="-1"></a><span class="co"># AUC metrics </span></span>
-<span id="cb110-8"><a href="estimation-of-propensity-score.html#cb110-8" tabindex="-1"></a>perf1  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m1_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
-<span id="cb110-9"><a href="estimation-of-propensity-score.html#cb110-9" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
-<span id="cb110-10"><a href="estimation-of-propensity-score.html#cb110-10" tabindex="-1"></a></span>
-<span id="cb110-11"><a href="estimation-of-propensity-score.html#cb110-11" tabindex="-1"></a>perf2  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m2_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
-<span id="cb110-12"><a href="estimation-of-propensity-score.html#cb110-12" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
-<span id="cb110-13"><a href="estimation-of-propensity-score.html#cb110-13" tabindex="-1"></a></span>
-<span id="cb110-14"><a href="estimation-of-propensity-score.html#cb110-14" tabindex="-1"></a><span class="co"># plot ROC curves</span></span>
-<span id="cb110-15"><a href="estimation-of-propensity-score.html#cb110-15" tabindex="-1"></a><span class="fu">plot</span>(perf1, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb110-16"><a href="estimation-of-propensity-score.html#cb110-16" tabindex="-1"></a><span class="fu">plot</span>(perf2, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>) </span>
-<span id="cb110-17"><a href="estimation-of-propensity-score.html#cb110-17" tabindex="-1"></a><span class="fu">legend</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;cv_model1&quot;</span>, <span class="st">&quot;cv_model2&quot;</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
-<span id="cb110-18"><a href="estimation-of-propensity-score.html#cb110-18" tabindex="-1"></a>            <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">cex =</span> <span class="fl">0.6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="estimation-of-propensity-score.html#cb116-1" tabindex="-1"></a><span class="fu">library</span>(ROCR)</span>
+<span id="cb116-2"><a href="estimation-of-propensity-score.html#cb116-2" tabindex="-1"></a></span>
+<span id="cb116-3"><a href="estimation-of-propensity-score.html#cb116-3" tabindex="-1"></a><span class="co"># compute probabilities </span></span>
+<span id="cb116-4"><a href="estimation-of-propensity-score.html#cb116-4" tabindex="-1"></a>m1_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
+<span id="cb116-5"><a href="estimation-of-propensity-score.html#cb116-5" tabindex="-1"></a>m2_prob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model2, dat_train, <span class="at">type =</span> <span class="st">&quot;prob&quot;</span>)[, <span class="dv">2</span>]</span>
+<span id="cb116-6"><a href="estimation-of-propensity-score.html#cb116-6" tabindex="-1"></a></span>
+<span id="cb116-7"><a href="estimation-of-propensity-score.html#cb116-7" tabindex="-1"></a><span class="co"># AUC metrics </span></span>
+<span id="cb116-8"><a href="estimation-of-propensity-score.html#cb116-8" tabindex="-1"></a>perf1  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m1_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
+<span id="cb116-9"><a href="estimation-of-propensity-score.html#cb116-9" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb116-10"><a href="estimation-of-propensity-score.html#cb116-10" tabindex="-1"></a></span>
+<span id="cb116-11"><a href="estimation-of-propensity-score.html#cb116-11" tabindex="-1"></a>perf2  <span class="ot">&lt;-</span> <span class="fu">prediction</span>(m2_prob, dat_train<span class="sc">$</span>W)  <span class="sc">%&gt;%</span> </span>
+<span id="cb116-12"><a href="estimation-of-propensity-score.html#cb116-12" tabindex="-1"></a>            <span class="fu">performance</span>(<span class="at">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="at">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)</span>
+<span id="cb116-13"><a href="estimation-of-propensity-score.html#cb116-13" tabindex="-1"></a></span>
+<span id="cb116-14"><a href="estimation-of-propensity-score.html#cb116-14" tabindex="-1"></a><span class="co"># plot ROC curves</span></span>
+<span id="cb116-15"><a href="estimation-of-propensity-score.html#cb116-15" tabindex="-1"></a><span class="fu">plot</span>(perf1, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb116-16"><a href="estimation-of-propensity-score.html#cb116-16" tabindex="-1"></a><span class="fu">plot</span>(perf2, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>) </span>
+<span id="cb116-17"><a href="estimation-of-propensity-score.html#cb116-17" tabindex="-1"></a><span class="fu">legend</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;cv_model1&quot;</span>, <span class="st">&quot;cv_model2&quot;</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),</span>
+<span id="cb116-18"><a href="estimation-of-propensity-score.html#cb116-18" tabindex="-1"></a>            <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">cex =</span> <span class="fl">0.6</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-31"></span>
 <img src="book_files/figure-html/unnamed-chunk-31-1.png" alt="ROC" width="672" />
 <p class="caption">
-Figure 5.1: ROC
+Figure 10.1: ROC
 </p>
 </div>
 <p>The figure above plots the ROC for two models that we tested using cross-validation. The cv_model2 produces a diagonal line, which means that this model is as good as a random guess. Next, cv_model1 performs a whole lot better since a large gains in True positive rate can be achieved with a relatively small increase in False positive rate at the start. The ROC curve pertaining to cv_model1 helps pick a threshold to balance the sensitivity (True Positive Rate) and specificity (1 - False Positive Rate).</p>
 <p>The histogram of the estimated propensity scores using the logistic regression is as:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="estimation-of-propensity-score.html#cb111-1" tabindex="-1"></a><span class="fu">hist</span>(pred_prob[, <span class="dv">2</span>], <span class="at">main =</span> <span class="st">&quot;Histogram of P(W=1|X)</span></span>
-<span id="cb111-2"><a href="estimation-of-propensity-score.html#cb111-2" tabindex="-1"></a><span class="st">      </span><span class="sc">\n</span><span class="st"> using Logistic Regression&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;probabilities&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="estimation-of-propensity-score.html#cb117-1" tabindex="-1"></a><span class="fu">hist</span>(pred_prob[, <span class="dv">2</span>], <span class="at">main =</span> <span class="st">&quot;Histogram of P(W=1|X)</span></span>
+<span id="cb117-2"><a href="estimation-of-propensity-score.html#cb117-2" tabindex="-1"></a><span class="st">      </span><span class="sc">\n</span><span class="st"> using Logistic Regression&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;probabilities&quot;</span>)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <p>Now, let’s take a look at the confusion matrix using the test data.</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="estimation-of-propensity-score.html#cb112-1" tabindex="-1"></a>pred_class_test  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_test)</span>
-<span id="cb112-2"><a href="estimation-of-propensity-score.html#cb112-2" tabindex="-1"></a></span>
-<span id="cb112-3"><a href="estimation-of-propensity-score.html#cb112-3" tabindex="-1"></a><span class="co"># print the confusion matrix this time for the test sample </span></span>
-<span id="cb112-4"><a href="estimation-of-propensity-score.html#cb112-4" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
-<span id="cb112-5"><a href="estimation-of-propensity-score.html#cb112-5" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class_test, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># classification from the prediction</span></span>
-<span id="cb112-6"><a href="estimation-of-propensity-score.html#cb112-6" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_test<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># ground truth </span></span>
-<span id="cb112-7"><a href="estimation-of-propensity-score.html#cb112-7" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="estimation-of-propensity-score.html#cb118-1" tabindex="-1"></a>pred_class_test  <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model1, dat_test)</span>
+<span id="cb118-2"><a href="estimation-of-propensity-score.html#cb118-2" tabindex="-1"></a></span>
+<span id="cb118-3"><a href="estimation-of-propensity-score.html#cb118-3" tabindex="-1"></a><span class="co"># print the confusion matrix this time for the test sample </span></span>
+<span id="cb118-4"><a href="estimation-of-propensity-score.html#cb118-4" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb118-5"><a href="estimation-of-propensity-score.html#cb118-5" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">relevel</span>(pred_class_test, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>), <span class="co"># classification from the prediction</span></span>
+<span id="cb118-6"><a href="estimation-of-propensity-score.html#cb118-6" tabindex="-1"></a>    <span class="at">reference =</span> <span class="fu">relevel</span>(dat_test<span class="sc">$</span>W, <span class="at">ref =</span> <span class="st">&quot;1&quot;</span>) <span class="co"># ground truth </span></span>
+<span id="cb118-7"><a href="estimation-of-propensity-score.html#cb118-7" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference

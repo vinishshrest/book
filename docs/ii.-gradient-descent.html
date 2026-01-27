@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>12 Causal Forest | Causal Inference</title>
-  <meta name="description" content="12 Causal Forest | Causal Inference" />
+  <title>6 ii. Gradient Descent | Causal Inference</title>
+  <meta name="description" content="6 ii. Gradient Descent | Causal Inference" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="12 Causal Forest | Causal Inference" />
+  <meta property="og:title" content="6 ii. Gradient Descent | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="12 Causal Forest | Causal Inference" />
+  <meta name="twitter:title" content="6 ii. Gradient Descent | Causal Inference" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"/>
-<link rel="next" href="introduction-1.html"/>
+<link rel="prev" href="i.-normal-equation.html"/>
+<link rel="next" href="multivariate-model.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -262,16 +262,88 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="causal-forest" class="section level1 hasAnchor" number="12">
-<h1><span class="header-section-number">12</span> Causal Forest<a href="causal-forest.html#causal-forest" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="ii.-gradient-descent" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> ii. Gradient Descent<a href="ii.-gradient-descent.html#ii.-gradient-descent" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Imagine that you are standing at the top of a mountain and want to descend the mountain as quickly as possible. One simple way is to consider a few directions – north, south, east, and west – and evaluate the steepness (gradient). Then you’d want to take a small step towards the steepest direction, pause, and re-evaluate the steepness. Doing this repeatedly gets you to the bottom of the mountain as fast as possible.</p>
+<p>The idea of gradient descent is similar in context to the aforementioned analogy. We’ve already been exposed to the idea of MSE and the objective of minimizing MSE. Instead of using the closed form normal equation to solve for the minimum of MSE, gradient descent uses <em>gradient</em> of MSE to adjust the estimates and move closer to the minimum.</p>
+<p>The gradient is a vector of partial derivatives of MSE that points to the direction of steepest increase increase in MSE. Hence, to minimize the loss, we’d want to move in opposite direction of the gradient. By repeatedly updating our parameter in this way, we move closer and closer to the minimum of the loss function. To simply the concept, we’ll start with the univariate case without the intercept.</p>
+<p><span class="math display">\[
+\begin{aligned}
+Y_i = \beta X_i + \epsilon_i
+\end{aligned}
+\]</span></p>
+<p>The MSE and the derivative is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+MSE(\beta) = \frac{1}{m} (Y - \beta X)^{T}(Y - \beta X)  \\
+\frac{\partial{MSE}}{\partial{\beta}} = -\frac{2}{m} X^{T}(Y - \beta X)
+\end{aligned}
+\]</span></p>
+<p>Here, <span class="math inline">\(\frac{2}{m}X^{T}(Y - \beta X)\)</span> is the gradient of the univariate specification, which informs the direction of the steepest increase in MSE. To reduce MSE, we therefore move in the opposite direction of the gradient.</p>
+<p>Now that we have the gradient, the gradient descent algorithm can be set up as follows:
+1. Start with an initial guesses of the parameter <span class="math inline">\((\beta_o)\)</span>.
+2. Update estimates of parameters by moving to the opposite direction of the gradient.
+<span class="math display">\[     
+      \beta_{new} = \beta_o - \eta \times gradient_o.
+      \]</span>
+where, <span class="math inline">\(\eta\)</span> is the <em>learning rate</em>.
+3. Re-evaluate the gradient using <span class="math inline">\(\beta_{new}\)</span>.
+4. Repeat steps 2 and 3 for a given number of times or until convergence is reached.</p>
+<p>Let’s simulate data for univariate model specification to visually see what this looks like.</p>
+<pre><code>dat_uni = make_regression(
+                n_samples=100,
+                n_features=1,
+                n_informative=1,
+                n_targets=1,
+                bias=0,
+                noise=0,
+                random_state=42, 
+                coef=True
+)
+
+X_uni, y_uni, coef = dat_uni
+print(f&quot;The first five rows of X: {X_uni[0:5,:]} \n \n&quot;)
+print(f&quot;The first five y values: {y_uni[0:5]} \n \n&quot;)
+print(f&quot;The coefficient of univariate model is: {coef} \n \n&quot;)
+
+# set up gradient descent 
+beta = -5 # initialize beta
+eta = 0.1 # learning rate
+m = X_uni.shape[0] # number of observations
+iter_val = 100 # number of iteration steps
+y_uni = y_uni.reshape((m,1)) # reshape into m*1 vector
+beta_store = np.ones(m)
+loss_store = np.ones(m)
+
+# loop 
+for i in range(iter_val):
+    gradient = -2/m * X_uni.T @ (y_uni - beta*X_uni)
+    loss = 2/m * (y_uni - beta*X_uni).T @ (y_uni - beta*X_uni)
+    beta = beta - eta*gradient
+    beta_store[i] = beta.item() # use .item to extract scalar
+    loss_store[i] = loss.item() # use .item to extract scalar
+
+print(f&quot;gradient descent at work: {beta_store} \n \n&quot;)
+
+# figure 
+plt.figure(figsize=(8,5))
+plt.scatter(beta_store, loss_store)
+plt.xlabel(&quot;beta value&quot;)
+plt.ylabel(&quot;loss&quot;)
+plt.title(&quot;Gradient Descent at Work&quot;)
+plt.show()</code></pre>
+<p>Here, we see that the algorithm converges at the estimated <span class="math inline">\(\beta\)</span> little over 40. Let’s print out the best beta from gradient descent and the true parameter for comparison.</p>
+<pre><code>print(f&quot;True parameter of the univariate model: {coef} \n \n &quot;)
+print(f&quot;Best estimate from gradient descent: {beta} \n \n&quot;) </code></pre>
+<p>See that the estimate obtained from gradient descent is close to the true parameter.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="i.-normal-equation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multivariate-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>

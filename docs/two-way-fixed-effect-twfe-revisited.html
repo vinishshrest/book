@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6.11 Two way fixed effect (TWFE) Revisited | Causal Inference</title>
-  <meta name="description" content="6.11 Two way fixed effect (TWFE) Revisited | Causal Inference" />
+  <title>11.11 Two way fixed effect (TWFE) Revisited | Causal Inference</title>
+  <meta name="description" content="11.11 Two way fixed effect (TWFE) Revisited | Causal Inference" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6.11 Two way fixed effect (TWFE) Revisited | Causal Inference" />
+  <meta property="og:title" content="11.11 Two way fixed effect (TWFE) Revisited | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6.11 Two way fixed effect (TWFE) Revisited | Causal Inference" />
+  <meta name="twitter:title" content="11.11 Two way fixed effect (TWFE) Revisited | Causal Inference" />
   
   
   
@@ -160,7 +160,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Work in Progress</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="a-lab-experiment.html"><a href="a-lab-experiment.html"><i class="fa fa-check"></i><b>2.1</b> A lab experiment</a></li>
@@ -181,64 +181,69 @@ div.csl-indent {
 <li class="chapter" data-level="3.8" data-path="standard-errors.html"><a href="standard-errors.html"><i class="fa fa-check"></i><b>3.8</b> Standard Errors</a></li>
 <li class="chapter" data-level="3.9" data-path="an-exercise.html"><a href="an-exercise.html"><i class="fa fa-check"></i><b>3.9</b> An exercise</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="causal-inference.html"><a href="causal-inference.html"><i class="fa fa-check"></i><b>4</b> Causal Inference</a>
+<li class="chapter" data-level="4" data-path="regression-and-gradient-descent.html"><a href="regression-and-gradient-descent.html"><i class="fa fa-check"></i><b>4</b> Regression and Gradient Descent</a></li>
+<li class="chapter" data-level="5" data-path="i.-normal-equation.html"><a href="i.-normal-equation.html"><i class="fa fa-check"></i><b>5</b> i. Normal Equation</a></li>
+<li class="chapter" data-level="6" data-path="ii.-gradient-descent.html"><a href="ii.-gradient-descent.html"><i class="fa fa-check"></i><b>6</b> ii. Gradient Descent</a></li>
+<li class="chapter" data-level="7" data-path="multivariate-model.html"><a href="multivariate-model.html"><i class="fa fa-check"></i><b>7</b> Multivariate model</a></li>
+<li class="chapter" data-level="8" data-path="standard-error.html"><a href="standard-error.html"><i class="fa fa-check"></i><b>8</b> Standard Error</a></li>
+<li class="chapter" data-level="9" data-path="causal-inference.html"><a href="causal-inference.html"><i class="fa fa-check"></i><b>9</b> Causal Inference</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>4.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
-<li class="chapter" data-level="4.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>4.2</b> Average treatment effect (ATE)</a></li>
-<li class="chapter" data-level="4.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>4.3</b> RCT</a></li>
-<li class="chapter" data-level="4.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>4.4</b> Average treatment effect on the treated (ATT)</a></li>
-<li class="chapter" data-level="4.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>4.5</b> An estimation example</a></li>
-<li class="chapter" data-level="4.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>4.6</b> Unconfoundedness assumption</a></li>
-<li class="chapter" data-level="4.7" data-path="discussion-1.html"><a href="discussion-1.html"><i class="fa fa-check"></i><b>4.7</b> Discussion</a></li>
-<li class="chapter" data-level="4.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>4.8</b> Reference</a></li>
+<li class="chapter" data-level="9.1" data-path="potential-outcome-framework-neyman-rubin-causal-model.html"><a href="potential-outcome-framework-neyman-rubin-causal-model.html"><i class="fa fa-check"></i><b>9.1</b> Potential Outcome Framework: Neyman-Rubin Causal Model</a></li>
+<li class="chapter" data-level="9.2" data-path="average-treatment-effect-ate.html"><a href="average-treatment-effect-ate.html"><i class="fa fa-check"></i><b>9.2</b> Average treatment effect (ATE)</a></li>
+<li class="chapter" data-level="9.3" data-path="rct.html"><a href="rct.html"><i class="fa fa-check"></i><b>9.3</b> RCT</a></li>
+<li class="chapter" data-level="9.4" data-path="average-treatment-effect-on-the-treated-att.html"><a href="average-treatment-effect-on-the-treated-att.html"><i class="fa fa-check"></i><b>9.4</b> Average treatment effect on the treated (ATT)</a></li>
+<li class="chapter" data-level="9.5" data-path="an-estimation-example.html"><a href="an-estimation-example.html"><i class="fa fa-check"></i><b>9.5</b> An estimation example</a></li>
+<li class="chapter" data-level="9.6" data-path="unconfoundedness-assumption.html"><a href="unconfoundedness-assumption.html"><i class="fa fa-check"></i><b>9.6</b> Unconfoundedness assumption</a></li>
+<li class="chapter" data-level="9.7" data-path="discussion-1.html"><a href="discussion-1.html"><i class="fa fa-check"></i><b>9.7</b> Discussion</a></li>
+<li class="chapter" data-level="9.8" data-path="reference.html"><a href="reference.html"><i class="fa fa-check"></i><b>9.8</b> Reference</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>5</b> IPW and AIPW</a>
+<li class="chapter" data-level="10" data-path="ipw-and-aipw.html"><a href="ipw-and-aipw.html"><i class="fa fa-check"></i><b>10</b> IPW and AIPW</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>5.1</b> A simple example</a></li>
-<li class="chapter" data-level="5.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>5.2</b> Aggregated Estimator</a></li>
-<li class="chapter" data-level="5.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>5.3</b> Propensity score</a></li>
-<li class="chapter" data-level="5.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>5.4</b> Estimation of propensity score</a></li>
-<li class="chapter" data-level="5.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>5.5</b> Using cross-fitting to predict propensity score</a></li>
-<li class="chapter" data-level="5.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>5.6</b> Propensity score stratification</a></li>
-<li class="chapter" data-level="5.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>5.7</b> Inverse Probability Weighting (IPW)</a></li>
-<li class="chapter" data-level="5.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>5.8</b> Comparing IPW with Aggregated Estimate</a></li>
-<li class="chapter" data-level="5.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>5.9</b> AIPW and Estimation</a></li>
-<li class="chapter" data-level="5.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>5.10</b> Assessing Balance</a></li>
-<li class="chapter" data-level="5.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>5.11</b> Cross-fitting</a></li>
+<li class="chapter" data-level="10.1" data-path="a-simple-example.html"><a href="a-simple-example.html"><i class="fa fa-check"></i><b>10.1</b> A simple example</a></li>
+<li class="chapter" data-level="10.2" data-path="aggregated-estimator.html"><a href="aggregated-estimator.html"><i class="fa fa-check"></i><b>10.2</b> Aggregated Estimator</a></li>
+<li class="chapter" data-level="10.3" data-path="propensity-score.html"><a href="propensity-score.html"><i class="fa fa-check"></i><b>10.3</b> Propensity score</a></li>
+<li class="chapter" data-level="10.4" data-path="estimation-of-propensity-score.html"><a href="estimation-of-propensity-score.html"><i class="fa fa-check"></i><b>10.4</b> Estimation of propensity score</a></li>
+<li class="chapter" data-level="10.5" data-path="using-cross-fitting-to-predict-propensity-score.html"><a href="using-cross-fitting-to-predict-propensity-score.html"><i class="fa fa-check"></i><b>10.5</b> Using cross-fitting to predict propensity score</a></li>
+<li class="chapter" data-level="10.6" data-path="propensity-score-stratification.html"><a href="propensity-score-stratification.html"><i class="fa fa-check"></i><b>10.6</b> Propensity score stratification</a></li>
+<li class="chapter" data-level="10.7" data-path="inverse-probability-weighting-ipw.html"><a href="inverse-probability-weighting-ipw.html"><i class="fa fa-check"></i><b>10.7</b> Inverse Probability Weighting (IPW)</a></li>
+<li class="chapter" data-level="10.8" data-path="comparing-ipw-with-aggregated-estimate.html"><a href="comparing-ipw-with-aggregated-estimate.html"><i class="fa fa-check"></i><b>10.8</b> Comparing IPW with Aggregated Estimate</a></li>
+<li class="chapter" data-level="10.9" data-path="aipw-and-estimation.html"><a href="aipw-and-estimation.html"><i class="fa fa-check"></i><b>10.9</b> AIPW and Estimation</a></li>
+<li class="chapter" data-level="10.10" data-path="assessing-balance.html"><a href="assessing-balance.html"><i class="fa fa-check"></i><b>10.10</b> Assessing Balance</a></li>
+<li class="chapter" data-level="10.11" data-path="cross-fitting.html"><a href="cross-fitting.html"><i class="fa fa-check"></i><b>10.11</b> Cross-fitting</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>6</b> Difference in Differences</a>
+<li class="chapter" data-level="11" data-path="difference-in-differences.html"><a href="difference-in-differences.html"><i class="fa fa-check"></i><b>11</b> Difference in Differences</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>6.1</b> A Quick Introduction</a></li>
-<li class="chapter" data-level="6.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>6.2</b> Set up</a></li>
-<li class="chapter" data-level="6.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>6.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
-<li class="chapter" data-level="6.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>6.4</b> Naive estimator</a></li>
-<li class="chapter" data-level="6.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>6.5</b> Canonical Difference in Differences Framework</a></li>
-<li class="chapter" data-level="6.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>6.6</b> DiD in multi-period set up</a></li>
-<li class="chapter" data-level="6.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>6.7</b> Conditional Parallel Trend Assumption</a></li>
-<li class="chapter" data-level="6.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>6.8</b> Some concerns with controls</a></li>
-<li class="chapter" data-level="6.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>6.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
-<li class="chapter" data-level="6.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>6.10</b> Event study model</a></li>
-<li class="chapter" data-level="6.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>6.11</b> Two way fixed effect (TWFE) Revisited</a></li>
-<li class="chapter" data-level="6.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>6.12</b> Various ways of estimation</a></li>
-<li class="chapter" data-level="6.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>6.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
-<li class="chapter" data-level="6.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>6.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
-<li class="chapter" data-level="6.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>6.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
-<li class="chapter" data-level="6.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>6.16</b> Assumptions governing TWFEDD estimate</a></li>
-<li class="chapter" data-level="6.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>6.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
+<li class="chapter" data-level="11.1" data-path="a-quick-introduction.html"><a href="a-quick-introduction.html"><i class="fa fa-check"></i><b>11.1</b> A Quick Introduction</a></li>
+<li class="chapter" data-level="11.2" data-path="set-up.html"><a href="set-up.html"><i class="fa fa-check"></i><b>11.2</b> Set up</a></li>
+<li class="chapter" data-level="11.3" data-path="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><a href="an-example-evaluating-the-impact-of-medicaid-expansion-on-uninsured-rate.html"><i class="fa fa-check"></i><b>11.3</b> An example: Evaluating the impact of Medicaid expansion on uninsured rate</a></li>
+<li class="chapter" data-level="11.4" data-path="naive-estimator.html"><a href="naive-estimator.html"><i class="fa fa-check"></i><b>11.4</b> Naive estimator</a></li>
+<li class="chapter" data-level="11.5" data-path="canonical-difference-in-differences-framework.html"><a href="canonical-difference-in-differences-framework.html"><i class="fa fa-check"></i><b>11.5</b> Canonical Difference in Differences Framework</a></li>
+<li class="chapter" data-level="11.6" data-path="did-in-multi-period-set-up.html"><a href="did-in-multi-period-set-up.html"><i class="fa fa-check"></i><b>11.6</b> DiD in multi-period set up</a></li>
+<li class="chapter" data-level="11.7" data-path="conditional-parallel-trend-assumption.html"><a href="conditional-parallel-trend-assumption.html"><i class="fa fa-check"></i><b>11.7</b> Conditional Parallel Trend Assumption</a></li>
+<li class="chapter" data-level="11.8" data-path="some-concerns-with-controls.html"><a href="some-concerns-with-controls.html"><i class="fa fa-check"></i><b>11.8</b> Some concerns with controls</a></li>
+<li class="chapter" data-level="11.9" data-path="the-2-times-2-difference-in-differences-estimate.html"><a href="the-2-times-2-difference-in-differences-estimate.html"><i class="fa fa-check"></i><b>11.9</b> The <span class="math inline">\(2 \times 2\)</span> Difference-in-Differences Estimate</a></li>
+<li class="chapter" data-level="11.10" data-path="event-study-model.html"><a href="event-study-model.html"><i class="fa fa-check"></i><b>11.10</b> Event study model</a></li>
+<li class="chapter" data-level="11.11" data-path="two-way-fixed-effect-twfe-revisited.html"><a href="two-way-fixed-effect-twfe-revisited.html"><i class="fa fa-check"></i><b>11.11</b> Two way fixed effect (TWFE) Revisited</a></li>
+<li class="chapter" data-level="11.12" data-path="various-ways-of-estimation.html"><a href="various-ways-of-estimation.html"><i class="fa fa-check"></i><b>11.12</b> Various ways of estimation</a></li>
+<li class="chapter" data-level="11.13" data-path="multi-period-multi-group-and-variation-in-treatment-timing.html"><a href="multi-period-multi-group-and-variation-in-treatment-timing.html"><i class="fa fa-check"></i><b>11.13</b> Multi Period, Multi Group and Variation in Treatment Timing</a></li>
+<li class="chapter" data-level="11.14" data-path="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><a href="problem-with-twfe-in-multiple-group-with-treatment-timing-variation.html"><i class="fa fa-check"></i><b>11.14</b> Problem with TWFE in Multiple Group with Treatment Timing Variation</a></li>
+<li class="chapter" data-level="11.15" data-path="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><a href="what-is-twfe-estimating-when-there-is-treatment-timing-variation.html"><i class="fa fa-check"></i><b>11.15</b> What is TWFE Estimating when there is Treatment Timing Variation?</a></li>
+<li class="chapter" data-level="11.16" data-path="assumptions-governing-twfedd-estimate.html"><a href="assumptions-governing-twfedd-estimate.html"><i class="fa fa-check"></i><b>11.16</b> Assumptions governing TWFEDD estimate</a></li>
+<li class="chapter" data-level="11.17" data-path="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"><i class="fa fa-check"></i><b>11.17</b> How Does Treatment Effect Heterogeneity in Time Affect TWFE?</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>7</b> Causal Forest</a>
+<li class="chapter" data-level="12" data-path="causal-forest.html"><a href="causal-forest.html"><i class="fa fa-check"></i><b>12</b> Causal Forest</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
-<li class="chapter" data-level="7.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>7.2</b> Summary of GRF</a></li>
-<li class="chapter" data-level="7.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>7.3</b> Motivation for Causal Forests</a></li>
-<li class="chapter" data-level="7.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>7.4</b> Causal Forest</a></li>
-<li class="chapter" data-level="7.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>7.5</b> An example of causal forest</a></li>
+<li class="chapter" data-level="12.1" data-path="introduction-1.html"><a href="introduction-1.html"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="summary-of-grf.html"><a href="summary-of-grf.html"><i class="fa fa-check"></i><b>12.2</b> Summary of GRF</a></li>
+<li class="chapter" data-level="12.3" data-path="motivation-for-causal-forests.html"><a href="motivation-for-causal-forests.html"><i class="fa fa-check"></i><b>12.3</b> Motivation for Causal Forests</a></li>
+<li class="chapter" data-level="12.4" data-path="causal-forest-1.html"><a href="causal-forest-1.html"><i class="fa fa-check"></i><b>12.4</b> Causal Forest</a></li>
+<li class="chapter" data-level="12.5" data-path="an-example-of-causal-forest.html"><a href="an-example-of-causal-forest.html"><i class="fa fa-check"></i><b>12.5</b> An example of causal forest</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>8</b> Heterogeneous Treatment Effects</a>
+<li class="chapter" data-level="13" data-path="heterogeneous-treatment-effects.html"><a href="heterogeneous-treatment-effects.html"><i class="fa fa-check"></i><b>13</b> Heterogeneous Treatment Effects</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>8.1</b> Some ways to estimate CATE</a></li>
-<li class="chapter" data-level="8.2" data-path="estimation-1.html"><a href="estimation-1.html"><i class="fa fa-check"></i><b>8.2</b> Estimation</a></li>
-<li class="chapter" data-level="8.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>8.3</b> Some Remarks and Questions</a></li>
+<li class="chapter" data-level="13.1" data-path="some-ways-to-estimate-cate.html"><a href="some-ways-to-estimate-cate.html"><i class="fa fa-check"></i><b>13.1</b> Some ways to estimate CATE</a></li>
+<li class="chapter" data-level="13.2" data-path="estimation-1.html"><a href="estimation-1.html"><i class="fa fa-check"></i><b>13.2</b> Estimation</a></li>
+<li class="chapter" data-level="13.3" data-path="some-remarks-and-questions.html"><a href="some-remarks-and-questions.html"><i class="fa fa-check"></i><b>13.3</b> Some Remarks and Questions</a></li>
 </ul></li>
 </ul>
 
@@ -257,8 +262,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="two-way-fixed-effect-twfe-revisited" class="section level2 hasAnchor" number="6.11">
-<h2><span class="header-section-number">6.11</span> Two way fixed effect (TWFE) Revisited<a href="two-way-fixed-effect-twfe-revisited.html#two-way-fixed-effect-twfe-revisited" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="two-way-fixed-effect-twfe-revisited" class="section level2 hasAnchor" number="11.11">
+<h2><span class="header-section-number">11.11</span> Two way fixed effect (TWFE) Revisited<a href="two-way-fixed-effect-twfe-revisited.html#two-way-fixed-effect-twfe-revisited" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We have already seen the TWFE and its importance in accounting for unobserved heterogeneity.
 The TWFE is heavily linked to the difference-in-differences setting (perhaps mistakenly).
 However, note that the TWFE estimator is not equal to
@@ -294,29 +299,29 @@ Y_{i}  = \frac{\theta_{1}+\theta_{2}}{2} + \eta_{i} + \alpha D_{i} + v_{i} \nonu
 Y_{it}-Y_{i} = \theta_{t} - \frac{\theta_{1}+\theta_{2}}{2} + \alpha (D_{it}-D_i) + (v_{it}-v_i)
 \end{equation}\]</span></p>
 <p>The code shows data arranging for the within estimator.</p>
-<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-1" tabindex="-1"></a><span class="do">###########################</span></span>
-<span id="cb206-2"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-2" tabindex="-1"></a><span class="co"># Treatment group</span></span>
-<span id="cb206-3"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-3" tabindex="-1"></a><span class="do">###########################</span></span>
-<span id="cb206-4"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-4" tabindex="-1"></a>treat_t <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">1000</span>)</span>
-<span id="cb206-5"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-5" tabindex="-1"></a>period_t <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">each =</span> <span class="dv">500</span>)</span>
-<span id="cb206-6"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-6" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">500</span>, <span class="dv">1</span>), <span class="dv">2</span>) <span class="co">#for the panel nature of data</span></span>
-<span id="cb206-7"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-7" tabindex="-1"></a>y_treat <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="sc">*</span> period_t <span class="sc">+</span> <span class="dv">7</span>  <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">5</span>) </span>
-<span id="cb206-8"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-8" tabindex="-1"></a>treatdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">treat =</span> treat_t, <span class="at">period =</span> period_t, <span class="at">Y =</span> y_treat, <span class="at">id =</span> id)</span>
-<span id="cb206-9"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-9" tabindex="-1"></a>treatdata <span class="ot">&lt;-</span> treatdata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Ytrans =</span> Y <span class="sc">-</span> <span class="fu">mean</span>(Y),</span>
-<span id="cb206-10"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-10" tabindex="-1"></a>                                  <span class="at">D =</span> treat <span class="sc">*</span> period <span class="sc">-</span> <span class="fu">mean</span>(treat <span class="sc">*</span> period))</span>
-<span id="cb206-11"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-11" tabindex="-1"></a></span>
-<span id="cb206-12"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-12" tabindex="-1"></a><span class="do">##########################</span></span>
-<span id="cb206-13"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-13" tabindex="-1"></a><span class="co"># control group</span></span>
-<span id="cb206-14"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-14" tabindex="-1"></a><span class="do">##########################</span></span>
-<span id="cb206-15"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-15" tabindex="-1"></a>control_t <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1000</span>)  </span>
-<span id="cb206-16"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-16" tabindex="-1"></a>period_c <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">each =</span> <span class="dv">500</span>)</span>
-<span id="cb206-17"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-17" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">501</span>, <span class="dv">1000</span>, <span class="dv">1</span>), <span class="dv">2</span>)</span>
-<span id="cb206-18"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-18" tabindex="-1"></a>y_control <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span>  <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">5</span>) </span>
-<span id="cb206-19"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-19" tabindex="-1"></a>controldata <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">treat =</span> control_t, <span class="at">period =</span> period_c, <span class="at">Y =</span> y_control, <span class="at">id =</span> id)</span>
-<span id="cb206-20"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-20" tabindex="-1"></a>controldata <span class="ot">&lt;-</span> controldata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Ytrans =</span> Y <span class="sc">-</span> <span class="fu">mean</span>(Y),</span>
-<span id="cb206-21"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-21" tabindex="-1"></a>                                  <span class="at">D =</span> treat <span class="sc">*</span> period <span class="sc">-</span> <span class="fu">mean</span>(treat <span class="sc">*</span> period))</span>
-<span id="cb206-22"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-22" tabindex="-1"></a></span>
-<span id="cb206-23"><a href="two-way-fixed-effect-twfe-revisited.html#cb206-23" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">rbind</span>(treatdata, controldata)</span></code></pre></div>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-1" tabindex="-1"></a><span class="do">###########################</span></span>
+<span id="cb212-2"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-2" tabindex="-1"></a><span class="co"># Treatment group</span></span>
+<span id="cb212-3"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-3" tabindex="-1"></a><span class="do">###########################</span></span>
+<span id="cb212-4"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-4" tabindex="-1"></a>treat_t <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">1000</span>)</span>
+<span id="cb212-5"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-5" tabindex="-1"></a>period_t <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">each =</span> <span class="dv">500</span>)</span>
+<span id="cb212-6"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-6" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">500</span>, <span class="dv">1</span>), <span class="dv">2</span>) <span class="co">#for the panel nature of data</span></span>
+<span id="cb212-7"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-7" tabindex="-1"></a>y_treat <span class="ot">&lt;-</span> <span class="dv">20</span> <span class="sc">*</span> period_t <span class="sc">+</span> <span class="dv">7</span>  <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">5</span>) </span>
+<span id="cb212-8"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-8" tabindex="-1"></a>treatdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">treat =</span> treat_t, <span class="at">period =</span> period_t, <span class="at">Y =</span> y_treat, <span class="at">id =</span> id)</span>
+<span id="cb212-9"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-9" tabindex="-1"></a>treatdata <span class="ot">&lt;-</span> treatdata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Ytrans =</span> Y <span class="sc">-</span> <span class="fu">mean</span>(Y),</span>
+<span id="cb212-10"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-10" tabindex="-1"></a>                                  <span class="at">D =</span> treat <span class="sc">*</span> period <span class="sc">-</span> <span class="fu">mean</span>(treat <span class="sc">*</span> period))</span>
+<span id="cb212-11"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-11" tabindex="-1"></a></span>
+<span id="cb212-12"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-12" tabindex="-1"></a><span class="do">##########################</span></span>
+<span id="cb212-13"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-13" tabindex="-1"></a><span class="co"># control group</span></span>
+<span id="cb212-14"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-14" tabindex="-1"></a><span class="do">##########################</span></span>
+<span id="cb212-15"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-15" tabindex="-1"></a>control_t <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">1000</span>)  </span>
+<span id="cb212-16"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-16" tabindex="-1"></a>period_c <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">each =</span> <span class="dv">500</span>)</span>
+<span id="cb212-17"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-17" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">seq</span>(<span class="dv">501</span>, <span class="dv">1000</span>, <span class="dv">1</span>), <span class="dv">2</span>)</span>
+<span id="cb212-18"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-18" tabindex="-1"></a>y_control <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span>  <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="dv">0</span>, <span class="dv">5</span>) </span>
+<span id="cb212-19"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-19" tabindex="-1"></a>controldata <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">treat =</span> control_t, <span class="at">period =</span> period_c, <span class="at">Y =</span> y_control, <span class="at">id =</span> id)</span>
+<span id="cb212-20"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-20" tabindex="-1"></a>controldata <span class="ot">&lt;-</span> controldata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Ytrans =</span> Y <span class="sc">-</span> <span class="fu">mean</span>(Y),</span>
+<span id="cb212-21"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-21" tabindex="-1"></a>                                  <span class="at">D =</span> treat <span class="sc">*</span> period <span class="sc">-</span> <span class="fu">mean</span>(treat <span class="sc">*</span> period))</span>
+<span id="cb212-22"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-22" tabindex="-1"></a></span>
+<span id="cb212-23"><a href="two-way-fixed-effect-twfe-revisited.html#cb212-23" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">rbind</span>(treatdata, controldata)</span></code></pre></div>
 <p><strong>Data Arrange 2: First differencing</strong></p>
 <p>Let’s briefly look at the concept behind first differencing.
 Write TWFE as:
@@ -331,25 +336,25 @@ Y_{i2} = \theta_{2} + \eta_{i} + \alpha D_{i2} + v_{i2}
 Y_{i2} - Y_{i1} = \theta_{2} - \theta_{1} + \alpha (D_{i2}-D_{i1}) + (v_{i2} - v_{i1})
 \end{equation}\]</span></p>
 <p>The code shows data arranging for the first difference estimator.</p>
-<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-1" tabindex="-1"></a><span class="co"># First the treated group</span></span>
-<span id="cb207-2"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-2" tabindex="-1"></a>fd_treat1 <span class="ot">&lt;-</span> treatdata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
-<span id="cb207-3"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-3" tabindex="-1"></a><span class="fu">colnames</span>(fd_treat1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;period1&quot;</span>, <span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb207-4"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-4" tabindex="-1"></a>fd_treat2 <span class="ot">&lt;-</span> treatdata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">1</span>)<span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
-<span id="cb207-5"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-5" tabindex="-1"></a><span class="fu">colnames</span>(fd_treat2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;period2&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb207-6"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-6" tabindex="-1"></a>fd_treat <span class="ot">&lt;-</span> <span class="fu">merge</span>(fd_treat1, fd_treat2, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> T)</span>
-<span id="cb207-7"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-7" tabindex="-1"></a>fd_treat <span class="ot">&lt;-</span> fd_treat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Y_FD =</span> Y2 <span class="sc">-</span> Y1,</span>
-<span id="cb207-8"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-8" tabindex="-1"></a>                                <span class="at">D =</span> (period2 <span class="sc">*</span> treat2) <span class="sc">-</span> (period1 <span class="sc">*</span> treat1)) </span>
-<span id="cb207-9"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-9" tabindex="-1"></a></span>
-<span id="cb207-10"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-10" tabindex="-1"></a><span class="co"># Then the control group</span></span>
-<span id="cb207-11"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-11" tabindex="-1"></a>fd_control1 <span class="ot">&lt;-</span> controldata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
-<span id="cb207-12"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-12" tabindex="-1"></a><span class="fu">colnames</span>(fd_control1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;period1&quot;</span>, <span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb207-13"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-13" tabindex="-1"></a>fd_control2 <span class="ot">&lt;-</span> controldata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">1</span>)<span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
-<span id="cb207-14"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-14" tabindex="-1"></a><span class="fu">colnames</span>(fd_control2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;period2&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
-<span id="cb207-15"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-15" tabindex="-1"></a>fd_control <span class="ot">&lt;-</span> <span class="fu">merge</span>(fd_control1, fd_control2, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> T)</span>
-<span id="cb207-16"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-16" tabindex="-1"></a>fd_control <span class="ot">&lt;-</span> fd_control <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Y_FD =</span> Y2 <span class="sc">-</span> Y1,</span>
-<span id="cb207-17"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-17" tabindex="-1"></a>                                <span class="at">D =</span> (period2 <span class="sc">*</span> treat2) <span class="sc">-</span> (period1 <span class="sc">*</span> treat1)) </span>
-<span id="cb207-18"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-18" tabindex="-1"></a></span>
-<span id="cb207-19"><a href="two-way-fixed-effect-twfe-revisited.html#cb207-19" tabindex="-1"></a>FDdata <span class="ot">=</span> <span class="fu">rbind</span>(fd_treat, fd_control)</span></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-1" tabindex="-1"></a><span class="co"># First the treated group</span></span>
+<span id="cb213-2"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-2" tabindex="-1"></a>fd_treat1 <span class="ot">&lt;-</span> treatdata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
+<span id="cb213-3"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-3" tabindex="-1"></a><span class="fu">colnames</span>(fd_treat1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;period1&quot;</span>, <span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb213-4"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-4" tabindex="-1"></a>fd_treat2 <span class="ot">&lt;-</span> treatdata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">1</span>)<span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
+<span id="cb213-5"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-5" tabindex="-1"></a><span class="fu">colnames</span>(fd_treat2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;period2&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb213-6"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-6" tabindex="-1"></a>fd_treat <span class="ot">&lt;-</span> <span class="fu">merge</span>(fd_treat1, fd_treat2, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> T)</span>
+<span id="cb213-7"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-7" tabindex="-1"></a>fd_treat <span class="ot">&lt;-</span> fd_treat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Y_FD =</span> Y2 <span class="sc">-</span> Y1,</span>
+<span id="cb213-8"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-8" tabindex="-1"></a>                                <span class="at">D =</span> (period2 <span class="sc">*</span> treat2) <span class="sc">-</span> (period1 <span class="sc">*</span> treat1)) </span>
+<span id="cb213-9"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-9" tabindex="-1"></a></span>
+<span id="cb213-10"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-10" tabindex="-1"></a><span class="co"># Then the control group</span></span>
+<span id="cb213-11"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-11" tabindex="-1"></a>fd_control1 <span class="ot">&lt;-</span> controldata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
+<span id="cb213-12"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-12" tabindex="-1"></a><span class="fu">colnames</span>(fd_control1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat1&quot;</span>, <span class="st">&quot;period1&quot;</span>, <span class="st">&quot;Y1&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb213-13"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-13" tabindex="-1"></a>fd_control2 <span class="ot">&lt;-</span> controldata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">1</span>)<span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;Ytrans&quot;</span>))</span>
+<span id="cb213-14"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-14" tabindex="-1"></a><span class="fu">colnames</span>(fd_control2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;treat2&quot;</span>, <span class="st">&quot;period2&quot;</span>, <span class="st">&quot;Y2&quot;</span>, <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb213-15"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-15" tabindex="-1"></a>fd_control <span class="ot">&lt;-</span> <span class="fu">merge</span>(fd_control1, fd_control2, <span class="at">by =</span> <span class="st">&quot;id&quot;</span>, <span class="at">all.x =</span> T)</span>
+<span id="cb213-16"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-16" tabindex="-1"></a>fd_control <span class="ot">&lt;-</span> fd_control <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Y_FD =</span> Y2 <span class="sc">-</span> Y1,</span>
+<span id="cb213-17"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-17" tabindex="-1"></a>                                <span class="at">D =</span> (period2 <span class="sc">*</span> treat2) <span class="sc">-</span> (period1 <span class="sc">*</span> treat1)) </span>
+<span id="cb213-18"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-18" tabindex="-1"></a></span>
+<span id="cb213-19"><a href="two-way-fixed-effect-twfe-revisited.html#cb213-19" tabindex="-1"></a>FDdata <span class="ot">=</span> <span class="fu">rbind</span>(fd_treat, fd_control)</span></code></pre></div>
 </div>
             </section>
 

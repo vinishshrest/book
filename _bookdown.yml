@@ -5,6 +5,7 @@ rmd_files:
   html: ["index.Rmd", # Lecture 1
         "why_causality.Rmd",  # Lecture 2
         "regression.Rmd", # Lecture 3
+        01_Regression_Gradient_Descent.Rmd,
         "01-intro.Rmd", # Lecture 4
         "ipw_aipw.Rmd", # Lecture 5
         #"natural_experiment.Rmd" # Lecture 6

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>12 Causal Forest | Causal Inference</title>
-  <meta name="description" content="12 Causal Forest | Causal Inference" />
+  <title>8 Standard Error | Causal Inference</title>
+  <meta name="description" content="8 Standard Error | Causal Inference" />
   <meta name="generator" content="bookdown 0.44 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="12 Causal Forest | Causal Inference" />
+  <meta property="og:title" content="8 Standard Error | Causal Inference" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="12 Causal Forest | Causal Inference" />
+  <meta name="twitter:title" content="8 Standard Error | Causal Inference" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html"/>
-<link rel="next" href="introduction-1.html"/>
+<link rel="prev" href="multivariate-model.html"/>
+<link rel="next" href="causal-inference.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -262,16 +262,45 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="causal-forest" class="section level1 hasAnchor" number="12">
-<h1><span class="header-section-number">12</span> Causal Forest<a href="causal-forest.html#causal-forest" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="standard-error" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> Standard Error<a href="standard-error.html#standard-error" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<pre><code># ----------------------------------------------
+
+
+# Standard errors 
+
+
+# ----------------------------------------------
+
+# 1. Get the standard error of the regression
+
+error = (X @ theta - y)
+error_sq = error.T @ error
+sigma_sq = 1 / (m -3) * error_sq
+se_reg = np.sqrt(sigma_sq)
+print(f&quot;standard error of the regression is: {se_reg}&quot;)
+
+# 2. get standard errors of the respective coefficients 
+var_cov = np.linalg.inv(X.T @ X) * sigma_sq
+manual_se = np.sqrt(np.diag(var_cov))
+print(f&quot;standard errors of coefficients (manual estimation): {manual_se}&quot;)
+
+# se from stats model
+X_sm = sm.add_constant(X)   # add intercept
+model = sm.OLS(y, X_sm).fit()
+
+print(f&quot;coefficients from statmodels: {model.params}&quot;)   # coefficients
+print(f&quot;standard errors from statmodels: {model.bse}&quot;)      # standard errors</code></pre>
+<pre><code></code></pre>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="how-does-treatment-effect-heterogeneity-in-time-affect-twfe.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="multivariate-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="causal-inference.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
