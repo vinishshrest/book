@@ -5,7 +5,8 @@ rmd_files:
   html: ["index.Rmd", # Lecture 1
         "why_causality.Rmd",  # Lecture 2
         "regression.Rmd", # Lecture 3
-        01_Regression_Gradient_Descent.Rmd,
+        '01_Regression_Gradient_Descent.Rmd',
+        'Lecture2_Logistic.Rmd',
         "01-intro.Rmd", # Lecture 4
         "ipw_aipw.Rmd", # Lecture 5
         #"natural_experiment.Rmd" # Lecture 6
@@ -18,6 +19,11 @@ rmd_files:
 # bookdown::render_book("index.Rmd", "bookdown::pdf_book")
 # bookdown::preview_chapter("01-intro.Rmd", "bookdown::gitbook") ## this previews only one chapter, intro chapter in this case
 
-  
-
+# -----------------------------------------------
+# NOTE:  
+# note that 01_Regression_Gradient_Descent.Rmd is originally written in .py.
+# Follow the steps below to convert into compatible .Rmd file for bookdown to read.
+# a. convert to ipynb: jupytext --to ipynb 01_Regression_Gradient_Descent.py
+# b. convert to md and execute: python -m jupyter nbconvert 01_Regression_Gradient_Descent.ipynb --to markdown --execute
+# c. rename md as .Rmd: mv 01_Regression_Gradient_Descent.md 01_Regression_Gradient_Descent.Rmd
   
