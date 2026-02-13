@@ -496,16 +496,16 @@ logistic function.</p>
 <span id="cb78-116"><a href="logistic-regression.html#cb78-116" tabindex="-1"></a>    health.append(health_i)</span>
 <span id="cb78-117"><a href="logistic-regression.html#cb78-117" tabindex="-1"></a></span>
 <span id="cb78-118"><a href="logistic-regression.html#cb78-118" tabindex="-1"></a>health <span class="op">=</span> np.array(health).ravel()</span></code></pre></div>
-<pre><code>mean of college: 0.40072
-share college for high income: 0.60098
-share college for low income: 0.20046</code></pre>
+<pre><code>mean of college: 0.39887
+share college for high income: 0.59856
+share college for low income: 0.19918</code></pre>
 <div class="float">
 <img src="Lecture2_Logistic_files/Lecture2_Logistic_3_1.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
-<pre><code>average stress index for low income group: 3.593
-average stress index for high income group: 0.0068
-fraction insured: 0.29915</code></pre>
+<pre><code>average stress index for low income group: 3.6123
+average stress index for high income group: 0.0
+fraction insured: 0.3039</code></pre>
 <div class="float">
 <img src="Lecture2_Logistic_files/Lecture2_Logistic_3_3.png" alt="png" />
 <div class="figcaption">png</div>
@@ -528,8 +528,8 @@ Let’s print out our some summary measures on health.</p>
 <span id="cb81-11"><a href="logistic-regression.html#cb81-11" tabindex="-1"></a>                                                                                               (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
 <span id="cb81-12"><a href="logistic-regression.html#cb81-12" tabindex="-1"></a>                                                                                               (insurance<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
 <span id="cb81-13"><a href="logistic-regression.html#cb81-13" tabindex="-1"></a>                                                                                               (stress_band)])<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>fraction with good health: 0.34648
-fraction with good health among no school, low income, and uninsured: 0.0357</code></pre>
+<pre><code>fraction with good health: 0.34717
+fraction with good health among no school, low income, and uninsured: 0.0341</code></pre>
 <p>The true <span class="math inline">\(\theta\)</span> values are <span class="math inline">\([\theta_0=0.3, \theta_1=0.1, \theta_2=0.2, \theta_3=0.05, \theta_4=-1]\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>0.3 is the intercept coefficient, representing people in no college,
@@ -544,7 +544,7 @@ index are in good health. This pertains to true <span class="math inline">\(\the
 into probability using:</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="logistic-regression.html#cb83-1" tabindex="-1"></a>p_gh <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="fl">0.3</span> <span class="op">+</span> np.mean(stress[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (insurance<span class="op">==</span><span class="dv">0</span>)])))</span>
 <span id="cb83-2"><a href="logistic-regression.html#cb83-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;the conversion of theta = 0.3 + mean stress value to prob: </span><span class="sc">{</span>p_gh<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>the conversion of theta = 0.3 + mean stress value to prob: 0.036 </code></pre>
+<pre><code>the conversion of theta = 0.3 + mean stress value to prob: 0.0351 </code></pre>
 <p>Notice that according to the DGP, around 3.55 percent of people in the population with no college,
 low income, uninsured, and of the mean stress value are in good health.
 This is close to what we have in our sample. Hence,
@@ -616,7 +616,7 @@ we have to move against the gradient; hence, the negative.</p></li>
 <span id="cb85-22"><a href="logistic-regression.html#cb85-22" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;cross-entropy loss&#39;</span>)</span>
 <span id="cb85-23"><a href="logistic-regression.html#cb85-23" tabindex="-1"></a>plt.title(<span class="st">&quot;Loss with respect to iterations&quot;</span>)</span>
 <span id="cb85-24"><a href="logistic-regression.html#cb85-24" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<pre><code>theta estimates from gradient descent: [[-0.3148 -0.6818  1.1555  0.7523 -0.9126]] 
+<pre><code>theta estimates from gradient descent: [[-0.2389  0.192   0.5794  0.38   -0.9031]] 
  </code></pre>
 <div class="float">
 <img src="Lecture2_Logistic_files/Lecture2_Logistic_9_1.png" alt="png" />
@@ -635,7 +635,7 @@ in-built library in sklearn that estimates the Logistic Regression.</p>
 <span id="cb87-9"><a href="logistic-regression.html#cb87-9" tabindex="-1"></a>}</span>
 <span id="cb87-10"><a href="logistic-regression.html#cb87-10" tabindex="-1"></a></span>
 <span id="cb87-11"><a href="logistic-regression.html#cb87-11" tabindex="-1"></a>pd.DataFrame(results)</span></code></pre></div>
-<pre><code>Estimates from sklearn: [[ 0.28453132  0.10165842  0.20973576  0.05319063 -1.00181428]]
+<pre><code>Estimates from sklearn: [[ 0.25589713  0.11397403  0.24584297  0.02864795 -0.99104408]]
 
 
 /home/vinish/Dropbox/Machine Learning/myenv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1170: UserWarning: Setting penalty=None will ignore the C and l1_ratio parameters
@@ -673,10 +673,10 @@ SK
 0
 </th>
 <td>
--0.315
+-0.239
 </td>
 <td>
-0.285
+0.256
 </td>
 </tr>
 <tr>
@@ -684,10 +684,10 @@ SK
 1
 </th>
 <td>
--0.682
+0.192
 </td>
 <td>
-0.102
+0.114
 </td>
 </tr>
 <tr>
@@ -695,10 +695,10 @@ SK
 2
 </th>
 <td>
-1.155
+0.579
 </td>
 <td>
-0.210
+0.246
 </td>
 </tr>
 <tr>
@@ -706,10 +706,10 @@ SK
 3
 </th>
 <td>
-0.752
+0.380
 </td>
 <td>
-0.053
+0.029
 </td>
 </tr>
 <tr>
@@ -717,10 +717,10 @@ SK
 4
 </th>
 <td>
--0.913
+-0.903
 </td>
 <td>
--1.002
+-0.991
 </td>
 </tr>
 </tbody>
@@ -731,7 +731,7 @@ SK
 <span id="cb89-2"><a href="logistic-regression.html#cb89-2" tabindex="-1"></a>mod_linear <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>) <span class="co"># we dont want to double fit the intercept; X already contains it </span></span>
 <span id="cb89-3"><a href="logistic-regression.html#cb89-3" tabindex="-1"></a>mod_linear <span class="op">=</span> mod_linear.fit(X, health)</span>
 <span id="cb89-4"><a href="logistic-regression.html#cb89-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from linear reg: </span><span class="sc">{</span>mod_linear<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>Estimates from linear reg: [ 0.44234901  0.01574498  0.16142705  0.00745558 -0.1028531 ]</code></pre>
+<pre><code>Estimates from linear reg: [ 0.43718759  0.01654884  0.16951229  0.00369069 -0.10103997]</code></pre>
 <p>The estimates from the gradient descent and sklearn are virtually similar. Note that the interpretation of <span class="math inline">\(\theta\)</span> estimates
 are not equivalent to marginal effects as they are in the LPM set up. Recall, in the case of logistic regression:
 <span class="math inline">\(\hat{p} = \frac{1}{(1 + exp(-\theta X))}\)</span>. Hence, we need to translate <span class="math inline">\(\theta\)</span> into marginal effects
@@ -771,13 +771,13 @@ are computed with respect to this person.</p>
 <span id="cb91-28"><a href="logistic-regression.html#cb91-28" tabindex="-1"></a>person_E <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline <span class="op">+</span> <span class="dv">1</span>]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
 <span id="cb91-29"><a href="logistic-regression.html#cb91-29" tabindex="-1"></a>prob_health_E <span class="op">=</span> fun_me(theta_gd, person_E)</span>
 <span id="cb91-30"><a href="logistic-regression.html#cb91-30" tabindex="-1"></a><span class="bu">print</span>(prob_health_E)</span></code></pre></div>
-<pre><code>The probability that person A is in good health is:[0.02688823] 
+<pre><code>The probability that person A is in good health is:[0.02924212] 
 
-The probability that person B is in good health is: [0.01378122] 
+The probability that person B is in good health is: [0.03521318] 
 
-[0.08066571]
-[0.05538157]
-[0.01097141]</code></pre>
+[0.05102397]
+[0.04218946]
+[0.01206149]</code></pre>
 <p>Since we are using Person A as the benchmark, we can compute marginal probabilities simply by
 substracting probabilities.</p>
 <div class="sourceCode" id="cb93"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb93-1"><a href="logistic-regression.html#cb93-1" tabindex="-1"></a>me_B_A <span class="op">=</span> prob_health_B <span class="op">-</span> prob_health_A </span>
@@ -826,10 +826,10 @@ ME:LPM
 0
 </th>
 <td>
-0.027
+0.029
 </td>
 <td>
-0.442
+0.437
 </td>
 </tr>
 <tr>
@@ -837,10 +837,10 @@ ME:LPM
 1
 </th>
 <td>
--0.013
+0.006
 </td>
 <td>
-0.016
+0.017
 </td>
 </tr>
 <tr>
@@ -848,10 +848,10 @@ ME:LPM
 2
 </th>
 <td>
-0.054
+0.022
 </td>
 <td>
-0.161
+0.170
 </td>
 </tr>
 <tr>
@@ -859,10 +859,10 @@ ME:LPM
 3
 </th>
 <td>
-0.028
+0.013
 </td>
 <td>
-0.007
+0.004
 </td>
 </tr>
 <tr>
@@ -870,10 +870,10 @@ ME:LPM
 4
 </th>
 <td>
--0.016
+-0.017
 </td>
 <td>
--0.103
+-0.101
 </td>
 </tr>
 </tbody>
@@ -904,8 +904,7 @@ Let’s take a look at predicted probabilities from both LPM and logistic regres
 <span id="cb94-21"><a href="logistic-regression.html#cb94-21" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">&#39;--&#39;</span>)</span>
 <span id="cb94-22"><a href="logistic-regression.html#cb94-22" tabindex="-1"></a>plt.title(<span class="st">&#39;Predicted probabilities from Logistic Regression&#39;</span>)</span>
 <span id="cb94-23"><a href="logistic-regression.html#cb94-23" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<pre><code>[ 0.72596366  0.02636548 -0.13996585 ...  0.76890919  0.4717254
- -0.20695239]</code></pre>
+<pre><code>[0.51392851 0.1614878  0.0131093  ... 0.5253499  0.46627795 0.66997023]</code></pre>
 <div class="float">
 <img src="Lecture2_Logistic_files/Lecture2_Logistic_19_1.png" alt="png" />
 <div class="figcaption">png</div>
