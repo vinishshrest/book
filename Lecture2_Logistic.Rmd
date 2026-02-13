@@ -4,9 +4,10 @@
 
 **Topic:** Logistic Regression
 
-Say, you need to predict the probability of someone being in a good vs. bad health given a set of 
+Say, you need to predict the probability of someone being in a good vs. bad health (binary outcome)
+given a set of 
 inputs: i) college education (yes or no); ii) income (high vs. low); iii) insured vs uninsured; 
-and stress level (continuous variable).
+and iv) stress level (continuous variable). 
 
 For the sake of simplicity, we are going to assume a super simple DGP as follows: 
 
@@ -14,16 +15,18 @@ For the sake of simplicity, we are going to assume a super simple DGP as follows
 2. High income has a positive effect on health (coefficient = 0.2)
 3. 40 percent more people from higher income households have college education
 4. Insurance has a positive effect on health (coefficient = 0.05)
-5. 60 percent more people from low income households are stressed
+5. 60 percent more people from low income households are likely to be stressed
 6. Stress has a negative effect on health (coefficient = -1)
 
-**Note:** LPM estimates directly gives us the marginal
-effects. Note that from the standpoint of a logistic regression, 
-the coefficients mentioned above are not marginal effects.
+**Note:** We know from the previous lecture that LPM estimates directly gives us the marginal
+effects -- the coefficients (at least theoretically) are interpreted as the effect of marginal changes 
+in $X$s on $y$. LPM estimates are straight forward and easy to interpret as most often we are 
+concerned with marginal effects from a policy standpoint.
+However, the coefficients pertaining to logistic regression are not marginal effects.
 This will be clearer as we proceed.
 
-We can use the Linear Probability Model (LPM), as we did in the previous lecture -- the estimates from a 
-properly specified model will be close to the true parameters and are easy to interpret. 
+We looked at the Linear Probability Model (LPM) in the previous lecture -- the estimates from a 
+properly specified model were close to the true parameters. 
 What if we have to estimate probability 
 of someone being in good health? In this case, LPM does 
 not gurantee that the probabilities are restricted between 0 and 1. 
@@ -32,13 +35,13 @@ Logistic regression is a tool that is used to model binary outcome and used for 
 It uses a logistic function to restrict 
 probabilities between values of 0 and 1. So how does it work?
 
-Let's first start with probabilities as the primary goal is to predict probability of a binary event. The probability is 
-written as:
+Essentially, the primary goal here is to predict probabilities of a binary event. 
+The probability is written as a function of $\theta$ and $X$:
 $$
 p = h_\theta(X) = \sigma(\theta X)
 $$
 
-Note that the true parameters are $\theta$ -- they govern the DGP, and probabilites 
+$\theta$ is a vector of true parameters -- they govern the DGP, and probabilites 
 are the function of the true coefficients and inputs. 
 Specifically, $\sigma(.)$ is the logistic function, defined as:
 
@@ -46,8 +49,10 @@ $$
 \sigma(z) = \frac{1}{(1 + exp(-z))} 
 $$
 
-This $\sigma()$ is also known as the sigmoid function and $z=\theta X$ is often known as the logit. The logit is a 
-linear combination of $\theta$ and $X$. 
+This $\sigma(.)$ is also known as the sigmoid function and $z=\theta X$ is often 
+known as the logit. The logit is a 
+linear combination of $\theta$ and $X$. By nature of the logistic function, the output is restricted
+between 0 and 1.  
 To see the logistic function closely, let's take a look  at the following graph.
 
 
@@ -66,7 +71,7 @@ from pathlib import Path
 
 # generate numbers from -5 to 5
 z = np.linspace(-5, 5, 1000)
-print(z)
+print(z[0:20])
 # compute logistic values (note that these are probabilities)
 sigma_z = 1/(1 + np.exp(-z))
 
@@ -81,170 +86,7 @@ plt.show()
     [-5.         -4.98998999 -4.97997998 -4.96996997 -4.95995996 -4.94994995
      -4.93993994 -4.92992993 -4.91991992 -4.90990991 -4.8998999  -4.88988989
      -4.87987988 -4.86986987 -4.85985986 -4.84984985 -4.83983984 -4.82982983
-     -4.81981982 -4.80980981 -4.7997998  -4.78978979 -4.77977978 -4.76976977
-     -4.75975976 -4.74974975 -4.73973974 -4.72972973 -4.71971972 -4.70970971
-     -4.6996997  -4.68968969 -4.67967968 -4.66966967 -4.65965966 -4.64964965
-     -4.63963964 -4.62962963 -4.61961962 -4.60960961 -4.5995996  -4.58958959
-     -4.57957958 -4.56956957 -4.55955956 -4.54954955 -4.53953954 -4.52952953
-     -4.51951952 -4.50950951 -4.4994995  -4.48948949 -4.47947948 -4.46946947
-     -4.45945946 -4.44944945 -4.43943944 -4.42942943 -4.41941942 -4.40940941
-     -4.3993994  -4.38938939 -4.37937938 -4.36936937 -4.35935936 -4.34934935
-     -4.33933934 -4.32932933 -4.31931932 -4.30930931 -4.2992993  -4.28928929
-     -4.27927928 -4.26926927 -4.25925926 -4.24924925 -4.23923924 -4.22922923
-     -4.21921922 -4.20920921 -4.1991992  -4.18918919 -4.17917918 -4.16916917
-     -4.15915916 -4.14914915 -4.13913914 -4.12912913 -4.11911912 -4.10910911
-     -4.0990991  -4.08908909 -4.07907908 -4.06906907 -4.05905906 -4.04904905
-     -4.03903904 -4.02902903 -4.01901902 -4.00900901 -3.998999   -3.98898899
-     -3.97897898 -3.96896897 -3.95895896 -3.94894895 -3.93893894 -3.92892893
-     -3.91891892 -3.90890891 -3.8988989  -3.88888889 -3.87887888 -3.86886887
-     -3.85885886 -3.84884885 -3.83883884 -3.82882883 -3.81881882 -3.80880881
-     -3.7987988  -3.78878879 -3.77877878 -3.76876877 -3.75875876 -3.74874875
-     -3.73873874 -3.72872873 -3.71871872 -3.70870871 -3.6986987  -3.68868869
-     -3.67867868 -3.66866867 -3.65865866 -3.64864865 -3.63863864 -3.62862863
-     -3.61861862 -3.60860861 -3.5985986  -3.58858859 -3.57857858 -3.56856857
-     -3.55855856 -3.54854855 -3.53853854 -3.52852853 -3.51851852 -3.50850851
-     -3.4984985  -3.48848849 -3.47847848 -3.46846847 -3.45845846 -3.44844845
-     -3.43843844 -3.42842843 -3.41841842 -3.40840841 -3.3983984  -3.38838839
-     -3.37837838 -3.36836837 -3.35835836 -3.34834835 -3.33833834 -3.32832833
-     -3.31831832 -3.30830831 -3.2982983  -3.28828829 -3.27827828 -3.26826827
-     -3.25825826 -3.24824825 -3.23823824 -3.22822823 -3.21821822 -3.20820821
-     -3.1981982  -3.18818819 -3.17817818 -3.16816817 -3.15815816 -3.14814815
-     -3.13813814 -3.12812813 -3.11811812 -3.10810811 -3.0980981  -3.08808809
-     -3.07807808 -3.06806807 -3.05805806 -3.04804805 -3.03803804 -3.02802803
-     -3.01801802 -3.00800801 -2.997998   -2.98798799 -2.97797798 -2.96796797
-     -2.95795796 -2.94794795 -2.93793794 -2.92792793 -2.91791792 -2.90790791
-     -2.8978979  -2.88788789 -2.87787788 -2.86786787 -2.85785786 -2.84784785
-     -2.83783784 -2.82782783 -2.81781782 -2.80780781 -2.7977978  -2.78778779
-     -2.77777778 -2.76776777 -2.75775776 -2.74774775 -2.73773774 -2.72772773
-     -2.71771772 -2.70770771 -2.6976977  -2.68768769 -2.67767768 -2.66766767
-     -2.65765766 -2.64764765 -2.63763764 -2.62762763 -2.61761762 -2.60760761
-     -2.5975976  -2.58758759 -2.57757758 -2.56756757 -2.55755756 -2.54754755
-     -2.53753754 -2.52752753 -2.51751752 -2.50750751 -2.4974975  -2.48748749
-     -2.47747748 -2.46746747 -2.45745746 -2.44744745 -2.43743744 -2.42742743
-     -2.41741742 -2.40740741 -2.3973974  -2.38738739 -2.37737738 -2.36736737
-     -2.35735736 -2.34734735 -2.33733734 -2.32732733 -2.31731732 -2.30730731
-     -2.2972973  -2.28728729 -2.27727728 -2.26726727 -2.25725726 -2.24724725
-     -2.23723724 -2.22722723 -2.21721722 -2.20720721 -2.1971972  -2.18718719
-     -2.17717718 -2.16716717 -2.15715716 -2.14714715 -2.13713714 -2.12712713
-     -2.11711712 -2.10710711 -2.0970971  -2.08708709 -2.07707708 -2.06706707
-     -2.05705706 -2.04704705 -2.03703704 -2.02702703 -2.01701702 -2.00700701
-     -1.996997   -1.98698699 -1.97697698 -1.96696697 -1.95695696 -1.94694695
-     -1.93693694 -1.92692693 -1.91691692 -1.90690691 -1.8968969  -1.88688689
-     -1.87687688 -1.86686687 -1.85685686 -1.84684685 -1.83683684 -1.82682683
-     -1.81681682 -1.80680681 -1.7967968  -1.78678679 -1.77677678 -1.76676677
-     -1.75675676 -1.74674675 -1.73673674 -1.72672673 -1.71671672 -1.70670671
-     -1.6966967  -1.68668669 -1.67667668 -1.66666667 -1.65665666 -1.64664665
-     -1.63663664 -1.62662663 -1.61661662 -1.60660661 -1.5965966  -1.58658659
-     -1.57657658 -1.56656657 -1.55655656 -1.54654655 -1.53653654 -1.52652653
-     -1.51651652 -1.50650651 -1.4964965  -1.48648649 -1.47647648 -1.46646647
-     -1.45645646 -1.44644645 -1.43643644 -1.42642643 -1.41641642 -1.40640641
-     -1.3963964  -1.38638639 -1.37637638 -1.36636637 -1.35635636 -1.34634635
-     -1.33633634 -1.32632633 -1.31631632 -1.30630631 -1.2962963  -1.28628629
-     -1.27627628 -1.26626627 -1.25625626 -1.24624625 -1.23623624 -1.22622623
-     -1.21621622 -1.20620621 -1.1961962  -1.18618619 -1.17617618 -1.16616617
-     -1.15615616 -1.14614615 -1.13613614 -1.12612613 -1.11611612 -1.10610611
-     -1.0960961  -1.08608609 -1.07607608 -1.06606607 -1.05605606 -1.04604605
-     -1.03603604 -1.02602603 -1.01601602 -1.00600601 -0.995996   -0.98598599
-     -0.97597598 -0.96596597 -0.95595596 -0.94594595 -0.93593594 -0.92592593
-     -0.91591592 -0.90590591 -0.8958959  -0.88588589 -0.87587588 -0.86586587
-     -0.85585586 -0.84584585 -0.83583584 -0.82582583 -0.81581582 -0.80580581
-     -0.7957958  -0.78578579 -0.77577578 -0.76576577 -0.75575576 -0.74574575
-     -0.73573574 -0.72572573 -0.71571572 -0.70570571 -0.6956957  -0.68568569
-     -0.67567568 -0.66566567 -0.65565566 -0.64564565 -0.63563564 -0.62562563
-     -0.61561562 -0.60560561 -0.5955956  -0.58558559 -0.57557558 -0.56556557
-     -0.55555556 -0.54554555 -0.53553554 -0.52552553 -0.51551552 -0.50550551
-     -0.4954955  -0.48548549 -0.47547548 -0.46546547 -0.45545546 -0.44544545
-     -0.43543544 -0.42542543 -0.41541542 -0.40540541 -0.3953954  -0.38538539
-     -0.37537538 -0.36536537 -0.35535536 -0.34534535 -0.33533534 -0.32532533
-     -0.31531532 -0.30530531 -0.2952953  -0.28528529 -0.27527528 -0.26526527
-     -0.25525526 -0.24524525 -0.23523524 -0.22522523 -0.21521522 -0.20520521
-     -0.1951952  -0.18518519 -0.17517518 -0.16516517 -0.15515516 -0.14514515
-     -0.13513514 -0.12512513 -0.11511512 -0.10510511 -0.0950951  -0.08508509
-     -0.07507508 -0.06506507 -0.05505506 -0.04504505 -0.03503504 -0.02502503
-     -0.01501502 -0.00500501  0.00500501  0.01501502  0.02502503  0.03503504
-      0.04504505  0.05505506  0.06506507  0.07507508  0.08508509  0.0950951
-      0.10510511  0.11511512  0.12512513  0.13513514  0.14514515  0.15515516
-      0.16516517  0.17517518  0.18518519  0.1951952   0.20520521  0.21521522
-      0.22522523  0.23523524  0.24524525  0.25525526  0.26526527  0.27527528
-      0.28528529  0.2952953   0.30530531  0.31531532  0.32532533  0.33533534
-      0.34534535  0.35535536  0.36536537  0.37537538  0.38538539  0.3953954
-      0.40540541  0.41541542  0.42542543  0.43543544  0.44544545  0.45545546
-      0.46546547  0.47547548  0.48548549  0.4954955   0.50550551  0.51551552
-      0.52552553  0.53553554  0.54554555  0.55555556  0.56556557  0.57557558
-      0.58558559  0.5955956   0.60560561  0.61561562  0.62562563  0.63563564
-      0.64564565  0.65565566  0.66566567  0.67567568  0.68568569  0.6956957
-      0.70570571  0.71571572  0.72572573  0.73573574  0.74574575  0.75575576
-      0.76576577  0.77577578  0.78578579  0.7957958   0.80580581  0.81581582
-      0.82582583  0.83583584  0.84584585  0.85585586  0.86586587  0.87587588
-      0.88588589  0.8958959   0.90590591  0.91591592  0.92592593  0.93593594
-      0.94594595  0.95595596  0.96596597  0.97597598  0.98598599  0.995996
-      1.00600601  1.01601602  1.02602603  1.03603604  1.04604605  1.05605606
-      1.06606607  1.07607608  1.08608609  1.0960961   1.10610611  1.11611612
-      1.12612613  1.13613614  1.14614615  1.15615616  1.16616617  1.17617618
-      1.18618619  1.1961962   1.20620621  1.21621622  1.22622623  1.23623624
-      1.24624625  1.25625626  1.26626627  1.27627628  1.28628629  1.2962963
-      1.30630631  1.31631632  1.32632633  1.33633634  1.34634635  1.35635636
-      1.36636637  1.37637638  1.38638639  1.3963964   1.40640641  1.41641642
-      1.42642643  1.43643644  1.44644645  1.45645646  1.46646647  1.47647648
-      1.48648649  1.4964965   1.50650651  1.51651652  1.52652653  1.53653654
-      1.54654655  1.55655656  1.56656657  1.57657658  1.58658659  1.5965966
-      1.60660661  1.61661662  1.62662663  1.63663664  1.64664665  1.65665666
-      1.66666667  1.67667668  1.68668669  1.6966967   1.70670671  1.71671672
-      1.72672673  1.73673674  1.74674675  1.75675676  1.76676677  1.77677678
-      1.78678679  1.7967968   1.80680681  1.81681682  1.82682683  1.83683684
-      1.84684685  1.85685686  1.86686687  1.87687688  1.88688689  1.8968969
-      1.90690691  1.91691692  1.92692693  1.93693694  1.94694695  1.95695696
-      1.96696697  1.97697698  1.98698699  1.996997    2.00700701  2.01701702
-      2.02702703  2.03703704  2.04704705  2.05705706  2.06706707  2.07707708
-      2.08708709  2.0970971   2.10710711  2.11711712  2.12712713  2.13713714
-      2.14714715  2.15715716  2.16716717  2.17717718  2.18718719  2.1971972
-      2.20720721  2.21721722  2.22722723  2.23723724  2.24724725  2.25725726
-      2.26726727  2.27727728  2.28728729  2.2972973   2.30730731  2.31731732
-      2.32732733  2.33733734  2.34734735  2.35735736  2.36736737  2.37737738
-      2.38738739  2.3973974   2.40740741  2.41741742  2.42742743  2.43743744
-      2.44744745  2.45745746  2.46746747  2.47747748  2.48748749  2.4974975
-      2.50750751  2.51751752  2.52752753  2.53753754  2.54754755  2.55755756
-      2.56756757  2.57757758  2.58758759  2.5975976   2.60760761  2.61761762
-      2.62762763  2.63763764  2.64764765  2.65765766  2.66766767  2.67767768
-      2.68768769  2.6976977   2.70770771  2.71771772  2.72772773  2.73773774
-      2.74774775  2.75775776  2.76776777  2.77777778  2.78778779  2.7977978
-      2.80780781  2.81781782  2.82782783  2.83783784  2.84784785  2.85785786
-      2.86786787  2.87787788  2.88788789  2.8978979   2.90790791  2.91791792
-      2.92792793  2.93793794  2.94794795  2.95795796  2.96796797  2.97797798
-      2.98798799  2.997998    3.00800801  3.01801802  3.02802803  3.03803804
-      3.04804805  3.05805806  3.06806807  3.07807808  3.08808809  3.0980981
-      3.10810811  3.11811812  3.12812813  3.13813814  3.14814815  3.15815816
-      3.16816817  3.17817818  3.18818819  3.1981982   3.20820821  3.21821822
-      3.22822823  3.23823824  3.24824825  3.25825826  3.26826827  3.27827828
-      3.28828829  3.2982983   3.30830831  3.31831832  3.32832833  3.33833834
-      3.34834835  3.35835836  3.36836837  3.37837838  3.38838839  3.3983984
-      3.40840841  3.41841842  3.42842843  3.43843844  3.44844845  3.45845846
-      3.46846847  3.47847848  3.48848849  3.4984985   3.50850851  3.51851852
-      3.52852853  3.53853854  3.54854855  3.55855856  3.56856857  3.57857858
-      3.58858859  3.5985986   3.60860861  3.61861862  3.62862863  3.63863864
-      3.64864865  3.65865866  3.66866867  3.67867868  3.68868869  3.6986987
-      3.70870871  3.71871872  3.72872873  3.73873874  3.74874875  3.75875876
-      3.76876877  3.77877878  3.78878879  3.7987988   3.80880881  3.81881882
-      3.82882883  3.83883884  3.84884885  3.85885886  3.86886887  3.87887888
-      3.88888889  3.8988989   3.90890891  3.91891892  3.92892893  3.93893894
-      3.94894895  3.95895896  3.96896897  3.97897898  3.98898899  3.998999
-      4.00900901  4.01901902  4.02902903  4.03903904  4.04904905  4.05905906
-      4.06906907  4.07907908  4.08908909  4.0990991   4.10910911  4.11911912
-      4.12912913  4.13913914  4.14914915  4.15915916  4.16916917  4.17917918
-      4.18918919  4.1991992   4.20920921  4.21921922  4.22922923  4.23923924
-      4.24924925  4.25925926  4.26926927  4.27927928  4.28928929  4.2992993
-      4.30930931  4.31931932  4.32932933  4.33933934  4.34934935  4.35935936
-      4.36936937  4.37937938  4.38938939  4.3993994   4.40940941  4.41941942
-      4.42942943  4.43943944  4.44944945  4.45945946  4.46946947  4.47947948
-      4.48948949  4.4994995   4.50950951  4.51951952  4.52952953  4.53953954
-      4.54954955  4.55955956  4.56956957  4.57957958  4.58958959  4.5995996
-      4.60960961  4.61961962  4.62962963  4.63963964  4.64964965  4.65965966
-      4.66966967  4.67967968  4.68968969  4.6996997   4.70970971  4.71971972
-      4.72972973  4.73973974  4.74974975  4.75975976  4.76976977  4.77977978
-      4.78978979  4.7997998   4.80980981  4.81981982  4.82982983  4.83983984
-      4.84984985  4.85985986  4.86986987  4.87987988  4.88988989  4.8998999
-      4.90990991  4.91991992  4.92992993  4.93993994  4.94994995  4.95995996
-      4.96996997  4.97997998  4.98998999  5.        ]
+     -4.81981982 -4.80980981]
 
 
 
@@ -253,17 +95,19 @@ plt.show()
     
 
 
-Note that the graph is S-shaped -- negative logit (z) values will have probabilities less than 0, 
+Note that the logistic function is S-shaped -- negative logit (z) values will have 
+probabilities less than 0.5, 
 whereas the positive z values will have 
-probablities greater than 0. Also, probabilities on the vertical axis are constrained between 0 and 1. 
+probablities greater than 0.5. Also, probabilities on the vertical axis are 
+constrained between 0 and 1, as they should be. 
  
-The input of the sigmoid function is: $z=\theta X$, which will help us attain probabilities. $
-X$ and $\theta$ are the inputs and the 
+The inputs in the sigmoid function is: $z=\theta X$, which will help us attain probabilities. 
+$X$ and $\theta$ are the features (covariates) and the 
 parameters of interest, respectively.
  
 Using these probability values, one can classify. For example:
 
-$y_i = 1$ if $\hat{p}\geq 0.5$ or else 0.    
+$y_i = 1$ if $\hat{p_i}\geq 0.5$ or else 0.    
 
 Our goal is to come up with the estimates of $\theta$. After we have $\hat{\theta}$, we can obtain
 probabilities, perform classification based on them, or use probability estimates for downstream analysis.
@@ -278,17 +122,17 @@ $C = -\log(1-\hat{p_i})$ if $y_i=0$
 
 Generally speaking, you want the model to come up with higher probabilities for observations with 
 $y_i=1$ and lower probabilities for $y_i=0$. With this in mind, consider what might happen
-if $\hat{p}$ is small vs large (say, 0.05 vs 0.95) when $y=1$. 
+if $\hat{p_i}$ is small vs large (say, 0.05 vs 0.95) when $y_i=1$. 
 This will inflate the loss in the former case but reduce it in the latter. The case is 
-reversed for $y=0$; higher probabilities will yield higher loss, whereas lower probabilities 
+reversed for $y_i=0$; higher probabilities will yield higher loss; whereas, lower probabilities 
 will yield lower loss values. So, lower 
-probabilities are 'shunned' for observations with $y=1$, and higher probabilities are penalized 
+probabilities are 'shunned' for observations with $y_i=1$, and higher probabilities are penalized 
 more for observations with $y=0$. 
 
 We put this logic together and come up with the following cross-entropy loss function:
 
 $$
-C = -\frac{1}{n} \sum_i^{n} [y_i \times \log(\hat{p_i}) + (1-y_i) \times \log(1-\hat{p_i})]
+C_{\theta} = -\frac{1}{n} \sum_i^{n} [y_i \times \log(\hat{p_i}) + (1-y_i) \times \log(1-\hat{p_i})]
 $$
 
 Recall: 
@@ -304,9 +148,9 @@ means that we can use gradient descent to estimate $\theta$.
 **Using Gradient Descent**
 
 Let's first simulate the data following the DGP stated above by using the code below. 
-Note that the functional form we use to simulate the
-outcome variable (health) will depend on probability values obtained from the logistic function 
-rather than a linear functional form. 
+Note that the functional that's used to simulate the
+outcome variable (health) will depend on probability values obtained from the 
+logistic function. 
 
 
 
@@ -369,7 +213,10 @@ stress = np.array(stress).ravel() + np.random.normal(3, 1, n)*low_income + np.ra
 
 # histogram of the stress index
 plt.figure(figsize=(8, 5))
-plt.hist(stress, bins=30, color="steelblue", edgecolor="black")
+plt.hist(stress, bins=30, color="steelblue", edgecolor="black", alpha=0.3)
+plt.xlabel('stress index')
+plt.ylabel('frequency')
+plt.title('Histogram of stress index')
 plt.show()
 
 print(f"average stress index for low income group: {stress[high_income==0].mean().round(4)}")
@@ -428,11 +275,11 @@ for i in range(n):
 health = np.array(health).ravel()
 ```
 
-    mean of college: 0.39836
+    mean of college: 0.3981
 
     
-    share college for high income: 0.59724
-    share college for low income: 0.19948
+    share college for high income: 0.59654
+    share college for low income: 0.19966
 
 
 
@@ -441,9 +288,9 @@ health = np.array(health).ravel()
     
 
 
-    average stress index for low income group: 3.6029
-    average stress index for high income group: 0.0019
-    fraction insured: 0.29742
+    average stress index for low income group: 3.5986
+    average stress index for high income group: 0.0088
+    fraction insured: 0.29812
 
 
 
@@ -452,12 +299,16 @@ health = np.array(health).ravel()
     
 
 
-Let's print out our y variable: health, and our X matrix.
+Since, this is a simulation, we know the true probabilities generated using the 
+true coefficients and the DGP. From a practitioner's standpoint, we won't know the 
+true probabilities since we don't know the true DGP -- we have to estimate 
+them.
+Let's print out our some summary measures on health.
 
 
 ```python
-print(f"y variable: {health} \n")
-print(f"X matrix: {X}")
+#print(f"y variable: {health} \n")
+#print(f"X matrix: {X}")
 print(f"fraction with good health: {health.mean()}")
 
 # create a stress band around the mean for no college, low income and uninsured
@@ -465,29 +316,21 @@ mean_stress_baseline = stress[(college==0) & (high_income==0) & (insurance==0)].
 stress_tolerance = 0.5  # within ±0.5 of mean
 stress_band = (np.abs(stress - mean_stress_baseline) <= stress_tolerance)
 
-
 print(f"fraction with good health among no school, low income, and uninsured: {np.mean(health[(college==0) & 
                                                                                                (high_income==0) & 
                                                                                                (insurance==0) & 
                                                                                                (stress_band)]).round(4)}")
 ```
 
-    y variable: [0 0 0 ... 0 0 0] 
-    
-    X matrix: [[1.         0.         0.         0.         3.84498944]
-     [1.         1.         0.         0.         2.18283205]
-     [1.         0.         0.         0.         4.12618032]
-     ...
-     [1.         1.         0.         1.         3.94744869]
-     [1.         1.         0.         0.         7.45700603]
-     [1.         1.         0.         0.         2.99714685]]
-    fraction with good health: 0.34683
-    fraction with good health among no school, low income, and uninsured: 0.0387
+    fraction with good health: 0.34883
+    fraction with good health among no school, low income, and uninsured: 0.0382
 
 
-The true $\theta$ values are $[\theta_0=0.3, \theta_1=0.1, \theta_2=0.2, \theta_3=0.05, \theta_4=-1]$. 
+The true $\theta$ values are $[\theta_0=0.3, \theta_1=0.1, 
+\theta_2=0.2, \theta_3=0.05, \theta_4=-1]$. 
 
-a. 0.3 is the intercept coefficient, representing people in no college, low income, and uninsured group.
+a. 0.3 is the intercept coefficient, representing people in no college, 
+low income, and uninsured group.
 
 b. 0.1 corresponds to college coefficient.
 
@@ -498,8 +341,8 @@ d. 0.05 corresponds to insurance coefficient.
 e. -1 corresponds to stress coefficient.
  
 Note that 3.61 percent of people who have no schooling, are of low income, are uninsured and around the mean stress 
-index are in good health. This pertains to true $\theta$ of 0.3. Let's convert this value into logistic 
-probability using:
+index are in good health. This pertains to true $\theta$ of 0.3. Let's convert this value 
+into probability using:
 
 
 
@@ -516,10 +359,11 @@ Notice that according to the DGP, around 3.55 percent of people in the populatio
 low income, uninsured, and of the mean stress value are in good health. 
 This is close to what we have in our sample. Hence,
 it is important to recognize that $\theta$ values are coefficients and in the case of logistic 
-regression; these are different from probabilities.
+regression; they are different from probabilities.
 
 **Gradient Descent**
-Let's move on to the gradient descent.
+
+Let's move on to the gradient descent and its usage in estimating $\theta$.
 
 Simply put, gradient is a vector of the partial derivatives of the loss function with respect to each 
 $\theta$ stacked together.
@@ -539,7 +383,7 @@ $$C = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\thet
 $C$ will be a scalar.
 Next, get $\frac{\partial C}{\partial \theta}$.
 
-Here are the dimensions of terms in the RHS:
+But first, here are the dimensions of terms in the RHS:
 
 a. $X: (n\times 5)$
 
@@ -551,14 +395,15 @@ d. $X\theta : (n\times 1)$
 
 e. $Y^{t} \log(\sigma(X\theta)): scalar$
 
-Taking the partial derivative of newly formatted cost function $C$ with respect to $\theta$, you get the gradient vector
+Taking the partial derivative of the newly formatted cost function $C$ with 
+respect to $\theta$, you get the gradient vector
 as follows:
 
 $\frac{\partial C}{\partial \theta} = \frac{1}{n} X^{T}(\sigma(X \theta) - Y)$. 
 
-where, $X^{T}$ is a $5\times n$ matrix$ and $(X^{T}\sigma(X \theta) - Y)$ is a $n \times 1$ matrix. 
+where, $X^{T}$ is a $5\times n$ matrix and $(X^{T}\sigma(X \theta) - Y)$ is a $n \times 1$ matrix. 
 I solved for the partial using 
-the brute force chain rule. One thing to note is a small trick below:
+the brute force chain rule. One thing to note while solving is a small trick below:
 
 $\frac{exp(\theta X)}{1 + exp(\theta X)} =  \frac{1 + exp(\theta X) -1}{1 + exp(\theta X)}$. This results to:
 $1 - \frac{1}{1 + exp(\theta X)} = 1 - \sigma(\theta X)$. 
@@ -605,11 +450,11 @@ plt.figure(figsize=(8, 5))
 plt.plot(np.linspace(1, epochs, epochs), np.array(loss).ravel())
 plt.xlabel('epochs')
 plt.ylabel('cross-entropy loss')
-plt.title("Loss with respect to interations")
+plt.title("Loss with respect to iterations")
 plt.show()
 ```
 
-    theta estimates from gradient descent: [[ 0.9867 -0.3614 -0.1253 -0.1746 -1.1415]] 
+    theta estimates from gradient descent: [[ 0.06   -0.0542  0.5818 -0.0198 -0.9164]] 
      
     
 
@@ -621,27 +466,27 @@ plt.show()
 
 
 We've now estimated the $\theta$ using gradient descent. Let's check our results using the 
-in-built library in sklearn that estimates Logistic Regression.
+in-built library in sklearn that estimates the Logistic Regression.
 
 
 ```python
 # compare estimates from sklearn
-mod = LogisticRegression(max_iter=epochs, fit_intercept=False, penalty=None)
+mod = LogisticRegression(max_iter=epochs, fit_intercept=False, C=np.inf)
 mod_fit = mod.fit(X, health)
 print(f"Estimates from sklearn: {mod_fit.coef_}")
 
 results = {
-            "Gradient Descent": theta_gd.ravel(),
-            "sklearn": mod_fit.coef_.ravel()
+            "GD": theta_gd.ravel(),
+            "SK": mod_fit.coef_.ravel()
 }
 
 pd.DataFrame(results)
 ```
 
-    Estimates from sklearn: [[ 0.32242915  0.11642384  0.149966    0.04682901 -0.9980519 ]]
+    Estimates from sklearn: [[ 0.29600819  0.09481312  0.22279611  0.03175326 -0.98693222]]
 
 
-    /home/vinish/Dropbox/Machine Learning/myenv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1135: FutureWarning: 'penalty' was deprecated in version 1.8 and will be removed in 1.10. To avoid this warning, leave 'penalty' set to its default value and use 'l1_ratio' or 'C' instead. Use l1_ratio=0 instead of penalty='l2', l1_ratio=1 instead of penalty='l1', and C=np.inf instead of penalty=None.
+    /home/vinish/Dropbox/Machine Learning/myenv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1170: UserWarning: Setting penalty=None will ignore the C and l1_ratio parameters
       warnings.warn(
 
 
@@ -666,35 +511,35 @@ pd.DataFrame(results)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Gradient Descent</th>
-      <th>sklearn</th>
+      <th>GD</th>
+      <th>SK</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.986744</td>
-      <td>0.322429</td>
+      <td>0.060008</td>
+      <td>0.296008</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.361377</td>
-      <td>0.116424</td>
+      <td>-0.054172</td>
+      <td>0.094813</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.125337</td>
-      <td>0.149966</td>
+      <td>0.581845</td>
+      <td>0.222796</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.174610</td>
-      <td>0.046829</td>
+      <td>-0.019761</td>
+      <td>0.031753</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-1.141489</td>
-      <td>-0.998052</td>
+      <td>-0.916444</td>
+      <td>-0.986932</td>
     </tr>
   </tbody>
 </table>
@@ -713,15 +558,16 @@ mod_linear = mod_linear.fit(X, health)
 print(f"Estimates from linear reg: {mod_linear.coef_}")
 ```
 
-    Estimates from linear reg: [ 0.44767277  0.01743835  0.15309291  0.0060399  -0.10326798]
+    Estimates from linear reg: [ 0.44482771  0.01377842  0.16374733  0.00466073 -0.10242624]
 
 
 The estimates from the gradient descent and sklearn are virtually similar. Note that $\theta$ estimates 
 aren't marginal effects as they are in the LPM setup. Recall, in the case of logistic regression: 
 $\hat{p} = \frac{1}{(1 + exp(-\theta X))}$. Hence, we need to translate $\theta$ into marginal effects 
 before comparing them with LPM's estimates. Calculation of marginal effect needs to be with respect to a benchmark.
-We consider person A with no college, low income, uninsured, and stress level around the mean (for the group with 
-no college, uninsured, and low income) as this benchmark person. 
+We consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with 
+no college, uninsured, and low income) as this benchmark person and the marginal effects 
+are computed with respect to this person. 
  
 The following code translates $\theta$ into marginal effect.
 
@@ -759,13 +605,13 @@ prob_health_E = fun_me(theta_gd, person_E)
 print(prob_health_E)
 ```
 
-    The probability that person A is in good health is:[0.04203026] 
+    The probability that person A is in good health is:[0.0376653] 
     
-    The probability that person B is in good health is: [0.02966127] 
+    The probability that person B is in good health is: [0.03575017] 
     
-    [0.03726356]
-    [0.03553563]
-    [0.01381737]
+    [0.06545006]
+    [0.03695553]
+    [0.01541215]
 
 
 
@@ -783,8 +629,8 @@ me_E_A = prob_health_E - prob_health_A
 me = np.array([prob_health_A, me_B_A, me_C_A, me_D_A, me_E_A])
 
 results_me_lpm = {
-                    "ME from logistic": me.ravel(),
-                    "ME from LPM": mod_linear.coef_.ravel()
+                    "ME:logistic": me.ravel().round(3),
+                    "ME:LPM": mod_linear.coef_.ravel().round(3)
 }
 
 pd.DataFrame(results_me_lpm)
@@ -811,35 +657,35 @@ pd.DataFrame(results_me_lpm)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ME from logistic</th>
-      <th>ME from LPM</th>
+      <th>ME:logistic</th>
+      <th>ME:LPM</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.042030</td>
-      <td>0.447673</td>
+      <td>0.038</td>
+      <td>0.445</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.012369</td>
-      <td>0.017438</td>
+      <td>-0.002</td>
+      <td>0.014</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-0.004767</td>
-      <td>0.153093</td>
+      <td>0.028</td>
+      <td>0.164</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.006495</td>
-      <td>0.006040</td>
+      <td>-0.001</td>
+      <td>0.005</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.028213</td>
-      <td>-0.103268</td>
+      <td>-0.022</td>
+      <td>-0.102</td>
     </tr>
   </tbody>
 </table>
@@ -847,7 +693,7 @@ pd.DataFrame(results_me_lpm)
 
 
 
-The marginal effects from LPM are and those from logistic regression are shown in the table. 
+The marginal effects from LPM and logistic regression are shown in the table. 
 Let's take a look at predicted probabilities from both LPM and logistic regression models:
 
 
@@ -858,7 +704,7 @@ prob_linear = mod_linear.predict(X) # LPM directly gives probabilites
 print(prob_linear) 
 
 plt.figure(figsize=(8, 5))
-plt.hist(prob_linear, bins = 30, color="steelblue", edgecolor="black")
+plt.hist(prob_linear, bins = 30, color="red", edgecolor="black", alpha=0)
 plt.xlabel('probability')
 plt.ylabel('frequency')
 plt.title('Predicted probabilities from LPM')
@@ -878,8 +724,8 @@ plt.title('Predicted probabilities from Logistic Regression')
 plt.show()
 ```
 
-    [ 0.05060849  0.23969447  0.02157048 ...  0.06350598 -0.30495881
-      0.15560183]
+    [ 0.73310663 -0.06638304  0.21153432 ...  0.69453787  0.76647622
+      0.6886302 ]
 
 
 
@@ -902,9 +748,9 @@ is clearly better than LPM.
 **LPM vs Logistic Regression**
 
 From a practitioner's perspective, one can get by using LPM if the goal is to infer causality alone and you 
-aren't concerned about predicting probabilities. It is simple, easy to interpret, can computationally less tasking. 
-It does mean that you should, but you can get by. But if the goal is to predict, say probability of the binary outcome, 
+aren't concerned about predicting probabilities. It is simple, easy to interpret, and will require low computational power. 
+It does mean that you should, but you can get by. However, if the goal is to predict, say probability of the binary outcome, 
 then LPM is a no-go. 
 
-In the world of causality, getting a sense of the probability of someone being treated (vs untreated) is paramount. We
-know this as propensity scores. Logistic regression can be a good starting model while estimating propensity scores.  
+In the world of causality, the importance of estimating the probability of someone being treated (vs untreated) cannot be overstated. 
+We know this as propensity scores. Logistic regression can be a good starting model while estimating propensity scores.  

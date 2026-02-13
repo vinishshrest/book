@@ -5,9 +5,10 @@
 #
 # **Topic:** Logistic Regression
 #
-# Say, you need to predict the probability of someone being in a good vs. bad health given a set of 
+# Say, you need to predict the probability of someone being in a good vs. bad health (binary outcome)
+# given a set of 
 # inputs: i) college education (yes or no); ii) income (high vs. low); iii) insured vs uninsured; 
-# and stress level (continuous variable).
+# and iv) stress level (continuous variable). 
 # 
 # For the sake of simplicity, we are going to assume a super simple DGP as follows: 
 
@@ -15,16 +16,18 @@
 # 2. High income has a positive effect on health (coefficient = 0.2)
 # 3. 40 percent more people from higher income households have college education
 # 4. Insurance has a positive effect on health (coefficient = 0.05)
-# 5. 60 percent more people from low income households are stressed
+# 5. 60 percent more people from low income households are likely to be stressed
 # 6. Stress has a negative effect on health (coefficient = -1)
 #
-# **Note:** LPM estimates directly gives us the marginal
-# effects. Note that from the standpoint of a logistic regression, 
-# the coefficients mentioned above are not marginal effects.
+# **Note:** We know from the previous lecture that LPM estimates directly gives us the marginal
+# effects -- the coefficients (at least theoretically) are interpreted as the effect of marginal changes 
+# in $X$s on $y$. LPM estimates are straight forward and easy to interpret as most often we are 
+# concerned with marginal effects from a policy standpoint.
+# However, the coefficients pertaining to logistic regression are not marginal effects.
 # This will be clearer as we proceed.
 #
-# We can use the Linear Probability Model (LPM), as we did in the previous lecture -- the estimates from a 
-# properly specified model will be close to the true parameters and are easy to interpret. 
+# We looked at the Linear Probability Model (LPM) in the previous lecture -- the estimates from a 
+# properly specified model were close to the true parameters. 
 # What if we have to estimate probability 
 # of someone being in good health? In this case, LPM does 
 # not gurantee that the probabilities are restricted between 0 and 1. 
@@ -33,13 +36,13 @@
 # It uses a logistic function to restrict 
 # probabilities between values of 0 and 1. So how does it work?
 #
-# Let's first start with probabilities as the primary goal is to predict probability of a binary event. The probability is 
-# written as:
+# Essentially, the primary goal here is to predict probabilities of a binary event. 
+# The probability is written as a function of $\theta$ and $X$:
 # $$
 # p = h_\theta(X) = \sigma(\theta X)
 # $$
 #
-# Note that the true parameters are $\theta$ -- they govern the DGP, and probabilites 
+# $\theta$ is a vector of true parameters -- they govern the DGP, and probabilites 
 # are the function of the true coefficients and inputs. 
 # Specifically, $\sigma(.)$ is the logistic function, defined as:
 # 
@@ -47,8 +50,10 @@
 # \sigma(z) = \frac{1}{(1 + exp(-z))} 
 # $$
 #
-# This $\sigma()$ is also known as the sigmoid function and $z=\theta X$ is often known as the logit. The logit is a 
-# linear combination of $\theta$ and $X$. 
+# This $\sigma(.)$ is also known as the sigmoid function and $z=\theta X$ is often 
+# known as the logit. The logit is a 
+# linear combination of $\theta$ and $X$. By nature of the logistic function, the output is restricted
+# between 0 and 1.  
 # To see the logistic function closely, let's take a look  at the following graph.
 
 # %%
@@ -66,7 +71,7 @@ from pathlib import Path
 
 # generate numbers from -5 to 5
 z = np.linspace(-5, 5, 1000)
-print(z)
+print(z[0:20])
 # compute logistic values (note that these are probabilities)
 sigma_z = 1/(1 + np.exp(-z))
 
@@ -78,17 +83,19 @@ plt.ylabel('probability')
 plt.show()
 
 # %% [markdown]
-# Note that the graph is S-shaped -- negative logit (z) values will have probabilities less than 0, 
+# Note that the logistic function is S-shaped -- negative logit (z) values will have 
+# probabilities less than 0.5, 
 # whereas the positive z values will have 
-# probablities greater than 0. Also, probabilities on the vertical axis are constrained between 0 and 1. 
+# probablities greater than 0.5. Also, probabilities on the vertical axis are 
+# constrained between 0 and 1, as they should be. 
 #  
-# The input of the sigmoid function is: $z=\theta X$, which will help us attain probabilities. $
-# X$ and $\theta$ are the inputs and the 
+# The inputs in the sigmoid function is: $z=\theta X$, which will help us attain probabilities. 
+# $X$ and $\theta$ are the features (covariates) and the 
 # parameters of interest, respectively.
 #  
 # Using these probability values, one can classify. For example:
 # 
-# $y_i = 1$ if $\hat{p}\geq 0.5$ or else 0.    
+# $y_i = 1$ if $\hat{p_i}\geq 0.5$ or else 0.    
 #
 # Our goal is to come up with the estimates of $\theta$. After we have $\hat{\theta}$, we can obtain
 # probabilities, perform classification based on them, or use probability estimates for downstream analysis.
@@ -103,17 +110,17 @@ plt.show()
 #
 # Generally speaking, you want the model to come up with higher probabilities for observations with 
 # $y_i=1$ and lower probabilities for $y_i=0$. With this in mind, consider what might happen
-# if $\hat{p}$ is small vs large (say, 0.05 vs 0.95) when $y=1$. 
+# if $\hat{p_i}$ is small vs large (say, 0.05 vs 0.95) when $y_i=1$. 
 # This will inflate the loss in the former case but reduce it in the latter. The case is 
-# reversed for $y=0$; higher probabilities will yield higher loss, whereas lower probabilities 
+# reversed for $y_i=0$; higher probabilities will yield higher loss; whereas, lower probabilities 
 # will yield lower loss values. So, lower 
-# probabilities are 'shunned' for observations with $y=1$, and higher probabilities are penalized 
+# probabilities are 'shunned' for observations with $y_i=1$, and higher probabilities are penalized 
 # more for observations with $y=0$. 
 # 
 # We put this logic together and come up with the following cross-entropy loss function:
 #
 # $$
-# C = -\frac{1}{n} \sum_i^{n} [y_i \times \log(\hat{p_i}) + (1-y_i) \times \log(1-\hat{p_i})]
+# C_{\theta} = -\frac{1}{n} \sum_i^{n} [y_i \times \log(\hat{p_i}) + (1-y_i) \times \log(1-\hat{p_i})]
 # $$
 #
 # Recall: 
@@ -129,9 +136,9 @@ plt.show()
 # **Using Gradient Descent**
 #
 # Let's first simulate the data following the DGP stated above by using the code below. 
-# Note that the functional form we use to simulate the
-# outcome variable (health) will depend on probability values obtained from the logistic function 
-# rather than a linear functional form. 
+# Note that the functional that's used to simulate the
+# outcome variable (health) will depend on probability values obtained from the 
+# logistic function. 
 #
 # %%
 
@@ -192,7 +199,10 @@ stress = np.array(stress).ravel() + np.random.normal(3, 1, n)*low_income + np.ra
 
 # histogram of the stress index
 plt.figure(figsize=(8, 5))
-plt.hist(stress, bins=30, color="steelblue", edgecolor="black")
+plt.hist(stress, bins=30, color="steelblue", edgecolor="black", alpha=0.3)
+plt.xlabel('stress index')
+plt.ylabel('frequency')
+plt.title('Histogram of stress index')
 plt.show()
 
 print(f"average stress index for low income group: {stress[high_income==0].mean().round(4)}")
@@ -250,11 +260,15 @@ for i in range(n):
 
 health = np.array(health).ravel()
 # %% [markdown]
-# Let's print out our y variable: health, and our X matrix.
+# Since, this is a simulation, we know the true probabilities generated using the 
+# true coefficients and the DGP. From a practitioner's standpoint, we won't know the 
+# true probabilities since we don't know the true DGP -- we have to estimate 
+# them.
+# Let's print out our some summary measures on health.
 
 # %%
-print(f"y variable: {health} \n")
-print(f"X matrix: {X}")
+#print(f"y variable: {health} \n")
+#print(f"X matrix: {X}")
 print(f"fraction with good health: {health.mean()}")
 
 # create a stress band around the mean for no college, low income and uninsured
@@ -262,16 +276,17 @@ mean_stress_baseline = stress[(college==0) & (high_income==0) & (insurance==0)].
 stress_tolerance = 0.5  # within ±0.5 of mean
 stress_band = (np.abs(stress - mean_stress_baseline) <= stress_tolerance)
 
-
 print(f"fraction with good health among no school, low income, and uninsured: {np.mean(health[(college==0) & 
                                                                                                (high_income==0) & 
                                                                                                (insurance==0) & 
                                                                                                (stress_band)]).round(4)}")
 
 # %% [markdown]
-# The true $\theta$ values are $[\theta_0=0.3, \theta_1=0.1, \theta_2=0.2, \theta_3=0.05, \theta_4=-1]$. 
+# The true $\theta$ values are $[\theta_0=0.3, \theta_1=0.1, 
+# \theta_2=0.2, \theta_3=0.05, \theta_4=-1]$. 
 #
-# a. 0.3 is the intercept coefficient, representing people in no college, low income, and uninsured group.
+# a. 0.3 is the intercept coefficient, representing people in no college, 
+# low income, and uninsured group.
 #
 # b. 0.1 corresponds to college coefficient.
 # 
@@ -282,8 +297,8 @@ print(f"fraction with good health among no school, low income, and uninsured: {n
 # e. -1 corresponds to stress coefficient.
 #  
 # Note that 3.61 percent of people who have no schooling, are of low income, are uninsured and around the mean stress 
-# index are in good health. This pertains to true $\theta$ of 0.3. Let's convert this value into logistic 
-# probability using:
+# index are in good health. This pertains to true $\theta$ of 0.3. Let's convert this value 
+# into probability using:
 #
 # %%
 p_gh = 1/(1 + np.exp(-0.3 + np.mean(stress[(college==0) & (high_income==0) & (insurance==0)])))
@@ -294,10 +309,11 @@ print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4
 # low income, uninsured, and of the mean stress value are in good health. 
 # This is close to what we have in our sample. Hence,
 # it is important to recognize that $\theta$ values are coefficients and in the case of logistic 
-# regression; these are different from probabilities.
+# regression; they are different from probabilities.
 #
 # **Gradient Descent**
-# Let's move on to the gradient descent.
+#
+# Let's move on to the gradient descent and its usage in estimating $\theta$.
 #
 # Simply put, gradient is a vector of the partial derivatives of the loss function with respect to each 
 # $\theta$ stacked together.
@@ -317,7 +333,7 @@ print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4
 # $C$ will be a scalar.
 # Next, get $\frac{\partial C}{\partial \theta}$.
 #
-# Here are the dimensions of terms in the RHS:
+# But first, here are the dimensions of terms in the RHS:
 #
 # a. $X: (n\times 5)$
 #
@@ -329,14 +345,15 @@ print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4
 #
 # e. $Y^{t} \log(\sigma(X\theta)): scalar$
 #
-# Taking the partial derivative of newly formatted cost function $C$ with respect to $\theta$, you get the gradient vector
+# Taking the partial derivative of the newly formatted cost function $C$ with 
+# respect to $\theta$, you get the gradient vector
 # as follows:
 #
 # $\frac{\partial C}{\partial \theta} = \frac{1}{n} X^{T}(\sigma(X \theta) - Y)$. 
 #
-# where, $X^{T}$ is a $5\times n$ matrix$ and $(X^{T}\sigma(X \theta) - Y)$ is a $n \times 1$ matrix. 
+# where, $X^{T}$ is a $5\times n$ matrix and $(X^{T}\sigma(X \theta) - Y)$ is a $n \times 1$ matrix. 
 # I solved for the partial using 
-# the brute force chain rule. One thing to note is a small trick below:
+# the brute force chain rule. One thing to note while solving is a small trick below:
 # 
 # $\frac{exp(\theta X)}{1 + exp(\theta X)} =  \frac{1 + exp(\theta X) -1}{1 + exp(\theta X)}$. This results to:
 # $1 - \frac{1}{1 + exp(\theta X)} = 1 - \sigma(\theta X)$. 
@@ -382,21 +399,21 @@ plt.figure(figsize=(8, 5))
 plt.plot(np.linspace(1, epochs, epochs), np.array(loss).ravel())
 plt.xlabel('epochs')
 plt.ylabel('cross-entropy loss')
-plt.title("Loss with respect to interations")
+plt.title("Loss with respect to iterations")
 plt.show()
 # %% [markdown]
 # We've now estimated the $\theta$ using gradient descent. Let's check our results using the 
-# in-built library in sklearn that estimates Logistic Regression.
+# in-built library in sklearn that estimates the Logistic Regression.
 
 # %%
 # compare estimates from sklearn
-mod = LogisticRegression(max_iter=epochs, fit_intercept=False, penalty=None)
+mod = LogisticRegression(max_iter=epochs, fit_intercept=False, C=np.inf)
 mod_fit = mod.fit(X, health)
 print(f"Estimates from sklearn: {mod_fit.coef_}")
 
 results = {
-            "Gradient Descent": theta_gd.ravel(),
-            "sklearn": mod_fit.coef_.ravel()
+            "GD": theta_gd.ravel(),
+            "SK": mod_fit.coef_.ravel()
 }
 
 pd.DataFrame(results)
@@ -417,8 +434,9 @@ print(f"Estimates from linear reg: {mod_linear.coef_}")
 # aren't marginal effects as they are in the LPM setup. Recall, in the case of logistic regression: 
 # $\hat{p} = \frac{1}{(1 + exp(-\theta X))}$. Hence, we need to translate $\theta$ into marginal effects 
 # before comparing them with LPM's estimates. Calculation of marginal effect needs to be with respect to a benchmark.
-# We consider person A with no college, low income, uninsured, and stress level around the mean (for the group with 
-# no college, uninsured, and low income) as this benchmark person. 
+# We consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with 
+# no college, uninsured, and low income) as this benchmark person and the marginal effects 
+# are computed with respect to this person. 
 #  
 # The following code translates $\theta$ into marginal effect.
 
@@ -467,15 +485,15 @@ me_E_A = prob_health_E - prob_health_A
 me = np.array([prob_health_A, me_B_A, me_C_A, me_D_A, me_E_A])
 
 results_me_lpm = {
-                    "ME from logistic": me.ravel(),
-                    "ME from LPM": mod_linear.coef_.ravel()
+                    "ME:logistic": me.ravel().round(3),
+                    "ME:LPM": mod_linear.coef_.ravel().round(3)
 }
 
 pd.DataFrame(results_me_lpm)
 
 
 # %% [markdown]
-# The marginal effects from LPM are and those from logistic regression are shown in the table. 
+# The marginal effects from LPM and logistic regression are shown in the table. 
 # Let's take a look at predicted probabilities from both LPM and logistic regression models:
 # 
 # %% 
@@ -484,7 +502,7 @@ prob_linear = mod_linear.predict(X) # LPM directly gives probabilites
 print(prob_linear) 
 
 plt.figure(figsize=(8, 5))
-plt.hist(prob_linear, bins = 30, color="steelblue", edgecolor="black")
+plt.hist(prob_linear, bins = 30, color="red", edgecolor="black", alpha=0)
 plt.xlabel('probability')
 plt.ylabel('frequency')
 plt.title('Predicted probabilities from LPM')
@@ -511,10 +529,10 @@ plt.show()
 # **LPM vs Logistic Regression**
 #
 # From a practitioner's perspective, one can get by using LPM if the goal is to infer causality alone and you 
-# aren't concerned about predicting probabilities. It is simple, easy to interpret, can computationally less tasking. 
-# It does mean that you should, but you can get by. But if the goal is to predict, say probability of the binary outcome, 
+# aren't concerned about predicting probabilities. It is simple, easy to interpret, and will require low computational power. 
+# It does mean that you should, but you can get by. However, if the goal is to predict, say probability of the binary outcome, 
 # then LPM is a no-go. 
 # 
-# In the world of causality, getting a sense of the probability of someone being treated (vs untreated) is paramount. We
-# know this as propensity scores. Logistic regression can be a good starting model while estimating propensity scores.  
+# In the world of causality, the importance of estimating the probability of someone being treated (vs untreated) cannot be overstated. 
+# We know this as propensity scores. Logistic regression can be a good starting model while estimating propensity scores.  
 
