@@ -36,7 +36,7 @@ It uses a logistic function to restrict
 probabilities between values of 0 and 1. So how does it work?
 
 Essentially, the primary goal here is to predict probabilities of a binary event. 
-The probability is written as a function of $\theta$ and $X$:
+The true probability is written as a function of $\theta$ and $X$:
 $$
 p = h_\theta(X) = \sigma(\theta X)
 $$
@@ -75,7 +75,7 @@ print(z[0:20])
 # compute logistic values (note that these are probabilities)
 sigma_z = 1/(1 + np.exp(-z))
 
-plt.figure(figsize=(10, 8))
+plt.figure(figsize=(8, 5))
 plt.plot(z, sigma_z)
 plt.xlabel('z')
 plt.title('A sigmoid function')
@@ -147,7 +147,7 @@ means that we can use gradient descent to estimate $\theta$.
 
 **Using Gradient Descent**
 
-Let's first simulate the data following the DGP stated above by using the code below. 
+Let's first simulate the data following the DGP mentioned above. 
 Note that the functional that's used to simulate the
 outcome variable (health) will depend on probability values obtained from the 
 logistic function. 
@@ -275,33 +275,31 @@ for i in range(n):
 health = np.array(health).ravel()
 ```
 
-    mean of college: 0.3981
-
-    
-    share college for high income: 0.59654
-    share college for low income: 0.19966
+    mean of college: 0.40072
+    share college for high income: 0.60098
+    share college for low income: 0.20046
 
 
 
     
-![png](Lecture2_Logistic_files/Lecture2_Logistic_3_2.png)
+![png](Lecture2_Logistic_files/Lecture2_Logistic_3_1.png)
     
 
 
-    average stress index for low income group: 3.5986
-    average stress index for high income group: 0.0088
-    fraction insured: 0.29812
+    average stress index for low income group: 3.593
+    average stress index for high income group: 0.0068
+    fraction insured: 0.29915
 
 
 
     
-![png](Lecture2_Logistic_files/Lecture2_Logistic_3_4.png)
+![png](Lecture2_Logistic_files/Lecture2_Logistic_3_3.png)
     
 
 
 Since, this is a simulation, we know the true probabilities generated using the 
 true coefficients and the DGP. From a practitioner's standpoint, we won't know the 
-true probabilities since we don't know the true DGP -- we have to estimate 
+true probabilities in non-experimental settings, since we don't know the true DGP to begin with. We have to estimate 
 them.
 Let's print out our some summary measures on health.
 
@@ -322,8 +320,8 @@ print(f"fraction with good health among no school, low income, and uninsured: {n
                                                                                                (stress_band)]).round(4)}")
 ```
 
-    fraction with good health: 0.34883
-    fraction with good health among no school, low income, and uninsured: 0.0382
+    fraction with good health: 0.34648
+    fraction with good health among no school, low income, and uninsured: 0.0357
 
 
 The true $\theta$ values are $[\theta_0=0.3, \theta_1=0.1, 
@@ -351,7 +349,7 @@ p_gh = 1/(1 + np.exp(-0.3 + np.mean(stress[(college==0) & (high_income==0) & (in
 print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4)} \n")
 ```
 
-    the conversion of theta = 0.3 + mean stress value to prob: 0.0355 
+    the conversion of theta = 0.3 + mean stress value to prob: 0.036 
     
 
 
@@ -374,11 +372,11 @@ $$
 
 Before we get to the gradient of the logistic kind, let's stack the loss function using matrices:
 
-$$C = -\frac{1}{n} [Y^{t} \log(p) + (1-Y^{t}) \log(1- p)]$$
+$$C_{\theta} = -\frac{1}{n} [Y^{t} \log(p) + (1-Y^{t}) \log(1- p)]$$
 
 Replacing $p= \sigma(\theta X)$, we have:  
 
-$$C = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\theta)]$$
+$$C_{\theta} = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\theta)]$$
 
 $C$ will be a scalar.
 Next, get $\frac{\partial C}{\partial \theta}$.
@@ -421,7 +419,7 @@ Now that we are through with all this, the gradient descent algorithm is straigh
 
 3. Compute the gradient. Call this $gd_i$.    
 
-4. Adjust theta using the gradient and the learning rate as: $\theta_{gd} = \theta_{gd} - \eta \times gd_i$. Note that 
+4. Adjust $\theta$ using the gradient and the learning rate as: $\theta_{gd} = \theta_{gd} - \eta \times gd_i$. Note that 
 we have to move against the gradient; hence, the negative.
 
 5. Iterate steps 3 and 4 for $iter=epochs$ number of times or until the algorithm converges.
@@ -454,7 +452,7 @@ plt.title("Loss with respect to iterations")
 plt.show()
 ```
 
-    theta estimates from gradient descent: [[ 0.06   -0.0542  0.5818 -0.0198 -0.9164]] 
+    theta estimates from gradient descent: [[-0.3148 -0.6818  1.1555  0.7523 -0.9126]] 
      
     
 
@@ -465,7 +463,7 @@ plt.show()
     
 
 
-We've now estimated the $\theta$ using gradient descent. Let's check our results using the 
+We've now estimated the $\theta$ using gradient descent. Let's verify our results using the 
 in-built library in sklearn that estimates the Logistic Regression.
 
 
@@ -476,14 +474,14 @@ mod_fit = mod.fit(X, health)
 print(f"Estimates from sklearn: {mod_fit.coef_}")
 
 results = {
-            "GD": theta_gd.ravel(),
-            "SK": mod_fit.coef_.ravel()
+            "GD": theta_gd.ravel().round(3),
+            "SK": mod_fit.coef_.ravel().round(3)
 }
 
 pd.DataFrame(results)
 ```
 
-    Estimates from sklearn: [[ 0.29600819  0.09481312  0.22279611  0.03175326 -0.98693222]]
+    Estimates from sklearn: [[ 0.28453132  0.10165842  0.20973576  0.05319063 -1.00181428]]
 
 
     /home/vinish/Dropbox/Machine Learning/myenv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1170: UserWarning: Setting penalty=None will ignore the C and l1_ratio parameters
@@ -518,28 +516,28 @@ pd.DataFrame(results)
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.060008</td>
-      <td>0.296008</td>
+      <td>-0.315</td>
+      <td>0.285</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.054172</td>
-      <td>0.094813</td>
+      <td>-0.682</td>
+      <td>0.102</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.581845</td>
-      <td>0.222796</td>
+      <td>1.155</td>
+      <td>0.210</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.019761</td>
-      <td>0.031753</td>
+      <td>0.752</td>
+      <td>0.053</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.916444</td>
-      <td>-0.986932</td>
+      <td>-0.913</td>
+      <td>-1.002</td>
     </tr>
   </tbody>
 </table>
@@ -558,14 +556,15 @@ mod_linear = mod_linear.fit(X, health)
 print(f"Estimates from linear reg: {mod_linear.coef_}")
 ```
 
-    Estimates from linear reg: [ 0.44482771  0.01377842  0.16374733  0.00466073 -0.10242624]
+    Estimates from linear reg: [ 0.44234901  0.01574498  0.16142705  0.00745558 -0.1028531 ]
 
 
-The estimates from the gradient descent and sklearn are virtually similar. Note that $\theta$ estimates 
-aren't marginal effects as they are in the LPM setup. Recall, in the case of logistic regression: 
+The estimates from the gradient descent and sklearn are virtually similar. Note that the interpretation of $\theta$ estimates 
+are not equivalent to marginal effects as they are in the LPM set up. Recall, in the case of logistic regression: 
 $\hat{p} = \frac{1}{(1 + exp(-\theta X))}$. Hence, we need to translate $\theta$ into marginal effects 
-before comparing them with LPM's estimates. Calculation of marginal effect needs to be with respect to a benchmark.
-We consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with 
+before comparing them with LPM's estimates. Calculation of marginal effect needs to be with respect to a given benchmark.
+There is nothing wrong with creating a benchmark.
+Say, we consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with 
 no college, uninsured, and low income) as this benchmark person and the marginal effects 
 are computed with respect to this person. 
  
@@ -605,13 +604,13 @@ prob_health_E = fun_me(theta_gd, person_E)
 print(prob_health_E)
 ```
 
-    The probability that person A is in good health is:[0.0376653] 
+    The probability that person A is in good health is:[0.02688823] 
     
-    The probability that person B is in good health is: [0.03575017] 
+    The probability that person B is in good health is: [0.01378122] 
     
-    [0.06545006]
-    [0.03695553]
-    [0.01541215]
+    [0.08066571]
+    [0.05538157]
+    [0.01097141]
 
 
 
@@ -664,28 +663,28 @@ pd.DataFrame(results_me_lpm)
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.038</td>
-      <td>0.445</td>
+      <td>0.027</td>
+      <td>0.442</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-0.002</td>
-      <td>0.014</td>
+      <td>-0.013</td>
+      <td>0.016</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.028</td>
-      <td>0.164</td>
+      <td>0.054</td>
+      <td>0.161</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-0.001</td>
-      <td>0.005</td>
+      <td>0.028</td>
+      <td>0.007</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.022</td>
-      <td>-0.102</td>
+      <td>-0.016</td>
+      <td>-0.103</td>
     </tr>
   </tbody>
 </table>
@@ -724,8 +723,8 @@ plt.title('Predicted probabilities from Logistic Regression')
 plt.show()
 ```
 
-    [ 0.73310663 -0.06638304  0.21153432 ...  0.69453787  0.76647622
-      0.6886302 ]
+    [ 0.72596366  0.02636548 -0.13996585 ...  0.76890919  0.4717254
+     -0.20695239]
 
 
 

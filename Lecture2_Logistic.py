@@ -37,7 +37,7 @@
 # probabilities between values of 0 and 1. So how does it work?
 #
 # Essentially, the primary goal here is to predict probabilities of a binary event. 
-# The probability is written as a function of $\theta$ and $X$:
+# The true probability is written as a function of $\theta$ and $X$:
 # $$
 # p = h_\theta(X) = \sigma(\theta X)
 # $$
@@ -75,7 +75,7 @@ print(z[0:20])
 # compute logistic values (note that these are probabilities)
 sigma_z = 1/(1 + np.exp(-z))
 
-plt.figure(figsize=(10, 8))
+plt.figure(figsize=(8, 5))
 plt.plot(z, sigma_z)
 plt.xlabel('z')
 plt.title('A sigmoid function')
@@ -135,7 +135,7 @@ plt.show()
 #
 # **Using Gradient Descent**
 #
-# Let's first simulate the data following the DGP stated above by using the code below. 
+# Let's first simulate the data following the DGP mentioned above. 
 # Note that the functional that's used to simulate the
 # outcome variable (health) will depend on probability values obtained from the 
 # logistic function. 
@@ -262,7 +262,7 @@ health = np.array(health).ravel()
 # %% [markdown]
 # Since, this is a simulation, we know the true probabilities generated using the 
 # true coefficients and the DGP. From a practitioner's standpoint, we won't know the 
-# true probabilities since we don't know the true DGP -- we have to estimate 
+# true probabilities in non-experimental settings, since we don't know the true DGP to begin with. We have to estimate 
 # them.
 # Let's print out our some summary measures on health.
 
@@ -324,11 +324,11 @@ print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4
 # 
 # Before we get to the gradient of the logistic kind, let's stack the loss function using matrices:
 # 
-# $$C = -\frac{1}{n} [Y^{t} \log(p) + (1-Y^{t}) \log(1- p)]$$
+# $$C_{\theta} = -\frac{1}{n} [Y^{t} \log(p) + (1-Y^{t}) \log(1- p)]$$
 #
 # Replacing $p= \sigma(\theta X)$, we have:  
 #
-# $$C = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\theta)]$$
+# $$C_{\theta} = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\theta)]$$
 #
 # $C$ will be a scalar.
 # Next, get $\frac{\partial C}{\partial \theta}$.
@@ -371,7 +371,7 @@ print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4
 # 
 # 3. Compute the gradient. Call this $gd_i$.    
 # 
-# 4. Adjust theta using the gradient and the learning rate as: $\theta_{gd} = \theta_{gd} - \eta \times gd_i$. Note that 
+# 4. Adjust $\theta$ using the gradient and the learning rate as: $\theta_{gd} = \theta_{gd} - \eta \times gd_i$. Note that 
 # we have to move against the gradient; hence, the negative.
 # 
 # 5. Iterate steps 3 and 4 for $iter=epochs$ number of times or until the algorithm converges.
@@ -402,7 +402,7 @@ plt.ylabel('cross-entropy loss')
 plt.title("Loss with respect to iterations")
 plt.show()
 # %% [markdown]
-# We've now estimated the $\theta$ using gradient descent. Let's check our results using the 
+# We've now estimated the $\theta$ using gradient descent. Let's verify our results using the 
 # in-built library in sklearn that estimates the Logistic Regression.
 
 # %%
@@ -412,8 +412,8 @@ mod_fit = mod.fit(X, health)
 print(f"Estimates from sklearn: {mod_fit.coef_}")
 
 results = {
-            "GD": theta_gd.ravel(),
-            "SK": mod_fit.coef_.ravel()
+            "GD": theta_gd.ravel().round(3),
+            "SK": mod_fit.coef_.ravel().round(3)
 }
 
 pd.DataFrame(results)
@@ -430,11 +430,12 @@ print(f"Estimates from linear reg: {mod_linear.coef_}")
 
 
 # %% [markdown]
-# The estimates from the gradient descent and sklearn are virtually similar. Note that $\theta$ estimates 
-# aren't marginal effects as they are in the LPM setup. Recall, in the case of logistic regression: 
+# The estimates from the gradient descent and sklearn are virtually similar. Note that the interpretation of $\theta$ estimates 
+# are not equivalent to marginal effects as they are in the LPM set up. Recall, in the case of logistic regression: 
 # $\hat{p} = \frac{1}{(1 + exp(-\theta X))}$. Hence, we need to translate $\theta$ into marginal effects 
-# before comparing them with LPM's estimates. Calculation of marginal effect needs to be with respect to a benchmark.
-# We consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with 
+# before comparing them with LPM's estimates. Calculation of marginal effect needs to be with respect to a given benchmark.
+# There is nothing wrong with creating a benchmark.
+# Say, we consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with 
 # no college, uninsured, and low income) as this benchmark person and the marginal effects 
 # are computed with respect to this person. 
 #  

@@ -291,7 +291,7 @@ not gurantee that the probabilities are restricted between 0 and 1.</p>
 It uses a logistic function to restrict
 probabilities between values of 0 and 1. So how does it work?</p>
 <p>Essentially, the primary goal here is to predict probabilities of a binary event.
-The probability is written as a function of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(X\)</span>:
+The true probability is written as a function of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(X\)</span>:
 <span class="math display">\[
 p = h_\theta(X) = \sigma(\theta X)
 \]</span></p>
@@ -324,7 +324,7 @@ To see the logistic function closely, let’s take a look at the following graph
 <span id="cb76-16"><a href="logistic-regression.html#cb76-16" tabindex="-1"></a><span class="co"># compute logistic values (note that these are probabilities)</span></span>
 <span id="cb76-17"><a href="logistic-regression.html#cb76-17" tabindex="-1"></a>sigma_z <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z))</span>
 <span id="cb76-18"><a href="logistic-regression.html#cb76-18" tabindex="-1"></a></span>
-<span id="cb76-19"><a href="logistic-regression.html#cb76-19" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb76-19"><a href="logistic-regression.html#cb76-19" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb76-20"><a href="logistic-regression.html#cb76-20" tabindex="-1"></a>plt.plot(z, sigma_z)</span>
 <span id="cb76-21"><a href="logistic-regression.html#cb76-21" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;z&#39;</span>)</span>
 <span id="cb76-22"><a href="logistic-regression.html#cb76-22" tabindex="-1"></a>plt.title(<span class="st">&#39;A sigmoid function&#39;</span>)</span>
@@ -374,7 +374,7 @@ p = \sigma(\theta X) = \frac{1}{(1 + exp(-\theta X))}
 loss function above don’t have an analytical or a closed form solution. However, the function is convex, which
 means that we can use gradient descent to estimate <span class="math inline">\(\theta\)</span>.</p>
 <p><strong>Using Gradient Descent</strong></p>
-<p>Let’s first simulate the data following the DGP stated above by using the code below.
+<p>Let’s first simulate the data following the DGP mentioned above.
 Note that the functional that’s used to simulate the
 outcome variable (health) will depend on probability values obtained from the
 logistic function.</p>
@@ -496,25 +496,23 @@ logistic function.</p>
 <span id="cb78-116"><a href="logistic-regression.html#cb78-116" tabindex="-1"></a>    health.append(health_i)</span>
 <span id="cb78-117"><a href="logistic-regression.html#cb78-117" tabindex="-1"></a></span>
 <span id="cb78-118"><a href="logistic-regression.html#cb78-118" tabindex="-1"></a>health <span class="op">=</span> np.array(health).ravel()</span></code></pre></div>
-<pre><code>mean of college: 0.3981
-
-
-share college for high income: 0.59654
-share college for low income: 0.19966</code></pre>
+<pre><code>mean of college: 0.40072
+share college for high income: 0.60098
+share college for low income: 0.20046</code></pre>
 <div class="float">
-<img src="Lecture2_Logistic_files/Lecture2_Logistic_3_2.png" alt="png" />
+<img src="Lecture2_Logistic_files/Lecture2_Logistic_3_1.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
-<pre><code>average stress index for low income group: 3.5986
-average stress index for high income group: 0.0088
-fraction insured: 0.29812</code></pre>
+<pre><code>average stress index for low income group: 3.593
+average stress index for high income group: 0.0068
+fraction insured: 0.29915</code></pre>
 <div class="float">
-<img src="Lecture2_Logistic_files/Lecture2_Logistic_3_4.png" alt="png" />
+<img src="Lecture2_Logistic_files/Lecture2_Logistic_3_3.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
 <p>Since, this is a simulation, we know the true probabilities generated using the
 true coefficients and the DGP. From a practitioner’s standpoint, we won’t know the
-true probabilities since we don’t know the true DGP – we have to estimate
+true probabilities in non-experimental settings, since we don’t know the true DGP to begin with. We have to estimate
 them.
 Let’s print out our some summary measures on health.</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb81-1"><a href="logistic-regression.html#cb81-1" tabindex="-1"></a><span class="co">#print(f&quot;y variable: {health} \n&quot;)</span></span>
@@ -530,8 +528,8 @@ Let’s print out our some summary measures on health.</p>
 <span id="cb81-11"><a href="logistic-regression.html#cb81-11" tabindex="-1"></a>                                                                                               (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
 <span id="cb81-12"><a href="logistic-regression.html#cb81-12" tabindex="-1"></a>                                                                                               (insurance<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
 <span id="cb81-13"><a href="logistic-regression.html#cb81-13" tabindex="-1"></a>                                                                                               (stress_band)])<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>fraction with good health: 0.34883
-fraction with good health among no school, low income, and uninsured: 0.0382</code></pre>
+<pre><code>fraction with good health: 0.34648
+fraction with good health among no school, low income, and uninsured: 0.0357</code></pre>
 <p>The true <span class="math inline">\(\theta\)</span> values are <span class="math inline">\([\theta_0=0.3, \theta_1=0.1, \theta_2=0.2, \theta_3=0.05, \theta_4=-1]\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>0.3 is the intercept coefficient, representing people in no college,
@@ -546,7 +544,7 @@ index are in good health. This pertains to true <span class="math inline">\(\the
 into probability using:</p>
 <div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="logistic-regression.html#cb83-1" tabindex="-1"></a>p_gh <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="fl">0.3</span> <span class="op">+</span> np.mean(stress[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (insurance<span class="op">==</span><span class="dv">0</span>)])))</span>
 <span id="cb83-2"><a href="logistic-regression.html#cb83-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;the conversion of theta = 0.3 + mean stress value to prob: </span><span class="sc">{</span>p_gh<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>the conversion of theta = 0.3 + mean stress value to prob: 0.0355 </code></pre>
+<pre><code>the conversion of theta = 0.3 + mean stress value to prob: 0.036 </code></pre>
 <p>Notice that according to the DGP, around 3.55 percent of people in the population with no college,
 low income, uninsured, and of the mean stress value are in good health.
 This is close to what we have in our sample. Hence,
@@ -560,9 +558,9 @@ regression; they are different from probabilities.</p>
 \text{gradient} = \begin{bmatrix} \frac{\partial C}{\partial \theta_0} \\ \frac{\partial C}{\partial \theta_1} \\ \frac{\partial C}{\partial \theta_2} \\ \frac{\partial C}{\partial \theta_3} \end{bmatrix}
 \]</span></p>
 <p>Before we get to the gradient of the logistic kind, let’s stack the loss function using matrices:</p>
-<p><span class="math display">\[C = -\frac{1}{n} [Y^{t} \log(p) + (1-Y^{t}) \log(1- p)]\]</span></p>
+<p><span class="math display">\[C_{\theta} = -\frac{1}{n} [Y^{t} \log(p) + (1-Y^{t}) \log(1- p)]\]</span></p>
 <p>Replacing <span class="math inline">\(p= \sigma(\theta X)\)</span>, we have:</p>
-<p><span class="math display">\[C = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\theta)]\]</span></p>
+<p><span class="math display">\[C_{\theta} = -\frac{1}{n} [Y^{t} \log(\sigma(X\theta)) + (1-Y^{t}) \log(1-\sigma(X\theta)]\]</span></p>
 <p><span class="math inline">\(C\)</span> will be a scalar.
 Next, get <span class="math inline">\(\frac{\partial C}{\partial \theta}\)</span>.</p>
 <p>But first, here are the dimensions of terms in the RHS:</p>
@@ -590,7 +588,7 @@ and just take the word for the gradient or you could try it all out. Upto you!</
 <li><p>Initialize the <span class="math inline">\(\theta_{gd}\)</span> values. I’ve used values from the normal distribution.</p></li>
 <li><p>Initialize the learning rate – <span class="math inline">\(\eta\)</span> and the number of interations (epochs). We set <span class="math inline">\(\eta = 0.5\)</span> and epochs=50.</p></li>
 <li><p>Compute the gradient. Call this <span class="math inline">\(gd_i\)</span>.</p></li>
-<li><p>Adjust theta using the gradient and the learning rate as: <span class="math inline">\(\theta_{gd} = \theta_{gd} - \eta \times gd_i\)</span>. Note that
+<li><p>Adjust <span class="math inline">\(\theta\)</span> using the gradient and the learning rate as: <span class="math inline">\(\theta_{gd} = \theta_{gd} - \eta \times gd_i\)</span>. Note that
 we have to move against the gradient; hence, the negative.</p></li>
 <li><p>Iterate steps 3 and 4 for <span class="math inline">\(iter=epochs\)</span> number of times or until the algorithm converges.</p></li>
 </ol>
@@ -618,13 +616,13 @@ we have to move against the gradient; hence, the negative.</p></li>
 <span id="cb85-22"><a href="logistic-regression.html#cb85-22" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;cross-entropy loss&#39;</span>)</span>
 <span id="cb85-23"><a href="logistic-regression.html#cb85-23" tabindex="-1"></a>plt.title(<span class="st">&quot;Loss with respect to iterations&quot;</span>)</span>
 <span id="cb85-24"><a href="logistic-regression.html#cb85-24" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<pre><code>theta estimates from gradient descent: [[ 0.06   -0.0542  0.5818 -0.0198 -0.9164]] 
+<pre><code>theta estimates from gradient descent: [[-0.3148 -0.6818  1.1555  0.7523 -0.9126]] 
  </code></pre>
 <div class="float">
 <img src="Lecture2_Logistic_files/Lecture2_Logistic_9_1.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
-<p>We’ve now estimated the <span class="math inline">\(\theta\)</span> using gradient descent. Let’s check our results using the
+<p>We’ve now estimated the <span class="math inline">\(\theta\)</span> using gradient descent. Let’s verify our results using the
 in-built library in sklearn that estimates the Logistic Regression.</p>
 <div class="sourceCode" id="cb87"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb87-1"><a href="logistic-regression.html#cb87-1" tabindex="-1"></a><span class="co"># compare estimates from sklearn</span></span>
 <span id="cb87-2"><a href="logistic-regression.html#cb87-2" tabindex="-1"></a>mod <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span>epochs, fit_intercept<span class="op">=</span><span class="va">False</span>, C<span class="op">=</span>np.inf)</span>
@@ -632,12 +630,12 @@ in-built library in sklearn that estimates the Logistic Regression.</p>
 <span id="cb87-4"><a href="logistic-regression.html#cb87-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from sklearn: </span><span class="sc">{</span>mod_fit<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb87-5"><a href="logistic-regression.html#cb87-5" tabindex="-1"></a></span>
 <span id="cb87-6"><a href="logistic-regression.html#cb87-6" tabindex="-1"></a>results <span class="op">=</span> {</span>
-<span id="cb87-7"><a href="logistic-regression.html#cb87-7" tabindex="-1"></a>            <span class="st">&quot;GD&quot;</span>: theta_gd.ravel(),</span>
-<span id="cb87-8"><a href="logistic-regression.html#cb87-8" tabindex="-1"></a>            <span class="st">&quot;SK&quot;</span>: mod_fit.coef_.ravel()</span>
+<span id="cb87-7"><a href="logistic-regression.html#cb87-7" tabindex="-1"></a>            <span class="st">&quot;GD&quot;</span>: theta_gd.ravel().<span class="bu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb87-8"><a href="logistic-regression.html#cb87-8" tabindex="-1"></a>            <span class="st">&quot;SK&quot;</span>: mod_fit.coef_.ravel().<span class="bu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb87-9"><a href="logistic-regression.html#cb87-9" tabindex="-1"></a>}</span>
 <span id="cb87-10"><a href="logistic-regression.html#cb87-10" tabindex="-1"></a></span>
 <span id="cb87-11"><a href="logistic-regression.html#cb87-11" tabindex="-1"></a>pd.DataFrame(results)</span></code></pre></div>
-<pre><code>Estimates from sklearn: [[ 0.29600819  0.09481312  0.22279611  0.03175326 -0.98693222]]
+<pre><code>Estimates from sklearn: [[ 0.28453132  0.10165842  0.20973576  0.05319063 -1.00181428]]
 
 
 /home/vinish/Dropbox/Machine Learning/myenv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1170: UserWarning: Setting penalty=None will ignore the C and l1_ratio parameters
@@ -675,10 +673,10 @@ SK
 0
 </th>
 <td>
-0.060008
+-0.315
 </td>
 <td>
-0.296008
+0.285
 </td>
 </tr>
 <tr>
@@ -686,10 +684,10 @@ SK
 1
 </th>
 <td>
--0.054172
+-0.682
 </td>
 <td>
-0.094813
+0.102
 </td>
 </tr>
 <tr>
@@ -697,10 +695,10 @@ SK
 2
 </th>
 <td>
-0.581845
+1.155
 </td>
 <td>
-0.222796
+0.210
 </td>
 </tr>
 <tr>
@@ -708,10 +706,10 @@ SK
 3
 </th>
 <td>
--0.019761
+0.752
 </td>
 <td>
-0.031753
+0.053
 </td>
 </tr>
 <tr>
@@ -719,10 +717,10 @@ SK
 4
 </th>
 <td>
--0.916444
+-0.913
 </td>
 <td>
--0.986932
+-1.002
 </td>
 </tr>
 </tbody>
@@ -733,12 +731,13 @@ SK
 <span id="cb89-2"><a href="logistic-regression.html#cb89-2" tabindex="-1"></a>mod_linear <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>) <span class="co"># we dont want to double fit the intercept; X already contains it </span></span>
 <span id="cb89-3"><a href="logistic-regression.html#cb89-3" tabindex="-1"></a>mod_linear <span class="op">=</span> mod_linear.fit(X, health)</span>
 <span id="cb89-4"><a href="logistic-regression.html#cb89-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from linear reg: </span><span class="sc">{</span>mod_linear<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<pre><code>Estimates from linear reg: [ 0.44482771  0.01377842  0.16374733  0.00466073 -0.10242624]</code></pre>
-<p>The estimates from the gradient descent and sklearn are virtually similar. Note that <span class="math inline">\(\theta\)</span> estimates
-aren’t marginal effects as they are in the LPM setup. Recall, in the case of logistic regression:
+<pre><code>Estimates from linear reg: [ 0.44234901  0.01574498  0.16142705  0.00745558 -0.1028531 ]</code></pre>
+<p>The estimates from the gradient descent and sklearn are virtually similar. Note that the interpretation of <span class="math inline">\(\theta\)</span> estimates
+are not equivalent to marginal effects as they are in the LPM set up. Recall, in the case of logistic regression:
 <span class="math inline">\(\hat{p} = \frac{1}{(1 + exp(-\theta X))}\)</span>. Hence, we need to translate <span class="math inline">\(\theta\)</span> into marginal effects
-before comparing them with LPM’s estimates. Calculation of marginal effect needs to be with respect to a benchmark.
-We consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with
+before comparing them with LPM’s estimates. Calculation of marginal effect needs to be with respect to a given benchmark.
+There is nothing wrong with creating a benchmark.
+Say, we consider person A: with no college, low income, uninsured, and stress level around the mean (for the group with
 no college, uninsured, and low income) as this benchmark person and the marginal effects
 are computed with respect to this person.</p>
 <p>The following code translates <span class="math inline">\(\theta\)</span> into marginal effect.</p>
@@ -772,13 +771,13 @@ are computed with respect to this person.</p>
 <span id="cb91-28"><a href="logistic-regression.html#cb91-28" tabindex="-1"></a>person_E <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline <span class="op">+</span> <span class="dv">1</span>]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
 <span id="cb91-29"><a href="logistic-regression.html#cb91-29" tabindex="-1"></a>prob_health_E <span class="op">=</span> fun_me(theta_gd, person_E)</span>
 <span id="cb91-30"><a href="logistic-regression.html#cb91-30" tabindex="-1"></a><span class="bu">print</span>(prob_health_E)</span></code></pre></div>
-<pre><code>The probability that person A is in good health is:[0.0376653] 
+<pre><code>The probability that person A is in good health is:[0.02688823] 
 
-The probability that person B is in good health is: [0.03575017] 
+The probability that person B is in good health is: [0.01378122] 
 
-[0.06545006]
-[0.03695553]
-[0.01541215]</code></pre>
+[0.08066571]
+[0.05538157]
+[0.01097141]</code></pre>
 <p>Since we are using Person A as the benchmark, we can compute marginal probabilities simply by
 substracting probabilities.</p>
 <div class="sourceCode" id="cb93"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb93-1"><a href="logistic-regression.html#cb93-1" tabindex="-1"></a>me_B_A <span class="op">=</span> prob_health_B <span class="op">-</span> prob_health_A </span>
@@ -827,10 +826,10 @@ ME:LPM
 0
 </th>
 <td>
-0.038
+0.027
 </td>
 <td>
-0.445
+0.442
 </td>
 </tr>
 <tr>
@@ -838,10 +837,10 @@ ME:LPM
 1
 </th>
 <td>
--0.002
+-0.013
 </td>
 <td>
-0.014
+0.016
 </td>
 </tr>
 <tr>
@@ -849,10 +848,10 @@ ME:LPM
 2
 </th>
 <td>
-0.028
+0.054
 </td>
 <td>
-0.164
+0.161
 </td>
 </tr>
 <tr>
@@ -860,10 +859,10 @@ ME:LPM
 3
 </th>
 <td>
--0.001
+0.028
 </td>
 <td>
-0.005
+0.007
 </td>
 </tr>
 <tr>
@@ -871,10 +870,10 @@ ME:LPM
 4
 </th>
 <td>
--0.022
+-0.016
 </td>
 <td>
--0.102
+-0.103
 </td>
 </tr>
 </tbody>
@@ -905,8 +904,8 @@ Let’s take a look at predicted probabilities from both LPM and logistic regres
 <span id="cb94-21"><a href="logistic-regression.html#cb94-21" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">&#39;--&#39;</span>)</span>
 <span id="cb94-22"><a href="logistic-regression.html#cb94-22" tabindex="-1"></a>plt.title(<span class="st">&#39;Predicted probabilities from Logistic Regression&#39;</span>)</span>
 <span id="cb94-23"><a href="logistic-regression.html#cb94-23" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<pre><code>[ 0.73310663 -0.06638304  0.21153432 ...  0.69453787  0.76647622
-  0.6886302 ]</code></pre>
+<pre><code>[ 0.72596366  0.02636548 -0.13996585 ...  0.76890919  0.4717254
+ -0.20695239]</code></pre>
 <div class="float">
 <img src="Lecture2_Logistic_files/Lecture2_Logistic_19_1.png" alt="png" />
 <div class="figcaption">png</div>
