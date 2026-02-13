@@ -1,4 +1,4 @@
-# Logistic regression 
+Logistic regression 
 
 **Course:** Causal Inference
 
@@ -275,25 +275,27 @@ for i in range(n):
 health = np.array(health).ravel()
 ```
 
-    mean of college: 0.39887
-    share college for high income: 0.59856
-    share college for low income: 0.19918
+    mean of college: 0.40291
+
+    
+    share college for high income: 0.603
+    share college for low income: 0.20282
 
 
 
     
-![png](Lecture2_Logistic_files/Lecture2_Logistic_3_1.png)
+![png](Lecture2_Logistic_files/Lecture2_Logistic_3_2.png)
     
 
 
-    average stress index for low income group: 3.6123
-    average stress index for high income group: 0.0
-    fraction insured: 0.3039
+    average stress index for low income group: 3.6107
+    average stress index for high income group: 0.0004
+    fraction insured: 0.30029
 
 
 
     
-![png](Lecture2_Logistic_files/Lecture2_Logistic_3_3.png)
+![png](Lecture2_Logistic_files/Lecture2_Logistic_3_4.png)
     
 
 
@@ -320,8 +322,8 @@ print(f"fraction with good health among no school, low income, and uninsured: {n
                                                                                                (stress_band)]).round(4)}")
 ```
 
-    fraction with good health: 0.34717
-    fraction with good health among no school, low income, and uninsured: 0.0341
+    fraction with good health: 0.34948
+    fraction with good health among no school, low income, and uninsured: 0.0353
 
 
 The true $\theta$ values are $[\theta_0=0.3, \theta_1=0.1, 
@@ -349,7 +351,7 @@ p_gh = 1/(1 + np.exp(-0.3 + np.mean(stress[(college==0) & (high_income==0) & (in
 print(f"the conversion of theta = 0.3 + mean stress value to prob: {p_gh.round(4)} \n")
 ```
 
-    the conversion of theta = 0.3 + mean stress value to prob: 0.0351 
+    the conversion of theta = 0.3 + mean stress value to prob: 0.035 
     
 
 
@@ -452,7 +454,7 @@ plt.title("Loss with respect to iterations")
 plt.show()
 ```
 
-    theta estimates from gradient descent: [[-0.2389  0.192   0.5794  0.38   -0.9031]] 
+    theta estimates from gradient descent: [[-0.296  -0.2989  1.1594 -0.1458 -0.8166]] 
      
     
 
@@ -481,7 +483,7 @@ results = {
 pd.DataFrame(results)
 ```
 
-    Estimates from sklearn: [[ 0.25589713  0.11397403  0.24584297  0.02864795 -0.99104408]]
+    Estimates from sklearn: [[ 0.32179444  0.08030071  0.20651284  0.01809187 -0.99105091]]
 
 
     /home/vinish/Dropbox/Machine Learning/myenv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1170: UserWarning: Setting penalty=None will ignore the C and l1_ratio parameters
@@ -516,27 +518,27 @@ pd.DataFrame(results)
   <tbody>
     <tr>
       <th>0</th>
-      <td>-0.239</td>
-      <td>0.256</td>
+      <td>-0.296</td>
+      <td>0.322</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.192</td>
-      <td>0.114</td>
+      <td>-0.299</td>
+      <td>0.080</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.579</td>
-      <td>0.246</td>
+      <td>1.159</td>
+      <td>0.207</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.380</td>
-      <td>0.029</td>
+      <td>-0.146</td>
+      <td>0.018</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.903</td>
+      <td>-0.817</td>
       <td>-0.991</td>
     </tr>
   </tbody>
@@ -556,7 +558,7 @@ mod_linear = mod_linear.fit(X, health)
 print(f"Estimates from linear reg: {mod_linear.coef_}")
 ```
 
-    Estimates from linear reg: [ 0.43718759  0.01654884  0.16951229  0.00369069 -0.10103997]
+    Estimates from linear reg: [ 0.44695463  0.01138116  0.16453216  0.0015579  -0.10234894]
 
 
 The estimates from the gradient descent and sklearn are virtually similar. Note that the interpretation of $\theta$ estimates 
@@ -604,13 +606,13 @@ prob_health_E = fun_me(theta_gd, person_E)
 print(prob_health_E)
 ```
 
-    The probability that person A is in good health is:[0.02924212] 
+    The probability that person A is in good health is:[0.03732477] 
     
-    The probability that person B is in good health is: [0.03521318] 
+    The probability that person B is in good health is: [0.02795158] 
     
-    [0.05102397]
-    [0.04218946]
-    [0.01206149]
+    [0.11001232]
+    [0.0324238]
+    [0.01684625]
 
 
 
@@ -663,28 +665,28 @@ pd.DataFrame(results_me_lpm)
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.029</td>
-      <td>0.437</td>
+      <td>0.037</td>
+      <td>0.447</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.006</td>
-      <td>0.017</td>
+      <td>-0.009</td>
+      <td>0.011</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.022</td>
-      <td>0.170</td>
+      <td>0.073</td>
+      <td>0.165</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.013</td>
-      <td>0.004</td>
+      <td>-0.005</td>
+      <td>0.002</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-0.017</td>
-      <td>-0.101</td>
+      <td>-0.020</td>
+      <td>-0.102</td>
     </tr>
   </tbody>
 </table>
@@ -723,7 +725,8 @@ plt.title('Predicted probabilities from Logistic Regression')
 plt.show()
 ```
 
-    [0.51392851 0.1614878  0.0131093  ... 0.5253499  0.46627795 0.66997023]
+    [ 0.29927004  0.64684742  0.74602907 ... -0.02085397  0.80991622
+      0.74443065]
 
 
 
