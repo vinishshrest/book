@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -282,14 +282,14 @@ the following conditional expectations.</p>
 between the first and the second difference – is <span class="math inline">\(\tau\)</span>. Hence, the estimation of <span class="math inline">\(\tau\)</span>, in the regression framework above,
 is the DiD estimate.</p>
 <p>Let’s apply this to our ACA-Medicaid example.</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-1" tabindex="-1"></a><span class="co"># lets create the post, treat, and the interaction between the post and treat (labeled as did)</span></span>
-<span id="cb201-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-2" tabindex="-1"></a>dat_canonical  <span class="ot">&lt;-</span> dat_canonical  <span class="sc">%&gt;%</span> </span>
-<span id="cb201-3"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-3" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">post =</span> <span class="fu">ifelse</span>(year <span class="sc">&gt;=</span> <span class="dv">2014</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
-<span id="cb201-4"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-4" tabindex="-1"></a>                             <span class="at">treat =</span> <span class="fu">ifelse</span>(expand <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
-<span id="cb201-5"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-5" tabindex="-1"></a>                             <span class="at">did =</span> post <span class="sc">*</span> treat)</span>
-<span id="cb201-6"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-6" tabindex="-1"></a></span>
-<span id="cb201-7"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-7" tabindex="-1"></a>reg_did  <span class="ot">&lt;-</span> <span class="fu">lm</span>(sahieunins138 <span class="sc">~</span> did <span class="sc">+</span> post <span class="sc">+</span> treat, <span class="at">data =</span> dat_canonical)</span>
-<span id="cb201-8"><a href="the-2-times-2-difference-in-differences-estimate.html#cb201-8" tabindex="-1"></a><span class="fu">summary</span>(reg_did)</span></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-1" tabindex="-1"></a><span class="co"># lets create the post, treat, and the interaction between the post and treat (labeled as did)</span></span>
+<span id="cb230-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-2" tabindex="-1"></a>dat_canonical  <span class="ot">&lt;-</span> dat_canonical  <span class="sc">%&gt;%</span> </span>
+<span id="cb230-3"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-3" tabindex="-1"></a>                      <span class="fu">mutate</span>(<span class="at">post =</span> <span class="fu">ifelse</span>(year <span class="sc">&gt;=</span> <span class="dv">2014</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb230-4"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-4" tabindex="-1"></a>                             <span class="at">treat =</span> <span class="fu">ifelse</span>(expand <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), </span>
+<span id="cb230-5"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-5" tabindex="-1"></a>                             <span class="at">did =</span> post <span class="sc">*</span> treat)</span>
+<span id="cb230-6"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-6" tabindex="-1"></a></span>
+<span id="cb230-7"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-7" tabindex="-1"></a>reg_did  <span class="ot">&lt;-</span> <span class="fu">lm</span>(sahieunins138 <span class="sc">~</span> did <span class="sc">+</span> post <span class="sc">+</span> treat, <span class="at">data =</span> dat_canonical)</span>
+<span id="cb230-8"><a href="the-2-times-2-difference-in-differences-estimate.html#cb230-8" tabindex="-1"></a><span class="fu">summary</span>(reg_did)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = sahieunins138 ~ did + post + treat, data = dat_canonical)
@@ -310,16 +310,16 @@ is the DiD estimate.</p>
 ## Residual standard error: 7.464 on 5224 degrees of freedom
 ## Multiple R-squared:  0.4322, Adjusted R-squared:  0.4319 
 ## F-statistic:  1326 on 3 and 5224 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb203-1" tabindex="-1"></a>did  <span class="ot">&lt;-</span> naive <span class="sc">-</span> naive_pre</span>
-<span id="cb203-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb203-2" tabindex="-1"></a><span class="fu">print</span>(did)</span></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb232-1" tabindex="-1"></a>did  <span class="ot">&lt;-</span> naive <span class="sc">-</span> naive_pre</span>
+<span id="cb232-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb232-2" tabindex="-1"></a><span class="fu">print</span>(did)</span></code></pre></div>
 <pre><code>## [1] -5.7538</code></pre>
 <p>Note that the difference in mean did and the regression coefficient on the interaction between
 <span class="math inline">\(Post \times treat\)</span> are the same. Plus, we get the standard errors as well. Of course, the standard errors
 are not adjusted for clustering. The errors of observations within a cluster (the ground at which the treatment is
 implemented, in our case state) will be correlated, so we need to account for it. The way to do it is to cluster the
 standard error at the state level. This can be done using the fixest library and feols command.</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb205-1" tabindex="-1"></a>reg_did_cluster  <span class="ot">&lt;-</span> <span class="fu">feols</span>(sahieunins138 <span class="sc">~</span> did <span class="sc">+</span> post <span class="sc">+</span> treat, <span class="at">data =</span> dat_canonical, <span class="at">cluster =</span> <span class="sc">~</span>state.abb)</span>
-<span id="cb205-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb205-2" tabindex="-1"></a><span class="fu">summary</span>(reg_did_cluster)</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="the-2-times-2-difference-in-differences-estimate.html#cb234-1" tabindex="-1"></a>reg_did_cluster  <span class="ot">&lt;-</span> <span class="fu">feols</span>(sahieunins138 <span class="sc">~</span> did <span class="sc">+</span> post <span class="sc">+</span> treat, <span class="at">data =</span> dat_canonical, <span class="at">cluster =</span> <span class="sc">~</span>state.abb)</span>
+<span id="cb234-2"><a href="the-2-times-2-difference-in-differences-estimate.html#cb234-2" tabindex="-1"></a><span class="fu">summary</span>(reg_did_cluster)</span></code></pre></div>
 <pre><code>## OLS estimation, Dep. Var.: sahieunins138
 ## Observations: 5,228
 ## Standard-errors: Clustered (state.abb) 

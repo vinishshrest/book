@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -280,32 +280,32 @@ div.csl-indent {
 <p>Here, <span class="math inline">\(\widehat{\sigma}^2\)</span> is the estimated variance of the error term. The square root of it is the
 <strong>standard error of the regression</strong>. It tells us on average how far away is the actual observation (<span class="math inline">\(Y\)</span>-value) from the regression line (best-fit line or <span class="math inline">\(E(Y|X)\)</span>). Lower the standard error of the regression, better the fit.</p>
 <p>Let’s estimate the standard error of the regression.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="standard-errors.html#cb46-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">125</span>)</span>
-<span id="cb46-2"><a href="standard-errors.html#cb46-2" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb46-3"><a href="standard-errors.html#cb46-3" tabindex="-1"></a>educ  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">16</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb46-4"><a href="standard-errors.html#cb46-4" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="dv">20000</span> <span class="sc">+</span> <span class="dv">2000</span> <span class="sc">*</span> educ <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">10000</span>, <span class="at">sd =</span> <span class="dv">5000</span>)</span>
-<span id="cb46-5"><a href="standard-errors.html#cb46-5" tabindex="-1"></a></span>
-<span id="cb46-6"><a href="standard-errors.html#cb46-6" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">educ =</span> educ, <span class="at">income =</span> income)</span>
-<span id="cb46-7"><a href="standard-errors.html#cb46-7" tabindex="-1"></a></span>
-<span id="cb46-8"><a href="standard-errors.html#cb46-8" tabindex="-1"></a><span class="co"># estimate the model</span></span>
-<span id="cb46-9"><a href="standard-errors.html#cb46-9" tabindex="-1"></a>reg_model  <span class="ot">&lt;-</span> <span class="fu">lm</span>(income<span class="sc">~</span>educ, <span class="at">data =</span> dat) </span>
-<span id="cb46-10"><a href="standard-errors.html#cb46-10" tabindex="-1"></a></span>
-<span id="cb46-11"><a href="standard-errors.html#cb46-11" tabindex="-1"></a><span class="co"># get the residuals</span></span>
-<span id="cb46-12"><a href="standard-errors.html#cb46-12" tabindex="-1"></a>resid  <span class="ot">&lt;-</span> <span class="fu">residuals</span>(reg_model) </span>
-<span id="cb46-13"><a href="standard-errors.html#cb46-13" tabindex="-1"></a></span>
-<span id="cb46-14"><a href="standard-errors.html#cb46-14" tabindex="-1"></a><span class="co"># sum of the square of residuals </span></span>
-<span id="cb46-15"><a href="standard-errors.html#cb46-15" tabindex="-1"></a>ssr  <span class="ot">&lt;-</span> <span class="fu">sum</span>(resid<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb46-16"><a href="standard-errors.html#cb46-16" tabindex="-1"></a></span>
-<span id="cb46-17"><a href="standard-errors.html#cb46-17" tabindex="-1"></a><span class="co"># divide ssr by n - p </span></span>
-<span id="cb46-18"><a href="standard-errors.html#cb46-18" tabindex="-1"></a>var_error  <span class="ot">&lt;-</span> ssr <span class="sc">/</span> (n <span class="sc">-</span> <span class="fu">length</span>((<span class="fu">coef</span>(reg_model))))</span>
-<span id="cb46-19"><a href="standard-errors.html#cb46-19" tabindex="-1"></a></span>
-<span id="cb46-20"><a href="standard-errors.html#cb46-20" tabindex="-1"></a><span class="co"># get se </span></span>
-<span id="cb46-21"><a href="standard-errors.html#cb46-21" tabindex="-1"></a>se <span class="ot">=</span> <span class="fu">sqrt</span>(var_error)</span>
-<span id="cb46-22"><a href="standard-errors.html#cb46-22" tabindex="-1"></a></span>
-<span id="cb46-23"><a href="standard-errors.html#cb46-23" tabindex="-1"></a><span class="fu">print</span>(se)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="standard-errors.html#cb49-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">125</span>)</span>
+<span id="cb49-2"><a href="standard-errors.html#cb49-2" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb49-3"><a href="standard-errors.html#cb49-3" tabindex="-1"></a>educ  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">16</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-4"><a href="standard-errors.html#cb49-4" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="dv">20000</span> <span class="sc">+</span> <span class="dv">2000</span> <span class="sc">*</span> educ <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">10000</span>, <span class="at">sd =</span> <span class="dv">5000</span>)</span>
+<span id="cb49-5"><a href="standard-errors.html#cb49-5" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="standard-errors.html#cb49-6" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">educ =</span> educ, <span class="at">income =</span> income)</span>
+<span id="cb49-7"><a href="standard-errors.html#cb49-7" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="standard-errors.html#cb49-8" tabindex="-1"></a><span class="co"># estimate the model</span></span>
+<span id="cb49-9"><a href="standard-errors.html#cb49-9" tabindex="-1"></a>reg_model  <span class="ot">&lt;-</span> <span class="fu">lm</span>(income<span class="sc">~</span>educ, <span class="at">data =</span> dat) </span>
+<span id="cb49-10"><a href="standard-errors.html#cb49-10" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="standard-errors.html#cb49-11" tabindex="-1"></a><span class="co"># get the residuals</span></span>
+<span id="cb49-12"><a href="standard-errors.html#cb49-12" tabindex="-1"></a>resid  <span class="ot">&lt;-</span> <span class="fu">residuals</span>(reg_model) </span>
+<span id="cb49-13"><a href="standard-errors.html#cb49-13" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="standard-errors.html#cb49-14" tabindex="-1"></a><span class="co"># sum of the square of residuals </span></span>
+<span id="cb49-15"><a href="standard-errors.html#cb49-15" tabindex="-1"></a>ssr  <span class="ot">&lt;-</span> <span class="fu">sum</span>(resid<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb49-16"><a href="standard-errors.html#cb49-16" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="standard-errors.html#cb49-17" tabindex="-1"></a><span class="co"># divide ssr by n - p </span></span>
+<span id="cb49-18"><a href="standard-errors.html#cb49-18" tabindex="-1"></a>var_error  <span class="ot">&lt;-</span> ssr <span class="sc">/</span> (n <span class="sc">-</span> <span class="fu">length</span>((<span class="fu">coef</span>(reg_model))))</span>
+<span id="cb49-19"><a href="standard-errors.html#cb49-19" tabindex="-1"></a></span>
+<span id="cb49-20"><a href="standard-errors.html#cb49-20" tabindex="-1"></a><span class="co"># get se </span></span>
+<span id="cb49-21"><a href="standard-errors.html#cb49-21" tabindex="-1"></a>se <span class="ot">=</span> <span class="fu">sqrt</span>(var_error)</span>
+<span id="cb49-22"><a href="standard-errors.html#cb49-22" tabindex="-1"></a></span>
+<span id="cb49-23"><a href="standard-errors.html#cb49-23" tabindex="-1"></a><span class="fu">print</span>(se)</span></code></pre></div>
 <pre><code>## [1] 4992.835</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="standard-errors.html#cb48-1" tabindex="-1"></a><span class="co"># compare to the regression output</span></span>
-<span id="cb48-2"><a href="standard-errors.html#cb48-2" tabindex="-1"></a><span class="fu">summary</span>(reg_model)<span class="sc">$</span>sigma</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="standard-errors.html#cb51-1" tabindex="-1"></a><span class="co"># compare to the regression output</span></span>
+<span id="cb51-2"><a href="standard-errors.html#cb51-2" tabindex="-1"></a><span class="fu">summary</span>(reg_model)<span class="sc">$</span>sigma</span></code></pre></div>
 <pre><code>## [1] 4992.835</code></pre>
 <p><strong>Standard error of the coefficient</strong></p>
 <p>Once we’ve estimated the standard error of the regression, we can go ahead estimate the <strong>standard error of the coefficient</strong>.</p>
@@ -313,17 +313,17 @@ div.csl-indent {
 <li><span class="math inline">\(\widehat{var}(\hat{\beta}) = \frac{\widehat{\sigma}^2}{var(X) \times (n - 1)}\)</span></li>
 </ul>
 <p>Let’s estimate the standard error of income coefficient.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="standard-errors.html#cb50-1" tabindex="-1"></a><span class="co"># estimate the variance of education coefficient</span></span>
-<span id="cb50-2"><a href="standard-errors.html#cb50-2" tabindex="-1"></a>var_educ  <span class="ot">&lt;-</span>  se<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">sd</span>(educ)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (n <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb50-3"><a href="standard-errors.html#cb50-3" tabindex="-1"></a></span>
-<span id="cb50-4"><a href="standard-errors.html#cb50-4" tabindex="-1"></a><span class="co"># get the standard error</span></span>
-<span id="cb50-5"><a href="standard-errors.html#cb50-5" tabindex="-1"></a>se_educ  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_educ)</span>
-<span id="cb50-6"><a href="standard-errors.html#cb50-6" tabindex="-1"></a></span>
-<span id="cb50-7"><a href="standard-errors.html#cb50-7" tabindex="-1"></a><span class="co"># print</span></span>
-<span id="cb50-8"><a href="standard-errors.html#cb50-8" tabindex="-1"></a><span class="fu">print</span>(se_educ)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="standard-errors.html#cb53-1" tabindex="-1"></a><span class="co"># estimate the variance of education coefficient</span></span>
+<span id="cb53-2"><a href="standard-errors.html#cb53-2" tabindex="-1"></a>var_educ  <span class="ot">&lt;-</span>  se<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">sd</span>(educ)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (n <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb53-3"><a href="standard-errors.html#cb53-3" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="standard-errors.html#cb53-4" tabindex="-1"></a><span class="co"># get the standard error</span></span>
+<span id="cb53-5"><a href="standard-errors.html#cb53-5" tabindex="-1"></a>se_educ  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(var_educ)</span>
+<span id="cb53-6"><a href="standard-errors.html#cb53-6" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="standard-errors.html#cb53-7" tabindex="-1"></a><span class="co"># print</span></span>
+<span id="cb53-8"><a href="standard-errors.html#cb53-8" tabindex="-1"></a><span class="fu">print</span>(se_educ)</span></code></pre></div>
 <pre><code>## [1] 34.63766</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="standard-errors.html#cb52-1" tabindex="-1"></a><span class="co"># compare the hand-estimated se with the model estimate</span></span>
-<span id="cb52-2"><a href="standard-errors.html#cb52-2" tabindex="-1"></a><span class="fu">se</span>(reg_model)[[<span class="dv">2</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="standard-errors.html#cb55-1" tabindex="-1"></a><span class="co"># compare the hand-estimated se with the model estimate</span></span>
+<span id="cb55-2"><a href="standard-errors.html#cb55-2" tabindex="-1"></a><span class="fu">se</span>(reg_model)[[<span class="dv">2</span>]]</span></code></pre></div>
 <pre><code>## [1] 34.63766</code></pre>
 </div>
             </section>

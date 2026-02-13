@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -262,33 +262,33 @@ div.csl-indent {
 <h2><span class="header-section-number">3.1</span> The best-fit line<a href="the-best-fit-line.html#the-best-fit-line" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let me first start with an illustration. Say, we want to understand the relationship between
 education and income. Let’s first simulate the data and plot the relationship.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="the-best-fit-line.html#cb31-1" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb31-2"><a href="the-best-fit-line.html#cb31-2" tabindex="-1"></a>educ  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">16</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb31-3"><a href="the-best-fit-line.html#cb31-3" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="dv">20000</span> <span class="sc">+</span> <span class="dv">2000</span> <span class="sc">*</span> educ <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">10000</span>, <span class="at">sd =</span> <span class="dv">5000</span>)</span>
-<span id="cb31-4"><a href="the-best-fit-line.html#cb31-4" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="the-best-fit-line.html#cb31-5" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">educ =</span> educ, <span class="at">income =</span> income)</span>
-<span id="cb31-6"><a href="the-best-fit-line.html#cb31-6" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="the-best-fit-line.html#cb31-7" tabindex="-1"></a><span class="co"># mean income for each value of education</span></span>
-<span id="cb31-8"><a href="the-best-fit-line.html#cb31-8" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
-<span id="cb31-9"><a href="the-best-fit-line.html#cb31-9" tabindex="-1"></a>                <span class="fu">group_by</span>(educ)  <span class="sc">%&gt;%</span> </span>
-<span id="cb31-10"><a href="the-best-fit-line.html#cb31-10" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">mean_income =</span> <span class="fu">mean</span>(income))</span>
-<span id="cb31-11"><a href="the-best-fit-line.html#cb31-11" tabindex="-1"></a></span>
-<span id="cb31-12"><a href="the-best-fit-line.html#cb31-12" tabindex="-1"></a><span class="co"># merge </span></span>
-<span id="cb31-13"><a href="the-best-fit-line.html#cb31-13" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
-<span id="cb31-14"><a href="the-best-fit-line.html#cb31-14" tabindex="-1"></a>            <span class="fu">merge</span>(dat_sum, <span class="at">by =</span> <span class="st">&quot;educ&quot;</span>, <span class="at">all.x =</span> T)</span>
-<span id="cb31-15"><a href="the-best-fit-line.html#cb31-15" tabindex="-1"></a></span>
-<span id="cb31-16"><a href="the-best-fit-line.html#cb31-16" tabindex="-1"></a>f0  <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> educ, <span class="at">y =</span> income)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb31-17"><a href="the-best-fit-line.html#cb31-17" tabindex="-1"></a>            <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> educ, <span class="at">y =</span> mean_income), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb31-18"><a href="the-best-fit-line.html#cb31-18" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="st">&quot;years of education&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Panel A&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb31-19"><a href="the-best-fit-line.html#cb31-19" tabindex="-1"></a>        <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">10</span>, <span class="at">y =</span> <span class="dv">35000</span>, </span>
-<span id="cb31-20"><a href="the-best-fit-line.html#cb31-20" tabindex="-1"></a>                <span class="at">label =</span> <span class="st">&quot;Line plotting the conditional mean&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">hjust =</span> <span class="dv">0</span>)</span>
-<span id="cb31-21"><a href="the-best-fit-line.html#cb31-21" tabindex="-1"></a></span>
-<span id="cb31-22"><a href="the-best-fit-line.html#cb31-22" tabindex="-1"></a>f1  <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> educ, <span class="at">y =</span> income)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb31-23"><a href="the-best-fit-line.html#cb31-23" tabindex="-1"></a><span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color  =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&quot;years of education&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb31-24"><a href="the-best-fit-line.html#cb31-24" tabindex="-1"></a><span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">10</span>, <span class="at">y =</span> <span class="dv">35000</span>, <span class="at">label =</span> <span class="st">&quot;Best-Fit Line; E(Y|X)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span> </span>
-<span id="cb31-25"><a href="the-best-fit-line.html#cb31-25" tabindex="-1"></a><span class="fu">ggtitle</span>(<span class="st">&quot;Panel B&quot;</span>)</span>
-<span id="cb31-26"><a href="the-best-fit-line.html#cb31-26" tabindex="-1"></a></span>
-<span id="cb31-27"><a href="the-best-fit-line.html#cb31-27" tabindex="-1"></a>f0 <span class="sc">/</span> f1</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="the-best-fit-line.html#cb34-1" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb34-2"><a href="the-best-fit-line.html#cb34-2" tabindex="-1"></a>educ  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">16</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb34-3"><a href="the-best-fit-line.html#cb34-3" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="dv">20000</span> <span class="sc">+</span> <span class="dv">2000</span> <span class="sc">*</span> educ <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">10000</span>, <span class="at">sd =</span> <span class="dv">5000</span>)</span>
+<span id="cb34-4"><a href="the-best-fit-line.html#cb34-4" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="the-best-fit-line.html#cb34-5" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">educ =</span> educ, <span class="at">income =</span> income)</span>
+<span id="cb34-6"><a href="the-best-fit-line.html#cb34-6" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="the-best-fit-line.html#cb34-7" tabindex="-1"></a><span class="co"># mean income for each value of education</span></span>
+<span id="cb34-8"><a href="the-best-fit-line.html#cb34-8" tabindex="-1"></a>dat_sum  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
+<span id="cb34-9"><a href="the-best-fit-line.html#cb34-9" tabindex="-1"></a>                <span class="fu">group_by</span>(educ)  <span class="sc">%&gt;%</span> </span>
+<span id="cb34-10"><a href="the-best-fit-line.html#cb34-10" tabindex="-1"></a>                <span class="fu">summarize</span>(<span class="at">mean_income =</span> <span class="fu">mean</span>(income))</span>
+<span id="cb34-11"><a href="the-best-fit-line.html#cb34-11" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="the-best-fit-line.html#cb34-12" tabindex="-1"></a><span class="co"># merge </span></span>
+<span id="cb34-13"><a href="the-best-fit-line.html#cb34-13" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> dat  <span class="sc">%&gt;%</span> </span>
+<span id="cb34-14"><a href="the-best-fit-line.html#cb34-14" tabindex="-1"></a>            <span class="fu">merge</span>(dat_sum, <span class="at">by =</span> <span class="st">&quot;educ&quot;</span>, <span class="at">all.x =</span> T)</span>
+<span id="cb34-15"><a href="the-best-fit-line.html#cb34-15" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="the-best-fit-line.html#cb34-16" tabindex="-1"></a>f0  <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> educ, <span class="at">y =</span> income)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb34-17"><a href="the-best-fit-line.html#cb34-17" tabindex="-1"></a>            <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> educ, <span class="at">y =</span> mean_income), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb34-18"><a href="the-best-fit-line.html#cb34-18" tabindex="-1"></a>        <span class="fu">xlab</span>(<span class="st">&quot;years of education&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Panel A&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb34-19"><a href="the-best-fit-line.html#cb34-19" tabindex="-1"></a>        <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">10</span>, <span class="at">y =</span> <span class="dv">35000</span>, </span>
+<span id="cb34-20"><a href="the-best-fit-line.html#cb34-20" tabindex="-1"></a>                <span class="at">label =</span> <span class="st">&quot;Line plotting the conditional mean&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">hjust =</span> <span class="dv">0</span>)</span>
+<span id="cb34-21"><a href="the-best-fit-line.html#cb34-21" tabindex="-1"></a></span>
+<span id="cb34-22"><a href="the-best-fit-line.html#cb34-22" tabindex="-1"></a>f1  <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> educ, <span class="at">y =</span> income)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb34-23"><a href="the-best-fit-line.html#cb34-23" tabindex="-1"></a><span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color  =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&quot;years of education&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb34-24"><a href="the-best-fit-line.html#cb34-24" tabindex="-1"></a><span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">10</span>, <span class="at">y =</span> <span class="dv">35000</span>, <span class="at">label =</span> <span class="st">&quot;Best-Fit Line; E(Y|X)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">hjust =</span> <span class="dv">0</span>) <span class="sc">+</span> </span>
+<span id="cb34-25"><a href="the-best-fit-line.html#cb34-25" tabindex="-1"></a><span class="fu">ggtitle</span>(<span class="st">&quot;Panel B&quot;</span>)</span>
+<span id="cb34-26"><a href="the-best-fit-line.html#cb34-26" tabindex="-1"></a></span>
+<span id="cb34-27"><a href="the-best-fit-line.html#cb34-27" tabindex="-1"></a>f0 <span class="sc">/</span> f1</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="book_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>Each point on the figure pertains to an individual. Panel A uses the raw points, while Panel

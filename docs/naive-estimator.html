@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -261,10 +261,10 @@ div.csl-indent {
 <div id="naive-estimator" class="section level2 hasAnchor" number="7.4">
 <h2><span class="header-section-number">7.4</span> Naive estimator<a href="naive-estimator.html#naive-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A naive estimate of ATT would just be the difference in means between the treated and control groups in the period following the expansion.</p>
-<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="naive-estimator.html#cb187-1" tabindex="-1"></a>naive  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
-<span id="cb187-2"><a href="naive-estimator.html#cb187-2" tabindex="-1"></a>          <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>])</span>
-<span id="cb187-3"><a href="naive-estimator.html#cb187-3" tabindex="-1"></a></span>
-<span id="cb187-4"><a href="naive-estimator.html#cb187-4" tabindex="-1"></a><span class="fu">print</span>(naive)</span></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="naive-estimator.html#cb216-1" tabindex="-1"></a>naive  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
+<span id="cb216-2"><a href="naive-estimator.html#cb216-2" tabindex="-1"></a>          <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&gt;=</span> <span class="dv">2014</span>])</span>
+<span id="cb216-3"><a href="naive-estimator.html#cb216-3" tabindex="-1"></a></span>
+<span id="cb216-4"><a href="naive-estimator.html#cb216-4" tabindex="-1"></a><span class="fu">print</span>(naive)</span></code></pre></div>
 <pre><code>## [1] -13.42305</code></pre>
 <p>The naive estimate suggests that uninsured rate dropped by -13.66 percentage points following the Medicaid expansion in 2014.
 But can we trust this estimate? Not really!</p>
@@ -278,10 +278,10 @@ comparison can simply be capturing the difference in pre-treatment characteristi
 <li><p>The baseline outcome among the treatment group may differ significantly from the control group. For example, southern states have higher population of Blacks compared to non-South. Typically, uninsured rate is higher among Blacks. Hence, it is difficult to disentagle the influence of democraphic composition versus Medicaid expansion.</p></li>
 </ol>
 <p>Let’s evaluate the difference in uninsured rate between the expansion versus the non-expansion states in the pre-treatment year (2013).</p>
-<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="naive-estimator.html#cb189-1" tabindex="-1"></a>naive_pre  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
-<span id="cb189-2"><a href="naive-estimator.html#cb189-2" tabindex="-1"></a>           <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>])</span>
-<span id="cb189-3"><a href="naive-estimator.html#cb189-3" tabindex="-1"></a></span>
-<span id="cb189-4"><a href="naive-estimator.html#cb189-4" tabindex="-1"></a><span class="fu">print</span>(naive_pre)</span></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="naive-estimator.html#cb218-1" tabindex="-1"></a>naive_pre  <span class="ot">&lt;-</span> <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>]) <span class="sc">-</span> </span>
+<span id="cb218-2"><a href="naive-estimator.html#cb218-2" tabindex="-1"></a>           <span class="fu">mean</span>(dat_canonical<span class="sc">$</span>sahieunins138[dat_canonical<span class="sc">$</span>expand <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> dat_canonical<span class="sc">$</span>year <span class="sc">&lt;</span> <span class="dv">2014</span>])</span>
+<span id="cb218-3"><a href="naive-estimator.html#cb218-3" tabindex="-1"></a></span>
+<span id="cb218-4"><a href="naive-estimator.html#cb218-4" tabindex="-1"></a><span class="fu">print</span>(naive_pre)</span></code></pre></div>
 <pre><code>## [1] -7.669252</code></pre>
 <p>Note that treatment units on average have 7.68 percentage points lower uninsured rate compared to the control units even prior to the treatment. Hence, the naive estimator captures the pre-existing differerences in outcome; something that we don’t want.</p>
 <ol start="3" style="list-style-type: lower-roman">

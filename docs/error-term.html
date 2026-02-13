@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -266,25 +266,25 @@ by <span class="math inline">\(X\)</span>. In this case, the error term will jus
 mean 0 and variance <span class="math inline">\(\sigma^2\)</span>, i.e., <span class="math inline">\(\epsilon \sim (0, \; \sigma^2)\)</span>. This is a
 strong assumption for two reasons. First, the error terms might be correlated. For example, individuals who live close each other in terms of spatial proximity might share something in common. Second, variance in the error term might vary with values on <span class="math inline">\(Xs\)</span>. To see this, earnings may have larger variance for individuals with higher levels of education, compared to those with lower levels of education. When the variance of the error term is not constant across all levels of the explanatory variables, this condition is known as <em>heteroskedasticity</em>. It violates one of the key assumptions of the Ordinary Least Squares (OLS) regression model, which assumes <em>homoskedasticity</em>, i.e., the error term has a constant variance.</p>
 <p>Instead of assuming that <span class="math inline">\(E(\epsilon) = 0\)</span>, we’ll utilize the <em>exogeneity</em> assumption to make sense of regression. This assumption implicitly states that we’ve closed all of the backdoors to “bad pathways” in the DGP. Let’s say that we’ve got the following DGP.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="error-term.html#cb33-1" tabindex="-1"></a><span class="fu">library</span>(dagitty) <span class="co"># libraries for DAG</span></span>
-<span id="cb33-2"><a href="error-term.html#cb33-2" tabindex="-1"></a><span class="fu">library</span>(ggdag)</span>
-<span id="cb33-3"><a href="error-term.html#cb33-3" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="error-term.html#cb33-4" tabindex="-1"></a><span class="co"># Define a causal diagram</span></span>
-<span id="cb33-5"><a href="error-term.html#cb33-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;</span></span>
-<span id="cb33-6"><a href="error-term.html#cb33-6" tabindex="-1"></a><span class="st">dag {</span></span>
-<span id="cb33-7"><a href="error-term.html#cb33-7" tabindex="-1"></a><span class="st">  health -&gt; educa     </span></span>
-<span id="cb33-8"><a href="error-term.html#cb33-8" tabindex="-1"></a><span class="st">  educa -&gt; earn     </span></span>
-<span id="cb33-9"><a href="error-term.html#cb33-9" tabindex="-1"></a><span class="st">  health -&gt; earn     </span></span>
-<span id="cb33-10"><a href="error-term.html#cb33-10" tabindex="-1"></a><span class="st">  race -&gt; educa</span></span>
-<span id="cb33-11"><a href="error-term.html#cb33-11" tabindex="-1"></a><span class="st">  race -&gt; earn</span></span>
-<span id="cb33-12"><a href="error-term.html#cb33-12" tabindex="-1"></a><span class="st">  height -&gt; earn     </span></span>
-<span id="cb33-13"><a href="error-term.html#cb33-13" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb33-14"><a href="error-term.html#cb33-14" tabindex="-1"></a><span class="st">&quot;</span>)</span>
-<span id="cb33-15"><a href="error-term.html#cb33-15" tabindex="-1"></a></span>
-<span id="cb33-16"><a href="error-term.html#cb33-16" tabindex="-1"></a><span class="co"># Visualize the DAG</span></span>
-<span id="cb33-17"><a href="error-term.html#cb33-17" tabindex="-1"></a><span class="fu">ggdag</span>(dag) <span class="sc">+</span></span>
-<span id="cb33-18"><a href="error-term.html#cb33-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb33-19"><a href="error-term.html#cb33-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Causal Diagram Example A.&quot;</span>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="error-term.html#cb36-1" tabindex="-1"></a><span class="fu">library</span>(dagitty) <span class="co"># libraries for DAG</span></span>
+<span id="cb36-2"><a href="error-term.html#cb36-2" tabindex="-1"></a><span class="fu">library</span>(ggdag)</span>
+<span id="cb36-3"><a href="error-term.html#cb36-3" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="error-term.html#cb36-4" tabindex="-1"></a><span class="co"># Define a causal diagram</span></span>
+<span id="cb36-5"><a href="error-term.html#cb36-5" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">&quot;</span></span>
+<span id="cb36-6"><a href="error-term.html#cb36-6" tabindex="-1"></a><span class="st">dag {</span></span>
+<span id="cb36-7"><a href="error-term.html#cb36-7" tabindex="-1"></a><span class="st">  health -&gt; educa     </span></span>
+<span id="cb36-8"><a href="error-term.html#cb36-8" tabindex="-1"></a><span class="st">  educa -&gt; earn     </span></span>
+<span id="cb36-9"><a href="error-term.html#cb36-9" tabindex="-1"></a><span class="st">  health -&gt; earn     </span></span>
+<span id="cb36-10"><a href="error-term.html#cb36-10" tabindex="-1"></a><span class="st">  race -&gt; educa</span></span>
+<span id="cb36-11"><a href="error-term.html#cb36-11" tabindex="-1"></a><span class="st">  race -&gt; earn</span></span>
+<span id="cb36-12"><a href="error-term.html#cb36-12" tabindex="-1"></a><span class="st">  height -&gt; earn     </span></span>
+<span id="cb36-13"><a href="error-term.html#cb36-13" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb36-14"><a href="error-term.html#cb36-14" tabindex="-1"></a><span class="st">&quot;</span>)</span>
+<span id="cb36-15"><a href="error-term.html#cb36-15" tabindex="-1"></a></span>
+<span id="cb36-16"><a href="error-term.html#cb36-16" tabindex="-1"></a><span class="co"># Visualize the DAG</span></span>
+<span id="cb36-17"><a href="error-term.html#cb36-17" tabindex="-1"></a><span class="fu">ggdag</span>(dag) <span class="sc">+</span></span>
+<span id="cb36-18"><a href="error-term.html#cb36-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb36-19"><a href="error-term.html#cb36-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Causal Diagram Example A.&quot;</span>) <span class="sc">+</span> <span class="fu">theme_void</span>()</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>In this DGP, channels from health and race are <em>bad pathways</em> and need to be accounted for in order to evaluate the causal effect of education on earnings. Once we have accounted for all of the <em>bad</em> and of course <em>good</em> pathways, we can see that height only affects earnings but no other variables. Since, height is not correlated to the explanatory variables <span class="math inline">\((Xs)\)</span>, we term height as an exogeneous variable. The <em>exogeneity assumption</em> states that the error term <span class="math inline">\((\epsilon)\)</span> is uncorrelated with the explanatory variables <span class="math inline">\(Xs\)</span> included in the model. This means that after accounting for <span class="math inline">\(Xs\)</span>, the error term is independent of <span class="math inline">\(Xs\)</span>. For instance, in the given DGP process, once accounting for education, health, and race, the unaccounted variation in earnings is not correlated with these variables. This conditional independence of error term implies that</p>
 <p><span class="math inline">\(E(\epsilon |Xs) = 0\)</span>.</p>

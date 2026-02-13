@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -293,27 +293,27 @@ div.csl-indent {
 <li>Use cross-fitting for prediction. prediction of observation <span class="math inline">\(i&#39;s\)</span> outcome &amp; treatment assignment is obtained without using the observation ``<span class="math inline">\(i\)</span>“. </li>
 </ul>
 <p>Lets take a look at residual-on-residual in the case of homogeneous treatment effect.</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="motivation-for-causal-forests.html#cb234-1" tabindex="-1"></a><span class="co"># generate data</span></span>
-<span id="cb234-2"><a href="motivation-for-causal-forests.html#cb234-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb234-3"><a href="motivation-for-causal-forests.html#cb234-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb234-4"><a href="motivation-for-causal-forests.html#cb234-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb234-5"><a href="motivation-for-causal-forests.html#cb234-5" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
-<span id="cb234-6"><a href="motivation-for-causal-forests.html#cb234-6" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
-<span id="cb234-7"><a href="motivation-for-causal-forests.html#cb234-7" tabindex="-1"></a></span>
-<span id="cb234-8"><a href="motivation-for-causal-forests.html#cb234-8" tabindex="-1"></a><span class="co"># Generate W and Y </span></span>
-<span id="cb234-9"><a href="motivation-for-causal-forests.html#cb234-9" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb234-10"><a href="motivation-for-causal-forests.html#cb234-10" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb234-11"><a href="motivation-for-causal-forests.html#cb234-11" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fl">2.5</span> <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb234-12"><a href="motivation-for-causal-forests.html#cb234-12" tabindex="-1"></a></span>
-<span id="cb234-13"><a href="motivation-for-causal-forests.html#cb234-13" tabindex="-1"></a><span class="co"># Train regression forests</span></span>
-<span id="cb234-14"><a href="motivation-for-causal-forests.html#cb234-14" tabindex="-1"></a>mx  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb234-15"><a href="motivation-for-causal-forests.html#cb234-15" tabindex="-1"></a>ex  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) </span>
-<span id="cb234-16"><a href="motivation-for-causal-forests.html#cb234-16" tabindex="-1"></a></span>
-<span id="cb234-17"><a href="motivation-for-causal-forests.html#cb234-17" tabindex="-1"></a>Wcen  <span class="ot">&lt;-</span> W <span class="sc">-</span> ex<span class="sc">$</span>predictions</span>
-<span id="cb234-18"><a href="motivation-for-causal-forests.html#cb234-18" tabindex="-1"></a>Ycen  <span class="ot">&lt;-</span> Y <span class="sc">-</span> mx<span class="sc">$</span>predictions </span>
-<span id="cb234-19"><a href="motivation-for-causal-forests.html#cb234-19" tabindex="-1"></a></span>
-<span id="cb234-20"><a href="motivation-for-causal-forests.html#cb234-20" tabindex="-1"></a>reg  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(<span class="fu">lm</span>(Ycen <span class="sc">~</span> Wcen))</span>
-<span id="cb234-21"><a href="motivation-for-causal-forests.html#cb234-21" tabindex="-1"></a>reg</span></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="motivation-for-causal-forests.html#cb263-1" tabindex="-1"></a><span class="co"># generate data</span></span>
+<span id="cb263-2"><a href="motivation-for-causal-forests.html#cb263-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb263-3"><a href="motivation-for-causal-forests.html#cb263-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb263-4"><a href="motivation-for-causal-forests.html#cb263-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb263-5"><a href="motivation-for-causal-forests.html#cb263-5" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb263-6"><a href="motivation-for-causal-forests.html#cb263-6" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb263-7"><a href="motivation-for-causal-forests.html#cb263-7" tabindex="-1"></a></span>
+<span id="cb263-8"><a href="motivation-for-causal-forests.html#cb263-8" tabindex="-1"></a><span class="co"># Generate W and Y </span></span>
+<span id="cb263-9"><a href="motivation-for-causal-forests.html#cb263-9" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb263-10"><a href="motivation-for-causal-forests.html#cb263-10" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb263-11"><a href="motivation-for-causal-forests.html#cb263-11" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fl">2.5</span> <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb263-12"><a href="motivation-for-causal-forests.html#cb263-12" tabindex="-1"></a></span>
+<span id="cb263-13"><a href="motivation-for-causal-forests.html#cb263-13" tabindex="-1"></a><span class="co"># Train regression forests</span></span>
+<span id="cb263-14"><a href="motivation-for-causal-forests.html#cb263-14" tabindex="-1"></a>mx  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb263-15"><a href="motivation-for-causal-forests.html#cb263-15" tabindex="-1"></a>ex  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) </span>
+<span id="cb263-16"><a href="motivation-for-causal-forests.html#cb263-16" tabindex="-1"></a></span>
+<span id="cb263-17"><a href="motivation-for-causal-forests.html#cb263-17" tabindex="-1"></a>Wcen  <span class="ot">&lt;-</span> W <span class="sc">-</span> ex<span class="sc">$</span>predictions</span>
+<span id="cb263-18"><a href="motivation-for-causal-forests.html#cb263-18" tabindex="-1"></a>Ycen  <span class="ot">&lt;-</span> Y <span class="sc">-</span> mx<span class="sc">$</span>predictions </span>
+<span id="cb263-19"><a href="motivation-for-causal-forests.html#cb263-19" tabindex="-1"></a></span>
+<span id="cb263-20"><a href="motivation-for-causal-forests.html#cb263-20" tabindex="-1"></a>reg  <span class="ot">&lt;-</span>  <span class="fu">summary</span>(<span class="fu">lm</span>(Ycen <span class="sc">~</span> Wcen))</span>
+<span id="cb263-21"><a href="motivation-for-causal-forests.html#cb263-21" tabindex="-1"></a>reg</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Ycen ~ Wcen)
@@ -332,9 +332,9 @@ div.csl-indent {
 ## Residual standard error: 1.055 on 1998 degrees of freedom
 ## Multiple R-squared:  0.5685, Adjusted R-squared:  0.5683 
 ## F-statistic:  2632 on 1 and 1998 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="motivation-for-causal-forests.html#cb236-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The treatment effect estimate based on residual-on-residual regression is: &quot;</span>, <span class="fu">coefficients</span>(reg)[<span class="dv">2</span>])) </span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="motivation-for-causal-forests.html#cb265-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The treatment effect estimate based on residual-on-residual regression is: &quot;</span>, <span class="fu">coefficients</span>(reg)[<span class="dv">2</span>])) </span></code></pre></div>
 <pre><code>## [1] &quot;The treatment effect estimate based on residual-on-residual regression is: 2.4581869361891&quot;</code></pre>
-<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="motivation-for-causal-forests.html#cb238-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The true treatment effect is: &quot;</span>, <span class="fl">2.5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="motivation-for-causal-forests.html#cb267-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;The true treatment effect is: &quot;</span>, <span class="fl">2.5</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;The true treatment effect is: 2.5&quot;</code></pre>
 </div>
 <div class="footnotes">

@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -262,16 +262,16 @@ div.csl-indent {
 <h2><span class="header-section-number">3.7</span> Running a regression<a href="running-a-regression.html#running-a-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Regression is a flexible tool to model the relationship between the dependent and independent
 variables. Consider the data coming from the following simulated DGP.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="running-a-regression.html#cb42-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1254</span>)</span>
-<span id="cb42-2"><a href="running-a-regression.html#cb42-2" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb42-3"><a href="running-a-regression.html#cb42-3" tabindex="-1"></a>female  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
-<span id="cb42-4"><a href="running-a-regression.html#cb42-4" tabindex="-1"></a>educ  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">16</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb42-5"><a href="running-a-regression.html#cb42-5" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="dv">20000</span> <span class="sc">+</span> (<span class="dv">4000</span> <span class="sc">*</span> educ) <span class="sc">-</span>(<span class="dv">2500</span> <span class="sc">*</span> female) <span class="sc">+</span> (<span class="dv">500</span> <span class="sc">*</span> female <span class="sc">*</span> educ) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2500</span>)</span>
-<span id="cb42-6"><a href="running-a-regression.html#cb42-6" tabindex="-1"></a></span>
-<span id="cb42-7"><a href="running-a-regression.html#cb42-7" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">educ =</span> educ, <span class="at">income =</span> income, <span class="at">female =</span> female)</span>
-<span id="cb42-8"><a href="running-a-regression.html#cb42-8" tabindex="-1"></a></span>
-<span id="cb42-9"><a href="running-a-regression.html#cb42-9" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb42-10"><a href="running-a-regression.html#cb42-10" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="running-a-regression.html#cb45-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1254</span>)</span>
+<span id="cb45-2"><a href="running-a-regression.html#cb45-2" tabindex="-1"></a>n  <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb45-3"><a href="running-a-regression.html#cb45-3" tabindex="-1"></a>female  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb45-4"><a href="running-a-regression.html#cb45-4" tabindex="-1"></a>educ  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">16</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-5"><a href="running-a-regression.html#cb45-5" tabindex="-1"></a>income  <span class="ot">&lt;-</span> <span class="dv">20000</span> <span class="sc">+</span> (<span class="dv">4000</span> <span class="sc">*</span> educ) <span class="sc">-</span>(<span class="dv">2500</span> <span class="sc">*</span> female) <span class="sc">+</span> (<span class="dv">500</span> <span class="sc">*</span> female <span class="sc">*</span> educ) <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2500</span>)</span>
+<span id="cb45-6"><a href="running-a-regression.html#cb45-6" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="running-a-regression.html#cb45-7" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">educ =</span> educ, <span class="at">income =</span> income, <span class="at">female =</span> female)</span>
+<span id="cb45-8"><a href="running-a-regression.html#cb45-8" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="running-a-regression.html#cb45-9" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb45-10"><a href="running-a-regression.html#cb45-10" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code></pre></div>
 <pre><code>##   educ   income female
 ## 1   15 80649.27      0
 ## 2   13 68828.91      0
@@ -313,8 +313,8 @@ earnings_i = \alpha + \beta_1 education_i + \beta_2 gender + \beta_3 gender \tim
 </ul>
 <p>The model allows for both intercept shift as well as changes in slope across gender.</p>
 <p>Let’s run the specification that tests our alternative hypothesis.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="running-a-regression.html#cb44-1" tabindex="-1"></a>reg  <span class="ot">&lt;-</span> <span class="fu">lm</span>(income <span class="sc">~</span> educ <span class="sc">+</span>  female <span class="sc">+</span>  female<span class="sc">*</span>educ, dat)</span>
-<span id="cb44-2"><a href="running-a-regression.html#cb44-2" tabindex="-1"></a><span class="fu">summary</span>(reg)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="running-a-regression.html#cb47-1" tabindex="-1"></a>reg  <span class="ot">&lt;-</span> <span class="fu">lm</span>(income <span class="sc">~</span> educ <span class="sc">+</span>  female <span class="sc">+</span>  female<span class="sc">*</span>educ, dat)</span>
+<span id="cb47-2"><a href="running-a-regression.html#cb47-2" tabindex="-1"></a><span class="fu">summary</span>(reg)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = income ~ educ + female + female * educ, data = dat)

@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -279,118 +279,118 @@ div.csl-indent {
 </ol>
 <p><strong>Estimation</strong></p>
 <p>The following example uses 10 fold cross-fitting.</p>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="inverse-probability-weighting-ipw.html#cb137-1" tabindex="-1"></a><span class="do">#################################</span></span>
-<span id="cb137-2"><a href="inverse-probability-weighting-ipw.html#cb137-2" tabindex="-1"></a><span class="co"># Author: VS</span></span>
-<span id="cb137-3"><a href="inverse-probability-weighting-ipw.html#cb137-3" tabindex="-1"></a><span class="co"># Last Revised: Jan 16, 2024</span></span>
-<span id="cb137-4"><a href="inverse-probability-weighting-ipw.html#cb137-4" tabindex="-1"></a><span class="co"># Keywords: IPW, AIPW, GRF</span></span>
-<span id="cb137-5"><a href="inverse-probability-weighting-ipw.html#cb137-5" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb137-6"><a href="inverse-probability-weighting-ipw.html#cb137-6" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb137-7"><a href="inverse-probability-weighting-ipw.html#cb137-7" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb137-8"><a href="inverse-probability-weighting-ipw.html#cb137-8" tabindex="-1"></a><span class="do">#################################</span></span>
-<span id="cb137-9"><a href="inverse-probability-weighting-ipw.html#cb137-9" tabindex="-1"></a></span>
-<span id="cb137-10"><a href="inverse-probability-weighting-ipw.html#cb137-10" tabindex="-1"></a></span>
-<span id="cb137-11"><a href="inverse-probability-weighting-ipw.html#cb137-11" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>)</span>
-<span id="cb137-12"><a href="inverse-probability-weighting-ipw.html#cb137-12" tabindex="-1"></a></span>
-<span id="cb137-13"><a href="inverse-probability-weighting-ipw.html#cb137-13" tabindex="-1"></a><span class="co"># Generate Data </span></span>
-<span id="cb137-14"><a href="inverse-probability-weighting-ipw.html#cb137-14" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb137-15"><a href="inverse-probability-weighting-ipw.html#cb137-15" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb137-16"><a href="inverse-probability-weighting-ipw.html#cb137-16" tabindex="-1"></a>true_effect  <span class="ot">&lt;-</span>  <span class="dv">15</span></span>
-<span id="cb137-17"><a href="inverse-probability-weighting-ipw.html#cb137-17" tabindex="-1"></a></span>
-<span id="cb137-18"><a href="inverse-probability-weighting-ipw.html#cb137-18" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb137-19"><a href="inverse-probability-weighting-ipw.html#cb137-19" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
-<span id="cb137-20"><a href="inverse-probability-weighting-ipw.html#cb137-20" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
-<span id="cb137-21"><a href="inverse-probability-weighting-ipw.html#cb137-21" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n))))</span>
-<span id="cb137-22"><a href="inverse-probability-weighting-ipw.html#cb137-22" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, prob)</span>
-<span id="cb137-23"><a href="inverse-probability-weighting-ipw.html#cb137-23" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="dv">60</span> <span class="sc">+</span> true_effect <span class="sc">*</span> W <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb137-24"><a href="inverse-probability-weighting-ipw.html#cb137-24" tabindex="-1"></a><span class="fu">plot</span>(X[, <span class="dv">1</span>], X[, <span class="dv">2</span>], <span class="at">col =</span> <span class="fu">as.factor</span>(W))</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="inverse-probability-weighting-ipw.html#cb166-1" tabindex="-1"></a><span class="do">#################################</span></span>
+<span id="cb166-2"><a href="inverse-probability-weighting-ipw.html#cb166-2" tabindex="-1"></a><span class="co"># Author: VS</span></span>
+<span id="cb166-3"><a href="inverse-probability-weighting-ipw.html#cb166-3" tabindex="-1"></a><span class="co"># Last Revised: Jan 16, 2024</span></span>
+<span id="cb166-4"><a href="inverse-probability-weighting-ipw.html#cb166-4" tabindex="-1"></a><span class="co"># Keywords: IPW, AIPW, GRF</span></span>
+<span id="cb166-5"><a href="inverse-probability-weighting-ipw.html#cb166-5" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb166-6"><a href="inverse-probability-weighting-ipw.html#cb166-6" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb166-7"><a href="inverse-probability-weighting-ipw.html#cb166-7" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb166-8"><a href="inverse-probability-weighting-ipw.html#cb166-8" tabindex="-1"></a><span class="do">#################################</span></span>
+<span id="cb166-9"><a href="inverse-probability-weighting-ipw.html#cb166-9" tabindex="-1"></a></span>
+<span id="cb166-10"><a href="inverse-probability-weighting-ipw.html#cb166-10" tabindex="-1"></a></span>
+<span id="cb166-11"><a href="inverse-probability-weighting-ipw.html#cb166-11" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>)</span>
+<span id="cb166-12"><a href="inverse-probability-weighting-ipw.html#cb166-12" tabindex="-1"></a></span>
+<span id="cb166-13"><a href="inverse-probability-weighting-ipw.html#cb166-13" tabindex="-1"></a><span class="co"># Generate Data </span></span>
+<span id="cb166-14"><a href="inverse-probability-weighting-ipw.html#cb166-14" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb166-15"><a href="inverse-probability-weighting-ipw.html#cb166-15" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb166-16"><a href="inverse-probability-weighting-ipw.html#cb166-16" tabindex="-1"></a>true_effect  <span class="ot">&lt;-</span>  <span class="dv">15</span></span>
+<span id="cb166-17"><a href="inverse-probability-weighting-ipw.html#cb166-17" tabindex="-1"></a></span>
+<span id="cb166-18"><a href="inverse-probability-weighting-ipw.html#cb166-18" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb166-19"><a href="inverse-probability-weighting-ipw.html#cb166-19" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb166-20"><a href="inverse-probability-weighting-ipw.html#cb166-20" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb166-21"><a href="inverse-probability-weighting-ipw.html#cb166-21" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n))))</span>
+<span id="cb166-22"><a href="inverse-probability-weighting-ipw.html#cb166-22" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, prob)</span>
+<span id="cb166-23"><a href="inverse-probability-weighting-ipw.html#cb166-23" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="dv">60</span> <span class="sc">+</span> true_effect <span class="sc">*</span> W <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb166-24"><a href="inverse-probability-weighting-ipw.html#cb166-24" tabindex="-1"></a><span class="fu">plot</span>(X[, <span class="dv">1</span>], X[, <span class="dv">2</span>], <span class="at">col =</span> <span class="fu">as.factor</span>(W))</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="inverse-probability-weighting-ipw.html#cb138-1" tabindex="-1"></a><span class="co">#paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3))</span></span>
-<span id="cb138-2"><a href="inverse-probability-weighting-ipw.html#cb138-2" tabindex="-1"></a></span>
-<span id="cb138-3"><a href="inverse-probability-weighting-ipw.html#cb138-3" tabindex="-1"></a></span>
-<span id="cb138-4"><a href="inverse-probability-weighting-ipw.html#cb138-4" tabindex="-1"></a><span class="do">#################################</span></span>
-<span id="cb138-5"><a href="inverse-probability-weighting-ipw.html#cb138-5" tabindex="-1"></a><span class="do">#################################</span></span>
-<span id="cb138-6"><a href="inverse-probability-weighting-ipw.html#cb138-6" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb138-7"><a href="inverse-probability-weighting-ipw.html#cb138-7" tabindex="-1"></a><span class="co"># Inverse Probability Weighting</span></span>
-<span id="cb138-8"><a href="inverse-probability-weighting-ipw.html#cb138-8" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb138-9"><a href="inverse-probability-weighting-ipw.html#cb138-9" tabindex="-1"></a><span class="do">#################################</span></span>
-<span id="cb138-10"><a href="inverse-probability-weighting-ipw.html#cb138-10" tabindex="-1"></a><span class="do">#################################</span></span>
-<span id="cb138-11"><a href="inverse-probability-weighting-ipw.html#cb138-11" tabindex="-1"></a></span>
-<span id="cb138-12"><a href="inverse-probability-weighting-ipw.html#cb138-12" tabindex="-1"></a><span class="co"># use the random forest to get the propensity score </span></span>
-<span id="cb138-13"><a href="inverse-probability-weighting-ipw.html#cb138-13" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(W, X, Y)</span>
-<span id="cb138-14"><a href="inverse-probability-weighting-ipw.html#cb138-14" tabindex="-1"></a>n_features  <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">setdiff</span>(<span class="fu">names</span>(dat), <span class="st">&quot;W&quot;</span>))</span>
-<span id="cb138-15"><a href="inverse-probability-weighting-ipw.html#cb138-15" tabindex="-1"></a></span>
-<span id="cb138-16"><a href="inverse-probability-weighting-ipw.html#cb138-16" tabindex="-1"></a><span class="co"># A. ranger (probability tree)</span></span>
-<span id="cb138-17"><a href="inverse-probability-weighting-ipw.html#cb138-17" tabindex="-1"></a>rf1_ranger  <span class="ot">&lt;-</span> <span class="fu">ranger</span>(</span>
-<span id="cb138-18"><a href="inverse-probability-weighting-ipw.html#cb138-18" tabindex="-1"></a>    W <span class="sc">~</span> ., </span>
-<span id="cb138-19"><a href="inverse-probability-weighting-ipw.html#cb138-19" tabindex="-1"></a>    <span class="at">data =</span> dat, </span>
-<span id="cb138-20"><a href="inverse-probability-weighting-ipw.html#cb138-20" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="fu">min</span>(<span class="fu">ceiling</span>(<span class="fu">sqrt</span>(n_features) <span class="sc">+</span> <span class="dv">20</span>), n_features),  </span>
-<span id="cb138-21"><a href="inverse-probability-weighting-ipw.html#cb138-21" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">2000</span>, </span>
-<span id="cb138-22"><a href="inverse-probability-weighting-ipw.html#cb138-22" tabindex="-1"></a>    <span class="at">probability =</span>  <span class="cn">TRUE</span></span>
-<span id="cb138-23"><a href="inverse-probability-weighting-ipw.html#cb138-23" tabindex="-1"></a>)</span>
-<span id="cb138-24"><a href="inverse-probability-weighting-ipw.html#cb138-24" tabindex="-1"></a><span class="co"># OOB predictions from ranger</span></span>
-<span id="cb138-25"><a href="inverse-probability-weighting-ipw.html#cb138-25" tabindex="-1"></a>p.ranger  <span class="ot">&lt;-</span> rf1_ranger<span class="sc">$</span>predictions[, <span class="dv">1</span>]  </span>
-<span id="cb138-26"><a href="inverse-probability-weighting-ipw.html#cb138-26" tabindex="-1"></a></span>
-<span id="cb138-27"><a href="inverse-probability-weighting-ipw.html#cb138-27" tabindex="-1"></a><span class="co"># B. probability tree using GRF</span></span>
-<span id="cb138-28"><a href="inverse-probability-weighting-ipw.html#cb138-28" tabindex="-1"></a></span>
-<span id="cb138-29"><a href="inverse-probability-weighting-ipw.html#cb138-29" tabindex="-1"></a><span class="co"># cross-fitting index </span></span>
-<span id="cb138-30"><a href="inverse-probability-weighting-ipw.html#cb138-30" tabindex="-1"></a>K  <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb138-31"><a href="inverse-probability-weighting-ipw.html#cb138-31" tabindex="-1"></a>ind  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">size =</span> <span class="fu">length</span>(W))</span>
-<span id="cb138-32"><a href="inverse-probability-weighting-ipw.html#cb138-32" tabindex="-1"></a>folds  <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">breaks =</span> K, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb138-33"><a href="inverse-probability-weighting-ipw.html#cb138-33" tabindex="-1"></a>index  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">length</span>(ind) <span class="sc">/</span> K, <span class="at">ncol =</span> K)</span>
-<span id="cb138-34"><a href="inverse-probability-weighting-ipw.html#cb138-34" tabindex="-1"></a><span class="cf">for</span>(f <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K){</span>
-<span id="cb138-35"><a href="inverse-probability-weighting-ipw.html#cb138-35" tabindex="-1"></a>    index[, f]  <span class="ot">&lt;-</span> ind[<span class="fu">which</span>(folds <span class="sc">==</span> f)]</span>
-<span id="cb138-36"><a href="inverse-probability-weighting-ipw.html#cb138-36" tabindex="-1"></a>}</span>
-<span id="cb138-37"><a href="inverse-probability-weighting-ipw.html#cb138-37" tabindex="-1"></a></span>
-<span id="cb138-38"><a href="inverse-probability-weighting-ipw.html#cb138-38" tabindex="-1"></a><span class="co"># Build RF using GRF P(W = 1 | X)</span></span>
-<span id="cb138-39"><a href="inverse-probability-weighting-ipw.html#cb138-39" tabindex="-1"></a>fun.rf.grf  <span class="ot">&lt;-</span> <span class="cf">function</span>(X, W, predictkfold){</span>
-<span id="cb138-40"><a href="inverse-probability-weighting-ipw.html#cb138-40" tabindex="-1"></a>    rf_grf  <span class="ot">&lt;-</span> <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb138-41"><a href="inverse-probability-weighting-ipw.html#cb138-41" tabindex="-1"></a>    p.grf  <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_grf, predictkfold)<span class="sc">$</span>predictions</span>
-<span id="cb138-42"><a href="inverse-probability-weighting-ipw.html#cb138-42" tabindex="-1"></a>    <span class="fu">return</span>(p.grf)</span>
-<span id="cb138-43"><a href="inverse-probability-weighting-ipw.html#cb138-43" tabindex="-1"></a>}</span>
-<span id="cb138-44"><a href="inverse-probability-weighting-ipw.html#cb138-44" tabindex="-1"></a></span>
-<span id="cb138-45"><a href="inverse-probability-weighting-ipw.html#cb138-45" tabindex="-1"></a><span class="co"># storing </span></span>
-<span id="cb138-46"><a href="inverse-probability-weighting-ipw.html#cb138-46" tabindex="-1"></a>predict.mat  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K)</span>
-<span id="cb138-47"><a href="inverse-probability-weighting-ipw.html#cb138-47" tabindex="-1"></a>tauk  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
-<span id="cb138-48"><a href="inverse-probability-weighting-ipw.html#cb138-48" tabindex="-1"></a>tauk_oracle  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
-<span id="cb138-49"><a href="inverse-probability-weighting-ipw.html#cb138-49" tabindex="-1"></a>weighttau  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
-<span id="cb138-50"><a href="inverse-probability-weighting-ipw.html#cb138-50" tabindex="-1"></a>score  <span class="ot">&lt;-</span>  <span class="fu">list</span>()</span>
-<span id="cb138-51"><a href="inverse-probability-weighting-ipw.html#cb138-51" tabindex="-1"></a>score_oracle  <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb138-52"><a href="inverse-probability-weighting-ipw.html#cb138-52" tabindex="-1"></a></span>
-<span id="cb138-53"><a href="inverse-probability-weighting-ipw.html#cb138-53" tabindex="-1"></a><span class="co"># for each fold i use other folds for estimation </span></span>
-<span id="cb138-54"><a href="inverse-probability-weighting-ipw.html#cb138-54" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
-<span id="cb138-55"><a href="inverse-probability-weighting-ipw.html#cb138-55" tabindex="-1"></a>    predict.mat[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], <span class="at">W =</span> W[index[, <span class="sc">-</span>i]], <span class="at">predictkfold =</span> X[<span class="fu">c</span>(index[, i]), ])</span>
-<span id="cb138-56"><a href="inverse-probability-weighting-ipw.html#cb138-56" tabindex="-1"></a>    <span class="co"># fold-specific treatment effect</span></span>
-<span id="cb138-57"><a href="inverse-probability-weighting-ipw.html#cb138-57" tabindex="-1"></a>    score[[i]]  <span class="ot">&lt;-</span> ((W[index[, i]] <span class="sc">*</span> Y[index[, i]]) <span class="sc">/</span> (predict.mat[, i])) <span class="sc">-</span> </span>
-<span id="cb138-58"><a href="inverse-probability-weighting-ipw.html#cb138-58" tabindex="-1"></a>                (((<span class="dv">1</span> <span class="sc">-</span> W[index[, i]]) <span class="sc">*</span> Y[index[, i]]) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> predict.mat[, i]))</span>
-<span id="cb138-59"><a href="inverse-probability-weighting-ipw.html#cb138-59" tabindex="-1"></a></span>
-<span id="cb138-60"><a href="inverse-probability-weighting-ipw.html#cb138-60" tabindex="-1"></a>    tauk[i]  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score[[i]])</span>
-<span id="cb138-61"><a href="inverse-probability-weighting-ipw.html#cb138-61" tabindex="-1"></a>}</span>
-<span id="cb138-62"><a href="inverse-probability-weighting-ipw.html#cb138-62" tabindex="-1"></a></span>
-<span id="cb138-63"><a href="inverse-probability-weighting-ipw.html#cb138-63" tabindex="-1"></a><span class="co"># ipw using oracle propensity score and propensity score estimated from grf </span></span>
-<span id="cb138-64"><a href="inverse-probability-weighting-ipw.html#cb138-64" tabindex="-1"></a>alpha  <span class="ot">&lt;-</span>  <span class="fl">0.05</span> <span class="co"># 5 percent level of significance</span></span>
-<span id="cb138-65"><a href="inverse-probability-weighting-ipw.html#cb138-65" tabindex="-1"></a><span class="co">#ipw.ranger  &lt;- mean(((W * Y) / (p.ranger)) - (((1 - W) * Y) / (1 - p.ranger))) </span></span>
-<span id="cb138-66"><a href="inverse-probability-weighting-ipw.html#cb138-66" tabindex="-1"></a>ipw.grf  <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">unlist</span>(score))</span>
-<span id="cb138-67"><a href="inverse-probability-weighting-ipw.html#cb138-67" tabindex="-1"></a>score_oracle  <span class="ot">&lt;-</span> ((W <span class="sc">*</span> Y) <span class="sc">/</span> (prob)) <span class="sc">-</span> </span>
-<span id="cb138-68"><a href="inverse-probability-weighting-ipw.html#cb138-68" tabindex="-1"></a>                ((<span class="dv">1</span> <span class="sc">-</span> W) <span class="sc">*</span> Y <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> prob))</span>
-<span id="cb138-69"><a href="inverse-probability-weighting-ipw.html#cb138-69" tabindex="-1"></a>ipw.oracle  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score_oracle)</span>
-<span id="cb138-70"><a href="inverse-probability-weighting-ipw.html#cb138-70" tabindex="-1"></a></span>
-<span id="cb138-71"><a href="inverse-probability-weighting-ipw.html#cb138-71" tabindex="-1"></a>sd.ipw  <span class="ot">&lt;-</span>  <span class="fu">sd</span>(<span class="fu">unlist</span>(score))</span>
-<span id="cb138-72"><a href="inverse-probability-weighting-ipw.html#cb138-72" tabindex="-1"></a>sd.oracle  <span class="ot">&lt;-</span>  <span class="fu">sd</span>(score_oracle)</span>
-<span id="cb138-73"><a href="inverse-probability-weighting-ipw.html#cb138-73" tabindex="-1"></a>ll  <span class="ot">&lt;-</span> ipw.grf <span class="sc">-</span> (sd.ipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb138-74"><a href="inverse-probability-weighting-ipw.html#cb138-74" tabindex="-1"></a>ul  <span class="ot">&lt;-</span> ipw.grf <span class="sc">+</span> (sd.ipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb138-75"><a href="inverse-probability-weighting-ipw.html#cb138-75" tabindex="-1"></a>ll_oracle  <span class="ot">&lt;-</span> ipw.oracle <span class="sc">-</span> (sd.oracle <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(score_oracle))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb138-76"><a href="inverse-probability-weighting-ipw.html#cb138-76" tabindex="-1"></a>ul_oracle  <span class="ot">&lt;-</span> ipw.oracle <span class="sc">+</span> (sd.oracle <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(score_oracle))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb138-77"><a href="inverse-probability-weighting-ipw.html#cb138-77" tabindex="-1"></a></span>
-<span id="cb138-78"><a href="inverse-probability-weighting-ipw.html#cb138-78" tabindex="-1"></a>result.ipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;IPW estimate&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.ipw <span class="sc">/</span> (<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>),</span>
-<span id="cb138-79"><a href="inverse-probability-weighting-ipw.html#cb138-79" tabindex="-1"></a>                 <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul, <span class="dv">3</span>))</span>
-<span id="cb138-80"><a href="inverse-probability-weighting-ipw.html#cb138-80" tabindex="-1"></a></span>
-<span id="cb138-81"><a href="inverse-probability-weighting-ipw.html#cb138-81" tabindex="-1"></a>result.oracle.ipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;IPW Oracle estimate&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.oracle <span class="sc">/</span> (<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>),</span>
-<span id="cb138-82"><a href="inverse-probability-weighting-ipw.html#cb138-82" tabindex="-1"></a>                 <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll_oracle, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul_oracle, <span class="dv">3</span>))                 </span>
-<span id="cb138-83"><a href="inverse-probability-weighting-ipw.html#cb138-83" tabindex="-1"></a></span>
-<span id="cb138-84"><a href="inverse-probability-weighting-ipw.html#cb138-84" tabindex="-1"></a><span class="fu">print</span>(result.ipw)</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="inverse-probability-weighting-ipw.html#cb167-1" tabindex="-1"></a><span class="co">#paste0(&quot;average treatment effect is: &quot;, round(mean(pmax(X[, 1], 0)), 3))</span></span>
+<span id="cb167-2"><a href="inverse-probability-weighting-ipw.html#cb167-2" tabindex="-1"></a></span>
+<span id="cb167-3"><a href="inverse-probability-weighting-ipw.html#cb167-3" tabindex="-1"></a></span>
+<span id="cb167-4"><a href="inverse-probability-weighting-ipw.html#cb167-4" tabindex="-1"></a><span class="do">#################################</span></span>
+<span id="cb167-5"><a href="inverse-probability-weighting-ipw.html#cb167-5" tabindex="-1"></a><span class="do">#################################</span></span>
+<span id="cb167-6"><a href="inverse-probability-weighting-ipw.html#cb167-6" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb167-7"><a href="inverse-probability-weighting-ipw.html#cb167-7" tabindex="-1"></a><span class="co"># Inverse Probability Weighting</span></span>
+<span id="cb167-8"><a href="inverse-probability-weighting-ipw.html#cb167-8" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb167-9"><a href="inverse-probability-weighting-ipw.html#cb167-9" tabindex="-1"></a><span class="do">#################################</span></span>
+<span id="cb167-10"><a href="inverse-probability-weighting-ipw.html#cb167-10" tabindex="-1"></a><span class="do">#################################</span></span>
+<span id="cb167-11"><a href="inverse-probability-weighting-ipw.html#cb167-11" tabindex="-1"></a></span>
+<span id="cb167-12"><a href="inverse-probability-weighting-ipw.html#cb167-12" tabindex="-1"></a><span class="co"># use the random forest to get the propensity score </span></span>
+<span id="cb167-13"><a href="inverse-probability-weighting-ipw.html#cb167-13" tabindex="-1"></a>dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(W, X, Y)</span>
+<span id="cb167-14"><a href="inverse-probability-weighting-ipw.html#cb167-14" tabindex="-1"></a>n_features  <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">setdiff</span>(<span class="fu">names</span>(dat), <span class="st">&quot;W&quot;</span>))</span>
+<span id="cb167-15"><a href="inverse-probability-weighting-ipw.html#cb167-15" tabindex="-1"></a></span>
+<span id="cb167-16"><a href="inverse-probability-weighting-ipw.html#cb167-16" tabindex="-1"></a><span class="co"># A. ranger (probability tree)</span></span>
+<span id="cb167-17"><a href="inverse-probability-weighting-ipw.html#cb167-17" tabindex="-1"></a>rf1_ranger  <span class="ot">&lt;-</span> <span class="fu">ranger</span>(</span>
+<span id="cb167-18"><a href="inverse-probability-weighting-ipw.html#cb167-18" tabindex="-1"></a>    W <span class="sc">~</span> ., </span>
+<span id="cb167-19"><a href="inverse-probability-weighting-ipw.html#cb167-19" tabindex="-1"></a>    <span class="at">data =</span> dat, </span>
+<span id="cb167-20"><a href="inverse-probability-weighting-ipw.html#cb167-20" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="fu">min</span>(<span class="fu">ceiling</span>(<span class="fu">sqrt</span>(n_features) <span class="sc">+</span> <span class="dv">20</span>), n_features),  </span>
+<span id="cb167-21"><a href="inverse-probability-weighting-ipw.html#cb167-21" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">2000</span>, </span>
+<span id="cb167-22"><a href="inverse-probability-weighting-ipw.html#cb167-22" tabindex="-1"></a>    <span class="at">probability =</span>  <span class="cn">TRUE</span></span>
+<span id="cb167-23"><a href="inverse-probability-weighting-ipw.html#cb167-23" tabindex="-1"></a>)</span>
+<span id="cb167-24"><a href="inverse-probability-weighting-ipw.html#cb167-24" tabindex="-1"></a><span class="co"># OOB predictions from ranger</span></span>
+<span id="cb167-25"><a href="inverse-probability-weighting-ipw.html#cb167-25" tabindex="-1"></a>p.ranger  <span class="ot">&lt;-</span> rf1_ranger<span class="sc">$</span>predictions[, <span class="dv">1</span>]  </span>
+<span id="cb167-26"><a href="inverse-probability-weighting-ipw.html#cb167-26" tabindex="-1"></a></span>
+<span id="cb167-27"><a href="inverse-probability-weighting-ipw.html#cb167-27" tabindex="-1"></a><span class="co"># B. probability tree using GRF</span></span>
+<span id="cb167-28"><a href="inverse-probability-weighting-ipw.html#cb167-28" tabindex="-1"></a></span>
+<span id="cb167-29"><a href="inverse-probability-weighting-ipw.html#cb167-29" tabindex="-1"></a><span class="co"># cross-fitting index </span></span>
+<span id="cb167-30"><a href="inverse-probability-weighting-ipw.html#cb167-30" tabindex="-1"></a>K  <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb167-31"><a href="inverse-probability-weighting-ipw.html#cb167-31" tabindex="-1"></a>ind  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">size =</span> <span class="fu">length</span>(W))</span>
+<span id="cb167-32"><a href="inverse-probability-weighting-ipw.html#cb167-32" tabindex="-1"></a>folds  <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">breaks =</span> K, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb167-33"><a href="inverse-probability-weighting-ipw.html#cb167-33" tabindex="-1"></a>index  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">length</span>(ind) <span class="sc">/</span> K, <span class="at">ncol =</span> K)</span>
+<span id="cb167-34"><a href="inverse-probability-weighting-ipw.html#cb167-34" tabindex="-1"></a><span class="cf">for</span>(f <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K){</span>
+<span id="cb167-35"><a href="inverse-probability-weighting-ipw.html#cb167-35" tabindex="-1"></a>    index[, f]  <span class="ot">&lt;-</span> ind[<span class="fu">which</span>(folds <span class="sc">==</span> f)]</span>
+<span id="cb167-36"><a href="inverse-probability-weighting-ipw.html#cb167-36" tabindex="-1"></a>}</span>
+<span id="cb167-37"><a href="inverse-probability-weighting-ipw.html#cb167-37" tabindex="-1"></a></span>
+<span id="cb167-38"><a href="inverse-probability-weighting-ipw.html#cb167-38" tabindex="-1"></a><span class="co"># Build RF using GRF P(W = 1 | X)</span></span>
+<span id="cb167-39"><a href="inverse-probability-weighting-ipw.html#cb167-39" tabindex="-1"></a>fun.rf.grf  <span class="ot">&lt;-</span> <span class="cf">function</span>(X, W, predictkfold){</span>
+<span id="cb167-40"><a href="inverse-probability-weighting-ipw.html#cb167-40" tabindex="-1"></a>    rf_grf  <span class="ot">&lt;-</span> <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb167-41"><a href="inverse-probability-weighting-ipw.html#cb167-41" tabindex="-1"></a>    p.grf  <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_grf, predictkfold)<span class="sc">$</span>predictions</span>
+<span id="cb167-42"><a href="inverse-probability-weighting-ipw.html#cb167-42" tabindex="-1"></a>    <span class="fu">return</span>(p.grf)</span>
+<span id="cb167-43"><a href="inverse-probability-weighting-ipw.html#cb167-43" tabindex="-1"></a>}</span>
+<span id="cb167-44"><a href="inverse-probability-weighting-ipw.html#cb167-44" tabindex="-1"></a></span>
+<span id="cb167-45"><a href="inverse-probability-weighting-ipw.html#cb167-45" tabindex="-1"></a><span class="co"># storing </span></span>
+<span id="cb167-46"><a href="inverse-probability-weighting-ipw.html#cb167-46" tabindex="-1"></a>predict.mat  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K)</span>
+<span id="cb167-47"><a href="inverse-probability-weighting-ipw.html#cb167-47" tabindex="-1"></a>tauk  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb167-48"><a href="inverse-probability-weighting-ipw.html#cb167-48" tabindex="-1"></a>tauk_oracle  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb167-49"><a href="inverse-probability-weighting-ipw.html#cb167-49" tabindex="-1"></a>weighttau  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb167-50"><a href="inverse-probability-weighting-ipw.html#cb167-50" tabindex="-1"></a>score  <span class="ot">&lt;-</span>  <span class="fu">list</span>()</span>
+<span id="cb167-51"><a href="inverse-probability-weighting-ipw.html#cb167-51" tabindex="-1"></a>score_oracle  <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb167-52"><a href="inverse-probability-weighting-ipw.html#cb167-52" tabindex="-1"></a></span>
+<span id="cb167-53"><a href="inverse-probability-weighting-ipw.html#cb167-53" tabindex="-1"></a><span class="co"># for each fold i use other folds for estimation </span></span>
+<span id="cb167-54"><a href="inverse-probability-weighting-ipw.html#cb167-54" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
+<span id="cb167-55"><a href="inverse-probability-weighting-ipw.html#cb167-55" tabindex="-1"></a>    predict.mat[, i]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> X[<span class="fu">c</span>(index[, <span class="sc">-</span>i]), ], <span class="at">W =</span> W[index[, <span class="sc">-</span>i]], <span class="at">predictkfold =</span> X[<span class="fu">c</span>(index[, i]), ])</span>
+<span id="cb167-56"><a href="inverse-probability-weighting-ipw.html#cb167-56" tabindex="-1"></a>    <span class="co"># fold-specific treatment effect</span></span>
+<span id="cb167-57"><a href="inverse-probability-weighting-ipw.html#cb167-57" tabindex="-1"></a>    score[[i]]  <span class="ot">&lt;-</span> ((W[index[, i]] <span class="sc">*</span> Y[index[, i]]) <span class="sc">/</span> (predict.mat[, i])) <span class="sc">-</span> </span>
+<span id="cb167-58"><a href="inverse-probability-weighting-ipw.html#cb167-58" tabindex="-1"></a>                (((<span class="dv">1</span> <span class="sc">-</span> W[index[, i]]) <span class="sc">*</span> Y[index[, i]]) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> predict.mat[, i]))</span>
+<span id="cb167-59"><a href="inverse-probability-weighting-ipw.html#cb167-59" tabindex="-1"></a></span>
+<span id="cb167-60"><a href="inverse-probability-weighting-ipw.html#cb167-60" tabindex="-1"></a>    tauk[i]  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score[[i]])</span>
+<span id="cb167-61"><a href="inverse-probability-weighting-ipw.html#cb167-61" tabindex="-1"></a>}</span>
+<span id="cb167-62"><a href="inverse-probability-weighting-ipw.html#cb167-62" tabindex="-1"></a></span>
+<span id="cb167-63"><a href="inverse-probability-weighting-ipw.html#cb167-63" tabindex="-1"></a><span class="co"># ipw using oracle propensity score and propensity score estimated from grf </span></span>
+<span id="cb167-64"><a href="inverse-probability-weighting-ipw.html#cb167-64" tabindex="-1"></a>alpha  <span class="ot">&lt;-</span>  <span class="fl">0.05</span> <span class="co"># 5 percent level of significance</span></span>
+<span id="cb167-65"><a href="inverse-probability-weighting-ipw.html#cb167-65" tabindex="-1"></a><span class="co">#ipw.ranger  &lt;- mean(((W * Y) / (p.ranger)) - (((1 - W) * Y) / (1 - p.ranger))) </span></span>
+<span id="cb167-66"><a href="inverse-probability-weighting-ipw.html#cb167-66" tabindex="-1"></a>ipw.grf  <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">unlist</span>(score))</span>
+<span id="cb167-67"><a href="inverse-probability-weighting-ipw.html#cb167-67" tabindex="-1"></a>score_oracle  <span class="ot">&lt;-</span> ((W <span class="sc">*</span> Y) <span class="sc">/</span> (prob)) <span class="sc">-</span> </span>
+<span id="cb167-68"><a href="inverse-probability-weighting-ipw.html#cb167-68" tabindex="-1"></a>                ((<span class="dv">1</span> <span class="sc">-</span> W) <span class="sc">*</span> Y <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> prob))</span>
+<span id="cb167-69"><a href="inverse-probability-weighting-ipw.html#cb167-69" tabindex="-1"></a>ipw.oracle  <span class="ot">&lt;-</span> <span class="fu">mean</span>(score_oracle)</span>
+<span id="cb167-70"><a href="inverse-probability-weighting-ipw.html#cb167-70" tabindex="-1"></a></span>
+<span id="cb167-71"><a href="inverse-probability-weighting-ipw.html#cb167-71" tabindex="-1"></a>sd.ipw  <span class="ot">&lt;-</span>  <span class="fu">sd</span>(<span class="fu">unlist</span>(score))</span>
+<span id="cb167-72"><a href="inverse-probability-weighting-ipw.html#cb167-72" tabindex="-1"></a>sd.oracle  <span class="ot">&lt;-</span>  <span class="fu">sd</span>(score_oracle)</span>
+<span id="cb167-73"><a href="inverse-probability-weighting-ipw.html#cb167-73" tabindex="-1"></a>ll  <span class="ot">&lt;-</span> ipw.grf <span class="sc">-</span> (sd.ipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb167-74"><a href="inverse-probability-weighting-ipw.html#cb167-74" tabindex="-1"></a>ul  <span class="ot">&lt;-</span> ipw.grf <span class="sc">+</span> (sd.ipw <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">unlist</span>(score)))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb167-75"><a href="inverse-probability-weighting-ipw.html#cb167-75" tabindex="-1"></a>ll_oracle  <span class="ot">&lt;-</span> ipw.oracle <span class="sc">-</span> (sd.oracle <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(score_oracle))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb167-76"><a href="inverse-probability-weighting-ipw.html#cb167-76" tabindex="-1"></a>ul_oracle  <span class="ot">&lt;-</span> ipw.oracle <span class="sc">+</span> (sd.oracle <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(score_oracle))) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb167-77"><a href="inverse-probability-weighting-ipw.html#cb167-77" tabindex="-1"></a></span>
+<span id="cb167-78"><a href="inverse-probability-weighting-ipw.html#cb167-78" tabindex="-1"></a>result.ipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;IPW estimate&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ipw.grf, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.ipw <span class="sc">/</span> (<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>),</span>
+<span id="cb167-79"><a href="inverse-probability-weighting-ipw.html#cb167-79" tabindex="-1"></a>                 <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul, <span class="dv">3</span>))</span>
+<span id="cb167-80"><a href="inverse-probability-weighting-ipw.html#cb167-80" tabindex="-1"></a></span>
+<span id="cb167-81"><a href="inverse-probability-weighting-ipw.html#cb167-81" tabindex="-1"></a>result.oracle.ipw  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;IPW Oracle estimate&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ipw.oracle, <span class="dv">3</span>), <span class="st">&quot;se&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(sd.oracle <span class="sc">/</span> (<span class="fu">sqrt</span>(<span class="fu">length</span>(W))), <span class="dv">3</span>),</span>
+<span id="cb167-82"><a href="inverse-probability-weighting-ipw.html#cb167-82" tabindex="-1"></a>                 <span class="st">&quot;lower bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ll_oracle, <span class="dv">3</span>), <span class="st">&quot;upper bound&quot;</span> <span class="ot">=</span> <span class="fu">round</span>(ul_oracle, <span class="dv">3</span>))                 </span>
+<span id="cb167-83"><a href="inverse-probability-weighting-ipw.html#cb167-83" tabindex="-1"></a></span>
+<span id="cb167-84"><a href="inverse-probability-weighting-ipw.html#cb167-84" tabindex="-1"></a><span class="fu">print</span>(result.ipw)</span></code></pre></div>
 <pre><code>## IPW estimate           se  lower bound  upper bound 
 ##       15.508        3.092        9.448       21.568</code></pre>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="inverse-probability-weighting-ipw.html#cb140-1" tabindex="-1"></a><span class="fu">print</span>(result.oracle.ipw)</span></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="inverse-probability-weighting-ipw.html#cb169-1" tabindex="-1"></a><span class="fu">print</span>(result.oracle.ipw)</span></code></pre></div>
 <pre><code>## IPW Oracle estimate                  se         lower bound         upper bound 
 ##              16.496               3.165              10.294              22.699</code></pre>
 <p>What? Despite having true propensity score, the Oracle IPW underperforms in accuracy compared to the IPW estimate with unknown propensity score. Why is it so?</p>

@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -262,23 +262,23 @@ div.csl-indent {
 <h2><span class="header-section-number">6.1</span> A simple example<a href="a-simple-example.html#a-simple-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Say, you are interested in evaluating the effect of tutoring program initiated following the first exam on grades at an introductory level course. For simplicity, the possible grades are <strong>A</strong> and <strong>B</strong>. However, students who received B on their first exam are more likely to attend the tutoring session. In other words, <span class="math inline">\(P(W_i = 1 | Y_{iFE} = A) &lt; P(W_i = 1 | Y_{iFE} = B)\)</span> (<span class="math inline">\(Y_{iFE}\)</span> is read as unit <span class="math inline">\(i&#39;s\)</span> grade in the first exam). In this case, the treatment assignment is correlated with the past grade, which can predict the grade on the second exam. In other words, if you did well in the first exam, you are likely to perform well in the second exam and so on. Hence, using equation (2) to estimate effects of the tutoring program will result in biased estimate.</p>
 <p>Since we know that the probability of treatment is influenced by the grade on the first exam, we can estimate the conditional average treatment effect (CATE) and average them using weights to form an estimate of ATE. Let’s take a look at the data.</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="a-simple-example.html#cb102-1" tabindex="-1"></a><span class="co"># function to report grade breakdown by the first exam grade (A and B)</span></span>
-<span id="cb102-2"><a href="a-simple-example.html#cb102-2" tabindex="-1"></a>grade_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(grade_vec){</span>
-<span id="cb102-3"><a href="a-simple-example.html#cb102-3" tabindex="-1"></a>    grade  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
-<span id="cb102-4"><a href="a-simple-example.html#cb102-4" tabindex="-1"></a>    grade[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
-<span id="cb102-5"><a href="a-simple-example.html#cb102-5" tabindex="-1"></a>    grade[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">1</span>], grade_vec[<span class="dv">2</span>])</span>
-<span id="cb102-6"><a href="a-simple-example.html#cb102-6" tabindex="-1"></a>    grade[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">3</span>], grade_vec[<span class="dv">4</span>])</span>
-<span id="cb102-7"><a href="a-simple-example.html#cb102-7" tabindex="-1"></a>    <span class="fu">return</span>(grade)</span>
-<span id="cb102-8"><a href="a-simple-example.html#cb102-8" tabindex="-1"></a>}</span>
-<span id="cb102-9"><a href="a-simple-example.html#cb102-9" tabindex="-1"></a></span>
-<span id="cb102-10"><a href="a-simple-example.html#cb102-10" tabindex="-1"></a><span class="co"># Y_iFS == A</span></span>
-<span id="cb102-11"><a href="a-simple-example.html#cb102-11" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">4</span>))</span>
-<span id="cb102-12"><a href="a-simple-example.html#cb102-12" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
-<span id="cb102-13"><a href="a-simple-example.html#cb102-13" tabindex="-1"></a></span>
-<span id="cb102-14"><a href="a-simple-example.html#cb102-14" tabindex="-1"></a><span class="co"># Se</span></span>
-<span id="cb102-15"><a href="a-simple-example.html#cb102-15" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb102-16"><a href="a-simple-example.html#cb102-16" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb102-17"><a href="a-simple-example.html#cb102-17" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 1.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = A&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="a-simple-example.html#cb125-1" tabindex="-1"></a><span class="co"># function to report grade breakdown by the first exam grade (A and B)</span></span>
+<span id="cb125-2"><a href="a-simple-example.html#cb125-2" tabindex="-1"></a>grade_mat  <span class="ot">&lt;-</span> <span class="cf">function</span>(grade_vec){</span>
+<span id="cb125-3"><a href="a-simple-example.html#cb125-3" tabindex="-1"></a>    grade  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span><span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
+<span id="cb125-4"><a href="a-simple-example.html#cb125-4" tabindex="-1"></a>    grade[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Treat&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
+<span id="cb125-5"><a href="a-simple-example.html#cb125-5" tabindex="-1"></a>    grade[ ,<span class="dv">2</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">1</span>], grade_vec[<span class="dv">2</span>])</span>
+<span id="cb125-6"><a href="a-simple-example.html#cb125-6" tabindex="-1"></a>    grade[ ,<span class="dv">3</span>]  <span class="ot">&lt;-</span> <span class="fu">c</span>(grade_vec[<span class="dv">3</span>], grade_vec[<span class="dv">4</span>])</span>
+<span id="cb125-7"><a href="a-simple-example.html#cb125-7" tabindex="-1"></a>    <span class="fu">return</span>(grade)</span>
+<span id="cb125-8"><a href="a-simple-example.html#cb125-8" tabindex="-1"></a>}</span>
+<span id="cb125-9"><a href="a-simple-example.html#cb125-9" tabindex="-1"></a></span>
+<span id="cb125-10"><a href="a-simple-example.html#cb125-10" tabindex="-1"></a><span class="co"># Y_iFS == A</span></span>
+<span id="cb125-11"><a href="a-simple-example.html#cb125-11" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">4</span>))</span>
+<span id="cb125-12"><a href="a-simple-example.html#cb125-12" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
+<span id="cb125-13"><a href="a-simple-example.html#cb125-13" tabindex="-1"></a></span>
+<span id="cb125-14"><a href="a-simple-example.html#cb125-14" tabindex="-1"></a><span class="co"># Se</span></span>
+<span id="cb125-15"><a href="a-simple-example.html#cb125-15" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
+<span id="cb125-16"><a href="a-simple-example.html#cb125-16" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb125-17"><a href="a-simple-example.html#cb125-17" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 1.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = A&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
 <table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>
@@ -329,12 +329,12 @@ Control
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="a-simple-example.html#cb103-1" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
-<span id="cb103-2"><a href="a-simple-example.html#cb103-2" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
-<span id="cb103-3"><a href="a-simple-example.html#cb103-3" tabindex="-1"></a></span>
-<span id="cb103-4"><a href="a-simple-example.html#cb103-4" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
-<span id="cb103-5"><a href="a-simple-example.html#cb103-5" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb103-6"><a href="a-simple-example.html#cb103-6" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 2.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = B&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="a-simple-example.html#cb126-1" tabindex="-1"></a>grade  <span class="ot">&lt;-</span> <span class="fu">grade_mat</span>(<span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb126-2"><a href="a-simple-example.html#cb126-2" tabindex="-1"></a><span class="fu">colnames</span>(grade)  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;A (2nd Exam)&quot;</span>, <span class="st">&quot;B (2nd Exam)&quot;</span>)</span>
+<span id="cb126-3"><a href="a-simple-example.html#cb126-3" tabindex="-1"></a></span>
+<span id="cb126-4"><a href="a-simple-example.html#cb126-4" tabindex="-1"></a>grade  <span class="sc">%&gt;%</span> <span class="fu">kable</span>()  <span class="sc">%&gt;%</span> </span>
+<span id="cb126-5"><a href="a-simple-example.html#cb126-5" tabindex="-1"></a>    <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="at">full_width =</span> F, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb126-6"><a href="a-simple-example.html#cb126-6" tabindex="-1"></a>    <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot;Table 2.&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Grade in the 2nd exam | 1st exam = B&quot;</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code></pre></div>
 <table class="table table-striped" style="width: auto !important; ">
 <thead>
 <tr>

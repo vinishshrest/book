@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -269,19 +269,19 @@ the effect of college education on health as defined by the simulated DGP. By ac
 for the necessary variables, regression may allow us to estimate causal effects. However,
 there are strong limitations to this approach, something which will discuss soon.</p>
 <p>First, let’s discuss some fundamentals of regression.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="why-regression.html#cb30-1" tabindex="-1"></a><span class="co"># declare paths and libraries</span></span>
-<span id="cb30-2"><a href="why-regression.html#cb30-2" tabindex="-1"></a>user <span class="ot">=</span> <span class="fu">Sys.info</span>()[<span class="st">&quot;nodename&quot;</span>]</span>
-<span id="cb30-3"><a href="why-regression.html#cb30-3" tabindex="-1"></a><span class="cf">if</span>(user <span class="sc">==</span> <span class="st">&quot;vinish-Legion-Pro-7-16IRX9H&quot;</span>){</span>
-<span id="cb30-4"><a href="why-regression.html#cb30-4" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;/home/vinish/Dropbox/Medicaid_South/code/filepath.r&quot;</span>)</span>
-<span id="cb30-5"><a href="why-regression.html#cb30-5" tabindex="-1"></a>    root_dir <span class="ot">&lt;-</span> <span class="st">&quot;/home/vinish/Dropbox/Machine Learning/book&quot;</span></span>
-<span id="cb30-6"><a href="why-regression.html#cb30-6" tabindex="-1"></a>}<span class="cf">else</span>{</span>
-<span id="cb30-7"><a href="why-regression.html#cb30-7" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;/Users/user1/Dropbox/Medicaid_South/code/filepath.r&quot;</span>)</span>
-<span id="cb30-8"><a href="why-regression.html#cb30-8" tabindex="-1"></a>}</span>
-<span id="cb30-9"><a href="why-regression.html#cb30-9" tabindex="-1"></a></span>
-<span id="cb30-10"><a href="why-regression.html#cb30-10" tabindex="-1"></a></span>
-<span id="cb30-11"><a href="why-regression.html#cb30-11" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
-<span id="cb30-12"><a href="why-regression.html#cb30-12" tabindex="-1"></a><span class="fu">p_load</span>(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow)</span>
-<span id="cb30-13"><a href="why-regression.html#cb30-13" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="why-regression.html#cb33-1" tabindex="-1"></a><span class="co"># declare paths and libraries</span></span>
+<span id="cb33-2"><a href="why-regression.html#cb33-2" tabindex="-1"></a>user <span class="ot">=</span> <span class="fu">Sys.info</span>()[<span class="st">&quot;nodename&quot;</span>]</span>
+<span id="cb33-3"><a href="why-regression.html#cb33-3" tabindex="-1"></a><span class="cf">if</span>(user <span class="sc">==</span> <span class="st">&quot;vinish-Legion-Pro-7-16IRX9H&quot;</span>){</span>
+<span id="cb33-4"><a href="why-regression.html#cb33-4" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;/home/vinish/Dropbox/Medicaid_South/code/filepath.r&quot;</span>)</span>
+<span id="cb33-5"><a href="why-regression.html#cb33-5" tabindex="-1"></a>    root_dir <span class="ot">&lt;-</span> <span class="st">&quot;/home/vinish/Dropbox/Machine Learning/book&quot;</span></span>
+<span id="cb33-6"><a href="why-regression.html#cb33-6" tabindex="-1"></a>}<span class="cf">else</span>{</span>
+<span id="cb33-7"><a href="why-regression.html#cb33-7" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;/Users/user1/Dropbox/Medicaid_South/code/filepath.r&quot;</span>)</span>
+<span id="cb33-8"><a href="why-regression.html#cb33-8" tabindex="-1"></a>}</span>
+<span id="cb33-9"><a href="why-regression.html#cb33-9" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="why-regression.html#cb33-10" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="why-regression.html#cb33-11" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
+<span id="cb33-12"><a href="why-regression.html#cb33-12" tabindex="-1"></a><span class="fu">p_load</span>(fixest, dplyr, ggplot2, tidyverse, patchwork, arrow)</span>
+<span id="cb33-13"><a href="why-regression.html#cb33-13" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>())</span></code></pre></div>
 </div>
             </section>
 

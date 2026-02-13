@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -260,91 +260,92 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="an-example-of-causal-forest" class="section level2 hasAnchor" number="8.5">
 <h2><span class="header-section-number">8.5</span> An example of causal forest<a href="an-example-of-causal-forest.html#an-example-of-causal-forest" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="an-example-of-causal-forest.html#cb240-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
-<span id="cb240-2"><a href="an-example-of-causal-forest.html#cb240-2" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb240-3"><a href="an-example-of-causal-forest.html#cb240-3" tabindex="-1"></a><span class="co">#devtools::install_github(&quot;grf-labs/grf&quot;, subdir = &quot;r-package/grf&quot;)</span></span>
-<span id="cb240-4"><a href="an-example-of-causal-forest.html#cb240-4" tabindex="-1"></a><span class="fu">library</span>(grf)</span>
-<span id="cb240-5"><a href="an-example-of-causal-forest.html#cb240-5" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb240-6"><a href="an-example-of-causal-forest.html#cb240-6" tabindex="-1"></a></span>
-<span id="cb240-7"><a href="an-example-of-causal-forest.html#cb240-7" tabindex="-1"></a></span>
-<span id="cb240-8"><a href="an-example-of-causal-forest.html#cb240-8" tabindex="-1"></a><span class="co"># generate data</span></span>
-<span id="cb240-9"><a href="an-example-of-causal-forest.html#cb240-9" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb240-10"><a href="an-example-of-causal-forest.html#cb240-10" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb240-11"><a href="an-example-of-causal-forest.html#cb240-11" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb240-12"><a href="an-example-of-causal-forest.html#cb240-12" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
-<span id="cb240-13"><a href="an-example-of-causal-forest.html#cb240-13" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
-<span id="cb240-14"><a href="an-example-of-causal-forest.html#cb240-14" tabindex="-1"></a></span>
-<span id="cb240-15"><a href="an-example-of-causal-forest.html#cb240-15" tabindex="-1"></a><span class="co"># Train a causal forest.</span></span>
-<span id="cb240-16"><a href="an-example-of-causal-forest.html#cb240-16" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb240-17"><a href="an-example-of-causal-forest.html#cb240-17" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb240-18"><a href="an-example-of-causal-forest.html#cb240-18" tabindex="-1"></a></span>
-<span id="cb240-19"><a href="an-example-of-causal-forest.html#cb240-19" tabindex="-1"></a><span class="co"># Train a causal forest </span></span>
-<span id="cb240-20"><a href="an-example-of-causal-forest.html#cb240-20" tabindex="-1"></a></span>
-<span id="cb240-21"><a href="an-example-of-causal-forest.html#cb240-21" tabindex="-1"></a>c.forest  <span class="ot">&lt;-</span>  <span class="fu">causal_forest</span>(X, Y, W)</span>
-<span id="cb240-22"><a href="an-example-of-causal-forest.html#cb240-22" tabindex="-1"></a></span>
-<span id="cb240-23"><a href="an-example-of-causal-forest.html#cb240-23" tabindex="-1"></a><span class="co"># predict using the training data using out-of-bag prediction</span></span>
-<span id="cb240-24"><a href="an-example-of-causal-forest.html#cb240-24" tabindex="-1"></a>tau.hat.oob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(c.forest)</span>
-<span id="cb240-25"><a href="an-example-of-causal-forest.html#cb240-25" tabindex="-1"></a><span class="fu">hist</span>(tau.hat.oob<span class="sc">$</span>predictions)</span></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="an-example-of-causal-forest.html#cb269-1" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb269-2"><a href="an-example-of-causal-forest.html#cb269-2" tabindex="-1"></a><span class="fu">library</span>(devtools)</span></code></pre></div>
+<pre><code>## Loading required package: usethis</code></pre>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="an-example-of-causal-forest.html#cb271-1" tabindex="-1"></a><span class="co">#devtools::install_github(&quot;grf-labs/grf&quot;, subdir = &quot;r-package/grf&quot;)</span></span>
+<span id="cb271-2"><a href="an-example-of-causal-forest.html#cb271-2" tabindex="-1"></a><span class="fu">library</span>(grf)</span>
+<span id="cb271-3"><a href="an-example-of-causal-forest.html#cb271-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb271-4"><a href="an-example-of-causal-forest.html#cb271-4" tabindex="-1"></a></span>
+<span id="cb271-5"><a href="an-example-of-causal-forest.html#cb271-5" tabindex="-1"></a></span>
+<span id="cb271-6"><a href="an-example-of-causal-forest.html#cb271-6" tabindex="-1"></a><span class="co"># generate data</span></span>
+<span id="cb271-7"><a href="an-example-of-causal-forest.html#cb271-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb271-8"><a href="an-example-of-causal-forest.html#cb271-8" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb271-9"><a href="an-example-of-causal-forest.html#cb271-9" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb271-10"><a href="an-example-of-causal-forest.html#cb271-10" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb271-11"><a href="an-example-of-causal-forest.html#cb271-11" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb271-12"><a href="an-example-of-causal-forest.html#cb271-12" tabindex="-1"></a></span>
+<span id="cb271-13"><a href="an-example-of-causal-forest.html#cb271-13" tabindex="-1"></a><span class="co"># Train a causal forest.</span></span>
+<span id="cb271-14"><a href="an-example-of-causal-forest.html#cb271-14" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb271-15"><a href="an-example-of-causal-forest.html#cb271-15" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmin</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb271-16"><a href="an-example-of-causal-forest.html#cb271-16" tabindex="-1"></a></span>
+<span id="cb271-17"><a href="an-example-of-causal-forest.html#cb271-17" tabindex="-1"></a><span class="co"># Train a causal forest </span></span>
+<span id="cb271-18"><a href="an-example-of-causal-forest.html#cb271-18" tabindex="-1"></a></span>
+<span id="cb271-19"><a href="an-example-of-causal-forest.html#cb271-19" tabindex="-1"></a>c.forest  <span class="ot">&lt;-</span>  <span class="fu">causal_forest</span>(X, Y, W)</span>
+<span id="cb271-20"><a href="an-example-of-causal-forest.html#cb271-20" tabindex="-1"></a></span>
+<span id="cb271-21"><a href="an-example-of-causal-forest.html#cb271-21" tabindex="-1"></a><span class="co"># predict using the training data using out-of-bag prediction</span></span>
+<span id="cb271-22"><a href="an-example-of-causal-forest.html#cb271-22" tabindex="-1"></a>tau.hat.oob  <span class="ot">&lt;-</span> <span class="fu">predict</span>(c.forest)</span>
+<span id="cb271-23"><a href="an-example-of-causal-forest.html#cb271-23" tabindex="-1"></a><span class="fu">hist</span>(tau.hat.oob<span class="sc">$</span>predictions)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
-<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="an-example-of-causal-forest.html#cb241-1" tabindex="-1"></a><span class="co"># Estimate treatment effects for the test sample </span></span>
-<span id="cb241-2"><a href="an-example-of-causal-forest.html#cb241-2" tabindex="-1"></a>tau.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(c.forest, X.test)</span>
-<span id="cb241-3"><a href="an-example-of-causal-forest.html#cb241-3" tabindex="-1"></a><span class="fu">plot</span>(X.test[, <span class="dv">1</span>], tau.hat<span class="sc">$</span>predictions, <span class="at">ylim =</span> <span class="fu">range</span>(tau.hat<span class="sc">$</span>predictions, <span class="dv">0</span>, <span class="dv">2</span>), <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;tau&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>)</span>
-<span id="cb241-4"><a href="an-example-of-causal-forest.html#cb241-4" tabindex="-1"></a><span class="fu">lines</span>(X.test[, <span class="dv">1</span>], <span class="fu">pmax</span>(<span class="dv">0</span>, X.test[, <span class="dv">1</span>]), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="an-example-of-causal-forest.html#cb272-1" tabindex="-1"></a><span class="co"># Estimate treatment effects for the test sample </span></span>
+<span id="cb272-2"><a href="an-example-of-causal-forest.html#cb272-2" tabindex="-1"></a>tau.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(c.forest, X.test)</span>
+<span id="cb272-3"><a href="an-example-of-causal-forest.html#cb272-3" tabindex="-1"></a><span class="fu">plot</span>(X.test[, <span class="dv">1</span>], tau.hat<span class="sc">$</span>predictions, <span class="at">ylim =</span> <span class="fu">range</span>(tau.hat<span class="sc">$</span>predictions, <span class="dv">0</span>, <span class="dv">2</span>), <span class="at">xlab =</span> <span class="st">&quot;x&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;tau&quot;</span>, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>)</span>
+<span id="cb272-4"><a href="an-example-of-causal-forest.html#cb272-4" tabindex="-1"></a><span class="fu">lines</span>(X.test[, <span class="dv">1</span>], <span class="fu">pmax</span>(<span class="dv">0</span>, X.test[, <span class="dv">1</span>]), <span class="at">col =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-70-2.png" width="672" /></p>
-<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="an-example-of-causal-forest.html#cb242-1" tabindex="-1"></a><span class="co"># estimate conditional average treatment effect (CATE) on the full sample </span></span>
-<span id="cb242-2"><a href="an-example-of-causal-forest.html#cb242-2" tabindex="-1"></a>cate  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(c.forest, <span class="at">target.sample =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb242-3"><a href="an-example-of-causal-forest.html#cb242-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Conditinal Average Treatment Effect (CATE) is: &quot;</span>, cate[[<span class="dv">1</span>]]))</span></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="an-example-of-causal-forest.html#cb273-1" tabindex="-1"></a><span class="co"># estimate conditional average treatment effect (CATE) on the full sample </span></span>
+<span id="cb273-2"><a href="an-example-of-causal-forest.html#cb273-2" tabindex="-1"></a>cate  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(c.forest, <span class="at">target.sample =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb273-3"><a href="an-example-of-causal-forest.html#cb273-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Conditinal Average Treatment Effect (CATE) is: &quot;</span>, cate[[<span class="dv">1</span>]]))</span></code></pre></div>
 <pre><code>## [1] &quot;Conditinal Average Treatment Effect (CATE) is:  0.405834044743919&quot;</code></pre>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="an-example-of-causal-forest.html#cb244-1" tabindex="-1"></a><span class="co"># estimate conditional average treatment effect on treated </span></span>
-<span id="cb244-2"><a href="an-example-of-causal-forest.html#cb244-2" tabindex="-1"></a>catt  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(c.forest, <span class="at">target.sample =</span> <span class="st">&quot;treated&quot;</span>)</span>
-<span id="cb244-3"><a href="an-example-of-causal-forest.html#cb244-3" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Conditional Average Treatment Effect on the Treated (CATT)&quot;</span>, catt[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="an-example-of-causal-forest.html#cb275-1" tabindex="-1"></a><span class="co"># estimate conditional average treatment effect on treated </span></span>
+<span id="cb275-2"><a href="an-example-of-causal-forest.html#cb275-2" tabindex="-1"></a>catt  <span class="ot">&lt;-</span> <span class="fu">average_treatment_effect</span>(c.forest, <span class="at">target.sample =</span> <span class="st">&quot;treated&quot;</span>)</span>
+<span id="cb275-3"><a href="an-example-of-causal-forest.html#cb275-3" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;Conditional Average Treatment Effect on the Treated (CATT)&quot;</span>, catt[[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>## [1] &quot;Conditional Average Treatment Effect on the Treated (CATT) 0.492310300523608&quot;</code></pre>
-<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="an-example-of-causal-forest.html#cb246-1" tabindex="-1"></a><span class="co"># Add confidence intervals for heterogeneous treatment effects; growing more trees recommended </span></span>
-<span id="cb246-2"><a href="an-example-of-causal-forest.html#cb246-2" tabindex="-1"></a></span>
-<span id="cb246-3"><a href="an-example-of-causal-forest.html#cb246-3" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X, Y, W, <span class="at">num.trees =</span> <span class="dv">4000</span>)</span>
-<span id="cb246-4"><a href="an-example-of-causal-forest.html#cb246-4" tabindex="-1"></a>tau.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(tau.forest, X.test, <span class="at">estimate.variance =</span> <span class="cn">TRUE</span>) <span class="co"># for the test sample </span></span>
-<span id="cb246-5"><a href="an-example-of-causal-forest.html#cb246-5" tabindex="-1"></a></span>
-<span id="cb246-6"><a href="an-example-of-causal-forest.html#cb246-6" tabindex="-1"></a>ul  <span class="ot">&lt;-</span> tau.hat<span class="sc">$</span>predictions <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sqrt</span>(tau.hat<span class="sc">$</span>variance.estimates)</span>
-<span id="cb246-7"><a href="an-example-of-causal-forest.html#cb246-7" tabindex="-1"></a>ll  <span class="ot">&lt;-</span> tau.hat<span class="sc">$</span>predictions <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sqrt</span>(tau.hat<span class="sc">$</span>variance.estimates)</span>
-<span id="cb246-8"><a href="an-example-of-causal-forest.html#cb246-8" tabindex="-1"></a></span>
-<span id="cb246-9"><a href="an-example-of-causal-forest.html#cb246-9" tabindex="-1"></a>tau.hat<span class="sc">$</span>ul  <span class="ot">&lt;-</span>  ul </span>
-<span id="cb246-10"><a href="an-example-of-causal-forest.html#cb246-10" tabindex="-1"></a>tau.hat<span class="sc">$</span>ll  <span class="ot">&lt;-</span> ll </span>
-<span id="cb246-11"><a href="an-example-of-causal-forest.html#cb246-11" tabindex="-1"></a>tau.hat<span class="sc">$</span>X.test  <span class="ot">&lt;-</span> X.test[,<span class="dv">1</span>]</span>
-<span id="cb246-12"><a href="an-example-of-causal-forest.html#cb246-12" tabindex="-1"></a></span>
-<span id="cb246-13"><a href="an-example-of-causal-forest.html#cb246-13" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tau.hat, <span class="fu">aes</span>(<span class="at">x =</span> X.test, <span class="at">y =</span> predictions)) <span class="sc">+</span> </span>
-<span id="cb246-14"><a href="an-example-of-causal-forest.html#cb246-14" tabindex="-1"></a><span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ll, <span class="at">ymax =</span> ul), <span class="at">fill =</span> <span class="st">&quot;grey70&quot;</span>) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> predictions)) <span class="sc">+</span> </span>
-<span id="cb246-15"><a href="an-example-of-causal-forest.html#cb246-15" tabindex="-1"></a><span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="an-example-of-causal-forest.html#cb277-1" tabindex="-1"></a><span class="co"># Add confidence intervals for heterogeneous treatment effects; growing more trees recommended </span></span>
+<span id="cb277-2"><a href="an-example-of-causal-forest.html#cb277-2" tabindex="-1"></a></span>
+<span id="cb277-3"><a href="an-example-of-causal-forest.html#cb277-3" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X, Y, W, <span class="at">num.trees =</span> <span class="dv">4000</span>)</span>
+<span id="cb277-4"><a href="an-example-of-causal-forest.html#cb277-4" tabindex="-1"></a>tau.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(tau.forest, X.test, <span class="at">estimate.variance =</span> <span class="cn">TRUE</span>) <span class="co"># for the test sample </span></span>
+<span id="cb277-5"><a href="an-example-of-causal-forest.html#cb277-5" tabindex="-1"></a></span>
+<span id="cb277-6"><a href="an-example-of-causal-forest.html#cb277-6" tabindex="-1"></a>ul  <span class="ot">&lt;-</span> tau.hat<span class="sc">$</span>predictions <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sqrt</span>(tau.hat<span class="sc">$</span>variance.estimates)</span>
+<span id="cb277-7"><a href="an-example-of-causal-forest.html#cb277-7" tabindex="-1"></a>ll  <span class="ot">&lt;-</span> tau.hat<span class="sc">$</span>predictions <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sqrt</span>(tau.hat<span class="sc">$</span>variance.estimates)</span>
+<span id="cb277-8"><a href="an-example-of-causal-forest.html#cb277-8" tabindex="-1"></a></span>
+<span id="cb277-9"><a href="an-example-of-causal-forest.html#cb277-9" tabindex="-1"></a>tau.hat<span class="sc">$</span>ul  <span class="ot">&lt;-</span>  ul </span>
+<span id="cb277-10"><a href="an-example-of-causal-forest.html#cb277-10" tabindex="-1"></a>tau.hat<span class="sc">$</span>ll  <span class="ot">&lt;-</span> ll </span>
+<span id="cb277-11"><a href="an-example-of-causal-forest.html#cb277-11" tabindex="-1"></a>tau.hat<span class="sc">$</span>X.test  <span class="ot">&lt;-</span> X.test[,<span class="dv">1</span>]</span>
+<span id="cb277-12"><a href="an-example-of-causal-forest.html#cb277-12" tabindex="-1"></a></span>
+<span id="cb277-13"><a href="an-example-of-causal-forest.html#cb277-13" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tau.hat, <span class="fu">aes</span>(<span class="at">x =</span> X.test, <span class="at">y =</span> predictions)) <span class="sc">+</span> </span>
+<span id="cb277-14"><a href="an-example-of-causal-forest.html#cb277-14" tabindex="-1"></a><span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ll, <span class="at">ymax =</span> ul), <span class="at">fill =</span> <span class="st">&quot;grey70&quot;</span>) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> predictions)) <span class="sc">+</span> </span>
+<span id="cb277-15"><a href="an-example-of-causal-forest.html#cb277-15" tabindex="-1"></a><span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-70-3.png" width="672" /></p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="an-example-of-causal-forest.html#cb247-1" tabindex="-1"></a><span class="do">######################################################</span></span>
-<span id="cb247-2"><a href="an-example-of-causal-forest.html#cb247-2" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb247-3"><a href="an-example-of-causal-forest.html#cb247-3" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb247-4"><a href="an-example-of-causal-forest.html#cb247-4" tabindex="-1"></a><span class="co"># In some cases prefitting Y and W separately may </span></span>
-<span id="cb247-5"><a href="an-example-of-causal-forest.html#cb247-5" tabindex="-1"></a><span class="co"># be helpful. Say they use different covariates.</span></span>
-<span id="cb247-6"><a href="an-example-of-causal-forest.html#cb247-6" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb247-7"><a href="an-example-of-causal-forest.html#cb247-7" tabindex="-1"></a><span class="do">######################################################</span></span>
-<span id="cb247-8"><a href="an-example-of-causal-forest.html#cb247-8" tabindex="-1"></a></span>
-<span id="cb247-9"><a href="an-example-of-causal-forest.html#cb247-9" tabindex="-1"></a><span class="co"># Generate a new data</span></span>
-<span id="cb247-10"><a href="an-example-of-causal-forest.html#cb247-10" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
-<span id="cb247-11"><a href="an-example-of-causal-forest.html#cb247-11" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb247-12"><a href="an-example-of-causal-forest.html#cb247-12" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb247-13"><a href="an-example-of-causal-forest.html#cb247-13" tabindex="-1"></a>TAU <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>X[, <span class="dv">3</span>]))</span>
-<span id="cb247-14"><a href="an-example-of-causal-forest.html#cb247-14" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>X[, <span class="dv">1</span>] <span class="sc">-</span> X[, <span class="dv">2</span>]))) <span class="co"># X[, 1] and X[, 2] influence W</span></span>
-<span id="cb247-15"><a href="an-example-of-causal-forest.html#cb247-15" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">pmax</span>(X[, <span class="dv">2</span>] <span class="sc">+</span> X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rowMeans</span>(X[, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> W <span class="sc">*</span> TAU <span class="sc">+</span> <span class="fu">rnorm</span>(n) <span class="co"># X[, 2], X[, 3], X[, 4:6] influence Y. So different set of Xs influence Y</span></span>
-<span id="cb247-16"><a href="an-example-of-causal-forest.html#cb247-16" tabindex="-1"></a></span>
-<span id="cb247-17"><a href="an-example-of-causal-forest.html#cb247-17" tabindex="-1"></a></span>
-<span id="cb247-18"><a href="an-example-of-causal-forest.html#cb247-18" tabindex="-1"></a></span>
-<span id="cb247-19"><a href="an-example-of-causal-forest.html#cb247-19" tabindex="-1"></a><span class="co"># Build a separate forest for Y and W </span></span>
-<span id="cb247-20"><a href="an-example-of-causal-forest.html#cb247-20" tabindex="-1"></a>forest.W  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb247-21"><a href="an-example-of-causal-forest.html#cb247-21" tabindex="-1"></a>W.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(forest.W)<span class="sc">$</span>predictions <span class="co"># this gives us the estimated propensity score (probability of treated)</span></span>
-<span id="cb247-22"><a href="an-example-of-causal-forest.html#cb247-22" tabindex="-1"></a><span class="co">#plot(W.hat, X[, 1], col = as.factor(W))</span></span>
-<span id="cb247-23"><a href="an-example-of-causal-forest.html#cb247-23" tabindex="-1"></a><span class="co">#plot(W.hat, X[, 2], col = as.factor(W))</span></span>
-<span id="cb247-24"><a href="an-example-of-causal-forest.html#cb247-24" tabindex="-1"></a></span>
-<span id="cb247-25"><a href="an-example-of-causal-forest.html#cb247-25" tabindex="-1"></a>forest.Y  <span class="ot">&lt;-</span> <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) <span class="co"># note that W is not used here </span></span>
-<span id="cb247-26"><a href="an-example-of-causal-forest.html#cb247-26" tabindex="-1"></a>Y.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(forest.Y)<span class="sc">$</span>predictions <span class="co"># this gives the conditional mean of Y or m(x)</span></span>
-<span id="cb247-27"><a href="an-example-of-causal-forest.html#cb247-27" tabindex="-1"></a><span class="co">#plot(Y, Y.hat)</span></span>
-<span id="cb247-28"><a href="an-example-of-causal-forest.html#cb247-28" tabindex="-1"></a></span>
-<span id="cb247-29"><a href="an-example-of-causal-forest.html#cb247-29" tabindex="-1"></a>forest.Y.varimp  <span class="ot">&lt;-</span> <span class="fu">variable_importance</span>(forest.Y)</span>
-<span id="cb247-30"><a href="an-example-of-causal-forest.html#cb247-30" tabindex="-1"></a>forest.Y.varimp</span></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="an-example-of-causal-forest.html#cb278-1" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb278-2"><a href="an-example-of-causal-forest.html#cb278-2" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb278-3"><a href="an-example-of-causal-forest.html#cb278-3" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb278-4"><a href="an-example-of-causal-forest.html#cb278-4" tabindex="-1"></a><span class="co"># In some cases prefitting Y and W separately may </span></span>
+<span id="cb278-5"><a href="an-example-of-causal-forest.html#cb278-5" tabindex="-1"></a><span class="co"># be helpful. Say they use different covariates.</span></span>
+<span id="cb278-6"><a href="an-example-of-causal-forest.html#cb278-6" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb278-7"><a href="an-example-of-causal-forest.html#cb278-7" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb278-8"><a href="an-example-of-causal-forest.html#cb278-8" tabindex="-1"></a></span>
+<span id="cb278-9"><a href="an-example-of-causal-forest.html#cb278-9" tabindex="-1"></a><span class="co"># Generate a new data</span></span>
+<span id="cb278-10"><a href="an-example-of-causal-forest.html#cb278-10" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb278-11"><a href="an-example-of-causal-forest.html#cb278-11" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb278-12"><a href="an-example-of-causal-forest.html#cb278-12" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb278-13"><a href="an-example-of-causal-forest.html#cb278-13" tabindex="-1"></a>TAU <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>X[, <span class="dv">3</span>]))</span>
+<span id="cb278-14"><a href="an-example-of-causal-forest.html#cb278-14" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>X[, <span class="dv">1</span>] <span class="sc">-</span> X[, <span class="dv">2</span>]))) <span class="co"># X[, 1] and X[, 2] influence W</span></span>
+<span id="cb278-15"><a href="an-example-of-causal-forest.html#cb278-15" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">pmax</span>(X[, <span class="dv">2</span>] <span class="sc">+</span> X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rowMeans</span>(X[, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> W <span class="sc">*</span> TAU <span class="sc">+</span> <span class="fu">rnorm</span>(n) <span class="co"># X[, 2], X[, 3], X[, 4:6] influence Y. So different set of Xs influence Y</span></span>
+<span id="cb278-16"><a href="an-example-of-causal-forest.html#cb278-16" tabindex="-1"></a></span>
+<span id="cb278-17"><a href="an-example-of-causal-forest.html#cb278-17" tabindex="-1"></a></span>
+<span id="cb278-18"><a href="an-example-of-causal-forest.html#cb278-18" tabindex="-1"></a></span>
+<span id="cb278-19"><a href="an-example-of-causal-forest.html#cb278-19" tabindex="-1"></a><span class="co"># Build a separate forest for Y and W </span></span>
+<span id="cb278-20"><a href="an-example-of-causal-forest.html#cb278-20" tabindex="-1"></a>forest.W  <span class="ot">&lt;-</span>  <span class="fu">regression_forest</span>(X, W, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb278-21"><a href="an-example-of-causal-forest.html#cb278-21" tabindex="-1"></a>W.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(forest.W)<span class="sc">$</span>predictions <span class="co"># this gives us the estimated propensity score (probability of treated)</span></span>
+<span id="cb278-22"><a href="an-example-of-causal-forest.html#cb278-22" tabindex="-1"></a><span class="co">#plot(W.hat, X[, 1], col = as.factor(W))</span></span>
+<span id="cb278-23"><a href="an-example-of-causal-forest.html#cb278-23" tabindex="-1"></a><span class="co">#plot(W.hat, X[, 2], col = as.factor(W))</span></span>
+<span id="cb278-24"><a href="an-example-of-causal-forest.html#cb278-24" tabindex="-1"></a></span>
+<span id="cb278-25"><a href="an-example-of-causal-forest.html#cb278-25" tabindex="-1"></a>forest.Y  <span class="ot">&lt;-</span> <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>) <span class="co"># note that W is not used here </span></span>
+<span id="cb278-26"><a href="an-example-of-causal-forest.html#cb278-26" tabindex="-1"></a>Y.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(forest.Y)<span class="sc">$</span>predictions <span class="co"># this gives the conditional mean of Y or m(x)</span></span>
+<span id="cb278-27"><a href="an-example-of-causal-forest.html#cb278-27" tabindex="-1"></a><span class="co">#plot(Y, Y.hat)</span></span>
+<span id="cb278-28"><a href="an-example-of-causal-forest.html#cb278-28" tabindex="-1"></a></span>
+<span id="cb278-29"><a href="an-example-of-causal-forest.html#cb278-29" tabindex="-1"></a>forest.Y.varimp  <span class="ot">&lt;-</span> <span class="fu">variable_importance</span>(forest.Y)</span>
+<span id="cb278-30"><a href="an-example-of-causal-forest.html#cb278-30" tabindex="-1"></a>forest.Y.varimp</span></code></pre></div>
 <pre><code>##              [,1]
 ##  [1,] 0.003306725
 ##  [2,] 0.467886532
@@ -366,29 +367,29 @@ div.csl-indent {
 ## [18,] 0.002076831
 ## [19,] 0.002872943
 ## [20,] 0.001213402</code></pre>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="an-example-of-causal-forest.html#cb249-1" tabindex="-1"></a><span class="co"># selects the important variables</span></span>
-<span id="cb249-2"><a href="an-example-of-causal-forest.html#cb249-2" tabindex="-1"></a>selected.vars  <span class="ot">&lt;-</span> <span class="fu">which</span>(forest.Y.varimp <span class="sc">/</span> <span class="fu">mean</span>(forest.Y.varimp) <span class="sc">&gt;</span> <span class="fl">0.2</span>)</span>
-<span id="cb249-3"><a href="an-example-of-causal-forest.html#cb249-3" tabindex="-1"></a>selected.vars</span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="an-example-of-causal-forest.html#cb280-1" tabindex="-1"></a><span class="co"># selects the important variables</span></span>
+<span id="cb280-2"><a href="an-example-of-causal-forest.html#cb280-2" tabindex="-1"></a>selected.vars  <span class="ot">&lt;-</span> <span class="fu">which</span>(forest.Y.varimp <span class="sc">/</span> <span class="fu">mean</span>(forest.Y.varimp) <span class="sc">&gt;</span> <span class="fl">0.2</span>)</span>
+<span id="cb280-3"><a href="an-example-of-causal-forest.html#cb280-3" tabindex="-1"></a>selected.vars</span></code></pre></div>
 <pre><code>## [1] 2 3 4 5 6</code></pre>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="an-example-of-causal-forest.html#cb251-1" tabindex="-1"></a><span class="co"># Trains a causal forest</span></span>
-<span id="cb251-2"><a href="an-example-of-causal-forest.html#cb251-2" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[, selected.vars], Y, W, </span>
-<span id="cb251-3"><a href="an-example-of-causal-forest.html#cb251-3" tabindex="-1"></a>                    <span class="at">W.hat =</span> W.hat, <span class="at">Y.hat =</span> Y.hat, <span class="co"># specify e(x) and m(x)</span></span>
-<span id="cb251-4"><a href="an-example-of-causal-forest.html#cb251-4" tabindex="-1"></a>                    <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb251-5"><a href="an-example-of-causal-forest.html#cb251-5" tabindex="-1"></a></span>
-<span id="cb251-6"><a href="an-example-of-causal-forest.html#cb251-6" tabindex="-1"></a></span>
-<span id="cb251-7"><a href="an-example-of-causal-forest.html#cb251-7" tabindex="-1"></a><span class="co"># See if a causal forest succeeded in capturing heterogeneity by plotting</span></span>
-<span id="cb251-8"><a href="an-example-of-causal-forest.html#cb251-8" tabindex="-1"></a><span class="co"># the TOC and calculating a 95% CI for the AUTOC.</span></span>
-<span id="cb251-9"><a href="an-example-of-causal-forest.html#cb251-9" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb251-10"><a href="an-example-of-causal-forest.html#cb251-10" tabindex="-1"></a>train.forest <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[train, ], Y[train], W[train])</span>
-<span id="cb251-11"><a href="an-example-of-causal-forest.html#cb251-11" tabindex="-1"></a>eval.forest <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[<span class="sc">-</span>train, ], Y[<span class="sc">-</span>train], W[<span class="sc">-</span>train])</span>
-<span id="cb251-12"><a href="an-example-of-causal-forest.html#cb251-12" tabindex="-1"></a>rate <span class="ot">&lt;-</span> <span class="fu">rank_average_treatment_effect</span>(eval.forest,</span>
-<span id="cb251-13"><a href="an-example-of-causal-forest.html#cb251-13" tabindex="-1"></a>                                      <span class="fu">predict</span>(train.forest, X[<span class="sc">-</span>train, ])<span class="sc">$</span>predictions)</span>
-<span id="cb251-14"><a href="an-example-of-causal-forest.html#cb251-14" tabindex="-1"></a>rate                                      </span></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="an-example-of-causal-forest.html#cb282-1" tabindex="-1"></a><span class="co"># Trains a causal forest</span></span>
+<span id="cb282-2"><a href="an-example-of-causal-forest.html#cb282-2" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[, selected.vars], Y, W, </span>
+<span id="cb282-3"><a href="an-example-of-causal-forest.html#cb282-3" tabindex="-1"></a>                    <span class="at">W.hat =</span> W.hat, <span class="at">Y.hat =</span> Y.hat, <span class="co"># specify e(x) and m(x)</span></span>
+<span id="cb282-4"><a href="an-example-of-causal-forest.html#cb282-4" tabindex="-1"></a>                    <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb282-5"><a href="an-example-of-causal-forest.html#cb282-5" tabindex="-1"></a></span>
+<span id="cb282-6"><a href="an-example-of-causal-forest.html#cb282-6" tabindex="-1"></a></span>
+<span id="cb282-7"><a href="an-example-of-causal-forest.html#cb282-7" tabindex="-1"></a><span class="co"># See if a causal forest succeeded in capturing heterogeneity by plotting</span></span>
+<span id="cb282-8"><a href="an-example-of-causal-forest.html#cb282-8" tabindex="-1"></a><span class="co"># the TOC and calculating a 95% CI for the AUTOC.</span></span>
+<span id="cb282-9"><a href="an-example-of-causal-forest.html#cb282-9" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb282-10"><a href="an-example-of-causal-forest.html#cb282-10" tabindex="-1"></a>train.forest <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[train, ], Y[train], W[train])</span>
+<span id="cb282-11"><a href="an-example-of-causal-forest.html#cb282-11" tabindex="-1"></a>eval.forest <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[<span class="sc">-</span>train, ], Y[<span class="sc">-</span>train], W[<span class="sc">-</span>train])</span>
+<span id="cb282-12"><a href="an-example-of-causal-forest.html#cb282-12" tabindex="-1"></a>rate <span class="ot">&lt;-</span> <span class="fu">rank_average_treatment_effect</span>(eval.forest,</span>
+<span id="cb282-13"><a href="an-example-of-causal-forest.html#cb282-13" tabindex="-1"></a>                                      <span class="fu">predict</span>(train.forest, X[<span class="sc">-</span>train, ])<span class="sc">$</span>predictions)</span>
+<span id="cb282-14"><a href="an-example-of-causal-forest.html#cb282-14" tabindex="-1"></a>rate                                      </span></code></pre></div>
 <pre><code>##   estimate    std.err             target
 ##  0.0201784 0.04785508 priorities | AUTOC</code></pre>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="an-example-of-causal-forest.html#cb253-1" tabindex="-1"></a><span class="fu">plot</span>(rate)</span></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="an-example-of-causal-forest.html#cb284-1" tabindex="-1"></a><span class="fu">plot</span>(rate)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-70-4.png" width="672" /></p>
-<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="an-example-of-causal-forest.html#cb254-1" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;AUTOC:&quot;</span>, <span class="fu">round</span>(rate<span class="sc">$</span>estimate, <span class="dv">2</span>), <span class="st">&quot;+/&quot;</span>, <span class="fu">round</span>(<span class="fl">1.96</span> <span class="sc">*</span> rate<span class="sc">$</span>std.err, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="an-example-of-causal-forest.html#cb285-1" tabindex="-1"></a><span class="fu">paste</span>(<span class="st">&quot;AUTOC:&quot;</span>, <span class="fu">round</span>(rate<span class="sc">$</span>estimate, <span class="dv">2</span>), <span class="st">&quot;+/&quot;</span>, <span class="fu">round</span>(<span class="fl">1.96</span> <span class="sc">*</span> rate<span class="sc">$</span>std.err, <span class="dv">2</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;AUTOC: 0.02 +/ 0.09&quot;</code></pre>
 
 </div>

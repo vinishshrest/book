@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -260,38 +260,38 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="an-estimation-example" class="section level2 hasAnchor" number="5.5">
 <h2><span class="header-section-number">5.5</span> An estimation example<a href="an-estimation-example.html#an-estimation-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="an-estimation-example.html#cb78-1" tabindex="-1"></a><span class="co"># create a function to estimate the treatment effects</span></span>
-<span id="cb78-2"><a href="an-estimation-example.html#cb78-2" tabindex="-1"></a>fun_ATE  <span class="ot">&lt;-</span> <span class="cf">function</span>(tau, N){</span>
-<span id="cb78-3"><a href="an-estimation-example.html#cb78-3" tabindex="-1"></a><span class="co"># @arg tau: true treatment effect</span></span>
-<span id="cb78-4"><a href="an-estimation-example.html#cb78-4" tabindex="-1"></a><span class="co"># @arg N:   sample size</span></span>
-<span id="cb78-5"><a href="an-estimation-example.html#cb78-5" tabindex="-1"></a><span class="co"># Return tau_hat: estimate of the treatment effect      </span></span>
-<span id="cb78-6"><a href="an-estimation-example.html#cb78-6" tabindex="-1"></a>    gender  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> <span class="fl">0.5</span>)</span>
-<span id="cb78-7"><a href="an-estimation-example.html#cb78-7" tabindex="-1"></a>    race  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> <span class="fl">0.5</span>)</span>
-<span id="cb78-8"><a href="an-estimation-example.html#cb78-8" tabindex="-1"></a>    W  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> <span class="fl">0.5</span>)    </span>
-<span id="cb78-9"><a href="an-estimation-example.html#cb78-9" tabindex="-1"></a>    Y  <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> tau <span class="sc">*</span> W  <span class="sc">+</span> gender <span class="sc">*</span> <span class="dv">5</span> <span class="sc">+</span> race <span class="sc">*</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> N, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
-<span id="cb78-10"><a href="an-estimation-example.html#cb78-10" tabindex="-1"></a></span>
-<span id="cb78-11"><a href="an-estimation-example.html#cb78-11" tabindex="-1"></a>    tau_hat  <span class="ot">&lt;-</span>  <span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">1</span>)]) <span class="sc">-</span> <span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">0</span>)]) </span>
-<span id="cb78-12"><a href="an-estimation-example.html#cb78-12" tabindex="-1"></a>    <span class="fu">return</span>(tau_hat)</span>
-<span id="cb78-13"><a href="an-estimation-example.html#cb78-13" tabindex="-1"></a>}</span>
-<span id="cb78-14"><a href="an-estimation-example.html#cb78-14" tabindex="-1"></a></span>
-<span id="cb78-15"><a href="an-estimation-example.html#cb78-15" tabindex="-1"></a><span class="co"># print treatment effect</span></span>
-<span id="cb78-16"><a href="an-estimation-example.html#cb78-16" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the ATE estimate is: &quot;</span>, <span class="fu">fun_ATE</span>(<span class="at">tau =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">2000</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="an-estimation-example.html#cb101-1" tabindex="-1"></a><span class="co"># create a function to estimate the treatment effects</span></span>
+<span id="cb101-2"><a href="an-estimation-example.html#cb101-2" tabindex="-1"></a>fun_ATE  <span class="ot">&lt;-</span> <span class="cf">function</span>(tau, N){</span>
+<span id="cb101-3"><a href="an-estimation-example.html#cb101-3" tabindex="-1"></a><span class="co"># @arg tau: true treatment effect</span></span>
+<span id="cb101-4"><a href="an-estimation-example.html#cb101-4" tabindex="-1"></a><span class="co"># @arg N:   sample size</span></span>
+<span id="cb101-5"><a href="an-estimation-example.html#cb101-5" tabindex="-1"></a><span class="co"># Return tau_hat: estimate of the treatment effect      </span></span>
+<span id="cb101-6"><a href="an-estimation-example.html#cb101-6" tabindex="-1"></a>    gender  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> <span class="fl">0.5</span>)</span>
+<span id="cb101-7"><a href="an-estimation-example.html#cb101-7" tabindex="-1"></a>    race  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> <span class="fl">0.5</span>)</span>
+<span id="cb101-8"><a href="an-estimation-example.html#cb101-8" tabindex="-1"></a>    W  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> <span class="fl">0.5</span>)    </span>
+<span id="cb101-9"><a href="an-estimation-example.html#cb101-9" tabindex="-1"></a>    Y  <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> tau <span class="sc">*</span> W  <span class="sc">+</span> gender <span class="sc">*</span> <span class="dv">5</span> <span class="sc">+</span> race <span class="sc">*</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> N, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb101-10"><a href="an-estimation-example.html#cb101-10" tabindex="-1"></a></span>
+<span id="cb101-11"><a href="an-estimation-example.html#cb101-11" tabindex="-1"></a>    tau_hat  <span class="ot">&lt;-</span>  <span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">1</span>)]) <span class="sc">-</span> <span class="fu">mean</span>(Y[<span class="fu">which</span>(W <span class="sc">==</span> <span class="dv">0</span>)]) </span>
+<span id="cb101-12"><a href="an-estimation-example.html#cb101-12" tabindex="-1"></a>    <span class="fu">return</span>(tau_hat)</span>
+<span id="cb101-13"><a href="an-estimation-example.html#cb101-13" tabindex="-1"></a>}</span>
+<span id="cb101-14"><a href="an-estimation-example.html#cb101-14" tabindex="-1"></a></span>
+<span id="cb101-15"><a href="an-estimation-example.html#cb101-15" tabindex="-1"></a><span class="co"># print treatment effect</span></span>
+<span id="cb101-16"><a href="an-estimation-example.html#cb101-16" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the ATE estimate is: &quot;</span>, <span class="fu">fun_ATE</span>(<span class="at">tau =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">2000</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;the ATE estimate is:  10.4120024165428&quot;</code></pre>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="an-estimation-example.html#cb80-1" tabindex="-1"></a><span class="co"># run 2000 replications to get a distribution of tau_hats</span></span>
-<span id="cb80-2"><a href="an-estimation-example.html#cb80-2" tabindex="-1"></a>reps  <span class="ot">&lt;-</span>  <span class="dv">2000</span></span>
-<span id="cb80-3"><a href="an-estimation-example.html#cb80-3" tabindex="-1"></a>tau.hats  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, reps)</span>
-<span id="cb80-4"><a href="an-estimation-example.html#cb80-4" tabindex="-1"></a></span>
-<span id="cb80-5"><a href="an-estimation-example.html#cb80-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>reps){</span>
-<span id="cb80-6"><a href="an-estimation-example.html#cb80-6" tabindex="-1"></a>    tau.hats[i]  <span class="ot">&lt;-</span> <span class="fu">fun_ATE</span>(<span class="at">tau =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">2000</span>)</span>
-<span id="cb80-7"><a href="an-estimation-example.html#cb80-7" tabindex="-1"></a>}</span>
-<span id="cb80-8"><a href="an-estimation-example.html#cb80-8" tabindex="-1"></a></span>
-<span id="cb80-9"><a href="an-estimation-example.html#cb80-9" tabindex="-1"></a><span class="co"># histogram of tau hats</span></span>
-<span id="cb80-10"><a href="an-estimation-example.html#cb80-10" tabindex="-1"></a><span class="fu">hist</span>(tau.hats, <span class="at">breaks =</span> <span class="dv">30</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="an-estimation-example.html#cb103-1" tabindex="-1"></a><span class="co"># run 2000 replications to get a distribution of tau_hats</span></span>
+<span id="cb103-2"><a href="an-estimation-example.html#cb103-2" tabindex="-1"></a>reps  <span class="ot">&lt;-</span>  <span class="dv">2000</span></span>
+<span id="cb103-3"><a href="an-estimation-example.html#cb103-3" tabindex="-1"></a>tau.hats  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, reps)</span>
+<span id="cb103-4"><a href="an-estimation-example.html#cb103-4" tabindex="-1"></a></span>
+<span id="cb103-5"><a href="an-estimation-example.html#cb103-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>reps){</span>
+<span id="cb103-6"><a href="an-estimation-example.html#cb103-6" tabindex="-1"></a>    tau.hats[i]  <span class="ot">&lt;-</span> <span class="fu">fun_ATE</span>(<span class="at">tau =</span> <span class="dv">10</span>, <span class="at">N =</span> <span class="dv">2000</span>)</span>
+<span id="cb103-7"><a href="an-estimation-example.html#cb103-7" tabindex="-1"></a>}</span>
+<span id="cb103-8"><a href="an-estimation-example.html#cb103-8" tabindex="-1"></a></span>
+<span id="cb103-9"><a href="an-estimation-example.html#cb103-9" tabindex="-1"></a><span class="co"># histogram of tau hats</span></span>
+<span id="cb103-10"><a href="an-estimation-example.html#cb103-10" tabindex="-1"></a><span class="fu">hist</span>(tau.hats, <span class="at">breaks =</span> <span class="dv">30</span>)</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="an-estimation-example.html#cb81-1" tabindex="-1"></a><span class="co"># obtaining the standard error</span></span>
-<span id="cb81-2"><a href="an-estimation-example.html#cb81-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the mean of tau hats : &quot;</span>, <span class="fu">mean</span>(tau.hats)))</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="an-estimation-example.html#cb104-1" tabindex="-1"></a><span class="co"># obtaining the standard error</span></span>
+<span id="cb104-2"><a href="an-estimation-example.html#cb104-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the mean of tau hats : &quot;</span>, <span class="fu">mean</span>(tau.hats)))</span></code></pre></div>
 <pre><code>## [1] &quot;the mean of tau hats :  9.99488871337007&quot;</code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="an-estimation-example.html#cb83-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the standard error of tau hats : &quot;</span>, <span class="fu">sd</span>(tau.hats)))</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="an-estimation-example.html#cb106-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;the standard error of tau hats : &quot;</span>, <span class="fu">sd</span>(tau.hats)))</span></code></pre></div>
 <pre><code>## [1] &quot;the standard error of tau hats :  0.337461879683807&quot;</code></pre>
 </div>
             </section>

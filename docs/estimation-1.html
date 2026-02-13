@@ -23,7 +23,7 @@
 <meta name="author" content="Vinish Shrestha" />
 
 
-<meta name="date" content="2026-01-27" />
+<meta name="date" content="2026-02-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -260,142 +260,142 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="estimation-1" class="section level2 hasAnchor" number="9.2">
 <h2><span class="header-section-number">9.2</span> Estimation<a href="estimation-1.html#estimation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="estimation-1.html#cb258-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>)</span>
-<span id="cb258-2"><a href="estimation-1.html#cb258-2" tabindex="-1"></a></span>
-<span id="cb258-3"><a href="estimation-1.html#cb258-3" tabindex="-1"></a><span class="co"># Generate Data </span></span>
-<span id="cb258-4"><a href="estimation-1.html#cb258-4" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb258-5"><a href="estimation-1.html#cb258-5" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb258-6"><a href="estimation-1.html#cb258-6" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb258-7"><a href="estimation-1.html#cb258-7" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
-<span id="cb258-8"><a href="estimation-1.html#cb258-8" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
-<span id="cb258-9"><a href="estimation-1.html#cb258-9" tabindex="-1"></a></span>
-<span id="cb258-10"><a href="estimation-1.html#cb258-10" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb258-11"><a href="estimation-1.html#cb258-11" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb258-12"><a href="estimation-1.html#cb258-12" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmax</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb258-13"><a href="estimation-1.html#cb258-13" tabindex="-1"></a></span>
-<span id="cb258-14"><a href="estimation-1.html#cb258-14" tabindex="-1"></a><span class="do">###################################</span></span>
-<span id="cb258-15"><a href="estimation-1.html#cb258-15" tabindex="-1"></a><span class="do">###################################</span></span>
-<span id="cb258-16"><a href="estimation-1.html#cb258-16" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb258-17"><a href="estimation-1.html#cb258-17" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb258-18"><a href="estimation-1.html#cb258-18" tabindex="-1"></a><span class="co"># 1. estimate m(X) and e(X)</span></span>
-<span id="cb258-19"><a href="estimation-1.html#cb258-19" tabindex="-1"></a><span class="co">#    using cross-fitting</span></span>
-<span id="cb258-20"><a href="estimation-1.html#cb258-20" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb258-21"><a href="estimation-1.html#cb258-21" tabindex="-1"></a><span class="do">###################################</span></span>
-<span id="cb258-22"><a href="estimation-1.html#cb258-22" tabindex="-1"></a><span class="do">###################################</span></span>
-<span id="cb258-23"><a href="estimation-1.html#cb258-23" tabindex="-1"></a></span>
-<span id="cb258-24"><a href="estimation-1.html#cb258-24" tabindex="-1"></a><span class="co"># cross-fitting index </span></span>
-<span id="cb258-25"><a href="estimation-1.html#cb258-25" tabindex="-1"></a>K  <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># total folds</span></span>
-<span id="cb258-26"><a href="estimation-1.html#cb258-26" tabindex="-1"></a>ind  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">size =</span> <span class="fu">length</span>(W))</span>
-<span id="cb258-27"><a href="estimation-1.html#cb258-27" tabindex="-1"></a>folds  <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">breaks =</span> K, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb258-28"><a href="estimation-1.html#cb258-28" tabindex="-1"></a>index  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">length</span>(ind) <span class="sc">/</span> K, <span class="at">ncol =</span> K)</span>
-<span id="cb258-29"><a href="estimation-1.html#cb258-29" tabindex="-1"></a><span class="cf">for</span>(f <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K){</span>
-<span id="cb258-30"><a href="estimation-1.html#cb258-30" tabindex="-1"></a>    index[, f]  <span class="ot">&lt;-</span> ind[<span class="fu">which</span>(folds <span class="sc">==</span> f)]</span>
-<span id="cb258-31"><a href="estimation-1.html#cb258-31" tabindex="-1"></a>}</span>
-<span id="cb258-32"><a href="estimation-1.html#cb258-32" tabindex="-1"></a></span>
-<span id="cb258-33"><a href="estimation-1.html#cb258-33" tabindex="-1"></a><span class="co"># Build a function to estimate conditional means (m(x) and e(x)) using random forest</span></span>
-<span id="cb258-34"><a href="estimation-1.html#cb258-34" tabindex="-1"></a>fun.rf.grf  <span class="ot">&lt;-</span> <span class="cf">function</span>(X, Y, predictkfold){</span>
-<span id="cb258-35"><a href="estimation-1.html#cb258-35" tabindex="-1"></a>    rf_grf  <span class="ot">&lt;-</span> <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
-<span id="cb258-36"><a href="estimation-1.html#cb258-36" tabindex="-1"></a>    p.grf  <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_grf, predictkfold)<span class="sc">$</span>predictions</span>
-<span id="cb258-37"><a href="estimation-1.html#cb258-37" tabindex="-1"></a>    <span class="fu">return</span>(p.grf)</span>
-<span id="cb258-38"><a href="estimation-1.html#cb258-38" tabindex="-1"></a>}</span>
-<span id="cb258-39"><a href="estimation-1.html#cb258-39" tabindex="-1"></a></span>
-<span id="cb258-40"><a href="estimation-1.html#cb258-40" tabindex="-1"></a><span class="co"># storing </span></span>
-<span id="cb258-41"><a href="estimation-1.html#cb258-41" tabindex="-1"></a>predict.mat  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K) <span class="co"># to store e(x) </span></span>
-<span id="cb258-42"><a href="estimation-1.html#cb258-42" tabindex="-1"></a>predict.mat2  <span class="ot">&lt;-</span> predict.mat <span class="co"># to store m(x)</span></span>
-<span id="cb258-43"><a href="estimation-1.html#cb258-43" tabindex="-1"></a></span>
-<span id="cb258-44"><a href="estimation-1.html#cb258-44" tabindex="-1"></a></span>
-<span id="cb258-45"><a href="estimation-1.html#cb258-45" tabindex="-1"></a><span class="co"># for each fold k use other folds for estimation </span></span>
-<span id="cb258-46"><a href="estimation-1.html#cb258-46" tabindex="-1"></a></span>
-<span id="cb258-47"><a href="estimation-1.html#cb258-47" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
-<span id="cb258-48"><a href="estimation-1.html#cb258-48" tabindex="-1"></a>    predict.mat[, k]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> X[<span class="fu">c</span>(index[, <span class="sc">-</span>k]), ], <span class="at">Y =</span> W[index[, <span class="sc">-</span>k]], <span class="at">predictkfold =</span> X[<span class="fu">c</span>(index[, k]), ])</span>
-<span id="cb258-49"><a href="estimation-1.html#cb258-49" tabindex="-1"></a>    predict.mat2[, k]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> X[<span class="fu">c</span>(index[, <span class="sc">-</span>k]), ], <span class="at">Y =</span> Y[<span class="fu">c</span>(index[, <span class="sc">-</span>k])], </span>
-<span id="cb258-50"><a href="estimation-1.html#cb258-50" tabindex="-1"></a>                        <span class="at">predictkfold =</span> X[<span class="fu">c</span>(index[, k]), ])</span>
-<span id="cb258-51"><a href="estimation-1.html#cb258-51" tabindex="-1"></a>}</span>
-<span id="cb258-52"><a href="estimation-1.html#cb258-52" tabindex="-1"></a></span>
-<span id="cb258-53"><a href="estimation-1.html#cb258-53" tabindex="-1"></a>W.hat  <span class="ot">&lt;-</span> <span class="fu">c</span>(predict.mat)</span>
-<span id="cb258-54"><a href="estimation-1.html#cb258-54" tabindex="-1"></a>Y.hat  <span class="ot">&lt;-</span> <span class="fu">c</span>(predict.mat2)</span>
-<span id="cb258-55"><a href="estimation-1.html#cb258-55" tabindex="-1"></a></span>
-<span id="cb258-56"><a href="estimation-1.html#cb258-56" tabindex="-1"></a><span class="do">################################</span></span>
-<span id="cb258-57"><a href="estimation-1.html#cb258-57" tabindex="-1"></a><span class="do">################################</span></span>
-<span id="cb258-58"><a href="estimation-1.html#cb258-58" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb258-59"><a href="estimation-1.html#cb258-59" tabindex="-1"></a><span class="co"># 2. Use LASSO to minimize</span></span>
-<span id="cb258-60"><a href="estimation-1.html#cb258-60" tabindex="-1"></a><span class="co">#    the loss function</span></span>
-<span id="cb258-61"><a href="estimation-1.html#cb258-61" tabindex="-1"></a><span class="do">################################</span></span>
-<span id="cb258-62"><a href="estimation-1.html#cb258-62" tabindex="-1"></a><span class="do">################################</span></span>
-<span id="cb258-63"><a href="estimation-1.html#cb258-63" tabindex="-1"></a></span>
-<span id="cb258-64"><a href="estimation-1.html#cb258-64" tabindex="-1"></a><span class="co"># rearrange features and response according to index </span></span>
-<span id="cb258-65"><a href="estimation-1.html#cb258-65" tabindex="-1"></a>XX  <span class="ot">&lt;-</span> X[<span class="fu">c</span>(index), ]</span>
-<span id="cb258-66"><a href="estimation-1.html#cb258-66" tabindex="-1"></a>YY  <span class="ot">&lt;-</span>  Y[<span class="fu">c</span>(index)]</span>
-<span id="cb258-67"><a href="estimation-1.html#cb258-67" tabindex="-1"></a>WW  <span class="ot">&lt;-</span> W[<span class="fu">c</span>(index)]</span>
-<span id="cb258-68"><a href="estimation-1.html#cb258-68" tabindex="-1"></a></span>
-<span id="cb258-69"><a href="estimation-1.html#cb258-69" tabindex="-1"></a>resid.Y  <span class="ot">&lt;-</span>  YY <span class="sc">-</span> Y.hat </span>
-<span id="cb258-70"><a href="estimation-1.html#cb258-70" tabindex="-1"></a>resid.W  <span class="ot">&lt;-</span> WW <span class="sc">-</span> W.hat </span>
-<span id="cb258-71"><a href="estimation-1.html#cb258-71" tabindex="-1"></a></span>
-<span id="cb258-72"><a href="estimation-1.html#cb258-72" tabindex="-1"></a><span class="co"># Create basis expansion of features</span></span>
-<span id="cb258-73"><a href="estimation-1.html#cb258-73" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(XX))) {</span>
-<span id="cb258-74"><a href="estimation-1.html#cb258-74" tabindex="-1"></a>    <span class="cf">if</span>(i <span class="sc">==</span> <span class="dv">1</span>){</span>
-<span id="cb258-75"><a href="estimation-1.html#cb258-75" tabindex="-1"></a>        XX.basis  <span class="ot">&lt;-</span> <span class="fu">bs</span>(XX[, i], <span class="at">knots =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>), <span class="at">degree =</span> <span class="dv">2</span>)</span>
-<span id="cb258-76"><a href="estimation-1.html#cb258-76" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
-<span id="cb258-77"><a href="estimation-1.html#cb258-77" tabindex="-1"></a>        XX.basisnew  <span class="ot">&lt;-</span> <span class="fu">bs</span>(XX[, i], <span class="at">knots =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>), <span class="at">degree =</span> <span class="dv">2</span>)</span>
-<span id="cb258-78"><a href="estimation-1.html#cb258-78" tabindex="-1"></a>        XX.basis  <span class="ot">&lt;-</span> <span class="fu">cbind</span>(XX.basis, XX.basisnew)</span>
-<span id="cb258-79"><a href="estimation-1.html#cb258-79" tabindex="-1"></a>    }</span>
-<span id="cb258-80"><a href="estimation-1.html#cb258-80" tabindex="-1"></a>}</span>
-<span id="cb258-81"><a href="estimation-1.html#cb258-81" tabindex="-1"></a></span>
-<span id="cb258-82"><a href="estimation-1.html#cb258-82" tabindex="-1"></a>resid.W.X  <span class="ot">&lt;-</span>  resid.W <span class="sc">*</span> XX.basis</span>
-<span id="cb258-83"><a href="estimation-1.html#cb258-83" tabindex="-1"></a>resid.W.X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="fu">formula</span>( <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> resid.W.X))</span>
-<span id="cb258-84"><a href="estimation-1.html#cb258-84" tabindex="-1"></a><span class="co">#plot(XX[ ,1], pmax(XX[ , 1], 0))</span></span>
-<span id="cb258-85"><a href="estimation-1.html#cb258-85" tabindex="-1"></a></span>
-<span id="cb258-86"><a href="estimation-1.html#cb258-86" tabindex="-1"></a><span class="co"># cross validation for lasso to tune lambda</span></span>
-<span id="cb258-87"><a href="estimation-1.html#cb258-87" tabindex="-1"></a>lasso  <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(</span>
-<span id="cb258-88"><a href="estimation-1.html#cb258-88" tabindex="-1"></a>    <span class="at">x =</span> resid.W.X,</span>
-<span id="cb258-89"><a href="estimation-1.html#cb258-89" tabindex="-1"></a>    <span class="at">y =</span> resid.Y, </span>
-<span id="cb258-90"><a href="estimation-1.html#cb258-90" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="dv">1</span>, </span>
-<span id="cb258-91"><a href="estimation-1.html#cb258-91" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="cn">FALSE</span></span>
-<span id="cb258-92"><a href="estimation-1.html#cb258-92" tabindex="-1"></a>)</span>
-<span id="cb258-93"><a href="estimation-1.html#cb258-93" tabindex="-1"></a></span>
-<span id="cb258-94"><a href="estimation-1.html#cb258-94" tabindex="-1"></a><span class="co">#plot(lasso, main = &quot;Lasso penalty \n \n&quot;)</span></span>
-<span id="cb258-95"><a href="estimation-1.html#cb258-95" tabindex="-1"></a></span>
-<span id="cb258-96"><a href="estimation-1.html#cb258-96" tabindex="-1"></a><span class="co"># lambda with minimum MSE</span></span>
-<span id="cb258-97"><a href="estimation-1.html#cb258-97" tabindex="-1"></a>best.lambda  <span class="ot">&lt;-</span> lasso<span class="sc">$</span>lambda.min</span>
-<span id="cb258-98"><a href="estimation-1.html#cb258-98" tabindex="-1"></a></span>
-<span id="cb258-99"><a href="estimation-1.html#cb258-99" tabindex="-1"></a>lasso_tuned  <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(</span>
-<span id="cb258-100"><a href="estimation-1.html#cb258-100" tabindex="-1"></a>    <span class="at">x =</span> resid.W.X,</span>
-<span id="cb258-101"><a href="estimation-1.html#cb258-101" tabindex="-1"></a>    <span class="at">y =</span> resid.Y, </span>
-<span id="cb258-102"><a href="estimation-1.html#cb258-102" tabindex="-1"></a>    <span class="at">lambda =</span> best.lambda, </span>
-<span id="cb258-103"><a href="estimation-1.html#cb258-103" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="cn">FALSE</span></span>
-<span id="cb258-104"><a href="estimation-1.html#cb258-104" tabindex="-1"></a>)</span>
-<span id="cb258-105"><a href="estimation-1.html#cb258-105" tabindex="-1"></a></span>
-<span id="cb258-106"><a href="estimation-1.html#cb258-106" tabindex="-1"></a><span class="co">#print(paste(&quot;The coefficients of lasso tuned are:&quot;, coef(lasso_tuned), sep = &quot; &quot;))</span></span>
-<span id="cb258-107"><a href="estimation-1.html#cb258-107" tabindex="-1"></a>pred.lasso  <span class="ot">&lt;-</span>  <span class="fu">predict</span>(lasso, <span class="at">newx =</span> XX.basis)</span>
-<span id="cb258-108"><a href="estimation-1.html#cb258-108" tabindex="-1"></a></span>
-<span id="cb258-109"><a href="estimation-1.html#cb258-109" tabindex="-1"></a></span>
-<span id="cb258-110"><a href="estimation-1.html#cb258-110" tabindex="-1"></a><span class="do">#########################</span></span>
-<span id="cb258-111"><a href="estimation-1.html#cb258-111" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb258-112"><a href="estimation-1.html#cb258-112" tabindex="-1"></a><span class="co"># Causal Forest</span></span>
-<span id="cb258-113"><a href="estimation-1.html#cb258-113" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb258-114"><a href="estimation-1.html#cb258-114" tabindex="-1"></a><span class="do">#########################</span></span>
-<span id="cb258-115"><a href="estimation-1.html#cb258-115" tabindex="-1"></a></span>
-<span id="cb258-116"><a href="estimation-1.html#cb258-116" tabindex="-1"></a>X.test  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(X), <span class="at">ncol =</span> <span class="fu">ncol</span>(X))</span>
-<span id="cb258-117"><a href="estimation-1.html#cb258-117" tabindex="-1"></a>X.test[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="fu">nrow</span>(X))</span>
-<span id="cb258-118"><a href="estimation-1.html#cb258-118" tabindex="-1"></a></span>
-<span id="cb258-119"><a href="estimation-1.html#cb258-119" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X, Y, W)</span>
-<span id="cb258-120"><a href="estimation-1.html#cb258-120" tabindex="-1"></a>tau.forest</span></code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="estimation-1.html#cb289-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">194</span>)</span>
+<span id="cb289-2"><a href="estimation-1.html#cb289-2" tabindex="-1"></a></span>
+<span id="cb289-3"><a href="estimation-1.html#cb289-3" tabindex="-1"></a><span class="co"># Generate Data </span></span>
+<span id="cb289-4"><a href="estimation-1.html#cb289-4" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb289-5"><a href="estimation-1.html#cb289-5" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb289-6"><a href="estimation-1.html#cb289-6" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
+<span id="cb289-7"><a href="estimation-1.html#cb289-7" tabindex="-1"></a>X.test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">101</span>, p)</span>
+<span id="cb289-8"><a href="estimation-1.html#cb289-8" tabindex="-1"></a>X.test[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">101</span>)</span>
+<span id="cb289-9"><a href="estimation-1.html#cb289-9" tabindex="-1"></a></span>
+<span id="cb289-10"><a href="estimation-1.html#cb289-10" tabindex="-1"></a>W <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb289-11"><a href="estimation-1.html#cb289-11" tabindex="-1"></a>prob  <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> (X[, <span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb289-12"><a href="estimation-1.html#cb289-12" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">pmax</span>(X[, <span class="dv">1</span>], <span class="dv">0</span>) <span class="sc">*</span> W <span class="sc">+</span> X[, <span class="dv">2</span>] <span class="sc">+</span> <span class="fu">pmax</span>(X[, <span class="dv">3</span>], <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb289-13"><a href="estimation-1.html#cb289-13" tabindex="-1"></a></span>
+<span id="cb289-14"><a href="estimation-1.html#cb289-14" tabindex="-1"></a><span class="do">###################################</span></span>
+<span id="cb289-15"><a href="estimation-1.html#cb289-15" tabindex="-1"></a><span class="do">###################################</span></span>
+<span id="cb289-16"><a href="estimation-1.html#cb289-16" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb289-17"><a href="estimation-1.html#cb289-17" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb289-18"><a href="estimation-1.html#cb289-18" tabindex="-1"></a><span class="co"># 1. estimate m(X) and e(X)</span></span>
+<span id="cb289-19"><a href="estimation-1.html#cb289-19" tabindex="-1"></a><span class="co">#    using cross-fitting</span></span>
+<span id="cb289-20"><a href="estimation-1.html#cb289-20" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb289-21"><a href="estimation-1.html#cb289-21" tabindex="-1"></a><span class="do">###################################</span></span>
+<span id="cb289-22"><a href="estimation-1.html#cb289-22" tabindex="-1"></a><span class="do">###################################</span></span>
+<span id="cb289-23"><a href="estimation-1.html#cb289-23" tabindex="-1"></a></span>
+<span id="cb289-24"><a href="estimation-1.html#cb289-24" tabindex="-1"></a><span class="co"># cross-fitting index </span></span>
+<span id="cb289-25"><a href="estimation-1.html#cb289-25" tabindex="-1"></a>K  <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># total folds</span></span>
+<span id="cb289-26"><a href="estimation-1.html#cb289-26" tabindex="-1"></a>ind  <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">replace =</span> <span class="cn">FALSE</span>, <span class="at">size =</span> <span class="fu">length</span>(W))</span>
+<span id="cb289-27"><a href="estimation-1.html#cb289-27" tabindex="-1"></a>folds  <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(W), <span class="at">breaks =</span> K, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb289-28"><a href="estimation-1.html#cb289-28" tabindex="-1"></a>index  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">length</span>(ind) <span class="sc">/</span> K, <span class="at">ncol =</span> K)</span>
+<span id="cb289-29"><a href="estimation-1.html#cb289-29" tabindex="-1"></a><span class="cf">for</span>(f <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K){</span>
+<span id="cb289-30"><a href="estimation-1.html#cb289-30" tabindex="-1"></a>    index[, f]  <span class="ot">&lt;-</span> ind[<span class="fu">which</span>(folds <span class="sc">==</span> f)]</span>
+<span id="cb289-31"><a href="estimation-1.html#cb289-31" tabindex="-1"></a>}</span>
+<span id="cb289-32"><a href="estimation-1.html#cb289-32" tabindex="-1"></a></span>
+<span id="cb289-33"><a href="estimation-1.html#cb289-33" tabindex="-1"></a><span class="co"># Build a function to estimate conditional means (m(x) and e(x)) using random forest</span></span>
+<span id="cb289-34"><a href="estimation-1.html#cb289-34" tabindex="-1"></a>fun.rf.grf  <span class="ot">&lt;-</span> <span class="cf">function</span>(X, Y, predictkfold){</span>
+<span id="cb289-35"><a href="estimation-1.html#cb289-35" tabindex="-1"></a>    rf_grf  <span class="ot">&lt;-</span> <span class="fu">regression_forest</span>(X, Y, <span class="at">tune.parameters =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb289-36"><a href="estimation-1.html#cb289-36" tabindex="-1"></a>    p.grf  <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf_grf, predictkfold)<span class="sc">$</span>predictions</span>
+<span id="cb289-37"><a href="estimation-1.html#cb289-37" tabindex="-1"></a>    <span class="fu">return</span>(p.grf)</span>
+<span id="cb289-38"><a href="estimation-1.html#cb289-38" tabindex="-1"></a>}</span>
+<span id="cb289-39"><a href="estimation-1.html#cb289-39" tabindex="-1"></a></span>
+<span id="cb289-40"><a href="estimation-1.html#cb289-40" tabindex="-1"></a><span class="co"># storing </span></span>
+<span id="cb289-41"><a href="estimation-1.html#cb289-41" tabindex="-1"></a>predict.mat  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(index), <span class="at">ncol =</span> K) <span class="co"># to store e(x) </span></span>
+<span id="cb289-42"><a href="estimation-1.html#cb289-42" tabindex="-1"></a>predict.mat2  <span class="ot">&lt;-</span> predict.mat <span class="co"># to store m(x)</span></span>
+<span id="cb289-43"><a href="estimation-1.html#cb289-43" tabindex="-1"></a></span>
+<span id="cb289-44"><a href="estimation-1.html#cb289-44" tabindex="-1"></a></span>
+<span id="cb289-45"><a href="estimation-1.html#cb289-45" tabindex="-1"></a><span class="co"># for each fold k use other folds for estimation </span></span>
+<span id="cb289-46"><a href="estimation-1.html#cb289-46" tabindex="-1"></a></span>
+<span id="cb289-47"><a href="estimation-1.html#cb289-47" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>K)){</span>
+<span id="cb289-48"><a href="estimation-1.html#cb289-48" tabindex="-1"></a>    predict.mat[, k]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> X[<span class="fu">c</span>(index[, <span class="sc">-</span>k]), ], <span class="at">Y =</span> W[index[, <span class="sc">-</span>k]], <span class="at">predictkfold =</span> X[<span class="fu">c</span>(index[, k]), ])</span>
+<span id="cb289-49"><a href="estimation-1.html#cb289-49" tabindex="-1"></a>    predict.mat2[, k]  <span class="ot">&lt;-</span> <span class="fu">fun.rf.grf</span>(<span class="at">X =</span> X[<span class="fu">c</span>(index[, <span class="sc">-</span>k]), ], <span class="at">Y =</span> Y[<span class="fu">c</span>(index[, <span class="sc">-</span>k])], </span>
+<span id="cb289-50"><a href="estimation-1.html#cb289-50" tabindex="-1"></a>                        <span class="at">predictkfold =</span> X[<span class="fu">c</span>(index[, k]), ])</span>
+<span id="cb289-51"><a href="estimation-1.html#cb289-51" tabindex="-1"></a>}</span>
+<span id="cb289-52"><a href="estimation-1.html#cb289-52" tabindex="-1"></a></span>
+<span id="cb289-53"><a href="estimation-1.html#cb289-53" tabindex="-1"></a>W.hat  <span class="ot">&lt;-</span> <span class="fu">c</span>(predict.mat)</span>
+<span id="cb289-54"><a href="estimation-1.html#cb289-54" tabindex="-1"></a>Y.hat  <span class="ot">&lt;-</span> <span class="fu">c</span>(predict.mat2)</span>
+<span id="cb289-55"><a href="estimation-1.html#cb289-55" tabindex="-1"></a></span>
+<span id="cb289-56"><a href="estimation-1.html#cb289-56" tabindex="-1"></a><span class="do">################################</span></span>
+<span id="cb289-57"><a href="estimation-1.html#cb289-57" tabindex="-1"></a><span class="do">################################</span></span>
+<span id="cb289-58"><a href="estimation-1.html#cb289-58" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb289-59"><a href="estimation-1.html#cb289-59" tabindex="-1"></a><span class="co"># 2. Use LASSO to minimize</span></span>
+<span id="cb289-60"><a href="estimation-1.html#cb289-60" tabindex="-1"></a><span class="co">#    the loss function</span></span>
+<span id="cb289-61"><a href="estimation-1.html#cb289-61" tabindex="-1"></a><span class="do">################################</span></span>
+<span id="cb289-62"><a href="estimation-1.html#cb289-62" tabindex="-1"></a><span class="do">################################</span></span>
+<span id="cb289-63"><a href="estimation-1.html#cb289-63" tabindex="-1"></a></span>
+<span id="cb289-64"><a href="estimation-1.html#cb289-64" tabindex="-1"></a><span class="co"># rearrange features and response according to index </span></span>
+<span id="cb289-65"><a href="estimation-1.html#cb289-65" tabindex="-1"></a>XX  <span class="ot">&lt;-</span> X[<span class="fu">c</span>(index), ]</span>
+<span id="cb289-66"><a href="estimation-1.html#cb289-66" tabindex="-1"></a>YY  <span class="ot">&lt;-</span>  Y[<span class="fu">c</span>(index)]</span>
+<span id="cb289-67"><a href="estimation-1.html#cb289-67" tabindex="-1"></a>WW  <span class="ot">&lt;-</span> W[<span class="fu">c</span>(index)]</span>
+<span id="cb289-68"><a href="estimation-1.html#cb289-68" tabindex="-1"></a></span>
+<span id="cb289-69"><a href="estimation-1.html#cb289-69" tabindex="-1"></a>resid.Y  <span class="ot">&lt;-</span>  YY <span class="sc">-</span> Y.hat </span>
+<span id="cb289-70"><a href="estimation-1.html#cb289-70" tabindex="-1"></a>resid.W  <span class="ot">&lt;-</span> WW <span class="sc">-</span> W.hat </span>
+<span id="cb289-71"><a href="estimation-1.html#cb289-71" tabindex="-1"></a></span>
+<span id="cb289-72"><a href="estimation-1.html#cb289-72" tabindex="-1"></a><span class="co"># Create basis expansion of features</span></span>
+<span id="cb289-73"><a href="estimation-1.html#cb289-73" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(XX))) {</span>
+<span id="cb289-74"><a href="estimation-1.html#cb289-74" tabindex="-1"></a>    <span class="cf">if</span>(i <span class="sc">==</span> <span class="dv">1</span>){</span>
+<span id="cb289-75"><a href="estimation-1.html#cb289-75" tabindex="-1"></a>        XX.basis  <span class="ot">&lt;-</span> <span class="fu">bs</span>(XX[, i], <span class="at">knots =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>), <span class="at">degree =</span> <span class="dv">2</span>)</span>
+<span id="cb289-76"><a href="estimation-1.html#cb289-76" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
+<span id="cb289-77"><a href="estimation-1.html#cb289-77" tabindex="-1"></a>        XX.basisnew  <span class="ot">&lt;-</span> <span class="fu">bs</span>(XX[, i], <span class="at">knots =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>), <span class="at">degree =</span> <span class="dv">2</span>)</span>
+<span id="cb289-78"><a href="estimation-1.html#cb289-78" tabindex="-1"></a>        XX.basis  <span class="ot">&lt;-</span> <span class="fu">cbind</span>(XX.basis, XX.basisnew)</span>
+<span id="cb289-79"><a href="estimation-1.html#cb289-79" tabindex="-1"></a>    }</span>
+<span id="cb289-80"><a href="estimation-1.html#cb289-80" tabindex="-1"></a>}</span>
+<span id="cb289-81"><a href="estimation-1.html#cb289-81" tabindex="-1"></a></span>
+<span id="cb289-82"><a href="estimation-1.html#cb289-82" tabindex="-1"></a>resid.W.X  <span class="ot">&lt;-</span>  resid.W <span class="sc">*</span> XX.basis</span>
+<span id="cb289-83"><a href="estimation-1.html#cb289-83" tabindex="-1"></a>resid.W.X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="fu">formula</span>( <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> resid.W.X))</span>
+<span id="cb289-84"><a href="estimation-1.html#cb289-84" tabindex="-1"></a><span class="co">#plot(XX[ ,1], pmax(XX[ , 1], 0))</span></span>
+<span id="cb289-85"><a href="estimation-1.html#cb289-85" tabindex="-1"></a></span>
+<span id="cb289-86"><a href="estimation-1.html#cb289-86" tabindex="-1"></a><span class="co"># cross validation for lasso to tune lambda</span></span>
+<span id="cb289-87"><a href="estimation-1.html#cb289-87" tabindex="-1"></a>lasso  <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(</span>
+<span id="cb289-88"><a href="estimation-1.html#cb289-88" tabindex="-1"></a>    <span class="at">x =</span> resid.W.X,</span>
+<span id="cb289-89"><a href="estimation-1.html#cb289-89" tabindex="-1"></a>    <span class="at">y =</span> resid.Y, </span>
+<span id="cb289-90"><a href="estimation-1.html#cb289-90" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="dv">1</span>, </span>
+<span id="cb289-91"><a href="estimation-1.html#cb289-91" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="cn">FALSE</span></span>
+<span id="cb289-92"><a href="estimation-1.html#cb289-92" tabindex="-1"></a>)</span>
+<span id="cb289-93"><a href="estimation-1.html#cb289-93" tabindex="-1"></a></span>
+<span id="cb289-94"><a href="estimation-1.html#cb289-94" tabindex="-1"></a><span class="co">#plot(lasso, main = &quot;Lasso penalty \n \n&quot;)</span></span>
+<span id="cb289-95"><a href="estimation-1.html#cb289-95" tabindex="-1"></a></span>
+<span id="cb289-96"><a href="estimation-1.html#cb289-96" tabindex="-1"></a><span class="co"># lambda with minimum MSE</span></span>
+<span id="cb289-97"><a href="estimation-1.html#cb289-97" tabindex="-1"></a>best.lambda  <span class="ot">&lt;-</span> lasso<span class="sc">$</span>lambda.min</span>
+<span id="cb289-98"><a href="estimation-1.html#cb289-98" tabindex="-1"></a></span>
+<span id="cb289-99"><a href="estimation-1.html#cb289-99" tabindex="-1"></a>lasso_tuned  <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(</span>
+<span id="cb289-100"><a href="estimation-1.html#cb289-100" tabindex="-1"></a>    <span class="at">x =</span> resid.W.X,</span>
+<span id="cb289-101"><a href="estimation-1.html#cb289-101" tabindex="-1"></a>    <span class="at">y =</span> resid.Y, </span>
+<span id="cb289-102"><a href="estimation-1.html#cb289-102" tabindex="-1"></a>    <span class="at">lambda =</span> best.lambda, </span>
+<span id="cb289-103"><a href="estimation-1.html#cb289-103" tabindex="-1"></a>    <span class="at">intercept =</span> <span class="cn">FALSE</span></span>
+<span id="cb289-104"><a href="estimation-1.html#cb289-104" tabindex="-1"></a>)</span>
+<span id="cb289-105"><a href="estimation-1.html#cb289-105" tabindex="-1"></a></span>
+<span id="cb289-106"><a href="estimation-1.html#cb289-106" tabindex="-1"></a><span class="co">#print(paste(&quot;The coefficients of lasso tuned are:&quot;, coef(lasso_tuned), sep = &quot; &quot;))</span></span>
+<span id="cb289-107"><a href="estimation-1.html#cb289-107" tabindex="-1"></a>pred.lasso  <span class="ot">&lt;-</span>  <span class="fu">predict</span>(lasso, <span class="at">newx =</span> XX.basis)</span>
+<span id="cb289-108"><a href="estimation-1.html#cb289-108" tabindex="-1"></a></span>
+<span id="cb289-109"><a href="estimation-1.html#cb289-109" tabindex="-1"></a></span>
+<span id="cb289-110"><a href="estimation-1.html#cb289-110" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb289-111"><a href="estimation-1.html#cb289-111" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb289-112"><a href="estimation-1.html#cb289-112" tabindex="-1"></a><span class="co"># Causal Forest</span></span>
+<span id="cb289-113"><a href="estimation-1.html#cb289-113" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb289-114"><a href="estimation-1.html#cb289-114" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb289-115"><a href="estimation-1.html#cb289-115" tabindex="-1"></a></span>
+<span id="cb289-116"><a href="estimation-1.html#cb289-116" tabindex="-1"></a>X.test  <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="fu">nrow</span>(X), <span class="at">ncol =</span> <span class="fu">ncol</span>(X))</span>
+<span id="cb289-117"><a href="estimation-1.html#cb289-117" tabindex="-1"></a>X.test[, <span class="dv">1</span>]  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">length.out =</span> <span class="fu">nrow</span>(X))</span>
+<span id="cb289-118"><a href="estimation-1.html#cb289-118" tabindex="-1"></a></span>
+<span id="cb289-119"><a href="estimation-1.html#cb289-119" tabindex="-1"></a>tau.forest  <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X, Y, W)</span>
+<span id="cb289-120"><a href="estimation-1.html#cb289-120" tabindex="-1"></a>tau.forest</span></code></pre></div>
 <pre><code>## GRF forest object of type causal_forest 
 ## Number of trees: 2000 
 ## Number of training samples: 2000 
 ## Variable importance: 
 ##     1     2     3     4     5     6     7     8     9    10 
 ## 0.707 0.045 0.030 0.037 0.034 0.029 0.026 0.035 0.024 0.033</code></pre>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="estimation-1.html#cb260-1" tabindex="-1"></a>tau.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(tau.forest, X.test)<span class="sc">$</span>predictions</span>
-<span id="cb260-2"><a href="estimation-1.html#cb260-2" tabindex="-1"></a></span>
-<span id="cb260-3"><a href="estimation-1.html#cb260-3" tabindex="-1"></a></span>
-<span id="cb260-4"><a href="estimation-1.html#cb260-4" tabindex="-1"></a><span class="fu">par</span>(<span class="at">oma=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">4</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
-<span id="cb260-5"><a href="estimation-1.html#cb260-5" tabindex="-1"></a><span class="fu">plot</span>(XX[<span class="fu">order</span>(XX[ , <span class="dv">1</span>]), <span class="dv">1</span>], pred.lasso[<span class="fu">order</span>(XX[, <span class="dv">1</span>])], <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="at">t =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot; &quot;</span>, <span class="at">ylab =</span> <span class="st">&quot; &quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
-<span id="cb260-6"><a href="estimation-1.html#cb260-6" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb260-7"><a href="estimation-1.html#cb260-7" tabindex="-1"></a><span class="fu">plot</span>(XX[<span class="fu">order</span>(XX[, <span class="dv">1</span>]), <span class="dv">1</span>], <span class="fu">pmax</span>(XX[<span class="fu">order</span>(XX[, <span class="dv">1</span>]), <span class="dv">1</span>], <span class="dv">0</span>), <span class="at">col =</span><span class="st">&quot;red&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="at">t =</span> <span class="st">&quot;l&quot;</span>,  <span class="at">xlab =</span> <span class="st">&quot;X1&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;tao(x)&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
-<span id="cb260-8"><a href="estimation-1.html#cb260-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb260-9"><a href="estimation-1.html#cb260-9" tabindex="-1"></a><span class="fu">plot</span>(X.test[<span class="fu">order</span>(X.test[, <span class="dv">1</span>]), <span class="dv">1</span>], tau.hat[<span class="fu">order</span>(X.test[, <span class="dv">1</span>])], <span class="at">t =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>),  <span class="at">xlab =</span> <span class="st">&quot;X1&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
-<span id="cb260-10"><a href="estimation-1.html#cb260-10" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Loss min Lasso&quot;</span>, <span class="st">&quot;True Effect&quot;</span>, <span class="st">&quot;Causal Forest&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="at">lty =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="estimation-1.html#cb291-1" tabindex="-1"></a>tau.hat  <span class="ot">&lt;-</span> <span class="fu">predict</span>(tau.forest, X.test)<span class="sc">$</span>predictions</span>
+<span id="cb291-2"><a href="estimation-1.html#cb291-2" tabindex="-1"></a></span>
+<span id="cb291-3"><a href="estimation-1.html#cb291-3" tabindex="-1"></a></span>
+<span id="cb291-4"><a href="estimation-1.html#cb291-4" tabindex="-1"></a><span class="fu">par</span>(<span class="at">oma=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">4</span>,<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb291-5"><a href="estimation-1.html#cb291-5" tabindex="-1"></a><span class="fu">plot</span>(XX[<span class="fu">order</span>(XX[ , <span class="dv">1</span>]), <span class="dv">1</span>], pred.lasso[<span class="fu">order</span>(XX[, <span class="dv">1</span>])], <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="at">t =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot; &quot;</span>, <span class="at">ylab =</span> <span class="st">&quot; &quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb291-6"><a href="estimation-1.html#cb291-6" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb291-7"><a href="estimation-1.html#cb291-7" tabindex="-1"></a><span class="fu">plot</span>(XX[<span class="fu">order</span>(XX[, <span class="dv">1</span>]), <span class="dv">1</span>], <span class="fu">pmax</span>(XX[<span class="fu">order</span>(XX[, <span class="dv">1</span>]), <span class="dv">1</span>], <span class="dv">0</span>), <span class="at">col =</span><span class="st">&quot;red&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="at">t =</span> <span class="st">&quot;l&quot;</span>,  <span class="at">xlab =</span> <span class="st">&quot;X1&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;tao(x)&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb291-8"><a href="estimation-1.html#cb291-8" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb291-9"><a href="estimation-1.html#cb291-9" tabindex="-1"></a><span class="fu">plot</span>(X.test[<span class="fu">order</span>(X.test[, <span class="dv">1</span>]), <span class="dv">1</span>], tau.hat[<span class="fu">order</span>(X.test[, <span class="dv">1</span>])], <span class="at">t =</span> <span class="st">&quot;l&quot;</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>),  <span class="at">xlab =</span> <span class="st">&quot;X1&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb291-10"><a href="estimation-1.html#cb291-10" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Loss min Lasso&quot;</span>, <span class="st">&quot;True Effect&quot;</span>, <span class="st">&quot;Causal Forest&quot;</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="at">lty =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span></code></pre></div>
 <p><img src="book_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
 </div>
             </section>
