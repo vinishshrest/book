@@ -358,14 +358,15 @@ In the model, this pertains to <span class="math inline">\(1(\underbrace{t - G}_
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="event-study-model.html#cb249-1" tabindex="-1"></a><span class="co"># quick look at the data</span></span>
 <span id="cb249-2"><a href="event-study-model.html#cb249-2" tabindex="-1"></a><span class="fu">head</span>(mort_allcauses)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 16
-##   countyfips  year state.abb expand yearexpand sahieunins138 GovernorisDemocrat1Yes yeararound rel_pre4 rel_pre3 rel_pre2 rel_pre1 rel_post0 rel_post1 rel_post2 rel_post3
-##        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;                  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1       1001  2010 AL             0       2014          40.6                      0         -4        0        0        0        0         0         0         0         0
-## 2       1001  2011 AL             0       2014          41.6                      0         -3        0        0        0        0         0         0         0         0
-## 3       1001  2012 AL             0       2014          39.6                      0         -2        0        0        0        0         0         0         0         0
-## 4       1001  2013 AL             0       2014          39.6                      0         -1        0        0        0        0         0         0         0         0
-## 5       1001  2014 AL             0       2014          31.9                      0          0        0        0        0        0         0         0         0         0
-## 6       1001  2015 AL             0       2014          27.5                      0          1        0        0        0        0         0         0         0         0</code></pre>
+##   countyfips  year state.abb expand yearexpand sahieunins138 GovernorisDemocrat1Yes yeararound rel_pre4 rel_pre3 rel_pre2 rel_pre1 rel_post0 rel_post1
+##        &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;                  &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1       1001  2010 AL             0       2014          40.6                      0         -4        0        0        0        0         0         0
+## 2       1001  2011 AL             0       2014          41.6                      0         -3        0        0        0        0         0         0
+## 3       1001  2012 AL             0       2014          39.6                      0         -2        0        0        0        0         0         0
+## 4       1001  2013 AL             0       2014          39.6                      0         -1        0        0        0        0         0         0
+## 5       1001  2014 AL             0       2014          31.9                      0          0        0        0        0        0         0         0
+## 6       1001  2015 AL             0       2014          27.5                      0          1        0        0        0        0         0         0
+## # ℹ 2 more variables: rel_post2 &lt;dbl&gt;, rel_post3 &lt;dbl&gt;</code></pre>
 <div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="event-study-model.html#cb251-1" tabindex="-1"></a><span class="co"># specify the event study model</span></span>
 <span id="cb251-2"><a href="event-study-model.html#cb251-2" tabindex="-1"></a>reg_es  <span class="ot">&lt;-</span> <span class="fu">lm</span>(sahieunins138 <span class="sc">~</span> rel_pre4 <span class="sc">+</span> rel_pre3 <span class="sc">+</span> rel_pre2 <span class="sc">+</span></span>
 <span id="cb251-3"><a href="event-study-model.html#cb251-3" tabindex="-1"></a>                              rel_post0 <span class="sc">+</span> rel_post1 <span class="sc">+</span> rel_post2 <span class="sc">+</span> rel_post3 <span class="sc">+</span></span>

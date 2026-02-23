@@ -99,7 +99,7 @@ print(f'average of mean height is {mean_store.mean().round(4)} and std is {mean_
 # n -- the number of observations. The standard deviation of the mean height will be lower if the population standard deviation is lower 
 # (meaning that height is relatively more homogeneous). Next, one can lower it by increasing the sample size. 
 # 
-# Just as the sample mean has a measure for deviation due to sampling variability (standard deviation), $\hat{\beta}}$ too has a measure that we know as standard errors. Simply put, the standard errors measure how fluctuating the estimates of $\beta$ can be given different samples. 
+# Just as the sample mean has a measure for deviation due to sampling variability (standard deviation), $\hat{\beta}$ too has a measure that we know as standard errors. Simply put, the standard errors measure how fluctuating the estimates of $\beta$ can be given different samples. 
 # 
 # Right off the start, it should be mentioned that reported standard errors are mostly incorrect. This could be due to several unknown reasons including the functional form of the specified model. But rather than dwelling on why the reported standard errors are incorrect, I want to discuss some known ways to fix the standard errors.
 # 
