@@ -35,7 +35,6 @@ running-a-regression
 standard-errors
 an-exercise
 regression-and-gradient-descent
-logistic-regression
 causal-inference
 potential-outcome-framework-neyman-rubin-causal-model
 average-treatment-effect-ate

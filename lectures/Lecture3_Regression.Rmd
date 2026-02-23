@@ -31,11 +31,11 @@ knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE,
 fig.width = 5, fig.height = 3)
 
 # declare paths and libraries
-user = 2
-if(user == 1){
-    source("/home/user1/Dropbox/Medicaid_South/code/filepath.r")
-}else{
-    source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
+user <- 1
+if (user == 1) {
+  source("/home/vinish/Dropbox/Medicaid_South/code/filepath.r")
+}else {
+  source("/Users/vshrestha/Dropbox/Medicaid_South/code/filepath.r")
 }
 
 
@@ -322,7 +322,9 @@ Y_i = \underbrace{E(Y_i | X_i)}_{conditional \; expectation} + \underbrace{\epsi
 
 2. Maximum likelihood estimation 
 
-3. Computational approach 
+3. Minimizing the sum of the square of residuals
+
+4. Gradient Descent
 
 - Let's discuss 3.
 
@@ -427,6 +429,232 @@ ylab("residual sum of \n square") + xlab("beta values")
 ```{r}
 f
 ```
+
+# Gradient Descent 
+
+## Slide 1: The Mountain Analogy
+:::::: {.columns}
+::: {.column}
+**You're at the top of a mountain** - want to get down fast
+
+- **Strategy**: Look around in all directions
+- **Action**: Take a small step in the steepest downward direction
+- **Repeat**: Pause, reassess, step again
+- **Result**: Fastest descent to the bottom
+:::
+
+::: {.column}
+![](../outputs/slide1_mountain_analogy.png)
+:::
+::::::
+
+
+
+
+## Slide 2: From Mountains to Math
+
+
+:::::: {.columns}
+::: {.column}
+
+**MSE is our "mountain"** - we want to reach the bottom (minimum)
+
+**Two approaches**:
+
+- Normal equation: Direct calculation (helicopter)
+- Gradient descent: Step-by-step descent (hiking)
+
+**The gradient**: Points to steepest *upward* direction
+
+**Our move**: Go the *opposite* way to descend
+:::
+
+::: {.column}
+![](../outputs/slide2_gradient_direction.png)
+:::
+::::::
+
+---
+
+## Slide 3: What is a Gradient?
+
+- **Definition**: Vector of partial derivatives
+
+- **What it tells us**: Direction of steepest increase in MSE
+
+- **Key insight**: Move *opposite* to the gradient to minimize loss
+
+- **Process**: Repeatedly update parameters → approach minimum
+
+---
+
+## Slide 4: Simple Example (Univariate)
+
+**Model**: 
+$$Y_i = \beta X_i + \epsilon_i \text{ (no intercept)}$$
+
+**Loss function**: 
+$$MSE(\beta) = \frac{1}{m} (Y - \beta X)^{T}(Y - \beta X)$$
+
+**Gradient**: 
+$$\frac{\partial{MSE}}{\partial{\beta}} = -\frac{2}{m} X^{T}(Y - \beta X)$$
+
+**Interpretation**: This tells us which way is "uphill"
+
+---
+
+## Slide 5: The Algorithm - Step 1
+
+:::::: {.columns}
+::: {.column}
+**The 4 Steps:**
+
+1. **Initialize**: Start with guess $\beta_0$
+
+2. **Update**: 
+$$\beta_{new} = \beta_0 - \eta \times gradient_0$$
+
+3. **Recalculate**: Compute new gradient
+
+4. **Repeat**: Until convergence
+:::
+
+::: {.column}
+![](../outputs/slide3_step_1.png)
+:::
+::::::
+
+---
+
+## Slide 6: The Algorithm - Step 2
+
+:::::: {.columns}
+::: {.column}
+**Moving downhill...**
+
+- Evaluate gradient at current position
+- Take step in opposite direction
+- Learning rate $\eta$ controls step size
+- Gradient gets smaller as we approach minimum
+:::
+
+::: {.column}
+![](../outputs/slide4_step_2.png)
+:::
+::::::
+
+---
+
+## Slide 7: The Algorithm - Step 3
+
+:::::: {.columns}
+::: {.column}
+**Continuing descent...**
+
+- Re-evaluate gradient at new position
+- Continue stepping downhill
+- Each step brings us closer to minimum
+- Process repeats iteratively
+:::
+
+::: {.column}
+![](../outputs/slide5_step_3.png)
+:::
+::::::
+
+---
+
+## Slide 8: The Algorithm - Step 4
+
+:::::: {.columns}
+::: {.column}
+**Approaching the minimum...**
+
+- Gradient becomes smaller
+- Steps become shorter
+- Getting close to optimal solution
+- Almost at convergence
+:::
+
+::: {.column}
+![](../outputs/slide6_step_4.png)
+:::
+::::::
+
+---
+
+## Slide 9: The Algorithm - Step 5 (Convergence)
+
+:::::: {.columns}
+::: {.column}
+**Convergence achieved!**
+
+- Reached (near) minimum
+- Gradient $\approx$ 0
+- Loss function minimized
+- Optimal parameter found
+:::
+
+::: {.column}
+![](../outputs/slide7_step_5.png)
+:::
+::::::
+
+---
+
+
+## Slide 10: Key Parameters
+
+**Learning rate ($\eta$)**:
+
+- Too large → miss the minimum (overshoot)
+- Too small → very slow convergence
+- Just right → efficient descent
+
+**Iterations**: How many steps to take
+
+**Convergence**: When gradient = 0 (we've reached the bottom)
+
+---
+
+## Gradient Descent in action 
+
+![](../outputs/slide7_step_5.png)
+
+## Gradient Descent in action 
+
+![](../outputs/gd_atwork.pdf)
+
+## Model Coefficient Comparison
+
+:::::: {.columns}
+::: {.column}
+**True Coefficients**
+
+| Parameter         | Value |
+|-------------------|------:|
+| $\beta_0$         | 10.00 |
+| $\beta_1$         | 40.71 |
+| $\beta_2$         |  6.60 |
+:::
+
+::: {.column}
+**Estimated Coefficients**
+
+| Parameter         | Value |
+|-------------------|------:|
+| $\beta_0$         | 10.00 |
+| $\beta_1$         | 40.75 |
+| $\beta_2$         |  6.62 |
+:::
+::::::
+
+**Maximum error**: 0.04 (0.1% relative error)
+
+Gradient descent successfully converged!
+
+---
+
 
 # Running a regression 
 

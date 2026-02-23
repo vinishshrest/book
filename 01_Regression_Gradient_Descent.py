@@ -44,6 +44,7 @@ from sklearn.datasets import make_regression
 from sklearn.preprocessing import add_dummy_feature
 from sklearn import linear_model
 import statsmodels.api as sm
+from scipy import stats
 root_dir = "/home/vinish/Dropbox/Machine Learning"
 
 # %% [markdown]
@@ -237,6 +238,7 @@ plt.scatter(beta_store, loss_store)
 plt.xlabel("beta value")
 plt.ylabel("loss")
 plt.title("Gradient Descent at Work")
+plt.savefig("./outputs/gd_atwork.pdf")
 plt.show()
 
 # %% [markdown]
@@ -302,39 +304,3 @@ print(f"coefficients from sklearn: {best_theta_coef}")
 # %% [markdown]
 # Not too bad!!
 
-
-# %% [markdown]
-
-# **Standard Error**
-
-# %%
-# ----------------------------------------------
-
-
-# Standard errors 
-
-
-# ----------------------------------------------
-
-# 1. Get the standard error of the regression
-
-error = (X @ theta - y)
-error_sq = error.T @ error
-sigma_sq = 1 / (m -3) * error_sq
-se_reg = np.sqrt(sigma_sq)
-print(f"standard error of the regression is: {se_reg}")
-
-# 2. get standard errors of the respective coefficients 
-var_cov = np.linalg.inv(X.T @ X) * sigma_sq
-manual_se = np.sqrt(np.diag(var_cov))
-print(f"standard errors of coefficients (manual estimation): {manual_se}")
-
-# se from stats model
-X_sm = sm.add_constant(X)   # add intercept
-model = sm.OLS(y, X_sm).fit()
-
-print(f"coefficients from statmodels: {model.params}")   # coefficients
-print(f"standard errors from statmodels: {model.bse}")      # standard errors
-
-
-# %%
