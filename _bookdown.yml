@@ -6,6 +6,7 @@ rmd_files:
         "why_causality.Rmd",  # Lecture 2
         "regression.Rmd", # Lecture 3
         '01_Regression_Gradient_Descent.Rmd',
+        'standard_errors.Rmd',
         'Lecture2_Logistic.Rmd',
         "01-intro.Rmd", # Lecture 4
         "ipw_aipw.Rmd", # Lecture 5
