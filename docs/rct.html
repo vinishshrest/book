@@ -264,25 +264,25 @@ div.csl-indent {
 <h2><span class="header-section-number">7.3</span> RCT<a href="rct.html#rct" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Randomized Controlled Trials (RCTs) are the cornerstone of causal inference and are often referred to as the gold standard. The quality of non-experimental studies is frequently assessed by comparing how closely the observational setting approximates an RCT. In an RCT, the Average Treatment Effect (ATE) is identified through the randomization of treatment assignment. This process ensures that the treatment and control groups are comparable, making RCTs a straightforward yet immensely powerful tool for establishing causal relationships.</p>
 <p>In a simple RCT setting the treatment is binary – the units are either assigned to the treatment group <span class="math inline">\((W_i = 0)\)</span> or the control group <span class="math inline">\((W_i = 1)\)</span>. The implicit assumption in this design is that each unit has an equal probability of being treated. The treatment assignment for the RCT setting can be attained using a Bernoulli process, where each unit has an independent probability <span class="math inline">\(\pi\)</span> of receiving treatment. Specifically, each unit is assigned to the treatment group with probability <span class="math inline">\(\pi\)</span> and to the control group with probability <span class="math inline">\(1 - \pi\)</span>.</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="rct.html#cb115-1" tabindex="-1"></a><span class="co"># a bernoulli process of treatment assignment </span></span>
-<span id="cb115-2"><a href="rct.html#cb115-2" tabindex="-1"></a></span>
-<span id="cb115-3"><a href="rct.html#cb115-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb115-4"><a href="rct.html#cb115-4" tabindex="-1"></a></span>
-<span id="cb115-5"><a href="rct.html#cb115-5" tabindex="-1"></a>fun_treat_assign  <span class="ot">&lt;-</span> <span class="cf">function</span>(N, prob, treat.type){</span>
-<span id="cb115-6"><a href="rct.html#cb115-6" tabindex="-1"></a>    treatment  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> prob)</span>
-<span id="cb115-7"><a href="rct.html#cb115-7" tabindex="-1"></a>    dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">treatment =</span> treatment, <span class="at">type =</span> treat.type)</span>
-<span id="cb115-8"><a href="rct.html#cb115-8" tabindex="-1"></a>    <span class="fu">return</span>(dat)</span>
-<span id="cb115-9"><a href="rct.html#cb115-9" tabindex="-1"></a>}</span>
-<span id="cb115-10"><a href="rct.html#cb115-10" tabindex="-1"></a><span class="co"># p = 0.5 for each unit</span></span>
-<span id="cb115-11"><a href="rct.html#cb115-11" tabindex="-1"></a>dat1  <span class="ot">&lt;-</span> <span class="fu">fun_treat_assign</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">prob =</span> <span class="fl">0.5</span>, <span class="at">treat.type =</span> <span class="st">&quot;p = 0.5&quot;</span>)</span>
-<span id="cb115-12"><a href="rct.html#cb115-12" tabindex="-1"></a><span class="co"># p = 0.3 for each unit</span></span>
-<span id="cb115-13"><a href="rct.html#cb115-13" tabindex="-1"></a>dat2  <span class="ot">&lt;-</span> <span class="fu">fun_treat_assign</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">prob =</span> <span class="fl">0.2</span>, <span class="at">treat.type =</span> <span class="st">&quot;p = 0.2&quot;</span>)</span>
-<span id="cb115-14"><a href="rct.html#cb115-14" tabindex="-1"></a></span>
-<span id="cb115-15"><a href="rct.html#cb115-15" tabindex="-1"></a>dat.assign  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dat1, dat2) </span>
-<span id="cb115-16"><a href="rct.html#cb115-16" tabindex="-1"></a></span>
-<span id="cb115-17"><a href="rct.html#cb115-17" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb115-18"><a href="rct.html#cb115-18" tabindex="-1"></a><span class="fu">ggplot</span>(dat.assign, <span class="fu">aes</span>(<span class="at">x =</span> treatment)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">fill=</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb115-19"><a href="rct.html#cb115-19" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span> type) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="rct.html#cb114-1" tabindex="-1"></a><span class="co"># a bernoulli process of treatment assignment </span></span>
+<span id="cb114-2"><a href="rct.html#cb114-2" tabindex="-1"></a></span>
+<span id="cb114-3"><a href="rct.html#cb114-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb114-4"><a href="rct.html#cb114-4" tabindex="-1"></a></span>
+<span id="cb114-5"><a href="rct.html#cb114-5" tabindex="-1"></a>fun_treat_assign  <span class="ot">&lt;-</span> <span class="cf">function</span>(N, prob, treat.type){</span>
+<span id="cb114-6"><a href="rct.html#cb114-6" tabindex="-1"></a>    treatment  <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">p =</span> prob)</span>
+<span id="cb114-7"><a href="rct.html#cb114-7" tabindex="-1"></a>    dat  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">treatment =</span> treatment, <span class="at">type =</span> treat.type)</span>
+<span id="cb114-8"><a href="rct.html#cb114-8" tabindex="-1"></a>    <span class="fu">return</span>(dat)</span>
+<span id="cb114-9"><a href="rct.html#cb114-9" tabindex="-1"></a>}</span>
+<span id="cb114-10"><a href="rct.html#cb114-10" tabindex="-1"></a><span class="co"># p = 0.5 for each unit</span></span>
+<span id="cb114-11"><a href="rct.html#cb114-11" tabindex="-1"></a>dat1  <span class="ot">&lt;-</span> <span class="fu">fun_treat_assign</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">prob =</span> <span class="fl">0.5</span>, <span class="at">treat.type =</span> <span class="st">&quot;p = 0.5&quot;</span>)</span>
+<span id="cb114-12"><a href="rct.html#cb114-12" tabindex="-1"></a><span class="co"># p = 0.3 for each unit</span></span>
+<span id="cb114-13"><a href="rct.html#cb114-13" tabindex="-1"></a>dat2  <span class="ot">&lt;-</span> <span class="fu">fun_treat_assign</span>(<span class="at">N =</span> <span class="dv">10000</span>, <span class="at">prob =</span> <span class="fl">0.2</span>, <span class="at">treat.type =</span> <span class="st">&quot;p = 0.2&quot;</span>)</span>
+<span id="cb114-14"><a href="rct.html#cb114-14" tabindex="-1"></a></span>
+<span id="cb114-15"><a href="rct.html#cb114-15" tabindex="-1"></a>dat.assign  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(dat1, dat2) </span>
+<span id="cb114-16"><a href="rct.html#cb114-16" tabindex="-1"></a></span>
+<span id="cb114-17"><a href="rct.html#cb114-17" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb114-18"><a href="rct.html#cb114-18" tabindex="-1"></a><span class="fu">ggplot</span>(dat.assign, <span class="fu">aes</span>(<span class="at">x =</span> treatment)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">fill=</span> <span class="st">&quot;skyblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb114-19"><a href="rct.html#cb114-19" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span> type) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 <p><img src="book_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p>A practical example of this is an unbiased coin toss used to determine treatment assignment. In this case, a head could correspond to the treatment group (e.g., <span class="math inline">\(W_i = 1\)</span>), and a tail to the control group (e.g., <span class="math inline">\(W_i = 0\)</span>). This method exemplifies Bernoulli-randomization, where the assignment is determined by a random process, ensuring that each unit has an equal probability of being assigned to either group.</p>

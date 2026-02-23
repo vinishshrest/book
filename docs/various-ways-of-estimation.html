@@ -265,8 +265,8 @@ div.csl-indent {
 <ol style="list-style-type: decimal">
 <li>Typical Estimation</li>
 </ol>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="various-ways-of-estimation.html#cb261-1" tabindex="-1"></a>reg1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> treat<span class="sc">:</span>period <span class="sc">+</span> treat <span class="sc">+</span> period, data)</span>
-<span id="cb261-2"><a href="various-ways-of-estimation.html#cb261-2" tabindex="-1"></a><span class="fu">summary</span>(reg1)</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="various-ways-of-estimation.html#cb260-1" tabindex="-1"></a>reg1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> treat<span class="sc">:</span>period <span class="sc">+</span> treat <span class="sc">+</span> period, data)</span>
+<span id="cb260-2"><a href="various-ways-of-estimation.html#cb260-2" tabindex="-1"></a><span class="fu">summary</span>(reg1)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ treat:period + treat + period, data = data)
@@ -290,8 +290,8 @@ div.csl-indent {
 <ol start="2" style="list-style-type: decimal">
 <li>Within Estimator</li>
 </ol>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="various-ways-of-estimation.html#cb263-1" tabindex="-1"></a>reg2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Ytrans <span class="sc">~</span> D <span class="sc">+</span> period, data)</span>
-<span id="cb263-2"><a href="various-ways-of-estimation.html#cb263-2" tabindex="-1"></a><span class="fu">summary</span>(reg2)</span></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="various-ways-of-estimation.html#cb262-1" tabindex="-1"></a>reg2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Ytrans <span class="sc">~</span> D <span class="sc">+</span> period, data)</span>
+<span id="cb262-2"><a href="various-ways-of-estimation.html#cb262-2" tabindex="-1"></a><span class="fu">summary</span>(reg2)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Ytrans ~ D + period, data = data)
@@ -314,8 +314,8 @@ div.csl-indent {
 <ol start="3" style="list-style-type: decimal">
 <li>First Difference</li>
 </ol>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="various-ways-of-estimation.html#cb265-1" tabindex="-1"></a>reg3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y_FD <span class="sc">~</span> D, FDdata)</span>
-<span id="cb265-2"><a href="various-ways-of-estimation.html#cb265-2" tabindex="-1"></a><span class="fu">summary</span>(reg3)</span></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="various-ways-of-estimation.html#cb264-1" tabindex="-1"></a>reg3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y_FD <span class="sc">~</span> D, FDdata)</span>
+<span id="cb264-2"><a href="various-ways-of-estimation.html#cb264-2" tabindex="-1"></a><span class="fu">summary</span>(reg3)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y_FD ~ D, data = FDdata)
@@ -361,10 +361,10 @@ ATT_{imp} = \frac{1}{n_1}\sum_{1}^{n}D_{i}(Y_{it}-\hat{Y_{it}(0)}) \\
 =  \frac{1}{n_1}\sum_{1}^{n}D_{i}\Delta Y_{it} - \frac{1}{n_0}\sum_{1}^{n}(1-D_{i}) \Delta Y_{it}
 
 \end{equation}\]</span></p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="various-ways-of-estimation.html#cb267-1" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y_FD <span class="sc">~</span> period2, <span class="fu">subset</span>(FDdata, treat1 <span class="sc">==</span> <span class="dv">0</span>))</span>
-<span id="cb267-2"><a href="various-ways-of-estimation.html#cb267-2" tabindex="-1"></a>FDdata<span class="sc">$</span>yhattreat <span class="ot">=</span> FDdata<span class="sc">$</span>Y1 <span class="sc">+</span>  reg[[<span class="dv">1</span>]][[<span class="dv">1</span>]]</span>
-<span id="cb267-3"><a href="various-ways-of-estimation.html#cb267-3" tabindex="-1"></a>FDdata<span class="sc">$</span>imp <span class="ot">=</span> FDdata<span class="sc">$</span>Y2 <span class="sc">-</span> FDdata<span class="sc">$</span>yhattreat</span>
-<span id="cb267-4"><a href="various-ways-of-estimation.html#cb267-4" tabindex="-1"></a><span class="fu">mean</span>(FDdata<span class="sc">$</span>imp[FDdata<span class="sc">$</span>treat1 <span class="sc">==</span> <span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="various-ways-of-estimation.html#cb266-1" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y_FD <span class="sc">~</span> period2, <span class="fu">subset</span>(FDdata, treat1 <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb266-2"><a href="various-ways-of-estimation.html#cb266-2" tabindex="-1"></a>FDdata<span class="sc">$</span>yhattreat <span class="ot">=</span> FDdata<span class="sc">$</span>Y1 <span class="sc">+</span>  reg[[<span class="dv">1</span>]][[<span class="dv">1</span>]]</span>
+<span id="cb266-3"><a href="various-ways-of-estimation.html#cb266-3" tabindex="-1"></a>FDdata<span class="sc">$</span>imp <span class="ot">=</span> FDdata<span class="sc">$</span>Y2 <span class="sc">-</span> FDdata<span class="sc">$</span>yhattreat</span>
+<span id="cb266-4"><a href="various-ways-of-estimation.html#cb266-4" tabindex="-1"></a><span class="fu">mean</span>(FDdata<span class="sc">$</span>imp[FDdata<span class="sc">$</span>treat1 <span class="sc">==</span> <span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## [1] 19.95384</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Frisch-Waugh Theorem</li>

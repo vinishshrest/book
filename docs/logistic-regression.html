@@ -307,30 +307,30 @@ known as the logit. The logit is a
 linear combination of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(X\)</span>. By nature of the logistic function, the output is restricted
 between 0 and 1.<br />
 To see the logistic function closely, let’s take a look at the following graph.</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb95-1"><a href="logistic-regression.html#cb95-1" tabindex="-1"></a></span>
-<span id="cb95-2"><a href="logistic-regression.html#cb95-2" tabindex="-1"></a><span class="co"># import necessary libraries</span></span>
-<span id="cb95-3"><a href="logistic-regression.html#cb95-3" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np    </span>
-<span id="cb95-4"><a href="logistic-regression.html#cb95-4" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb95-5"><a href="logistic-regression.html#cb95-5" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb95-6"><a href="logistic-regression.html#cb95-6" tabindex="-1"></a></span>
-<span id="cb95-7"><a href="logistic-regression.html#cb95-7" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb95-8"><a href="logistic-regression.html#cb95-8" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb95-9"><a href="logistic-regression.html#cb95-9" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> add_dummy_feature</span>
-<span id="cb95-10"><a href="logistic-regression.html#cb95-10" tabindex="-1"></a></span>
-<span id="cb95-11"><a href="logistic-regression.html#cb95-11" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb95-12"><a href="logistic-regression.html#cb95-12" tabindex="-1"></a></span>
-<span id="cb95-13"><a href="logistic-regression.html#cb95-13" tabindex="-1"></a><span class="co"># generate numbers from -5 to 5</span></span>
-<span id="cb95-14"><a href="logistic-regression.html#cb95-14" tabindex="-1"></a>z <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1000</span>)</span>
-<span id="cb95-15"><a href="logistic-regression.html#cb95-15" tabindex="-1"></a><span class="bu">print</span>(z[<span class="dv">0</span>:<span class="dv">20</span>])</span>
-<span id="cb95-16"><a href="logistic-regression.html#cb95-16" tabindex="-1"></a><span class="co"># compute logistic values (note that these are probabilities)</span></span>
-<span id="cb95-17"><a href="logistic-regression.html#cb95-17" tabindex="-1"></a>sigma_z <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z))</span>
-<span id="cb95-18"><a href="logistic-regression.html#cb95-18" tabindex="-1"></a></span>
-<span id="cb95-19"><a href="logistic-regression.html#cb95-19" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb95-20"><a href="logistic-regression.html#cb95-20" tabindex="-1"></a>plt.plot(z, sigma_z)</span>
-<span id="cb95-21"><a href="logistic-regression.html#cb95-21" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;z&#39;</span>)</span>
-<span id="cb95-22"><a href="logistic-regression.html#cb95-22" tabindex="-1"></a>plt.title(<span class="st">&#39;A sigmoid function&#39;</span>)</span>
-<span id="cb95-23"><a href="logistic-regression.html#cb95-23" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;probability&#39;</span>)</span>
-<span id="cb95-24"><a href="logistic-regression.html#cb95-24" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb94-1"><a href="logistic-regression.html#cb94-1" tabindex="-1"></a></span>
+<span id="cb94-2"><a href="logistic-regression.html#cb94-2" tabindex="-1"></a><span class="co"># import necessary libraries</span></span>
+<span id="cb94-3"><a href="logistic-regression.html#cb94-3" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np    </span>
+<span id="cb94-4"><a href="logistic-regression.html#cb94-4" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb94-5"><a href="logistic-regression.html#cb94-5" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb94-6"><a href="logistic-regression.html#cb94-6" tabindex="-1"></a></span>
+<span id="cb94-7"><a href="logistic-regression.html#cb94-7" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb94-8"><a href="logistic-regression.html#cb94-8" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb94-9"><a href="logistic-regression.html#cb94-9" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> add_dummy_feature</span>
+<span id="cb94-10"><a href="logistic-regression.html#cb94-10" tabindex="-1"></a></span>
+<span id="cb94-11"><a href="logistic-regression.html#cb94-11" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb94-12"><a href="logistic-regression.html#cb94-12" tabindex="-1"></a></span>
+<span id="cb94-13"><a href="logistic-regression.html#cb94-13" tabindex="-1"></a><span class="co"># generate numbers from -5 to 5</span></span>
+<span id="cb94-14"><a href="logistic-regression.html#cb94-14" tabindex="-1"></a>z <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1000</span>)</span>
+<span id="cb94-15"><a href="logistic-regression.html#cb94-15" tabindex="-1"></a><span class="bu">print</span>(z[<span class="dv">0</span>:<span class="dv">20</span>])</span>
+<span id="cb94-16"><a href="logistic-regression.html#cb94-16" tabindex="-1"></a><span class="co"># compute logistic values (note that these are probabilities)</span></span>
+<span id="cb94-17"><a href="logistic-regression.html#cb94-17" tabindex="-1"></a>sigma_z <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z))</span>
+<span id="cb94-18"><a href="logistic-regression.html#cb94-18" tabindex="-1"></a></span>
+<span id="cb94-19"><a href="logistic-regression.html#cb94-19" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb94-20"><a href="logistic-regression.html#cb94-20" tabindex="-1"></a>plt.plot(z, sigma_z)</span>
+<span id="cb94-21"><a href="logistic-regression.html#cb94-21" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;z&#39;</span>)</span>
+<span id="cb94-22"><a href="logistic-regression.html#cb94-22" tabindex="-1"></a>plt.title(<span class="st">&#39;A sigmoid function&#39;</span>)</span>
+<span id="cb94-23"><a href="logistic-regression.html#cb94-23" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;probability&#39;</span>)</span>
+<span id="cb94-24"><a href="logistic-regression.html#cb94-24" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <pre><code>[-5.         -4.98998999 -4.97997998 -4.96996997 -4.95995996 -4.94994995
  -4.93993994 -4.92992993 -4.91991992 -4.90990991 -4.8998999  -4.88988989
  -4.87987988 -4.86986987 -4.85985986 -4.84984985 -4.83983984 -4.82982983
@@ -379,124 +379,124 @@ means that we can use gradient descent to estimate <span class="math inline">\(\
 Note that the functional that’s used to simulate the
 outcome variable (health) will depend on probability values obtained from the
 logistic function.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb97-1"><a href="logistic-regression.html#cb97-1" tabindex="-1"></a></span>
-<span id="cb97-2"><a href="logistic-regression.html#cb97-2" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
-<span id="cb97-3"><a href="logistic-regression.html#cb97-3" tabindex="-1"></a></span>
-<span id="cb97-4"><a href="logistic-regression.html#cb97-4" tabindex="-1"></a><span class="co"># A. Simulate data </span></span>
-<span id="cb97-5"><a href="logistic-regression.html#cb97-5" tabindex="-1"></a></span>
-<span id="cb97-6"><a href="logistic-regression.html#cb97-6" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
-<span id="cb97-7"><a href="logistic-regression.html#cb97-7" tabindex="-1"></a></span>
-<span id="cb97-8"><a href="logistic-regression.html#cb97-8" tabindex="-1"></a><span class="co"># 1. College education has a positive effect on health (coefficient = 0.1)</span></span>
-<span id="cb97-9"><a href="logistic-regression.html#cb97-9" tabindex="-1"></a><span class="co"># 2. High income has a positive effect on health (coefficient = 0.2)</span></span>
-<span id="cb97-10"><a href="logistic-regression.html#cb97-10" tabindex="-1"></a><span class="co"># 3. 40 percent more people from higher income households have college education</span></span>
-<span id="cb97-11"><a href="logistic-regression.html#cb97-11" tabindex="-1"></a><span class="co"># 4. Insurance has a positive effect on health (coefficient = 0.05)</span></span>
-<span id="cb97-12"><a href="logistic-regression.html#cb97-12" tabindex="-1"></a><span class="co"># 5. Stress has a negative effect on health (coefficient = -1)</span></span>
-<span id="cb97-13"><a href="logistic-regression.html#cb97-13" tabindex="-1"></a></span>
-<span id="cb97-14"><a href="logistic-regression.html#cb97-14" tabindex="-1"></a><span class="co"># number of obs</span></span>
-<span id="cb97-15"><a href="logistic-regression.html#cb97-15" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100000</span></span>
-<span id="cb97-16"><a href="logistic-regression.html#cb97-16" tabindex="-1"></a></span>
-<span id="cb97-17"><a href="logistic-regression.html#cb97-17" tabindex="-1"></a><span class="co"># 1. income </span></span>
-<span id="cb97-18"><a href="logistic-regression.html#cb97-18" tabindex="-1"></a>income_log <span class="op">=</span> np.random.lognormal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
-<span id="cb97-19"><a href="logistic-regression.html#cb97-19" tabindex="-1"></a>income <span class="op">=</span> income_log <span class="op">*</span> <span class="dv">20000</span></span>
-<span id="cb97-20"><a href="logistic-regression.html#cb97-20" tabindex="-1"></a>ln_income <span class="op">=</span> np.log(income)</span>
-<span id="cb97-21"><a href="logistic-regression.html#cb97-21" tabindex="-1"></a><span class="co"># categorize high vs low income based on median income</span></span>
-<span id="cb97-22"><a href="logistic-regression.html#cb97-22" tabindex="-1"></a>high_income <span class="op">=</span> (income<span class="op">&gt;=</span>np.median(income)).astype(<span class="st">&#39;int&#39;</span>)</span>
-<span id="cb97-23"><a href="logistic-regression.html#cb97-23" tabindex="-1"></a>low_income <span class="op">=</span> (income<span class="op">&lt;</span>np.median(income)).astype(<span class="st">&#39;int&#39;</span>)</span>
-<span id="cb97-24"><a href="logistic-regression.html#cb97-24" tabindex="-1"></a></span>
-<span id="cb97-25"><a href="logistic-regression.html#cb97-25" tabindex="-1"></a><span class="co"># 2. college </span></span>
-<span id="cb97-26"><a href="logistic-regression.html#cb97-26" tabindex="-1"></a><span class="kw">def</span> gen_college(prob):</span>
-<span id="cb97-27"><a href="logistic-regression.html#cb97-27" tabindex="-1"></a>    col <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, <span class="dv">1</span>)</span>
-<span id="cb97-28"><a href="logistic-regression.html#cb97-28" tabindex="-1"></a>    <span class="cf">return</span> col</span>
-<span id="cb97-29"><a href="logistic-regression.html#cb97-29" tabindex="-1"></a></span>
-<span id="cb97-30"><a href="logistic-regression.html#cb97-30" tabindex="-1"></a>college <span class="op">=</span> []</span>
-<span id="cb97-31"><a href="logistic-regression.html#cb97-31" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb97-32"><a href="logistic-regression.html#cb97-32" tabindex="-1"></a>    <span class="co"># 40% more people from high income group will have college degree</span></span>
-<span id="cb97-33"><a href="logistic-regression.html#cb97-33" tabindex="-1"></a>    college_i <span class="op">=</span> gen_college(<span class="fl">0.2</span> <span class="op">+</span> <span class="fl">0.4</span><span class="op">*</span>high_income[i])</span>
-<span id="cb97-34"><a href="logistic-regression.html#cb97-34" tabindex="-1"></a>    college.append(college_i)</span>
-<span id="cb97-35"><a href="logistic-regression.html#cb97-35" tabindex="-1"></a></span>
-<span id="cb97-36"><a href="logistic-regression.html#cb97-36" tabindex="-1"></a>college <span class="op">=</span> np.array(college).ravel()</span>
-<span id="cb97-37"><a href="logistic-regression.html#cb97-37" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;mean of college: </span><span class="sc">{</span>college<span class="sc">.</span>mean()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb97-38"><a href="logistic-regression.html#cb97-38" tabindex="-1"></a></span>
-<span id="cb97-39"><a href="logistic-regression.html#cb97-39" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;share college for high income: </span><span class="sc">{</span>np<span class="sc">.</span>mean(college[high_income <span class="op">==</span> <span class="dv">1</span>])<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb97-40"><a href="logistic-regression.html#cb97-40" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;share college for low income: </span><span class="sc">{</span>np<span class="sc">.</span>mean(college[high_income <span class="op">==</span> <span class="dv">0</span>])<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb97-41"><a href="logistic-regression.html#cb97-41" tabindex="-1"></a></span>
-<span id="cb97-42"><a href="logistic-regression.html#cb97-42" tabindex="-1"></a><span class="co"># 3. Stress </span></span>
-<span id="cb97-43"><a href="logistic-regression.html#cb97-43" tabindex="-1"></a><span class="kw">def</span> gen_stress(prob):</span>
-<span id="cb97-44"><a href="logistic-regression.html#cb97-44" tabindex="-1"></a>    p <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, <span class="dv">1</span>)</span>
-<span id="cb97-45"><a href="logistic-regression.html#cb97-45" tabindex="-1"></a>    <span class="cf">return</span> p</span>
-<span id="cb97-46"><a href="logistic-regression.html#cb97-46" tabindex="-1"></a></span>
-<span id="cb97-47"><a href="logistic-regression.html#cb97-47" tabindex="-1"></a>stress <span class="op">=</span> []</span>
-<span id="cb97-48"><a href="logistic-regression.html#cb97-48" tabindex="-1"></a></span>
-<span id="cb97-49"><a href="logistic-regression.html#cb97-49" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb97-50"><a href="logistic-regression.html#cb97-50" tabindex="-1"></a>    <span class="co"># 60% more people in low income will be stressed</span></span>
-<span id="cb97-51"><a href="logistic-regression.html#cb97-51" tabindex="-1"></a>    stress_i <span class="op">=</span> gen_stress(<span class="fl">0.6</span><span class="op">*</span>low_income[i])</span>
-<span id="cb97-52"><a href="logistic-regression.html#cb97-52" tabindex="-1"></a>    stress.append(stress_i)</span>
-<span id="cb97-53"><a href="logistic-regression.html#cb97-53" tabindex="-1"></a></span>
-<span id="cb97-54"><a href="logistic-regression.html#cb97-54" tabindex="-1"></a><span class="co"># a continuous stress variable dependent on income status</span></span>
-<span id="cb97-55"><a href="logistic-regression.html#cb97-55" tabindex="-1"></a>stress <span class="op">=</span> np.array(stress).ravel() <span class="op">+</span> np.random.normal(<span class="dv">3</span>, <span class="dv">1</span>, n)<span class="op">*</span>low_income <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
-<span id="cb97-56"><a href="logistic-regression.html#cb97-56" tabindex="-1"></a></span>
-<span id="cb97-57"><a href="logistic-regression.html#cb97-57" tabindex="-1"></a><span class="co"># histogram of the stress index</span></span>
-<span id="cb97-58"><a href="logistic-regression.html#cb97-58" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb97-59"><a href="logistic-regression.html#cb97-59" tabindex="-1"></a>plt.hist(stress, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb97-60"><a href="logistic-regression.html#cb97-60" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;stress index&#39;</span>)</span>
-<span id="cb97-61"><a href="logistic-regression.html#cb97-61" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
-<span id="cb97-62"><a href="logistic-regression.html#cb97-62" tabindex="-1"></a>plt.title(<span class="st">&#39;Histogram of stress index&#39;</span>)</span>
-<span id="cb97-63"><a href="logistic-regression.html#cb97-63" tabindex="-1"></a>plt.show()</span>
-<span id="cb97-64"><a href="logistic-regression.html#cb97-64" tabindex="-1"></a></span>
-<span id="cb97-65"><a href="logistic-regression.html#cb97-65" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;average stress index for low income group: </span><span class="sc">{</span>stress[high_income<span class="op">==</span><span class="dv">0</span>]<span class="sc">.</span>mean()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb97-66"><a href="logistic-regression.html#cb97-66" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;average stress index for high income group: </span><span class="sc">{</span>stress[high_income<span class="op">==</span><span class="dv">1</span>]<span class="sc">.</span>mean()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb97-67"><a href="logistic-regression.html#cb97-67" tabindex="-1"></a></span>
-<span id="cb97-68"><a href="logistic-regression.html#cb97-68" tabindex="-1"></a><span class="co"># 4. Insurance (exogeneous -- does not depend on other Xs)</span></span>
-<span id="cb97-69"><a href="logistic-regression.html#cb97-69" tabindex="-1"></a>insurance <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, <span class="fl">0.3</span>, n)</span>
-<span id="cb97-70"><a href="logistic-regression.html#cb97-70" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;fraction insured: </span><span class="sc">{</span>insurance<span class="sc">.</span>mean()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb97-71"><a href="logistic-regression.html#cb97-71" tabindex="-1"></a></span>
-<span id="cb97-72"><a href="logistic-regression.html#cb97-72" tabindex="-1"></a><span class="co"># 5. health (Y variable)</span></span>
-<span id="cb97-73"><a href="logistic-regression.html#cb97-73" tabindex="-1"></a><span class="kw">def</span> gen_health(prob):</span>
-<span id="cb97-74"><a href="logistic-regression.html#cb97-74" tabindex="-1"></a>    h <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, <span class="dv">1</span>) <span class="co"># these probabilities are going to come from the logistic function</span></span>
-<span id="cb97-75"><a href="logistic-regression.html#cb97-75" tabindex="-1"></a>    <span class="cf">return</span> h</span>
-<span id="cb97-76"><a href="logistic-regression.html#cb97-76" tabindex="-1"></a></span>
-<span id="cb97-77"><a href="logistic-regression.html#cb97-77" tabindex="-1"></a><span class="co"># ----------------------------------------------------</span></span>
-<span id="cb97-78"><a href="logistic-regression.html#cb97-78" tabindex="-1"></a></span>
-<span id="cb97-79"><a href="logistic-regression.html#cb97-79" tabindex="-1"></a></span>
-<span id="cb97-80"><a href="logistic-regression.html#cb97-80" tabindex="-1"></a><span class="co"># Logistic regression using the gradient descent </span></span>
-<span id="cb97-81"><a href="logistic-regression.html#cb97-81" tabindex="-1"></a></span>
-<span id="cb97-82"><a href="logistic-regression.html#cb97-82" tabindex="-1"></a></span>
-<span id="cb97-83"><a href="logistic-regression.html#cb97-83" tabindex="-1"></a><span class="co"># ----------------------------------------------------</span></span>
-<span id="cb97-84"><a href="logistic-regression.html#cb97-84" tabindex="-1"></a><span class="co"># define the logistic function</span></span>
-<span id="cb97-85"><a href="logistic-regression.html#cb97-85" tabindex="-1"></a><span class="kw">def</span> sigma(<span class="bu">input</span>):</span>
-<span id="cb97-86"><a href="logistic-regression.html#cb97-86" tabindex="-1"></a>    logistic <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="bu">input</span>)) </span>
-<span id="cb97-87"><a href="logistic-regression.html#cb97-87" tabindex="-1"></a>    <span class="cf">return</span> logistic</span>
-<span id="cb97-88"><a href="logistic-regression.html#cb97-88" tabindex="-1"></a></span>
-<span id="cb97-89"><a href="logistic-regression.html#cb97-89" tabindex="-1"></a><span class="co"># true thetas governing the DGP</span></span>
-<span id="cb97-90"><a href="logistic-regression.html#cb97-90" tabindex="-1"></a>theta_true <span class="op">=</span> np.array([<span class="fl">0.3</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.05</span>, <span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb97-91"><a href="logistic-regression.html#cb97-91" tabindex="-1"></a>sigma(theta_true)</span>
-<span id="cb97-92"><a href="logistic-regression.html#cb97-92" tabindex="-1"></a>X <span class="op">=</span> np.concatenate((college.reshape((n, <span class="dv">1</span>)), </span>
-<span id="cb97-93"><a href="logistic-regression.html#cb97-93" tabindex="-1"></a>                    high_income.reshape((n, <span class="dv">1</span>)), </span>
-<span id="cb97-94"><a href="logistic-regression.html#cb97-94" tabindex="-1"></a>                    insurance.reshape((n, <span class="dv">1</span>)), </span>
-<span id="cb97-95"><a href="logistic-regression.html#cb97-95" tabindex="-1"></a>                    stress.reshape((n, <span class="dv">1</span>))),</span>
-<span id="cb97-96"><a href="logistic-regression.html#cb97-96" tabindex="-1"></a>                    axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb97-97"><a href="logistic-regression.html#cb97-97" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X) <span class="co"># this adds 1 in the first column (intercept)</span></span>
-<span id="cb97-98"><a href="logistic-regression.html#cb97-98" tabindex="-1"></a>z <span class="op">=</span> X <span class="op">@</span> theta_true.reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb97-99"><a href="logistic-regression.html#cb97-99" tabindex="-1"></a>prob_logit <span class="op">=</span> sigma(z)  <span class="co"># output true probabilities</span></span>
-<span id="cb97-100"><a href="logistic-regression.html#cb97-100" tabindex="-1"></a></span>
-<span id="cb97-101"><a href="logistic-regression.html#cb97-101" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: PROBABILITIES COME FROM THE LOGISTIC FUNCTION. THIS IS THE KEY TO SIMULATE LOGISTIC REGRESSION.</span></span>
-<span id="cb97-102"><a href="logistic-regression.html#cb97-102" tabindex="-1"></a><span class="co"># Step 1: Calculate linear combination (logit): z = X @ theta</span></span>
-<span id="cb97-103"><a href="logistic-regression.html#cb97-103" tabindex="-1"></a><span class="co"># Step 2: Transform to probabilities: p = sigma(z) = 1/(1 + exp(-z))</span></span>
-<span id="cb97-104"><a href="logistic-regression.html#cb97-104" tabindex="-1"></a><span class="co"># Step 3: Generate binary outcomes using these probabilities using a binomial dist.</span></span>
-<span id="cb97-105"><a href="logistic-regression.html#cb97-105" tabindex="-1"></a></span>
-<span id="cb97-106"><a href="logistic-regression.html#cb97-106" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb97-107"><a href="logistic-regression.html#cb97-107" tabindex="-1"></a>plt.hist(prob_logit, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>)</span>
-<span id="cb97-108"><a href="logistic-regression.html#cb97-108" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="dv">0</span>, linestyle<span class="op">=</span><span class="st">&#39;--&#39;</span>)</span>
-<span id="cb97-109"><a href="logistic-regression.html#cb97-109" tabindex="-1"></a>plt.title(<span class="st">&#39;True probabilities using true theta values&#39;</span>)</span>
-<span id="cb97-110"><a href="logistic-regression.html#cb97-110" tabindex="-1"></a>plt.show()</span>
-<span id="cb97-111"><a href="logistic-regression.html#cb97-111" tabindex="-1"></a></span>
-<span id="cb97-112"><a href="logistic-regression.html#cb97-112" tabindex="-1"></a><span class="co"># generate health using probabilities</span></span>
-<span id="cb97-113"><a href="logistic-regression.html#cb97-113" tabindex="-1"></a>health <span class="op">=</span> []</span>
-<span id="cb97-114"><a href="logistic-regression.html#cb97-114" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb97-115"><a href="logistic-regression.html#cb97-115" tabindex="-1"></a>    health_i <span class="op">=</span> gen_health(prob_logit[i]) <span class="co"># AGAIN, THESE PROBABILITIES COME FROM THE LOGISTIC FUNCTION</span></span>
-<span id="cb97-116"><a href="logistic-regression.html#cb97-116" tabindex="-1"></a>    health.append(health_i)</span>
-<span id="cb97-117"><a href="logistic-regression.html#cb97-117" tabindex="-1"></a></span>
-<span id="cb97-118"><a href="logistic-regression.html#cb97-118" tabindex="-1"></a>health <span class="op">=</span> np.array(health).ravel()</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb96-1"><a href="logistic-regression.html#cb96-1" tabindex="-1"></a></span>
+<span id="cb96-2"><a href="logistic-regression.html#cb96-2" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
+<span id="cb96-3"><a href="logistic-regression.html#cb96-3" tabindex="-1"></a></span>
+<span id="cb96-4"><a href="logistic-regression.html#cb96-4" tabindex="-1"></a><span class="co"># A. Simulate data </span></span>
+<span id="cb96-5"><a href="logistic-regression.html#cb96-5" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="logistic-regression.html#cb96-6" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
+<span id="cb96-7"><a href="logistic-regression.html#cb96-7" tabindex="-1"></a></span>
+<span id="cb96-8"><a href="logistic-regression.html#cb96-8" tabindex="-1"></a><span class="co"># 1. College education has a positive effect on health (coefficient = 0.1)</span></span>
+<span id="cb96-9"><a href="logistic-regression.html#cb96-9" tabindex="-1"></a><span class="co"># 2. High income has a positive effect on health (coefficient = 0.2)</span></span>
+<span id="cb96-10"><a href="logistic-regression.html#cb96-10" tabindex="-1"></a><span class="co"># 3. 40 percent more people from higher income households have college education</span></span>
+<span id="cb96-11"><a href="logistic-regression.html#cb96-11" tabindex="-1"></a><span class="co"># 4. Insurance has a positive effect on health (coefficient = 0.05)</span></span>
+<span id="cb96-12"><a href="logistic-regression.html#cb96-12" tabindex="-1"></a><span class="co"># 5. Stress has a negative effect on health (coefficient = -1)</span></span>
+<span id="cb96-13"><a href="logistic-regression.html#cb96-13" tabindex="-1"></a></span>
+<span id="cb96-14"><a href="logistic-regression.html#cb96-14" tabindex="-1"></a><span class="co"># number of obs</span></span>
+<span id="cb96-15"><a href="logistic-regression.html#cb96-15" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb96-16"><a href="logistic-regression.html#cb96-16" tabindex="-1"></a></span>
+<span id="cb96-17"><a href="logistic-regression.html#cb96-17" tabindex="-1"></a><span class="co"># 1. income </span></span>
+<span id="cb96-18"><a href="logistic-regression.html#cb96-18" tabindex="-1"></a>income_log <span class="op">=</span> np.random.lognormal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb96-19"><a href="logistic-regression.html#cb96-19" tabindex="-1"></a>income <span class="op">=</span> income_log <span class="op">*</span> <span class="dv">20000</span></span>
+<span id="cb96-20"><a href="logistic-regression.html#cb96-20" tabindex="-1"></a>ln_income <span class="op">=</span> np.log(income)</span>
+<span id="cb96-21"><a href="logistic-regression.html#cb96-21" tabindex="-1"></a><span class="co"># categorize high vs low income based on median income</span></span>
+<span id="cb96-22"><a href="logistic-regression.html#cb96-22" tabindex="-1"></a>high_income <span class="op">=</span> (income<span class="op">&gt;=</span>np.median(income)).astype(<span class="st">&#39;int&#39;</span>)</span>
+<span id="cb96-23"><a href="logistic-regression.html#cb96-23" tabindex="-1"></a>low_income <span class="op">=</span> (income<span class="op">&lt;</span>np.median(income)).astype(<span class="st">&#39;int&#39;</span>)</span>
+<span id="cb96-24"><a href="logistic-regression.html#cb96-24" tabindex="-1"></a></span>
+<span id="cb96-25"><a href="logistic-regression.html#cb96-25" tabindex="-1"></a><span class="co"># 2. college </span></span>
+<span id="cb96-26"><a href="logistic-regression.html#cb96-26" tabindex="-1"></a><span class="kw">def</span> gen_college(prob):</span>
+<span id="cb96-27"><a href="logistic-regression.html#cb96-27" tabindex="-1"></a>    col <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, <span class="dv">1</span>)</span>
+<span id="cb96-28"><a href="logistic-regression.html#cb96-28" tabindex="-1"></a>    <span class="cf">return</span> col</span>
+<span id="cb96-29"><a href="logistic-regression.html#cb96-29" tabindex="-1"></a></span>
+<span id="cb96-30"><a href="logistic-regression.html#cb96-30" tabindex="-1"></a>college <span class="op">=</span> []</span>
+<span id="cb96-31"><a href="logistic-regression.html#cb96-31" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb96-32"><a href="logistic-regression.html#cb96-32" tabindex="-1"></a>    <span class="co"># 40% more people from high income group will have college degree</span></span>
+<span id="cb96-33"><a href="logistic-regression.html#cb96-33" tabindex="-1"></a>    college_i <span class="op">=</span> gen_college(<span class="fl">0.2</span> <span class="op">+</span> <span class="fl">0.4</span><span class="op">*</span>high_income[i])</span>
+<span id="cb96-34"><a href="logistic-regression.html#cb96-34" tabindex="-1"></a>    college.append(college_i)</span>
+<span id="cb96-35"><a href="logistic-regression.html#cb96-35" tabindex="-1"></a></span>
+<span id="cb96-36"><a href="logistic-regression.html#cb96-36" tabindex="-1"></a>college <span class="op">=</span> np.array(college).ravel()</span>
+<span id="cb96-37"><a href="logistic-regression.html#cb96-37" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;mean of college: </span><span class="sc">{</span>college<span class="sc">.</span>mean()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb96-38"><a href="logistic-regression.html#cb96-38" tabindex="-1"></a></span>
+<span id="cb96-39"><a href="logistic-regression.html#cb96-39" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;share college for high income: </span><span class="sc">{</span>np<span class="sc">.</span>mean(college[high_income <span class="op">==</span> <span class="dv">1</span>])<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb96-40"><a href="logistic-regression.html#cb96-40" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;share college for low income: </span><span class="sc">{</span>np<span class="sc">.</span>mean(college[high_income <span class="op">==</span> <span class="dv">0</span>])<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb96-41"><a href="logistic-regression.html#cb96-41" tabindex="-1"></a></span>
+<span id="cb96-42"><a href="logistic-regression.html#cb96-42" tabindex="-1"></a><span class="co"># 3. Stress </span></span>
+<span id="cb96-43"><a href="logistic-regression.html#cb96-43" tabindex="-1"></a><span class="kw">def</span> gen_stress(prob):</span>
+<span id="cb96-44"><a href="logistic-regression.html#cb96-44" tabindex="-1"></a>    p <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, <span class="dv">1</span>)</span>
+<span id="cb96-45"><a href="logistic-regression.html#cb96-45" tabindex="-1"></a>    <span class="cf">return</span> p</span>
+<span id="cb96-46"><a href="logistic-regression.html#cb96-46" tabindex="-1"></a></span>
+<span id="cb96-47"><a href="logistic-regression.html#cb96-47" tabindex="-1"></a>stress <span class="op">=</span> []</span>
+<span id="cb96-48"><a href="logistic-regression.html#cb96-48" tabindex="-1"></a></span>
+<span id="cb96-49"><a href="logistic-regression.html#cb96-49" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb96-50"><a href="logistic-regression.html#cb96-50" tabindex="-1"></a>    <span class="co"># 60% more people in low income will be stressed</span></span>
+<span id="cb96-51"><a href="logistic-regression.html#cb96-51" tabindex="-1"></a>    stress_i <span class="op">=</span> gen_stress(<span class="fl">0.6</span><span class="op">*</span>low_income[i])</span>
+<span id="cb96-52"><a href="logistic-regression.html#cb96-52" tabindex="-1"></a>    stress.append(stress_i)</span>
+<span id="cb96-53"><a href="logistic-regression.html#cb96-53" tabindex="-1"></a></span>
+<span id="cb96-54"><a href="logistic-regression.html#cb96-54" tabindex="-1"></a><span class="co"># a continuous stress variable dependent on income status</span></span>
+<span id="cb96-55"><a href="logistic-regression.html#cb96-55" tabindex="-1"></a>stress <span class="op">=</span> np.array(stress).ravel() <span class="op">+</span> np.random.normal(<span class="dv">3</span>, <span class="dv">1</span>, n)<span class="op">*</span>low_income <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb96-56"><a href="logistic-regression.html#cb96-56" tabindex="-1"></a></span>
+<span id="cb96-57"><a href="logistic-regression.html#cb96-57" tabindex="-1"></a><span class="co"># histogram of the stress index</span></span>
+<span id="cb96-58"><a href="logistic-regression.html#cb96-58" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb96-59"><a href="logistic-regression.html#cb96-59" tabindex="-1"></a>plt.hist(stress, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb96-60"><a href="logistic-regression.html#cb96-60" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;stress index&#39;</span>)</span>
+<span id="cb96-61"><a href="logistic-regression.html#cb96-61" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
+<span id="cb96-62"><a href="logistic-regression.html#cb96-62" tabindex="-1"></a>plt.title(<span class="st">&#39;Histogram of stress index&#39;</span>)</span>
+<span id="cb96-63"><a href="logistic-regression.html#cb96-63" tabindex="-1"></a>plt.show()</span>
+<span id="cb96-64"><a href="logistic-regression.html#cb96-64" tabindex="-1"></a></span>
+<span id="cb96-65"><a href="logistic-regression.html#cb96-65" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;average stress index for low income group: </span><span class="sc">{</span>stress[high_income<span class="op">==</span><span class="dv">0</span>]<span class="sc">.</span>mean()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb96-66"><a href="logistic-regression.html#cb96-66" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;average stress index for high income group: </span><span class="sc">{</span>stress[high_income<span class="op">==</span><span class="dv">1</span>]<span class="sc">.</span>mean()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb96-67"><a href="logistic-regression.html#cb96-67" tabindex="-1"></a></span>
+<span id="cb96-68"><a href="logistic-regression.html#cb96-68" tabindex="-1"></a><span class="co"># 4. Insurance (exogeneous -- does not depend on other Xs)</span></span>
+<span id="cb96-69"><a href="logistic-regression.html#cb96-69" tabindex="-1"></a>insurance <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, <span class="fl">0.3</span>, n)</span>
+<span id="cb96-70"><a href="logistic-regression.html#cb96-70" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;fraction insured: </span><span class="sc">{</span>insurance<span class="sc">.</span>mean()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb96-71"><a href="logistic-regression.html#cb96-71" tabindex="-1"></a></span>
+<span id="cb96-72"><a href="logistic-regression.html#cb96-72" tabindex="-1"></a><span class="co"># 5. health (Y variable)</span></span>
+<span id="cb96-73"><a href="logistic-regression.html#cb96-73" tabindex="-1"></a><span class="kw">def</span> gen_health(prob):</span>
+<span id="cb96-74"><a href="logistic-regression.html#cb96-74" tabindex="-1"></a>    h <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, prob, <span class="dv">1</span>) <span class="co"># these probabilities are going to come from the logistic function</span></span>
+<span id="cb96-75"><a href="logistic-regression.html#cb96-75" tabindex="-1"></a>    <span class="cf">return</span> h</span>
+<span id="cb96-76"><a href="logistic-regression.html#cb96-76" tabindex="-1"></a></span>
+<span id="cb96-77"><a href="logistic-regression.html#cb96-77" tabindex="-1"></a><span class="co"># ----------------------------------------------------</span></span>
+<span id="cb96-78"><a href="logistic-regression.html#cb96-78" tabindex="-1"></a></span>
+<span id="cb96-79"><a href="logistic-regression.html#cb96-79" tabindex="-1"></a></span>
+<span id="cb96-80"><a href="logistic-regression.html#cb96-80" tabindex="-1"></a><span class="co"># Logistic regression using the gradient descent </span></span>
+<span id="cb96-81"><a href="logistic-regression.html#cb96-81" tabindex="-1"></a></span>
+<span id="cb96-82"><a href="logistic-regression.html#cb96-82" tabindex="-1"></a></span>
+<span id="cb96-83"><a href="logistic-regression.html#cb96-83" tabindex="-1"></a><span class="co"># ----------------------------------------------------</span></span>
+<span id="cb96-84"><a href="logistic-regression.html#cb96-84" tabindex="-1"></a><span class="co"># define the logistic function</span></span>
+<span id="cb96-85"><a href="logistic-regression.html#cb96-85" tabindex="-1"></a><span class="kw">def</span> sigma(<span class="bu">input</span>):</span>
+<span id="cb96-86"><a href="logistic-regression.html#cb96-86" tabindex="-1"></a>    logistic <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="bu">input</span>)) </span>
+<span id="cb96-87"><a href="logistic-regression.html#cb96-87" tabindex="-1"></a>    <span class="cf">return</span> logistic</span>
+<span id="cb96-88"><a href="logistic-regression.html#cb96-88" tabindex="-1"></a></span>
+<span id="cb96-89"><a href="logistic-regression.html#cb96-89" tabindex="-1"></a><span class="co"># true thetas governing the DGP</span></span>
+<span id="cb96-90"><a href="logistic-regression.html#cb96-90" tabindex="-1"></a>theta_true <span class="op">=</span> np.array([<span class="fl">0.3</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.05</span>, <span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb96-91"><a href="logistic-regression.html#cb96-91" tabindex="-1"></a>sigma(theta_true)</span>
+<span id="cb96-92"><a href="logistic-regression.html#cb96-92" tabindex="-1"></a>X <span class="op">=</span> np.concatenate((college.reshape((n, <span class="dv">1</span>)), </span>
+<span id="cb96-93"><a href="logistic-regression.html#cb96-93" tabindex="-1"></a>                    high_income.reshape((n, <span class="dv">1</span>)), </span>
+<span id="cb96-94"><a href="logistic-regression.html#cb96-94" tabindex="-1"></a>                    insurance.reshape((n, <span class="dv">1</span>)), </span>
+<span id="cb96-95"><a href="logistic-regression.html#cb96-95" tabindex="-1"></a>                    stress.reshape((n, <span class="dv">1</span>))),</span>
+<span id="cb96-96"><a href="logistic-regression.html#cb96-96" tabindex="-1"></a>                    axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb96-97"><a href="logistic-regression.html#cb96-97" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X) <span class="co"># this adds 1 in the first column (intercept)</span></span>
+<span id="cb96-98"><a href="logistic-regression.html#cb96-98" tabindex="-1"></a>z <span class="op">=</span> X <span class="op">@</span> theta_true.reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb96-99"><a href="logistic-regression.html#cb96-99" tabindex="-1"></a>prob_logit <span class="op">=</span> sigma(z)  <span class="co"># output true probabilities</span></span>
+<span id="cb96-100"><a href="logistic-regression.html#cb96-100" tabindex="-1"></a></span>
+<span id="cb96-101"><a href="logistic-regression.html#cb96-101" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: PROBABILITIES COME FROM THE LOGISTIC FUNCTION. THIS IS THE KEY TO SIMULATE LOGISTIC REGRESSION.</span></span>
+<span id="cb96-102"><a href="logistic-regression.html#cb96-102" tabindex="-1"></a><span class="co"># Step 1: Calculate linear combination (logit): z = X @ theta</span></span>
+<span id="cb96-103"><a href="logistic-regression.html#cb96-103" tabindex="-1"></a><span class="co"># Step 2: Transform to probabilities: p = sigma(z) = 1/(1 + exp(-z))</span></span>
+<span id="cb96-104"><a href="logistic-regression.html#cb96-104" tabindex="-1"></a><span class="co"># Step 3: Generate binary outcomes using these probabilities using a binomial dist.</span></span>
+<span id="cb96-105"><a href="logistic-regression.html#cb96-105" tabindex="-1"></a></span>
+<span id="cb96-106"><a href="logistic-regression.html#cb96-106" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb96-107"><a href="logistic-regression.html#cb96-107" tabindex="-1"></a>plt.hist(prob_logit, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb96-108"><a href="logistic-regression.html#cb96-108" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="dv">0</span>, linestyle<span class="op">=</span><span class="st">&#39;--&#39;</span>)</span>
+<span id="cb96-109"><a href="logistic-regression.html#cb96-109" tabindex="-1"></a>plt.title(<span class="st">&#39;True probabilities using true theta values&#39;</span>)</span>
+<span id="cb96-110"><a href="logistic-regression.html#cb96-110" tabindex="-1"></a>plt.show()</span>
+<span id="cb96-111"><a href="logistic-regression.html#cb96-111" tabindex="-1"></a></span>
+<span id="cb96-112"><a href="logistic-regression.html#cb96-112" tabindex="-1"></a><span class="co"># generate health using probabilities</span></span>
+<span id="cb96-113"><a href="logistic-regression.html#cb96-113" tabindex="-1"></a>health <span class="op">=</span> []</span>
+<span id="cb96-114"><a href="logistic-regression.html#cb96-114" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb96-115"><a href="logistic-regression.html#cb96-115" tabindex="-1"></a>    health_i <span class="op">=</span> gen_health(prob_logit[i]) <span class="co"># AGAIN, THESE PROBABILITIES COME FROM THE LOGISTIC FUNCTION</span></span>
+<span id="cb96-116"><a href="logistic-regression.html#cb96-116" tabindex="-1"></a>    health.append(health_i)</span>
+<span id="cb96-117"><a href="logistic-regression.html#cb96-117" tabindex="-1"></a></span>
+<span id="cb96-118"><a href="logistic-regression.html#cb96-118" tabindex="-1"></a>health <span class="op">=</span> np.array(health).ravel()</span></code></pre></div>
 <pre><code>mean of college: 0.40291
 
 
@@ -518,19 +518,19 @@ true coefficients and the DGP. From a practitioner’s standpoint, we won’t kn
 true probabilities in non-experimental settings, since we don’t know the true DGP to begin with. We have to estimate
 them.
 Let’s print out our some summary measures on health.</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb100-1"><a href="logistic-regression.html#cb100-1" tabindex="-1"></a><span class="co">#print(f&quot;y variable: {health} \n&quot;)</span></span>
-<span id="cb100-2"><a href="logistic-regression.html#cb100-2" tabindex="-1"></a><span class="co">#print(f&quot;X matrix: {X}&quot;)</span></span>
-<span id="cb100-3"><a href="logistic-regression.html#cb100-3" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;fraction with good health: </span><span class="sc">{</span>health<span class="sc">.</span>mean()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb100-4"><a href="logistic-regression.html#cb100-4" tabindex="-1"></a></span>
-<span id="cb100-5"><a href="logistic-regression.html#cb100-5" tabindex="-1"></a><span class="co"># create a stress band around the mean for no college, low income and uninsured</span></span>
-<span id="cb100-6"><a href="logistic-regression.html#cb100-6" tabindex="-1"></a>mean_stress_baseline <span class="op">=</span> stress[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (insurance<span class="op">==</span><span class="dv">0</span>)].mean()</span>
-<span id="cb100-7"><a href="logistic-regression.html#cb100-7" tabindex="-1"></a>stress_tolerance <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># within ±0.5 of mean</span></span>
-<span id="cb100-8"><a href="logistic-regression.html#cb100-8" tabindex="-1"></a>stress_band <span class="op">=</span> (np.<span class="bu">abs</span>(stress <span class="op">-</span> mean_stress_baseline) <span class="op">&lt;=</span> stress_tolerance)</span>
-<span id="cb100-9"><a href="logistic-regression.html#cb100-9" tabindex="-1"></a></span>
-<span id="cb100-10"><a href="logistic-regression.html#cb100-10" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;fraction with good health among no school, low income, and uninsured: </span><span class="sc">{</span>np<span class="sc">.</span>mean(health[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
-<span id="cb100-11"><a href="logistic-regression.html#cb100-11" tabindex="-1"></a>                                                                                               (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
-<span id="cb100-12"><a href="logistic-regression.html#cb100-12" tabindex="-1"></a>                                                                                               (insurance<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
-<span id="cb100-13"><a href="logistic-regression.html#cb100-13" tabindex="-1"></a>                                                                                               (stress_band)])<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb99-1"><a href="logistic-regression.html#cb99-1" tabindex="-1"></a><span class="co">#print(f&quot;y variable: {health} \n&quot;)</span></span>
+<span id="cb99-2"><a href="logistic-regression.html#cb99-2" tabindex="-1"></a><span class="co">#print(f&quot;X matrix: {X}&quot;)</span></span>
+<span id="cb99-3"><a href="logistic-regression.html#cb99-3" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;fraction with good health: </span><span class="sc">{</span>health<span class="sc">.</span>mean()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb99-4"><a href="logistic-regression.html#cb99-4" tabindex="-1"></a></span>
+<span id="cb99-5"><a href="logistic-regression.html#cb99-5" tabindex="-1"></a><span class="co"># create a stress band around the mean for no college, low income and uninsured</span></span>
+<span id="cb99-6"><a href="logistic-regression.html#cb99-6" tabindex="-1"></a>mean_stress_baseline <span class="op">=</span> stress[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (insurance<span class="op">==</span><span class="dv">0</span>)].mean()</span>
+<span id="cb99-7"><a href="logistic-regression.html#cb99-7" tabindex="-1"></a>stress_tolerance <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># within ±0.5 of mean</span></span>
+<span id="cb99-8"><a href="logistic-regression.html#cb99-8" tabindex="-1"></a>stress_band <span class="op">=</span> (np.<span class="bu">abs</span>(stress <span class="op">-</span> mean_stress_baseline) <span class="op">&lt;=</span> stress_tolerance)</span>
+<span id="cb99-9"><a href="logistic-regression.html#cb99-9" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="logistic-regression.html#cb99-10" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;fraction with good health among no school, low income, and uninsured: </span><span class="sc">{</span>np<span class="sc">.</span>mean(health[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
+<span id="cb99-11"><a href="logistic-regression.html#cb99-11" tabindex="-1"></a>                                                                                               (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
+<span id="cb99-12"><a href="logistic-regression.html#cb99-12" tabindex="-1"></a>                                                                                               (insurance<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> </span>
+<span id="cb99-13"><a href="logistic-regression.html#cb99-13" tabindex="-1"></a>                                                                                               (stress_band)])<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <pre><code>fraction with good health: 0.34948
 fraction with good health among no school, low income, and uninsured: 0.0353</code></pre>
 <p>The true <span class="math inline">\(\theta\)</span> values are <span class="math inline">\([\theta_0=0.3, \theta_1=0.1, \theta_2=0.2, \theta_3=0.05, \theta_4=-1]\)</span>.</p>
@@ -545,8 +545,8 @@ low income, and uninsured group.</p></li>
 <p>Note that 3.61 percent of people who have no schooling, are of low income, are uninsured and around the mean stress
 index are in good health. This pertains to true <span class="math inline">\(\theta\)</span> of 0.3. Let’s convert this value
 into probability using:</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb102-1"><a href="logistic-regression.html#cb102-1" tabindex="-1"></a>p_gh <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="fl">0.3</span> <span class="op">+</span> np.mean(stress[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (insurance<span class="op">==</span><span class="dv">0</span>)])))</span>
-<span id="cb102-2"><a href="logistic-regression.html#cb102-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;the conversion of theta = 0.3 + mean stress value to prob: </span><span class="sc">{</span>p_gh<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb101-1"><a href="logistic-regression.html#cb101-1" tabindex="-1"></a>p_gh <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span><span class="fl">0.3</span> <span class="op">+</span> np.mean(stress[(college<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (high_income<span class="op">==</span><span class="dv">0</span>) <span class="op">&amp;</span> (insurance<span class="op">==</span><span class="dv">0</span>)])))</span>
+<span id="cb101-2"><a href="logistic-regression.html#cb101-2" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;the conversion of theta = 0.3 + mean stress value to prob: </span><span class="sc">{</span>p_gh<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <pre><code>the conversion of theta = 0.3 + mean stress value to prob: 0.035 </code></pre>
 <p>Notice that according to the DGP, around 3.55 percent of people in the population with no college,
 low income, uninsured, and of the mean stress value are in good health.
@@ -595,30 +595,30 @@ and just take the word for the gradient or you could try it all out. Upto you!</
 we have to move against the gradient; hence, the negative.</p></li>
 <li><p>Iterate steps 3 and 4 for <span class="math inline">\(iter=epochs\)</span> number of times or until the algorithm converges.</p></li>
 </ol>
-<div class="sourceCode" id="cb104"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb104-1"><a href="logistic-regression.html#cb104-1" tabindex="-1"></a><span class="co"># Gradient Descent </span></span>
-<span id="cb104-2"><a href="logistic-regression.html#cb104-2" tabindex="-1"></a>theta_gd <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">5</span>)    <span class="co"># initial theta values from the normal dist.</span></span>
-<span id="cb104-3"><a href="logistic-regression.html#cb104-3" tabindex="-1"></a>epsilon <span class="op">=</span> <span class="fl">1e-15</span>                         <span class="co"># to prevent overflow coming from logit values close to 0.</span></span>
-<span id="cb104-4"><a href="logistic-regression.html#cb104-4" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">50</span>                           <span class="co"># number of iterations</span></span>
-<span id="cb104-5"><a href="logistic-regression.html#cb104-5" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.5</span>                               <span class="co"># learning rate</span></span>
-<span id="cb104-6"><a href="logistic-regression.html#cb104-6" tabindex="-1"></a>loss <span class="op">=</span> []</span>
-<span id="cb104-7"><a href="logistic-regression.html#cb104-7" tabindex="-1"></a></span>
-<span id="cb104-8"><a href="logistic-regression.html#cb104-8" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
-<span id="cb104-9"><a href="logistic-regression.html#cb104-9" tabindex="-1"></a></span>
-<span id="cb104-10"><a href="logistic-regression.html#cb104-10" tabindex="-1"></a>    z <span class="op">=</span> np.clip(X <span class="op">@</span> theta_gd.reshape((<span class="dv">5</span>, <span class="dv">1</span>)), <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)</span>
-<span id="cb104-11"><a href="logistic-regression.html#cb104-11" tabindex="-1"></a>    gradient_i <span class="op">=</span> ((sigma(z) <span class="op">-</span> health.reshape((n, <span class="dv">1</span>))).transpose() <span class="op">@</span> X) <span class="op">/</span> n <span class="co"># caculate the gradient</span></span>
-<span id="cb104-12"><a href="logistic-regression.html#cb104-12" tabindex="-1"></a>    theta_gd <span class="op">=</span> theta_gd <span class="op">-</span> eta<span class="op">*</span>gradient_i                                   <span class="co"># adjust theta by moving opposite to the gradient</span></span>
-<span id="cb104-13"><a href="logistic-regression.html#cb104-13" tabindex="-1"></a>    loss_i <span class="op">=</span> np.mean(health<span class="op">*</span>(<span class="op">-</span>np.log(sigma(z)<span class="op">+</span>epsilon).ravel()) <span class="op">+</span>          <span class="co"># calculate loss</span></span>
-<span id="cb104-14"><a href="logistic-regression.html#cb104-14" tabindex="-1"></a>                    (<span class="dv">1</span><span class="op">-</span>health)<span class="op">*</span>(<span class="op">-</span>np.log(<span class="dv">1</span><span class="op">-</span>sigma(z)<span class="op">+</span>epsilon).ravel()))</span>
-<span id="cb104-15"><a href="logistic-regression.html#cb104-15" tabindex="-1"></a>    loss.append(loss_i)                                                     <span class="co"># append loss</span></span>
-<span id="cb104-16"><a href="logistic-regression.html#cb104-16" tabindex="-1"></a></span>
-<span id="cb104-17"><a href="logistic-regression.html#cb104-17" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;theta estimates from gradient descent: </span><span class="sc">{</span>theta_gd<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb104-18"><a href="logistic-regression.html#cb104-18" tabindex="-1"></a></span>
-<span id="cb104-19"><a href="logistic-regression.html#cb104-19" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb104-20"><a href="logistic-regression.html#cb104-20" tabindex="-1"></a>plt.plot(np.linspace(<span class="dv">1</span>, epochs, epochs), np.array(loss).ravel())</span>
-<span id="cb104-21"><a href="logistic-regression.html#cb104-21" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;epochs&#39;</span>)</span>
-<span id="cb104-22"><a href="logistic-regression.html#cb104-22" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;cross-entropy loss&#39;</span>)</span>
-<span id="cb104-23"><a href="logistic-regression.html#cb104-23" tabindex="-1"></a>plt.title(<span class="st">&quot;Loss with respect to iterations&quot;</span>)</span>
-<span id="cb104-24"><a href="logistic-regression.html#cb104-24" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb103-1"><a href="logistic-regression.html#cb103-1" tabindex="-1"></a><span class="co"># Gradient Descent </span></span>
+<span id="cb103-2"><a href="logistic-regression.html#cb103-2" tabindex="-1"></a>theta_gd <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">5</span>)    <span class="co"># initial theta values from the normal dist.</span></span>
+<span id="cb103-3"><a href="logistic-regression.html#cb103-3" tabindex="-1"></a>epsilon <span class="op">=</span> <span class="fl">1e-15</span>                         <span class="co"># to prevent overflow coming from logit values close to 0.</span></span>
+<span id="cb103-4"><a href="logistic-regression.html#cb103-4" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">50</span>                           <span class="co"># number of iterations</span></span>
+<span id="cb103-5"><a href="logistic-regression.html#cb103-5" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">0.5</span>                               <span class="co"># learning rate</span></span>
+<span id="cb103-6"><a href="logistic-regression.html#cb103-6" tabindex="-1"></a>loss <span class="op">=</span> []</span>
+<span id="cb103-7"><a href="logistic-regression.html#cb103-7" tabindex="-1"></a></span>
+<span id="cb103-8"><a href="logistic-regression.html#cb103-8" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb103-9"><a href="logistic-regression.html#cb103-9" tabindex="-1"></a></span>
+<span id="cb103-10"><a href="logistic-regression.html#cb103-10" tabindex="-1"></a>    z <span class="op">=</span> np.clip(X <span class="op">@</span> theta_gd.reshape((<span class="dv">5</span>, <span class="dv">1</span>)), <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)</span>
+<span id="cb103-11"><a href="logistic-regression.html#cb103-11" tabindex="-1"></a>    gradient_i <span class="op">=</span> ((sigma(z) <span class="op">-</span> health.reshape((n, <span class="dv">1</span>))).transpose() <span class="op">@</span> X) <span class="op">/</span> n <span class="co"># caculate the gradient</span></span>
+<span id="cb103-12"><a href="logistic-regression.html#cb103-12" tabindex="-1"></a>    theta_gd <span class="op">=</span> theta_gd <span class="op">-</span> eta<span class="op">*</span>gradient_i                                   <span class="co"># adjust theta by moving opposite to the gradient</span></span>
+<span id="cb103-13"><a href="logistic-regression.html#cb103-13" tabindex="-1"></a>    loss_i <span class="op">=</span> np.mean(health<span class="op">*</span>(<span class="op">-</span>np.log(sigma(z)<span class="op">+</span>epsilon).ravel()) <span class="op">+</span>          <span class="co"># calculate loss</span></span>
+<span id="cb103-14"><a href="logistic-regression.html#cb103-14" tabindex="-1"></a>                    (<span class="dv">1</span><span class="op">-</span>health)<span class="op">*</span>(<span class="op">-</span>np.log(<span class="dv">1</span><span class="op">-</span>sigma(z)<span class="op">+</span>epsilon).ravel()))</span>
+<span id="cb103-15"><a href="logistic-regression.html#cb103-15" tabindex="-1"></a>    loss.append(loss_i)                                                     <span class="co"># append loss</span></span>
+<span id="cb103-16"><a href="logistic-regression.html#cb103-16" tabindex="-1"></a></span>
+<span id="cb103-17"><a href="logistic-regression.html#cb103-17" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;theta estimates from gradient descent: </span><span class="sc">{</span>theta_gd<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb103-18"><a href="logistic-regression.html#cb103-18" tabindex="-1"></a></span>
+<span id="cb103-19"><a href="logistic-regression.html#cb103-19" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb103-20"><a href="logistic-regression.html#cb103-20" tabindex="-1"></a>plt.plot(np.linspace(<span class="dv">1</span>, epochs, epochs), np.array(loss).ravel())</span>
+<span id="cb103-21"><a href="logistic-regression.html#cb103-21" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;epochs&#39;</span>)</span>
+<span id="cb103-22"><a href="logistic-regression.html#cb103-22" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;cross-entropy loss&#39;</span>)</span>
+<span id="cb103-23"><a href="logistic-regression.html#cb103-23" tabindex="-1"></a>plt.title(<span class="st">&quot;Loss with respect to iterations&quot;</span>)</span>
+<span id="cb103-24"><a href="logistic-regression.html#cb103-24" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <pre><code>theta estimates from gradient descent: [[-0.296  -0.2989  1.1594 -0.1458 -0.8166]] 
  </code></pre>
 <div class="float">
@@ -627,17 +627,17 @@ we have to move against the gradient; hence, the negative.</p></li>
 </div>
 <p>We’ve now estimated the <span class="math inline">\(\theta\)</span> using gradient descent. Let’s verify our results using the
 in-built library in sklearn that estimates the Logistic Regression.</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb106-1"><a href="logistic-regression.html#cb106-1" tabindex="-1"></a><span class="co"># compare estimates from sklearn</span></span>
-<span id="cb106-2"><a href="logistic-regression.html#cb106-2" tabindex="-1"></a>mod <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span>epochs, fit_intercept<span class="op">=</span><span class="va">False</span>, C<span class="op">=</span>np.inf)</span>
-<span id="cb106-3"><a href="logistic-regression.html#cb106-3" tabindex="-1"></a>mod_fit <span class="op">=</span> mod.fit(X, health)</span>
-<span id="cb106-4"><a href="logistic-regression.html#cb106-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from sklearn: </span><span class="sc">{</span>mod_fit<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb106-5"><a href="logistic-regression.html#cb106-5" tabindex="-1"></a></span>
-<span id="cb106-6"><a href="logistic-regression.html#cb106-6" tabindex="-1"></a>results <span class="op">=</span> {</span>
-<span id="cb106-7"><a href="logistic-regression.html#cb106-7" tabindex="-1"></a>            <span class="st">&quot;GD&quot;</span>: theta_gd.ravel().<span class="bu">round</span>(<span class="dv">3</span>),</span>
-<span id="cb106-8"><a href="logistic-regression.html#cb106-8" tabindex="-1"></a>            <span class="st">&quot;SK&quot;</span>: mod_fit.coef_.ravel().<span class="bu">round</span>(<span class="dv">3</span>)</span>
-<span id="cb106-9"><a href="logistic-regression.html#cb106-9" tabindex="-1"></a>}</span>
-<span id="cb106-10"><a href="logistic-regression.html#cb106-10" tabindex="-1"></a></span>
-<span id="cb106-11"><a href="logistic-regression.html#cb106-11" tabindex="-1"></a>pd.DataFrame(results)</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb105-1"><a href="logistic-regression.html#cb105-1" tabindex="-1"></a><span class="co"># compare estimates from sklearn</span></span>
+<span id="cb105-2"><a href="logistic-regression.html#cb105-2" tabindex="-1"></a>mod <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span>epochs, fit_intercept<span class="op">=</span><span class="va">False</span>, C<span class="op">=</span>np.inf)</span>
+<span id="cb105-3"><a href="logistic-regression.html#cb105-3" tabindex="-1"></a>mod_fit <span class="op">=</span> mod.fit(X, health)</span>
+<span id="cb105-4"><a href="logistic-regression.html#cb105-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from sklearn: </span><span class="sc">{</span>mod_fit<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb105-5"><a href="logistic-regression.html#cb105-5" tabindex="-1"></a></span>
+<span id="cb105-6"><a href="logistic-regression.html#cb105-6" tabindex="-1"></a>results <span class="op">=</span> {</span>
+<span id="cb105-7"><a href="logistic-regression.html#cb105-7" tabindex="-1"></a>            <span class="st">&quot;GD&quot;</span>: theta_gd.ravel().<span class="bu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb105-8"><a href="logistic-regression.html#cb105-8" tabindex="-1"></a>            <span class="st">&quot;SK&quot;</span>: mod_fit.coef_.ravel().<span class="bu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb105-9"><a href="logistic-regression.html#cb105-9" tabindex="-1"></a>}</span>
+<span id="cb105-10"><a href="logistic-regression.html#cb105-10" tabindex="-1"></a></span>
+<span id="cb105-11"><a href="logistic-regression.html#cb105-11" tabindex="-1"></a>pd.DataFrame(results)</span></code></pre></div>
 <pre><code>Estimates from sklearn: [[ 0.32179444  0.08030071  0.20651284  0.01809187 -0.99105091]]
 
 
@@ -730,10 +730,10 @@ SK
 </table>
 </div>
 <p>Let’s estimate the model using the LPM – note that this is a wrong functional form at use.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb108-1"><a href="logistic-regression.html#cb108-1" tabindex="-1"></a><span class="co"># linear regression</span></span>
-<span id="cb108-2"><a href="logistic-regression.html#cb108-2" tabindex="-1"></a>mod_linear <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>) <span class="co"># we dont want to double fit the intercept; X already contains it </span></span>
-<span id="cb108-3"><a href="logistic-regression.html#cb108-3" tabindex="-1"></a>mod_linear <span class="op">=</span> mod_linear.fit(X, health)</span>
-<span id="cb108-4"><a href="logistic-regression.html#cb108-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from linear reg: </span><span class="sc">{</span>mod_linear<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb107-1"><a href="logistic-regression.html#cb107-1" tabindex="-1"></a><span class="co"># linear regression</span></span>
+<span id="cb107-2"><a href="logistic-regression.html#cb107-2" tabindex="-1"></a>mod_linear <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>) <span class="co"># we dont want to double fit the intercept; X already contains it </span></span>
+<span id="cb107-3"><a href="logistic-regression.html#cb107-3" tabindex="-1"></a>mod_linear <span class="op">=</span> mod_linear.fit(X, health)</span>
+<span id="cb107-4"><a href="logistic-regression.html#cb107-4" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Estimates from linear reg: </span><span class="sc">{</span>mod_linear<span class="sc">.</span>coef_<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 <pre><code>Estimates from linear reg: [ 0.44695463  0.01138116  0.16453216  0.0015579  -0.10234894]</code></pre>
 <p>The estimates from the gradient descent and sklearn are virtually similar. Note that the interpretation of <span class="math inline">\(\theta\)</span> estimates
 are not equivalent to marginal effects as they are in the LPM set up. Recall, in the case of logistic regression:
@@ -744,36 +744,36 @@ Say, we consider person A: with no college, low income, uninsured, and stress le
 no college, uninsured, and low income) as this benchmark person and the marginal effects
 are computed with respect to this person.</p>
 <p>The following code translates <span class="math inline">\(\theta\)</span> into marginal effect.</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="logistic-regression.html#cb110-1" tabindex="-1"></a><span class="kw">def</span> fun_me(theta_vals, person):</span>
-<span id="cb110-2"><a href="logistic-regression.html#cb110-2" tabindex="-1"></a>    logit <span class="op">=</span> (theta_vals <span class="op">@</span> person).ravel()</span>
-<span id="cb110-3"><a href="logistic-regression.html#cb110-3" tabindex="-1"></a>    p <span class="op">=</span> sigma(logit)</span>
-<span id="cb110-4"><a href="logistic-regression.html#cb110-4" tabindex="-1"></a>    <span class="cf">return</span> p</span>
-<span id="cb110-5"><a href="logistic-regression.html#cb110-5" tabindex="-1"></a></span>
-<span id="cb110-6"><a href="logistic-regression.html#cb110-6" tabindex="-1"></a><span class="co"># create person A: without college, low income, and uninsured   </span></span>
-<span id="cb110-7"><a href="logistic-regression.html#cb110-7" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: This will be our benchmark person.</span></span>
-<span id="cb110-8"><a href="logistic-regression.html#cb110-8" tabindex="-1"></a>person_A <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb110-9"><a href="logistic-regression.html#cb110-9" tabindex="-1"></a>prob_health_A <span class="op">=</span> fun_me(theta_gd, person_A)</span>
-<span id="cb110-10"><a href="logistic-regression.html#cb110-10" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The probability that person A is in good health is:</span><span class="sc">{</span>prob_health_A<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb110-11"><a href="logistic-regression.html#cb110-11" tabindex="-1"></a></span>
-<span id="cb110-12"><a href="logistic-regression.html#cb110-12" tabindex="-1"></a><span class="co"># Person B: with college but low income and uninsured</span></span>
-<span id="cb110-13"><a href="logistic-regression.html#cb110-13" tabindex="-1"></a>person_B <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb110-14"><a href="logistic-regression.html#cb110-14" tabindex="-1"></a>prob_health_B <span class="op">=</span> fun_me(theta_gd, person_B)</span>
-<span id="cb110-15"><a href="logistic-regression.html#cb110-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The probability that person B is in good health is: </span><span class="sc">{</span>prob_health_B<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb110-16"><a href="logistic-regression.html#cb110-16" tabindex="-1"></a></span>
-<span id="cb110-17"><a href="logistic-regression.html#cb110-17" tabindex="-1"></a><span class="co"># Person C: with high income but without college and uninsured</span></span>
-<span id="cb110-18"><a href="logistic-regression.html#cb110-18" tabindex="-1"></a>person_C <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb110-19"><a href="logistic-regression.html#cb110-19" tabindex="-1"></a>prob_health_C <span class="op">=</span> fun_me(theta_gd, person_C)</span>
-<span id="cb110-20"><a href="logistic-regression.html#cb110-20" tabindex="-1"></a><span class="bu">print</span>(prob_health_C)</span>
-<span id="cb110-21"><a href="logistic-regression.html#cb110-21" tabindex="-1"></a></span>
-<span id="cb110-22"><a href="logistic-regression.html#cb110-22" tabindex="-1"></a><span class="co"># Person D: with insurance but without college and low income</span></span>
-<span id="cb110-23"><a href="logistic-regression.html#cb110-23" tabindex="-1"></a>person_D <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb110-24"><a href="logistic-regression.html#cb110-24" tabindex="-1"></a>prob_health_D <span class="op">=</span> fun_me(theta_gd, person_D)</span>
-<span id="cb110-25"><a href="logistic-regression.html#cb110-25" tabindex="-1"></a><span class="bu">print</span>(prob_health_D)</span>
-<span id="cb110-26"><a href="logistic-regression.html#cb110-26" tabindex="-1"></a></span>
-<span id="cb110-27"><a href="logistic-regression.html#cb110-27" tabindex="-1"></a><span class="co"># Person E: Same as Person A but one unit increase in stress for marginal effects</span></span>
-<span id="cb110-28"><a href="logistic-regression.html#cb110-28" tabindex="-1"></a>person_E <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline <span class="op">+</span> <span class="dv">1</span>]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb110-29"><a href="logistic-regression.html#cb110-29" tabindex="-1"></a>prob_health_E <span class="op">=</span> fun_me(theta_gd, person_E)</span>
-<span id="cb110-30"><a href="logistic-regression.html#cb110-30" tabindex="-1"></a><span class="bu">print</span>(prob_health_E)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb109-1"><a href="logistic-regression.html#cb109-1" tabindex="-1"></a><span class="kw">def</span> fun_me(theta_vals, person):</span>
+<span id="cb109-2"><a href="logistic-regression.html#cb109-2" tabindex="-1"></a>    logit <span class="op">=</span> (theta_vals <span class="op">@</span> person).ravel()</span>
+<span id="cb109-3"><a href="logistic-regression.html#cb109-3" tabindex="-1"></a>    p <span class="op">=</span> sigma(logit)</span>
+<span id="cb109-4"><a href="logistic-regression.html#cb109-4" tabindex="-1"></a>    <span class="cf">return</span> p</span>
+<span id="cb109-5"><a href="logistic-regression.html#cb109-5" tabindex="-1"></a></span>
+<span id="cb109-6"><a href="logistic-regression.html#cb109-6" tabindex="-1"></a><span class="co"># create person A: without college, low income, and uninsured   </span></span>
+<span id="cb109-7"><a href="logistic-regression.html#cb109-7" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: This will be our benchmark person.</span></span>
+<span id="cb109-8"><a href="logistic-regression.html#cb109-8" tabindex="-1"></a>person_A <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb109-9"><a href="logistic-regression.html#cb109-9" tabindex="-1"></a>prob_health_A <span class="op">=</span> fun_me(theta_gd, person_A)</span>
+<span id="cb109-10"><a href="logistic-regression.html#cb109-10" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The probability that person A is in good health is:</span><span class="sc">{</span>prob_health_A<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb109-11"><a href="logistic-regression.html#cb109-11" tabindex="-1"></a></span>
+<span id="cb109-12"><a href="logistic-regression.html#cb109-12" tabindex="-1"></a><span class="co"># Person B: with college but low income and uninsured</span></span>
+<span id="cb109-13"><a href="logistic-regression.html#cb109-13" tabindex="-1"></a>person_B <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb109-14"><a href="logistic-regression.html#cb109-14" tabindex="-1"></a>prob_health_B <span class="op">=</span> fun_me(theta_gd, person_B)</span>
+<span id="cb109-15"><a href="logistic-regression.html#cb109-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The probability that person B is in good health is: </span><span class="sc">{</span>prob_health_B<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb109-16"><a href="logistic-regression.html#cb109-16" tabindex="-1"></a></span>
+<span id="cb109-17"><a href="logistic-regression.html#cb109-17" tabindex="-1"></a><span class="co"># Person C: with high income but without college and uninsured</span></span>
+<span id="cb109-18"><a href="logistic-regression.html#cb109-18" tabindex="-1"></a>person_C <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb109-19"><a href="logistic-regression.html#cb109-19" tabindex="-1"></a>prob_health_C <span class="op">=</span> fun_me(theta_gd, person_C)</span>
+<span id="cb109-20"><a href="logistic-regression.html#cb109-20" tabindex="-1"></a><span class="bu">print</span>(prob_health_C)</span>
+<span id="cb109-21"><a href="logistic-regression.html#cb109-21" tabindex="-1"></a></span>
+<span id="cb109-22"><a href="logistic-regression.html#cb109-22" tabindex="-1"></a><span class="co"># Person D: with insurance but without college and low income</span></span>
+<span id="cb109-23"><a href="logistic-regression.html#cb109-23" tabindex="-1"></a>person_D <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, mean_stress_baseline]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb109-24"><a href="logistic-regression.html#cb109-24" tabindex="-1"></a>prob_health_D <span class="op">=</span> fun_me(theta_gd, person_D)</span>
+<span id="cb109-25"><a href="logistic-regression.html#cb109-25" tabindex="-1"></a><span class="bu">print</span>(prob_health_D)</span>
+<span id="cb109-26"><a href="logistic-regression.html#cb109-26" tabindex="-1"></a></span>
+<span id="cb109-27"><a href="logistic-regression.html#cb109-27" tabindex="-1"></a><span class="co"># Person E: Same as Person A but one unit increase in stress for marginal effects</span></span>
+<span id="cb109-28"><a href="logistic-regression.html#cb109-28" tabindex="-1"></a>person_E <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, mean_stress_baseline <span class="op">+</span> <span class="dv">1</span>]).reshape((<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb109-29"><a href="logistic-regression.html#cb109-29" tabindex="-1"></a>prob_health_E <span class="op">=</span> fun_me(theta_gd, person_E)</span>
+<span id="cb109-30"><a href="logistic-regression.html#cb109-30" tabindex="-1"></a><span class="bu">print</span>(prob_health_E)</span></code></pre></div>
 <pre><code>The probability that person A is in good health is:[0.03732477] 
 
 The probability that person B is in good health is: [0.02795158] 
@@ -783,19 +783,19 @@ The probability that person B is in good health is: [0.02795158]
 [0.01684625]</code></pre>
 <p>Since we are using Person A as the benchmark, we can compute marginal probabilities simply by
 substracting probabilities.</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb112-1"><a href="logistic-regression.html#cb112-1" tabindex="-1"></a>me_B_A <span class="op">=</span> prob_health_B <span class="op">-</span> prob_health_A </span>
-<span id="cb112-2"><a href="logistic-regression.html#cb112-2" tabindex="-1"></a>me_C_A <span class="op">=</span> prob_health_C <span class="op">-</span> prob_health_A </span>
-<span id="cb112-3"><a href="logistic-regression.html#cb112-3" tabindex="-1"></a>me_D_A <span class="op">=</span> prob_health_D <span class="op">-</span> prob_health_A</span>
-<span id="cb112-4"><a href="logistic-regression.html#cb112-4" tabindex="-1"></a>me_E_A <span class="op">=</span> prob_health_E <span class="op">-</span> prob_health_A</span>
-<span id="cb112-5"><a href="logistic-regression.html#cb112-5" tabindex="-1"></a></span>
-<span id="cb112-6"><a href="logistic-regression.html#cb112-6" tabindex="-1"></a>me <span class="op">=</span> np.array([prob_health_A, me_B_A, me_C_A, me_D_A, me_E_A])</span>
-<span id="cb112-7"><a href="logistic-regression.html#cb112-7" tabindex="-1"></a></span>
-<span id="cb112-8"><a href="logistic-regression.html#cb112-8" tabindex="-1"></a>results_me_lpm <span class="op">=</span> {</span>
-<span id="cb112-9"><a href="logistic-regression.html#cb112-9" tabindex="-1"></a>                    <span class="st">&quot;ME:logistic&quot;</span>: me.ravel().<span class="bu">round</span>(<span class="dv">3</span>),</span>
-<span id="cb112-10"><a href="logistic-regression.html#cb112-10" tabindex="-1"></a>                    <span class="st">&quot;ME:LPM&quot;</span>: mod_linear.coef_.ravel().<span class="bu">round</span>(<span class="dv">3</span>)</span>
-<span id="cb112-11"><a href="logistic-regression.html#cb112-11" tabindex="-1"></a>}</span>
-<span id="cb112-12"><a href="logistic-regression.html#cb112-12" tabindex="-1"></a></span>
-<span id="cb112-13"><a href="logistic-regression.html#cb112-13" tabindex="-1"></a>pd.DataFrame(results_me_lpm)</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb111-1"><a href="logistic-regression.html#cb111-1" tabindex="-1"></a>me_B_A <span class="op">=</span> prob_health_B <span class="op">-</span> prob_health_A </span>
+<span id="cb111-2"><a href="logistic-regression.html#cb111-2" tabindex="-1"></a>me_C_A <span class="op">=</span> prob_health_C <span class="op">-</span> prob_health_A </span>
+<span id="cb111-3"><a href="logistic-regression.html#cb111-3" tabindex="-1"></a>me_D_A <span class="op">=</span> prob_health_D <span class="op">-</span> prob_health_A</span>
+<span id="cb111-4"><a href="logistic-regression.html#cb111-4" tabindex="-1"></a>me_E_A <span class="op">=</span> prob_health_E <span class="op">-</span> prob_health_A</span>
+<span id="cb111-5"><a href="logistic-regression.html#cb111-5" tabindex="-1"></a></span>
+<span id="cb111-6"><a href="logistic-regression.html#cb111-6" tabindex="-1"></a>me <span class="op">=</span> np.array([prob_health_A, me_B_A, me_C_A, me_D_A, me_E_A])</span>
+<span id="cb111-7"><a href="logistic-regression.html#cb111-7" tabindex="-1"></a></span>
+<span id="cb111-8"><a href="logistic-regression.html#cb111-8" tabindex="-1"></a>results_me_lpm <span class="op">=</span> {</span>
+<span id="cb111-9"><a href="logistic-regression.html#cb111-9" tabindex="-1"></a>                    <span class="st">&quot;ME:logistic&quot;</span>: me.ravel().<span class="bu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb111-10"><a href="logistic-regression.html#cb111-10" tabindex="-1"></a>                    <span class="st">&quot;ME:LPM&quot;</span>: mod_linear.coef_.ravel().<span class="bu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb111-11"><a href="logistic-regression.html#cb111-11" tabindex="-1"></a>}</span>
+<span id="cb111-12"><a href="logistic-regression.html#cb111-12" tabindex="-1"></a></span>
+<span id="cb111-13"><a href="logistic-regression.html#cb111-13" tabindex="-1"></a>pd.DataFrame(results_me_lpm)</span></code></pre></div>
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -884,29 +884,29 @@ ME:LPM
 </div>
 <p>The marginal effects from LPM and logistic regression are shown in the table.
 Let’s take a look at predicted probabilities from both LPM and logistic regression models:</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a href="logistic-regression.html#cb113-1" tabindex="-1"></a><span class="co"># prediction from LPM</span></span>
-<span id="cb113-2"><a href="logistic-regression.html#cb113-2" tabindex="-1"></a>prob_linear <span class="op">=</span> mod_linear.predict(X) <span class="co"># LPM directly gives probabilites</span></span>
-<span id="cb113-3"><a href="logistic-regression.html#cb113-3" tabindex="-1"></a><span class="bu">print</span>(prob_linear) </span>
-<span id="cb113-4"><a href="logistic-regression.html#cb113-4" tabindex="-1"></a></span>
-<span id="cb113-5"><a href="logistic-regression.html#cb113-5" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb113-6"><a href="logistic-regression.html#cb113-6" tabindex="-1"></a>plt.hist(prob_linear, bins <span class="op">=</span> <span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;red&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>, alpha<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb113-7"><a href="logistic-regression.html#cb113-7" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;probability&#39;</span>)</span>
-<span id="cb113-8"><a href="logistic-regression.html#cb113-8" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
-<span id="cb113-9"><a href="logistic-regression.html#cb113-9" tabindex="-1"></a>plt.title(<span class="st">&#39;Predicted probabilities from LPM&#39;</span>)</span>
-<span id="cb113-10"><a href="logistic-regression.html#cb113-10" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">&quot;--&quot;</span>)</span>
-<span id="cb113-11"><a href="logistic-regression.html#cb113-11" tabindex="-1"></a>plt.show()</span>
-<span id="cb113-12"><a href="logistic-regression.html#cb113-12" tabindex="-1"></a></span>
-<span id="cb113-13"><a href="logistic-regression.html#cb113-13" tabindex="-1"></a><span class="co"># predictions from logistic</span></span>
-<span id="cb113-14"><a href="logistic-regression.html#cb113-14" tabindex="-1"></a>prob_logit_predict <span class="op">=</span> mod_fit.predict_proba(X) <span class="co"># need to call .predict_proba() to get probabilities from logistic model</span></span>
-<span id="cb113-15"><a href="logistic-regression.html#cb113-15" tabindex="-1"></a></span>
-<span id="cb113-16"><a href="logistic-regression.html#cb113-16" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb113-17"><a href="logistic-regression.html#cb113-17" tabindex="-1"></a>plt.hist(prob_logit_predict[:,<span class="dv">1</span>], bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb113-18"><a href="logistic-regression.html#cb113-18" tabindex="-1"></a><span class="co">#plt.hist(prob_logit, bins=30, color=&quot;red&quot;, edgecolor=&quot;black&quot;, alpha=0.3)</span></span>
-<span id="cb113-19"><a href="logistic-regression.html#cb113-19" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;probability&#39;</span>)</span>
-<span id="cb113-20"><a href="logistic-regression.html#cb113-20" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
-<span id="cb113-21"><a href="logistic-regression.html#cb113-21" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">&#39;--&#39;</span>)</span>
-<span id="cb113-22"><a href="logistic-regression.html#cb113-22" tabindex="-1"></a>plt.title(<span class="st">&#39;Predicted probabilities from Logistic Regression&#39;</span>)</span>
-<span id="cb113-23"><a href="logistic-regression.html#cb113-23" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb112-1"><a href="logistic-regression.html#cb112-1" tabindex="-1"></a><span class="co"># prediction from LPM</span></span>
+<span id="cb112-2"><a href="logistic-regression.html#cb112-2" tabindex="-1"></a>prob_linear <span class="op">=</span> mod_linear.predict(X) <span class="co"># LPM directly gives probabilites</span></span>
+<span id="cb112-3"><a href="logistic-regression.html#cb112-3" tabindex="-1"></a><span class="bu">print</span>(prob_linear) </span>
+<span id="cb112-4"><a href="logistic-regression.html#cb112-4" tabindex="-1"></a></span>
+<span id="cb112-5"><a href="logistic-regression.html#cb112-5" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb112-6"><a href="logistic-regression.html#cb112-6" tabindex="-1"></a>plt.hist(prob_linear, bins <span class="op">=</span> <span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;red&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>, alpha<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb112-7"><a href="logistic-regression.html#cb112-7" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;probability&#39;</span>)</span>
+<span id="cb112-8"><a href="logistic-regression.html#cb112-8" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
+<span id="cb112-9"><a href="logistic-regression.html#cb112-9" tabindex="-1"></a>plt.title(<span class="st">&#39;Predicted probabilities from LPM&#39;</span>)</span>
+<span id="cb112-10"><a href="logistic-regression.html#cb112-10" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">&quot;--&quot;</span>)</span>
+<span id="cb112-11"><a href="logistic-regression.html#cb112-11" tabindex="-1"></a>plt.show()</span>
+<span id="cb112-12"><a href="logistic-regression.html#cb112-12" tabindex="-1"></a></span>
+<span id="cb112-13"><a href="logistic-regression.html#cb112-13" tabindex="-1"></a><span class="co"># predictions from logistic</span></span>
+<span id="cb112-14"><a href="logistic-regression.html#cb112-14" tabindex="-1"></a>prob_logit_predict <span class="op">=</span> mod_fit.predict_proba(X) <span class="co"># need to call .predict_proba() to get probabilities from logistic model</span></span>
+<span id="cb112-15"><a href="logistic-regression.html#cb112-15" tabindex="-1"></a></span>
+<span id="cb112-16"><a href="logistic-regression.html#cb112-16" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb112-17"><a href="logistic-regression.html#cb112-17" tabindex="-1"></a>plt.hist(prob_logit_predict[:,<span class="dv">1</span>], bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&quot;steelblue&quot;</span>, edgecolor<span class="op">=</span><span class="st">&quot;black&quot;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb112-18"><a href="logistic-regression.html#cb112-18" tabindex="-1"></a><span class="co">#plt.hist(prob_logit, bins=30, color=&quot;red&quot;, edgecolor=&quot;black&quot;, alpha=0.3)</span></span>
+<span id="cb112-19"><a href="logistic-regression.html#cb112-19" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;probability&#39;</span>)</span>
+<span id="cb112-20"><a href="logistic-regression.html#cb112-20" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
+<span id="cb112-21"><a href="logistic-regression.html#cb112-21" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, linestyle<span class="op">=</span><span class="st">&#39;--&#39;</span>)</span>
+<span id="cb112-22"><a href="logistic-regression.html#cb112-22" tabindex="-1"></a>plt.title(<span class="st">&#39;Predicted probabilities from Logistic Regression&#39;</span>)</span>
+<span id="cb112-23"><a href="logistic-regression.html#cb112-23" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <pre><code>[ 0.29927004  0.64684742  0.74602907 ... -0.02085397  0.80991622
   0.74443065]</code></pre>
 <div class="float">

@@ -29,16 +29,7 @@
 #</style>
 
 
-# **Standard Error**
 
-# %%
-# ----------------------------------------------
-
-
-# Standard errors 
-
-
-# ----------------------------------------------
 
 # %% [markdown]
 # **Standard Errors** 
@@ -47,10 +38,10 @@
 # the population parameters. The $\hat{\beta}$ are the sample estimates that inform us about the population parameters $\beta$.
 # In this sense, sampling variability -- if you were to take say 1,000 samples from the population and re-estimate the parameter --
 # will give you different estimates of $\beta$. Just as the sample mean is a random variable with its own distribution,
-# so is $\hat{\beta}$. The standard error of $\hat{\beta}$ plays the exact same role as the standard error of the mean,
+# so is $\hat{\beta}$. The standard error of $\hat{\beta}$ plays the same role as the standard error of the mean,
 # which we motivate below.
 #
-# Consider the example of mean height. Say the population distribution is normal with mean 175 cm and standard deviation 
+# Consider the following example of mean height. Say, the population distribution is normal with mean 175 cm and standard deviation 
 # of 7.6 cm. You first take a sample of 1,000 individuals and estimate the mean height; then re-take the next sample, 
 # re-estimate the mean, and so on for 1,000 different samples. This will give you a distribution of mean height estimates,
 # which will itself be normal with a variance driven entirely by sampling variability.
@@ -103,7 +94,7 @@ plt.grid(False)
 
 print(f'average of mean height is {mean_store.mean().round(4)} and std is {mean_store.std().round(4)}')
 
-# %%[markdown]
+# %% [markdown]
 # It is clear that the standard deviation of the mean height depends on: i) the standard deviation of the population height; and ii)
 # n -- the number of observations. The standard deviation of the mean height will be lower if the population standard deviation is lower 
 # (meaning that height is relatively more homogeneous). Next, one can lower it by increasing the sample size. 
@@ -172,10 +163,10 @@ plt.ylabel('Error')
 plt.grid(True, linestyle='dashed')
 
 # %% [markdown]
-# The plot above shows that although there exist a positive correlation between schooling and earnings. However, variation in earnings is higher for greater values of education. Using the true coefficients (we have these since this is a simulated DGP) we extract error and plot the relationship between schooling and errors. Here, we see a funnel shaped scatter plot with the mean of error aligned at 0. 
+# The plot above shows that although there exist a positive correlation between schooling and earnings, variation in earnings is higher for greater values of education. Using the true coefficients (we have these since this is a simulated DGP) we extract error and plot the relationship between schooling and errors. Here, we see a funnel shaped scatter plot with the mean of error aligned at 0. 
 # This simple example breaks the homoskedasticity assumption. The main point is that the estimation of standard errors need to reflect the fact that error term comes from distribution with different variances. We now have what is known as heteroskedasticity. 
 # 
-# Let's start with estimates using the gradient descent.
+# Let's start with regression estimates using the gradient descent.
 
 # %%
 # features
@@ -207,7 +198,7 @@ print(f'The estimates from manual GD is: {theta.reshape((1, 3)).round(4)}')
 
 
 # %% [markdown]
-# We area simply running gradient descent in the code above. This should be familiar to you from previous lectures. Now, we'd want to move on to the standard errors to assess precision of these estimates. First, let's explore the graphical relationship between education and residuals. Note that I've distinguised error vs. residuals -- the former is what you get from using true coefficients (you never see this in practice), while the latter use the estimates.  
+# We are simply running gradient descent in the code above. This should be familiar to you from previous lectures. Now, we'd want to move on to the standard errors to determine precision of these estimates. First, let's explore the graphical relationship between education and residuals. Note that I've distinguised error vs. residual -- the former is what you get from using true coefficients (you never see this in practice), while the latter uses the estimates.  
 
 # %%
 # Get residuals (note that we are using the estimated thetas)
@@ -220,7 +211,7 @@ plt.xlabel('education')
 plt.ylabel('residuals')
 plt.grid(True, linestyle='dashed')
 
-# %%[markdown]
+# %% [markdown]
 # As you can see we've got a funnel shaped relationship between education and residual, again signaling heteroskedasticity. This is precisely coming from differing variance of error term based on education. This won't affect the estimates but will affect the standard errors. Note that there are many tests for homoskedasticity vs heteroskedasticity. But in practice, the case of homoskedasticity almost always fails. The simple way to see it is to plot the residuals with the variable of concern. If you have a funnel looking shape, then you've got the case of heteroskedasticity.  
 
 # First, let's do some benchmarking by estimating the standard errors under the homoskedasticity assumption -- error terms have the same variance (which is incorrect in this case and in practice).   
@@ -253,7 +244,7 @@ print(f"standard errors from statmodel under homoskedasticity: {model.bse.round(
 print(f"standard errors (manual estimation) under homoskedasticity: {manual_se.round(4)} \n \n")
 
 
-# %%[markdown]
+# %% [markdown]
 # Now that we have estimated standard errors under the homoskedasticity assumption let's see how we can fix this. Before we move on, I want to reiterate that the origin of heteroskedasicity is due to error terms coming from the distribution of different variance. In that regard, we want to account for this in our estimation of standard errors. 
 #
 # To do so, we'll use a sandwich method, which you should've heard from you previous classes. So what does it entail? Basically, we'd want to form weights using the size of the error term. 
@@ -299,7 +290,7 @@ print(f'standard errors from stats model under heteroskedasticity: {model2.bse.r
 #  
 # Note that there are various forms of heteroskedasicity robust standard error including "HC1", "HC2", and "HC3". Here, we've used the "H0" type -- you can dig deeper according to your need.
 # 
-# Let's now discuss the case where error terms are not independent and are correlated. One can think of this in a geospatial form -- the unexplained portion of income for people living in a particular area can be correlated. For example, if you have people living in Des Moines, Iowa and NYC, you probably will think that income is spatially correlated due to local market conditions, taste, cost of living and other unobserved factors attributing to spatial clustering.   
+# Let's now discuss the case where error terms are not independent and are correlated. One can think of this in a geospatial form -- the unexplained portion of income for people living in a particular area can be correlated. For example, if you have people living in Des Moines, Iowa and NYC in your sample, you'll probably think that income is spatially correlated due to local market conditions, taste, cost of living and other unobserved factors attributing to spatial clustering.   
 #
 # In the following simulation exercise, we'll incorporate this cluter-type correlation in the error terms. Specifically, we'll build error as:
 # 
@@ -393,7 +384,7 @@ for i in range(1, nc+1):
 var_cov_clus = bun@stuff@bun
 se_clus = np.sqrt(np.diag(var_cov_clus))
 
-print(f'Cluster robust standard error is: {se_clus}')
+
 
 # small sample correction term
 correction = ((nc/(nc-1)) * (m-1)/(m-p))
@@ -408,13 +399,13 @@ print(f'Clustered se corrected for small sample: {se_clus_correct.round(4)}')
 print(f'Clustered standard error from statsmodel: {model_clus.bse.round(4)}')
 print(f'standard error without clustering from statsmodel: {model_noclus.bse.round(4)}')
 # %% [markdown]
-# We've now computed the clustered standard errors and compared it with those from statsmodel. They are very exactly the same. However, clustered standard errors are larger compared to unclustered standard errors.  
+# We've now computed the clustered standard errors and compared it with those from statsmodel. They are exactly the same. However, clustered standard errors are larger compared to non-clustered standard errors.  
 #
 #
 #**Bootstrapped standard errors**
 #
 # Bootstapping can lead to a convenient way of obtaining standard errors. The bootstrapping process assumes
-# the data as the population and resamples $k$ number of times from the population (with replacement) and re-estimates the coefficients on every sample. You'll then have $k$ number of estimates. The standard error 
+# the sample as the population and performs resampling $k$ number of times from the population (with replacement). For each re-sampling we estimates the coefficients. With this process, you'll then have $k$ number of estimates. Then the standard error 
 # is simply the standard deviation of the estimates.
 #
 #
@@ -448,8 +439,14 @@ for k in range(0, rep):
         theta_new = theta.ravel()
         theta_store = np.vstack((theta_store, theta_new))    
 
-    print(f'Rep {k} estimate: {theta}')
-    
+    #print(f'Rep {k} estimate: {theta}')
+
+plt.figure(figsize=(8,5))
+plt.hist(theta_store[:,1], bins = 30, color='steelblue', edgecolor='black', alpha=0.3)
+plt.xlabel('Schooling estimates')
+plt.ylabel('Frequency')
+plt.title(f'Histogram of bootstrapped estimate \n from {rep} replications.')
+
 
 boot_se = theta_store.std(axis=0)
 print(f'bootstrapped non-clustered version of se: {boot_se.round(4)}')

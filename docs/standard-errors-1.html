@@ -263,7 +263,7 @@ div.csl-indent {
 <div id="standard-errors-1" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">5</span> Standard Errors<a href="standard-errors-1.html#standard-errors-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><strong>Course:</strong> Causal Inference</p>
-<p><strong>Topic:</strong> Standard Errors</p>
+<p><strong>Topic:</strong> Estimation of linear regression model and standard errors</p>
 <style>
 .jp-Notebook,
 .jp-NotebookPanel-notebook {
@@ -283,22 +283,14 @@ div.csl-indent {
  }
 }
 </style>
-<p><strong>Standard Error</strong></p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb77-1"><a href="standard-errors-1.html#cb77-1" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span>
-<span id="cb77-2"><a href="standard-errors-1.html#cb77-2" tabindex="-1"></a></span>
-<span id="cb77-3"><a href="standard-errors-1.html#cb77-3" tabindex="-1"></a></span>
-<span id="cb77-4"><a href="standard-errors-1.html#cb77-4" tabindex="-1"></a><span class="co"># Standard errors </span></span>
-<span id="cb77-5"><a href="standard-errors-1.html#cb77-5" tabindex="-1"></a></span>
-<span id="cb77-6"><a href="standard-errors-1.html#cb77-6" tabindex="-1"></a></span>
-<span id="cb77-7"><a href="standard-errors-1.html#cb77-7" tabindex="-1"></a><span class="co"># ----------------------------------------------</span></span></code></pre></div>
 <p><strong>Standard Errors</strong></p>
 <p>As previously mentioned, we start with a specification oriented towards the population and use a sample to estimate
 the population parameters. The <span class="math inline">\(\hat{\beta}\)</span> are the sample estimates that inform us about the population parameters <span class="math inline">\(\beta\)</span>.
 In this sense, sampling variability – if you were to take say 1,000 samples from the population and re-estimate the parameter –
 will give you different estimates of <span class="math inline">\(\beta\)</span>. Just as the sample mean is a random variable with its own distribution,
-so is <span class="math inline">\(\hat{\beta}\)</span>. The standard error of <span class="math inline">\(\hat{\beta}\)</span> plays the exact same role as the standard error of the mean,
+so is <span class="math inline">\(\hat{\beta}\)</span>. The standard error of <span class="math inline">\(\hat{\beta}\)</span> plays the same role as the standard error of the mean,
 which we motivate below.</p>
-<p>Consider the example of mean height. Say the population distribution is normal with mean 175 cm and standard deviation
+<p>Consider the following example of mean height. Say, the population distribution is normal with mean 175 cm and standard deviation
 of 7.6 cm. You first take a sample of 1,000 individuals and estimate the mean height; then re-take the next sample,
 re-estimate the mean, and so on for 1,000 different samples. This will give you a distribution of mean height estimates,
 which will itself be normal with a variance driven entirely by sampling variability.</p>
@@ -311,112 +303,103 @@ where <span class="math inline">\(\sigma\)</span> is the population standard dev
 Note the distinction: <span class="math inline">\(\sigma\)</span> describes variability in individual heights; <span class="math inline">\(\frac{\sigma}{\sqrt{n}}\)</span> describes variability
 in the <em>estimate of the mean</em> across repeated samples.</p>
 <p>Let’s simulate height coming from a normal distribution with mean 175 cm and standard deviation 7.6 cm.</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb78-1"><a href="standard-errors-1.html#cb78-1" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb78-2"><a href="standard-errors-1.html#cb78-2" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb78-3"><a href="standard-errors-1.html#cb78-3" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> add_dummy_feature</span>
-<span id="cb78-4"><a href="standard-errors-1.html#cb78-4" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
-<span id="cb78-5"><a href="standard-errors-1.html#cb78-5" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb78-6"><a href="standard-errors-1.html#cb78-6" tabindex="-1"></a></span>
-<span id="cb78-7"><a href="standard-errors-1.html#cb78-7" tabindex="-1"></a>mean_store <span class="op">=</span> []</span>
-<span id="cb78-8"><a href="standard-errors-1.html#cb78-8" tabindex="-1"></a><span class="bu">iter</span> <span class="op">=</span> <span class="dv">10000</span></span>
-<span id="cb78-9"><a href="standard-errors-1.html#cb78-9" tabindex="-1"></a>mean_height <span class="op">=</span> <span class="dv">175</span></span>
-<span id="cb78-10"><a href="standard-errors-1.html#cb78-10" tabindex="-1"></a>std_height <span class="op">=</span> <span class="fl">7.6</span></span>
-<span id="cb78-11"><a href="standard-errors-1.html#cb78-11" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb78-12"><a href="standard-errors-1.html#cb78-12" tabindex="-1"></a></span>
-<span id="cb78-13"><a href="standard-errors-1.html#cb78-13" tabindex="-1"></a></span>
-<span id="cb78-14"><a href="standard-errors-1.html#cb78-14" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">iter</span>):</span>
-<span id="cb78-15"><a href="standard-errors-1.html#cb78-15" tabindex="-1"></a>    height <span class="op">=</span> np.random.normal(mean_height, std_height, n) <span class="co"># sample height from a normal distribution</span></span>
-<span id="cb78-16"><a href="standard-errors-1.html#cb78-16" tabindex="-1"></a>    mean_store.append(height.mean())</span>
-<span id="cb78-17"><a href="standard-errors-1.html#cb78-17" tabindex="-1"></a></span>
-<span id="cb78-18"><a href="standard-errors-1.html#cb78-18" tabindex="-1"></a><span class="co"># plot the histogram of mean height</span></span>
-<span id="cb78-19"><a href="standard-errors-1.html#cb78-19" tabindex="-1"></a>mean_store <span class="op">=</span> np.array(mean_store).ravel()    </span>
-<span id="cb78-20"><a href="standard-errors-1.html#cb78-20" tabindex="-1"></a></span>
-<span id="cb78-21"><a href="standard-errors-1.html#cb78-21" tabindex="-1"></a><span class="co"># overlay theoretical normal dist</span></span>
-<span id="cb78-22"><a href="standard-errors-1.html#cb78-22" tabindex="-1"></a>x_space <span class="op">=</span> np.linspace(mean_store.<span class="bu">min</span>(), mean_store.<span class="bu">max</span>(), <span class="dv">1000</span>)</span>
-<span id="cb78-23"><a href="standard-errors-1.html#cb78-23" tabindex="-1"></a>theo_nd <span class="op">=</span> stats.norm.pdf(x_space, mean_height, std_height<span class="op">/</span>np.sqrt(n))</span>
-<span id="cb78-24"><a href="standard-errors-1.html#cb78-24" tabindex="-1"></a></span>
-<span id="cb78-25"><a href="standard-errors-1.html#cb78-25" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb78-26"><a href="standard-errors-1.html#cb78-26" tabindex="-1"></a>plt.hist(mean_store, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&#39;steelblue&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;black&#39;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, density<span class="op">=</span><span class="st">&#39;True&#39;</span>)</span>
-<span id="cb78-27"><a href="standard-errors-1.html#cb78-27" tabindex="-1"></a>plt.plot(x_space, theo_nd, color <span class="op">=</span> <span class="st">&#39;red&#39;</span>, linewidth <span class="op">=</span> <span class="dv">2</span>, label <span class="op">=</span> <span class="st">&#39;Theoretical Dist.&#39;</span>)</span>
-<span id="cb78-28"><a href="standard-errors-1.html#cb78-28" tabindex="-1"></a>plt.title(<span class="ss">f&#39;Distribution of mean height from </span><span class="sc">{</span><span class="bu">iter</span><span class="sc">}</span><span class="ss"> different samples&#39;</span>)</span>
-<span id="cb78-29"><a href="standard-errors-1.html#cb78-29" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;mean height&#39;</span>)</span>
-<span id="cb78-30"><a href="standard-errors-1.html#cb78-30" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;density&#39;</span>)</span>
-<span id="cb78-31"><a href="standard-errors-1.html#cb78-31" tabindex="-1"></a>plt.legend()</span>
-<span id="cb78-32"><a href="standard-errors-1.html#cb78-32" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span>
-<span id="cb78-33"><a href="standard-errors-1.html#cb78-33" tabindex="-1"></a></span>
-<span id="cb78-34"><a href="standard-errors-1.html#cb78-34" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;average of mean height is </span><span class="sc">{</span>mean_store<span class="sc">.</span>mean()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> and std is </span><span class="sc">{</span>mean_store<span class="sc">.</span>std()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb78-35"><a href="standard-errors-1.html#cb78-35" tabindex="-1"></a></span>
-<span id="cb78-36"><a href="standard-errors-1.html#cb78-36" tabindex="-1"></a><span class="co"># %%[markdown]</span></span>
-<span id="cb78-37"><a href="standard-errors-1.html#cb78-37" tabindex="-1"></a><span class="co"># It is clear that the standard deviation of the mean height depends on: i) the standard deviation of the population height; and ii)</span></span>
-<span id="cb78-38"><a href="standard-errors-1.html#cb78-38" tabindex="-1"></a><span class="co"># n -- the number of observations. The standard deviation of the mean height will be lower if the population standard deviation is lower </span></span>
-<span id="cb78-39"><a href="standard-errors-1.html#cb78-39" tabindex="-1"></a><span class="co"># (meaning that height is relatively more homogeneous). Next, one can lower it by increasing the sample size. </span></span>
-<span id="cb78-40"><a href="standard-errors-1.html#cb78-40" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-41"><a href="standard-errors-1.html#cb78-41" tabindex="-1"></a><span class="co"># Just as the sample mean has a measure for deviation due to sampling variability (standard deviation), $\hat{\beta}}$ too has a measure that we know as standard errors. Simply put, the standard errors measure how fluctuating the estimates of $\beta$ can be given different samples. </span></span>
-<span id="cb78-42"><a href="standard-errors-1.html#cb78-42" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-43"><a href="standard-errors-1.html#cb78-43" tabindex="-1"></a><span class="co"># Right off the start, it should be mentioned that reported standard errors are mostly incorrect. This could be due to several unknown reasons including the functional form of the specified model. But rather than dwelling on why the reported standard errors are incorrect, I want to discuss some known ways to fix the standard errors.</span></span>
-<span id="cb78-44"><a href="standard-errors-1.html#cb78-44" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-45"><a href="standard-errors-1.html#cb78-45" tabindex="-1"></a><span class="co"># First, (recall) we start with the assumption on the error term. We discussed the i.i.d. assumtion of the error term. Again, the i.i.d. assumption states that error term are *independent* and *identically* distributed. The former means that errors are not correlated, whereas the latter means that errors are extracted from the same distribution with the same mean and variance. </span></span>
-<span id="cb78-46"><a href="standard-errors-1.html#cb78-46" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-47"><a href="standard-errors-1.html#cb78-47" tabindex="-1"></a><span class="co"># Under the i.i.d. assumption, errors are homoskedastic. Estimation of standard errors take the following steps.</span></span>
-<span id="cb78-48"><a href="standard-errors-1.html#cb78-48" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-49"><a href="standard-errors-1.html#cb78-49" tabindex="-1"></a><span class="co"># 1. First estimate the regression standard error as: $\sigma_{reg}^2 = \frac{1}{n}\epsilon^{T} \epsilon$.</span></span>
-<span id="cb78-50"><a href="standard-errors-1.html#cb78-50" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-51"><a href="standard-errors-1.html#cb78-51" tabindex="-1"></a><span class="co"># 2. The standard error of estimates then is: $\sqrt{Var(\hat{\beta})} = (X^{T}X)^{-1} \times \sigma_{reg}$, where $X^{T}X$ is the variance-covariance matrix with variance terms in the diagonal. </span></span>
-<span id="cb78-52"><a href="standard-errors-1.html#cb78-52" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb78-53"><a href="standard-errors-1.html#cb78-53" tabindex="-1"></a><span class="co"># However, both of these assumptions (identical and independently distributed) will mostly likely fail in practice. This means that we&#39;d need to adjust the standard errors appropriately.      </span></span>
-<span id="cb78-54"><a href="standard-errors-1.html#cb78-54" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb78-55"><a href="standard-errors-1.html#cb78-55" tabindex="-1"></a><span class="co"># Let&#39;s take a classic example between education and earnings. We&#39;ll also consider &#39;ability&#39; as a control variable in the DGP. Of course, this is only a simulation exercise to clarify the context of standard errors.</span></span>
-<span id="cb78-56"><a href="standard-errors-1.html#cb78-56" tabindex="-1"></a><span class="co"># </span></span></code></pre></div>
-<pre><code>average of mean height is 175.0002 and std is 0.2389</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb77-1"><a href="standard-errors-1.html#cb77-1" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb77-2"><a href="standard-errors-1.html#cb77-2" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb77-3"><a href="standard-errors-1.html#cb77-3" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> add_dummy_feature</span>
+<span id="cb77-4"><a href="standard-errors-1.html#cb77-4" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
+<span id="cb77-5"><a href="standard-errors-1.html#cb77-5" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb77-6"><a href="standard-errors-1.html#cb77-6" tabindex="-1"></a></span>
+<span id="cb77-7"><a href="standard-errors-1.html#cb77-7" tabindex="-1"></a>mean_store <span class="op">=</span> []</span>
+<span id="cb77-8"><a href="standard-errors-1.html#cb77-8" tabindex="-1"></a><span class="bu">iter</span> <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb77-9"><a href="standard-errors-1.html#cb77-9" tabindex="-1"></a>mean_height <span class="op">=</span> <span class="dv">175</span></span>
+<span id="cb77-10"><a href="standard-errors-1.html#cb77-10" tabindex="-1"></a>std_height <span class="op">=</span> <span class="fl">7.6</span></span>
+<span id="cb77-11"><a href="standard-errors-1.html#cb77-11" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb77-12"><a href="standard-errors-1.html#cb77-12" tabindex="-1"></a></span>
+<span id="cb77-13"><a href="standard-errors-1.html#cb77-13" tabindex="-1"></a></span>
+<span id="cb77-14"><a href="standard-errors-1.html#cb77-14" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">iter</span>):</span>
+<span id="cb77-15"><a href="standard-errors-1.html#cb77-15" tabindex="-1"></a>    height <span class="op">=</span> np.random.normal(mean_height, std_height, n) <span class="co"># sample height from a normal distribution</span></span>
+<span id="cb77-16"><a href="standard-errors-1.html#cb77-16" tabindex="-1"></a>    mean_store.append(height.mean())</span>
+<span id="cb77-17"><a href="standard-errors-1.html#cb77-17" tabindex="-1"></a></span>
+<span id="cb77-18"><a href="standard-errors-1.html#cb77-18" tabindex="-1"></a><span class="co"># plot the histogram of mean height</span></span>
+<span id="cb77-19"><a href="standard-errors-1.html#cb77-19" tabindex="-1"></a>mean_store <span class="op">=</span> np.array(mean_store).ravel()    </span>
+<span id="cb77-20"><a href="standard-errors-1.html#cb77-20" tabindex="-1"></a></span>
+<span id="cb77-21"><a href="standard-errors-1.html#cb77-21" tabindex="-1"></a><span class="co"># overlay theoretical normal dist</span></span>
+<span id="cb77-22"><a href="standard-errors-1.html#cb77-22" tabindex="-1"></a>x_space <span class="op">=</span> np.linspace(mean_store.<span class="bu">min</span>(), mean_store.<span class="bu">max</span>(), <span class="dv">1000</span>)</span>
+<span id="cb77-23"><a href="standard-errors-1.html#cb77-23" tabindex="-1"></a>theo_nd <span class="op">=</span> stats.norm.pdf(x_space, mean_height, std_height<span class="op">/</span>np.sqrt(n))</span>
+<span id="cb77-24"><a href="standard-errors-1.html#cb77-24" tabindex="-1"></a></span>
+<span id="cb77-25"><a href="standard-errors-1.html#cb77-25" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb77-26"><a href="standard-errors-1.html#cb77-26" tabindex="-1"></a>plt.hist(mean_store, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&#39;steelblue&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;black&#39;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, density<span class="op">=</span><span class="st">&#39;True&#39;</span>)</span>
+<span id="cb77-27"><a href="standard-errors-1.html#cb77-27" tabindex="-1"></a>plt.plot(x_space, theo_nd, color <span class="op">=</span> <span class="st">&#39;red&#39;</span>, linewidth <span class="op">=</span> <span class="dv">2</span>, label <span class="op">=</span> <span class="st">&#39;Theoretical Dist.&#39;</span>)</span>
+<span id="cb77-28"><a href="standard-errors-1.html#cb77-28" tabindex="-1"></a>plt.title(<span class="ss">f&#39;Distribution of mean height from </span><span class="sc">{</span><span class="bu">iter</span><span class="sc">}</span><span class="ss"> different samples&#39;</span>)</span>
+<span id="cb77-29"><a href="standard-errors-1.html#cb77-29" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;mean height&#39;</span>)</span>
+<span id="cb77-30"><a href="standard-errors-1.html#cb77-30" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;density&#39;</span>)</span>
+<span id="cb77-31"><a href="standard-errors-1.html#cb77-31" tabindex="-1"></a>plt.legend()</span>
+<span id="cb77-32"><a href="standard-errors-1.html#cb77-32" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span>
+<span id="cb77-33"><a href="standard-errors-1.html#cb77-33" tabindex="-1"></a></span>
+<span id="cb77-34"><a href="standard-errors-1.html#cb77-34" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;average of mean height is </span><span class="sc">{</span>mean_store<span class="sc">.</span>mean()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> and std is </span><span class="sc">{</span>mean_store<span class="sc">.</span>std()<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<pre><code>average of mean height is 174.997 and std is 0.2402</code></pre>
 <div class="float">
-<img src="standard_errors_files/standard_errors_5_1.png" alt="png" />
+<img src="standard_errors_files/standard_errors_4_1.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
-<div class="sourceCode" id="cb80"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb80-1"><a href="standard-errors-1.html#cb80-1" tabindex="-1"></a></span>
-<span id="cb80-2"><a href="standard-errors-1.html#cb80-2" tabindex="-1"></a><span class="co"># 1. generate ability score with a mean of 50 and sd of 20.</span></span>
-<span id="cb80-3"><a href="standard-errors-1.html#cb80-3" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">10000</span></span>
-<span id="cb80-4"><a href="standard-errors-1.html#cb80-4" tabindex="-1"></a>ability <span class="op">=</span> np.random.normal(<span class="dv">50</span>, <span class="dv">20</span>, m)</span>
-<span id="cb80-5"><a href="standard-errors-1.html#cb80-5" tabindex="-1"></a>ability_scaled <span class="op">=</span> (ability <span class="op">-</span> ability.mean()) <span class="op">/</span> ability.std() <span class="co"># ability scaled</span></span>
-<span id="cb80-6"><a href="standard-errors-1.html#cb80-6" tabindex="-1"></a></span>
-<span id="cb80-7"><a href="standard-errors-1.html#cb80-7" tabindex="-1"></a><span class="co"># plot histogram of ability score</span></span>
-<span id="cb80-8"><a href="standard-errors-1.html#cb80-8" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb80-9"><a href="standard-errors-1.html#cb80-9" tabindex="-1"></a>plt.hist(ability, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&#39;steelblue&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;black&#39;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb80-10"><a href="standard-errors-1.html#cb80-10" tabindex="-1"></a>plt.title(<span class="st">&#39;Distribution of ability&#39;</span>)</span>
-<span id="cb80-11"><a href="standard-errors-1.html#cb80-11" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;ability score&#39;</span>)</span>
-<span id="cb80-12"><a href="standard-errors-1.html#cb80-12" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
-<span id="cb80-13"><a href="standard-errors-1.html#cb80-13" tabindex="-1"></a></span>
-<span id="cb80-14"><a href="standard-errors-1.html#cb80-14" tabindex="-1"></a><span class="co"># 2. education is positively dependent on ability</span></span>
-<span id="cb80-15"><a href="standard-errors-1.html#cb80-15" tabindex="-1"></a>educa <span class="op">=</span> <span class="dv">7</span> <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> ability <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">4</span>, m)</span>
-<span id="cb80-16"><a href="standard-errors-1.html#cb80-16" tabindex="-1"></a>educa[educa<span class="op">&lt;</span><span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span> </span>
-<span id="cb80-17"><a href="standard-errors-1.html#cb80-17" tabindex="-1"></a>educa_scaled <span class="op">=</span> (educa <span class="op">-</span> educa.mean()) <span class="op">/</span> educa.std() <span class="co"># education scaled</span></span>
-<span id="cb80-18"><a href="standard-errors-1.html#cb80-18" tabindex="-1"></a><span class="co">#plt.hist(educa)</span></span>
-<span id="cb80-19"><a href="standard-errors-1.html#cb80-19" tabindex="-1"></a></span>
-<span id="cb80-20"><a href="standard-errors-1.html#cb80-20" tabindex="-1"></a><span class="co"># 3. generate income</span></span>
-<span id="cb80-21"><a href="standard-errors-1.html#cb80-21" tabindex="-1"></a><span class="co"># Income comes from distribution with varying standard deviation</span></span>
-<span id="cb80-22"><a href="standard-errors-1.html#cb80-22" tabindex="-1"></a><span class="co"># this marks heteroskedasticity</span></span>
-<span id="cb80-23"><a href="standard-errors-1.html#cb80-23" tabindex="-1"></a>error_term <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">500</span> <span class="op">+</span> (<span class="dv">200</span><span class="op">*</span>educa))</span>
-<span id="cb80-24"><a href="standard-errors-1.html#cb80-24" tabindex="-1"></a></span>
-<span id="cb80-25"><a href="standard-errors-1.html#cb80-25" tabindex="-1"></a><span class="co"># generate income using the following DGP </span></span>
-<span id="cb80-26"><a href="standard-errors-1.html#cb80-26" tabindex="-1"></a>income <span class="op">=</span> <span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled <span class="op">+</span> np.array(error_term).ravel()</span>
-<span id="cb80-27"><a href="standard-errors-1.html#cb80-27" tabindex="-1"></a>true_coefficients <span class="op">=</span> np.array([<span class="dv">40000</span>, <span class="dv">10000</span>, <span class="dv">700</span>])</span>
-<span id="cb80-28"><a href="standard-errors-1.html#cb80-28" tabindex="-1"></a></span>
-<span id="cb80-29"><a href="standard-errors-1.html#cb80-29" tabindex="-1"></a><span class="co"># scatter plot between schooling and education </span></span>
-<span id="cb80-30"><a href="standard-errors-1.html#cb80-30" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb80-31"><a href="standard-errors-1.html#cb80-31" tabindex="-1"></a>plt.scatter(educa, income)</span>
-<span id="cb80-32"><a href="standard-errors-1.html#cb80-32" tabindex="-1"></a>plt.title(<span class="st">&#39;Scatter plot of education and income&#39;</span>)</span>
-<span id="cb80-33"><a href="standard-errors-1.html#cb80-33" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle <span class="op">=</span><span class="st">&#39;dashed&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>)</span>
-<span id="cb80-34"><a href="standard-errors-1.html#cb80-34" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Schooling&#39;</span>)</span>
-<span id="cb80-35"><a href="standard-errors-1.html#cb80-35" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Earnings&#39;</span>)</span>
-<span id="cb80-36"><a href="standard-errors-1.html#cb80-36" tabindex="-1"></a></span>
-<span id="cb80-37"><a href="standard-errors-1.html#cb80-37" tabindex="-1"></a><span class="co"># scatter plot between schooling and error</span></span>
-<span id="cb80-38"><a href="standard-errors-1.html#cb80-38" tabindex="-1"></a>error_true <span class="op">=</span> income <span class="op">-</span> (<span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled)</span>
-<span id="cb80-39"><a href="standard-errors-1.html#cb80-39" tabindex="-1"></a></span>
-<span id="cb80-40"><a href="standard-errors-1.html#cb80-40" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb80-41"><a href="standard-errors-1.html#cb80-41" tabindex="-1"></a>plt.scatter(educa, error_term, alpha <span class="op">=</span> <span class="fl">0.3</span>, color <span class="op">=</span> <span class="st">&#39;red&#39;</span>)</span>
-<span id="cb80-42"><a href="standard-errors-1.html#cb80-42" tabindex="-1"></a>plt.title(<span class="st">&#39;Relationship between schooling and error term </span><span class="ch">\n</span><span class="st"> using the true parameters&#39;</span>)</span>
-<span id="cb80-43"><a href="standard-errors-1.html#cb80-43" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Schooling&#39;</span>)</span>
-<span id="cb80-44"><a href="standard-errors-1.html#cb80-44" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Error&#39;</span>)</span>
-<span id="cb80-45"><a href="standard-errors-1.html#cb80-45" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>)</span></code></pre></div>
+<p>It is clear that the standard deviation of the mean height depends on: i) the standard deviation of the population height; and ii)
+n – the number of observations. The standard deviation of the mean height will be lower if the population standard deviation is lower
+(meaning that height is relatively more homogeneous). Next, one can lower it by increasing the sample size.</p>
+<p>Just as the sample mean has a measure for deviation due to sampling variability (standard deviation), <span class="math inline">\(\hat{\beta}}\)</span> too has a measure that we know as standard errors. Simply put, the standard errors measure how fluctuating the estimates of <span class="math inline">\(\beta\)</span> can be given different samples.</p>
+<p>Right off the start, it should be mentioned that reported standard errors are mostly incorrect. This could be due to several unknown reasons including the functional form of the specified model. But rather than dwelling on why the reported standard errors are incorrect, I want to discuss some known ways to fix the standard errors.</p>
+<p>First, (recall) we start with the assumption on the error term. We discussed the i.i.d. assumtion of the error term. Again, the i.i.d. assumption states that error term are <em>independent</em> and <em>identically</em> distributed. The former means that errors are not correlated, whereas the latter means that errors are extracted from the same distribution with the same mean and variance.</p>
+<p>Under the i.i.d. assumption, errors are homoskedastic. Estimation of standard errors take the following steps.</p>
+<ol style="list-style-type: decimal">
+<li><p>First estimate the regression standard error as: <span class="math inline">\(\sigma_{reg}^2 = \frac{1}{n}\epsilon^{T} \epsilon\)</span>.</p></li>
+<li><p>The standard error of estimates then is: <span class="math inline">\(\sqrt{Var(\hat{\beta})} = (X^{T}X)^{-1} \times \sigma_{reg}\)</span>, where <span class="math inline">\(X^{T}X\)</span> is the variance-covariance matrix with variance terms in the diagonal.</p></li>
+</ol>
+<p>However, both of these assumptions (identical and independently distributed) will mostly likely fail in practice. This means that we’d need to adjust the standard errors appropriately.</p>
+<p>Let’s take a classic example between education and earnings. We’ll also consider ‘ability’ as a control variable in the DGP. Of course, this is only a simulation exercise to clarify the context of standard errors.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb79-1"><a href="standard-errors-1.html#cb79-1" tabindex="-1"></a></span>
+<span id="cb79-2"><a href="standard-errors-1.html#cb79-2" tabindex="-1"></a><span class="co"># 1. generate ability score with a mean of 50 and sd of 20.</span></span>
+<span id="cb79-3"><a href="standard-errors-1.html#cb79-3" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb79-4"><a href="standard-errors-1.html#cb79-4" tabindex="-1"></a>ability <span class="op">=</span> np.random.normal(<span class="dv">50</span>, <span class="dv">20</span>, m)</span>
+<span id="cb79-5"><a href="standard-errors-1.html#cb79-5" tabindex="-1"></a>ability_scaled <span class="op">=</span> (ability <span class="op">-</span> ability.mean()) <span class="op">/</span> ability.std() <span class="co"># ability scaled</span></span>
+<span id="cb79-6"><a href="standard-errors-1.html#cb79-6" tabindex="-1"></a></span>
+<span id="cb79-7"><a href="standard-errors-1.html#cb79-7" tabindex="-1"></a><span class="co"># plot histogram of ability score</span></span>
+<span id="cb79-8"><a href="standard-errors-1.html#cb79-8" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb79-9"><a href="standard-errors-1.html#cb79-9" tabindex="-1"></a>plt.hist(ability, bins<span class="op">=</span><span class="dv">30</span>, color<span class="op">=</span><span class="st">&#39;steelblue&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;black&#39;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb79-10"><a href="standard-errors-1.html#cb79-10" tabindex="-1"></a>plt.title(<span class="st">&#39;Distribution of ability&#39;</span>)</span>
+<span id="cb79-11"><a href="standard-errors-1.html#cb79-11" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;ability score&#39;</span>)</span>
+<span id="cb79-12"><a href="standard-errors-1.html#cb79-12" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;frequency&#39;</span>)</span>
+<span id="cb79-13"><a href="standard-errors-1.html#cb79-13" tabindex="-1"></a></span>
+<span id="cb79-14"><a href="standard-errors-1.html#cb79-14" tabindex="-1"></a><span class="co"># 2. education is positively dependent on ability</span></span>
+<span id="cb79-15"><a href="standard-errors-1.html#cb79-15" tabindex="-1"></a>educa <span class="op">=</span> <span class="dv">7</span> <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> ability <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">4</span>, m)</span>
+<span id="cb79-16"><a href="standard-errors-1.html#cb79-16" tabindex="-1"></a>educa[educa<span class="op">&lt;</span><span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span> </span>
+<span id="cb79-17"><a href="standard-errors-1.html#cb79-17" tabindex="-1"></a>educa_scaled <span class="op">=</span> (educa <span class="op">-</span> educa.mean()) <span class="op">/</span> educa.std() <span class="co"># education scaled</span></span>
+<span id="cb79-18"><a href="standard-errors-1.html#cb79-18" tabindex="-1"></a><span class="co">#plt.hist(educa)</span></span>
+<span id="cb79-19"><a href="standard-errors-1.html#cb79-19" tabindex="-1"></a></span>
+<span id="cb79-20"><a href="standard-errors-1.html#cb79-20" tabindex="-1"></a><span class="co"># 3. generate income</span></span>
+<span id="cb79-21"><a href="standard-errors-1.html#cb79-21" tabindex="-1"></a><span class="co"># Income comes from distribution with varying standard deviation</span></span>
+<span id="cb79-22"><a href="standard-errors-1.html#cb79-22" tabindex="-1"></a><span class="co"># this marks heteroskedasticity</span></span>
+<span id="cb79-23"><a href="standard-errors-1.html#cb79-23" tabindex="-1"></a>error_term <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">500</span> <span class="op">+</span> (<span class="dv">200</span><span class="op">*</span>educa))</span>
+<span id="cb79-24"><a href="standard-errors-1.html#cb79-24" tabindex="-1"></a></span>
+<span id="cb79-25"><a href="standard-errors-1.html#cb79-25" tabindex="-1"></a><span class="co"># generate income using the following DGP </span></span>
+<span id="cb79-26"><a href="standard-errors-1.html#cb79-26" tabindex="-1"></a>income <span class="op">=</span> <span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled <span class="op">+</span> np.array(error_term).ravel()</span>
+<span id="cb79-27"><a href="standard-errors-1.html#cb79-27" tabindex="-1"></a>true_coefficients <span class="op">=</span> np.array([<span class="dv">40000</span>, <span class="dv">10000</span>, <span class="dv">700</span>])</span>
+<span id="cb79-28"><a href="standard-errors-1.html#cb79-28" tabindex="-1"></a></span>
+<span id="cb79-29"><a href="standard-errors-1.html#cb79-29" tabindex="-1"></a><span class="co"># scatter plot between schooling and education </span></span>
+<span id="cb79-30"><a href="standard-errors-1.html#cb79-30" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb79-31"><a href="standard-errors-1.html#cb79-31" tabindex="-1"></a>plt.scatter(educa, income)</span>
+<span id="cb79-32"><a href="standard-errors-1.html#cb79-32" tabindex="-1"></a>plt.title(<span class="st">&#39;Scatter plot of education and income&#39;</span>)</span>
+<span id="cb79-33"><a href="standard-errors-1.html#cb79-33" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle <span class="op">=</span><span class="st">&#39;dashed&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>)</span>
+<span id="cb79-34"><a href="standard-errors-1.html#cb79-34" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Schooling&#39;</span>)</span>
+<span id="cb79-35"><a href="standard-errors-1.html#cb79-35" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Earnings&#39;</span>)</span>
+<span id="cb79-36"><a href="standard-errors-1.html#cb79-36" tabindex="-1"></a></span>
+<span id="cb79-37"><a href="standard-errors-1.html#cb79-37" tabindex="-1"></a><span class="co"># scatter plot between schooling and error</span></span>
+<span id="cb79-38"><a href="standard-errors-1.html#cb79-38" tabindex="-1"></a>error_true <span class="op">=</span> income <span class="op">-</span> (<span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled)</span>
+<span id="cb79-39"><a href="standard-errors-1.html#cb79-39" tabindex="-1"></a></span>
+<span id="cb79-40"><a href="standard-errors-1.html#cb79-40" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb79-41"><a href="standard-errors-1.html#cb79-41" tabindex="-1"></a>plt.scatter(educa, error_term, alpha <span class="op">=</span> <span class="fl">0.3</span>, color <span class="op">=</span> <span class="st">&#39;red&#39;</span>)</span>
+<span id="cb79-42"><a href="standard-errors-1.html#cb79-42" tabindex="-1"></a>plt.title(<span class="st">&#39;Relationship between schooling and error term </span><span class="ch">\n</span><span class="st"> using the true parameters&#39;</span>)</span>
+<span id="cb79-43"><a href="standard-errors-1.html#cb79-43" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Schooling&#39;</span>)</span>
+<span id="cb79-44"><a href="standard-errors-1.html#cb79-44" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Error&#39;</span>)</span>
+<span id="cb79-45"><a href="standard-errors-1.html#cb79-45" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>)</span></code></pre></div>
 <div class="float">
 <img src="standard_errors_files/standard_errors_6_0.png" alt="png" />
 <div class="figcaption">png</div>
@@ -429,200 +412,186 @@ in the <em>estimate of the mean</em> across repeated samples.</p>
 <img src="standard_errors_files/standard_errors_6_2.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
-<p>The plot above shows that although there exist a positive correlation between schooling and earnings. However, variation in earnings is higher for greater values of education. Using the true coefficients (we have these since this is a simulated DGP) we extract error and plot the relationship between schooling and errors. Here, we see a funnel shaped scatter plot with the mean of error aligned at 0.
+<p>The plot above shows that although there exist a positive correlation between schooling and earnings, variation in earnings is higher for greater values of education. Using the true coefficients (we have these since this is a simulated DGP) we extract error and plot the relationship between schooling and errors. Here, we see a funnel shaped scatter plot with the mean of error aligned at 0.
 This simple example breaks the homoskedasticity assumption. The main point is that the estimation of standard errors need to reflect the fact that error term comes from distribution with different variances. We now have what is known as heteroskedasticity.</p>
-<p>Let’s start with estimates using the gradient descent.</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb81-1"><a href="standard-errors-1.html#cb81-1" tabindex="-1"></a><span class="co"># features</span></span>
-<span id="cb81-2"><a href="standard-errors-1.html#cb81-2" tabindex="-1"></a>X <span class="op">=</span> np.concatenate((educa_scaled.reshape(m,<span class="dv">1</span>), ability_scaled.reshape(m,<span class="dv">1</span>)), axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb81-3"><a href="standard-errors-1.html#cb81-3" tabindex="-1"></a><span class="co"># Note: no need to scale the features as they already are scaled </span></span>
-<span id="cb81-4"><a href="standard-errors-1.html#cb81-4" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X) <span class="co"># intercept term</span></span>
-<span id="cb81-5"><a href="standard-errors-1.html#cb81-5" tabindex="-1"></a>y <span class="op">=</span> income.reshape((m, <span class="dv">1</span>))</span>
-<span id="cb81-6"><a href="standard-errors-1.html#cb81-6" tabindex="-1"></a>p <span class="op">=</span> X.shape[<span class="dv">1</span>]           <span class="co"># number of features</span></span>
-<span id="cb81-7"><a href="standard-errors-1.html#cb81-7" tabindex="-1"></a></span>
-<span id="cb81-8"><a href="standard-errors-1.html#cb81-8" tabindex="-1"></a><span class="co"># initialize theta</span></span>
-<span id="cb81-9"><a href="standard-errors-1.html#cb81-9" tabindex="-1"></a>theta <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, p).reshape((p, <span class="dv">1</span>))</span>
-<span id="cb81-10"><a href="standard-errors-1.html#cb81-10" tabindex="-1"></a><span class="co"># learning rate</span></span>
-<span id="cb81-11"><a href="standard-errors-1.html#cb81-11" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">1e-2</span></span>
-<span id="cb81-12"><a href="standard-errors-1.html#cb81-12" tabindex="-1"></a><span class="co"># number of iterations</span></span>
-<span id="cb81-13"><a href="standard-errors-1.html#cb81-13" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">2000</span></span>
-<span id="cb81-14"><a href="standard-errors-1.html#cb81-14" tabindex="-1"></a></span>
-<span id="cb81-15"><a href="standard-errors-1.html#cb81-15" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, epochs):</span>
-<span id="cb81-16"><a href="standard-errors-1.html#cb81-16" tabindex="-1"></a></span>
-<span id="cb81-17"><a href="standard-errors-1.html#cb81-17" tabindex="-1"></a>    <span class="co"># get the gradient and adjust theta against the gradient using the learning rate</span></span>
-<span id="cb81-18"><a href="standard-errors-1.html#cb81-18" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> X.T<span class="op">@</span>(y <span class="op">-</span> X<span class="op">@</span>theta )</span>
-<span id="cb81-19"><a href="standard-errors-1.html#cb81-19" tabindex="-1"></a>    theta <span class="op">=</span> theta <span class="op">-</span> eta<span class="op">*</span>gradient </span>
-<span id="cb81-20"><a href="standard-errors-1.html#cb81-20" tabindex="-1"></a> </span>
-<span id="cb81-21"><a href="standard-errors-1.html#cb81-21" tabindex="-1"></a></span>
-<span id="cb81-22"><a href="standard-errors-1.html#cb81-22" tabindex="-1"></a><span class="co"># Use sklearn module to check</span></span>
-<span id="cb81-23"><a href="standard-errors-1.html#cb81-23" tabindex="-1"></a>reg <span class="op">=</span> linear_model.LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb81-24"><a href="standard-errors-1.html#cb81-24" tabindex="-1"></a>reg.fit(X, y)</span>
-<span id="cb81-25"><a href="standard-errors-1.html#cb81-25" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from sklearn is: </span><span class="sc">{</span>reg<span class="sc">.</span>coef_<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb81-26"><a href="standard-errors-1.html#cb81-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from manual GD is: </span><span class="sc">{</span>theta<span class="sc">.</span>reshape((<span class="dv">1</span>, <span class="dv">3</span>))<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>) </span></code></pre></div>
-<pre><code>The estimates from sklearn is: [[40015.7547 10015.2551   714.2199]]
-The estimates from manual GD is: [[40015.7547 10015.2551   714.2199]]</code></pre>
-<p>We area simply running gradient descent in the code above. This should be familiar to you from previous lectures. Now, we’d want to move on to the standard errors to assess precision of these estimates. First, let’s explore the graphical relationship between education and residuals. Note that I’ve distinguised error vs. residuals – the former is what you get from using true coefficients (you never see this in practice), while the latter use the estimates.</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="standard-errors-1.html#cb83-1" tabindex="-1"></a><span class="co"># Get residuals (note that we are using the estimated thetas)</span></span>
-<span id="cb83-2"><a href="standard-errors-1.html#cb83-2" tabindex="-1"></a>residual <span class="op">=</span> y <span class="op">-</span> X <span class="op">@</span> theta</span>
-<span id="cb83-3"><a href="standard-errors-1.html#cb83-3" tabindex="-1"></a></span>
-<span id="cb83-4"><a href="standard-errors-1.html#cb83-4" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb83-5"><a href="standard-errors-1.html#cb83-5" tabindex="-1"></a>plt.scatter(educa, residual, alpha <span class="op">=</span> <span class="fl">0.3</span>, color<span class="op">=</span><span class="st">&#39;red&#39;</span>)</span>
-<span id="cb83-6"><a href="standard-errors-1.html#cb83-6" tabindex="-1"></a>plt.title(<span class="st">&#39;Relationship between education and residuals&#39;</span>)</span>
-<span id="cb83-7"><a href="standard-errors-1.html#cb83-7" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;education&#39;</span>)</span>
-<span id="cb83-8"><a href="standard-errors-1.html#cb83-8" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;residuals&#39;</span>)</span>
-<span id="cb83-9"><a href="standard-errors-1.html#cb83-9" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>)</span>
-<span id="cb83-10"><a href="standard-errors-1.html#cb83-10" tabindex="-1"></a></span>
-<span id="cb83-11"><a href="standard-errors-1.html#cb83-11" tabindex="-1"></a><span class="co"># %%[markdown]</span></span>
-<span id="cb83-12"><a href="standard-errors-1.html#cb83-12" tabindex="-1"></a><span class="co"># As you can see we&#39;ve got a funnel shaped relationship between education and residual, again signaling heteroskedasticity. This is precisely coming from differing variance of error term based on education. This won&#39;t affect the estimates but will affect the standard errors. Note that there are many tests for homoskedasticity vs heteroskedasticity. But in practice, the case of homoskedasticity almost always fails. The simple way to see it is to plot the residuals with the variable of concern. If you have a funnel looking shape, then you&#39;ve got the case of heteroskedasticity.  </span></span>
-<span id="cb83-13"><a href="standard-errors-1.html#cb83-13" tabindex="-1"></a></span>
-<span id="cb83-14"><a href="standard-errors-1.html#cb83-14" tabindex="-1"></a><span class="co"># First, let&#39;s do some benchmarking by estimating the standard errors under the homoskedasticity assumption -- error terms have the same variance (which is incorrect in this case and in practice).   </span></span></code></pre></div>
+<p>Let’s start with regression estimates using the gradient descent.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb80-1"><a href="standard-errors-1.html#cb80-1" tabindex="-1"></a><span class="co"># features</span></span>
+<span id="cb80-2"><a href="standard-errors-1.html#cb80-2" tabindex="-1"></a>X <span class="op">=</span> np.concatenate((educa_scaled.reshape(m,<span class="dv">1</span>), ability_scaled.reshape(m,<span class="dv">1</span>)), axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb80-3"><a href="standard-errors-1.html#cb80-3" tabindex="-1"></a><span class="co"># Note: no need to scale the features as they already are scaled </span></span>
+<span id="cb80-4"><a href="standard-errors-1.html#cb80-4" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X) <span class="co"># intercept term</span></span>
+<span id="cb80-5"><a href="standard-errors-1.html#cb80-5" tabindex="-1"></a>y <span class="op">=</span> income.reshape((m, <span class="dv">1</span>))</span>
+<span id="cb80-6"><a href="standard-errors-1.html#cb80-6" tabindex="-1"></a>p <span class="op">=</span> X.shape[<span class="dv">1</span>]           <span class="co"># number of features</span></span>
+<span id="cb80-7"><a href="standard-errors-1.html#cb80-7" tabindex="-1"></a></span>
+<span id="cb80-8"><a href="standard-errors-1.html#cb80-8" tabindex="-1"></a><span class="co"># initialize theta</span></span>
+<span id="cb80-9"><a href="standard-errors-1.html#cb80-9" tabindex="-1"></a>theta <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, p).reshape((p, <span class="dv">1</span>))</span>
+<span id="cb80-10"><a href="standard-errors-1.html#cb80-10" tabindex="-1"></a><span class="co"># learning rate</span></span>
+<span id="cb80-11"><a href="standard-errors-1.html#cb80-11" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">1e-2</span></span>
+<span id="cb80-12"><a href="standard-errors-1.html#cb80-12" tabindex="-1"></a><span class="co"># number of iterations</span></span>
+<span id="cb80-13"><a href="standard-errors-1.html#cb80-13" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">2000</span></span>
+<span id="cb80-14"><a href="standard-errors-1.html#cb80-14" tabindex="-1"></a></span>
+<span id="cb80-15"><a href="standard-errors-1.html#cb80-15" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, epochs):</span>
+<span id="cb80-16"><a href="standard-errors-1.html#cb80-16" tabindex="-1"></a></span>
+<span id="cb80-17"><a href="standard-errors-1.html#cb80-17" tabindex="-1"></a>    <span class="co"># get the gradient and adjust theta against the gradient using the learning rate</span></span>
+<span id="cb80-18"><a href="standard-errors-1.html#cb80-18" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> X.T<span class="op">@</span>(y <span class="op">-</span> X<span class="op">@</span>theta )</span>
+<span id="cb80-19"><a href="standard-errors-1.html#cb80-19" tabindex="-1"></a>    theta <span class="op">=</span> theta <span class="op">-</span> eta<span class="op">*</span>gradient </span>
+<span id="cb80-20"><a href="standard-errors-1.html#cb80-20" tabindex="-1"></a> </span>
+<span id="cb80-21"><a href="standard-errors-1.html#cb80-21" tabindex="-1"></a></span>
+<span id="cb80-22"><a href="standard-errors-1.html#cb80-22" tabindex="-1"></a><span class="co"># Use sklearn module to check</span></span>
+<span id="cb80-23"><a href="standard-errors-1.html#cb80-23" tabindex="-1"></a>reg <span class="op">=</span> linear_model.LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb80-24"><a href="standard-errors-1.html#cb80-24" tabindex="-1"></a>reg.fit(X, y)</span>
+<span id="cb80-25"><a href="standard-errors-1.html#cb80-25" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from sklearn is: </span><span class="sc">{</span>reg<span class="sc">.</span>coef_<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb80-26"><a href="standard-errors-1.html#cb80-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from manual GD is: </span><span class="sc">{</span>theta<span class="sc">.</span>reshape((<span class="dv">1</span>, <span class="dv">3</span>))<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>) </span></code></pre></div>
+<pre><code>The estimates from sklearn is: [[39987.2777  9991.4859   695.5676]]
+The estimates from manual GD is: [[39987.2777  9991.4859   695.5676]]</code></pre>
+<p>We are simply running gradient descent in the code above. This should be familiar to you from previous lectures. Now, we’d want to move on to the standard errors to determine precision of these estimates. First, let’s explore the graphical relationship between education and residuals. Note that I’ve distinguised error vs. residual – the former is what you get from using true coefficients (you never see this in practice), while the latter uses the estimates.</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb82-1"><a href="standard-errors-1.html#cb82-1" tabindex="-1"></a><span class="co"># Get residuals (note that we are using the estimated thetas)</span></span>
+<span id="cb82-2"><a href="standard-errors-1.html#cb82-2" tabindex="-1"></a>residual <span class="op">=</span> y <span class="op">-</span> X <span class="op">@</span> theta</span>
+<span id="cb82-3"><a href="standard-errors-1.html#cb82-3" tabindex="-1"></a></span>
+<span id="cb82-4"><a href="standard-errors-1.html#cb82-4" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb82-5"><a href="standard-errors-1.html#cb82-5" tabindex="-1"></a>plt.scatter(educa, residual, alpha <span class="op">=</span> <span class="fl">0.3</span>, color<span class="op">=</span><span class="st">&#39;red&#39;</span>)</span>
+<span id="cb82-6"><a href="standard-errors-1.html#cb82-6" tabindex="-1"></a>plt.title(<span class="st">&#39;Relationship between education and residuals&#39;</span>)</span>
+<span id="cb82-7"><a href="standard-errors-1.html#cb82-7" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;education&#39;</span>)</span>
+<span id="cb82-8"><a href="standard-errors-1.html#cb82-8" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;residuals&#39;</span>)</span>
+<span id="cb82-9"><a href="standard-errors-1.html#cb82-9" tabindex="-1"></a>plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">&#39;dashed&#39;</span>)</span></code></pre></div>
 <div class="float">
 <img src="standard_errors_files/standard_errors_10_0.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
-<div class="sourceCode" id="cb84"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb84-1"><a href="standard-errors-1.html#cb84-1" tabindex="-1"></a><span class="co"># 1. Get the standard error of the regression</span></span>
-<span id="cb84-2"><a href="standard-errors-1.html#cb84-2" tabindex="-1"></a>error <span class="op">=</span> (X <span class="op">@</span> theta <span class="op">-</span> y)</span>
-<span id="cb84-3"><a href="standard-errors-1.html#cb84-3" tabindex="-1"></a>error_sq <span class="op">=</span> error.T <span class="op">@</span> error</span>
-<span id="cb84-4"><a href="standard-errors-1.html#cb84-4" tabindex="-1"></a>sigma_sq <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (X.shape[<span class="dv">0</span>] <span class="op">-</span><span class="dv">3</span>) <span class="op">*</span> error_sq</span>
-<span id="cb84-5"><a href="standard-errors-1.html#cb84-5" tabindex="-1"></a>se_reg <span class="op">=</span> np.sqrt(sigma_sq)</span>
-<span id="cb84-6"><a href="standard-errors-1.html#cb84-6" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard error of the regression is: </span><span class="sc">{</span>se_reg<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb84-7"><a href="standard-errors-1.html#cb84-7" tabindex="-1"></a></span>
-<span id="cb84-8"><a href="standard-errors-1.html#cb84-8" tabindex="-1"></a><span class="co"># 2. get standard errors of the respective coefficients </span></span>
-<span id="cb84-9"><a href="standard-errors-1.html#cb84-9" tabindex="-1"></a>var_cov <span class="op">=</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">*</span> sigma_sq</span>
-<span id="cb84-10"><a href="standard-errors-1.html#cb84-10" tabindex="-1"></a>manual_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
-<span id="cb84-11"><a href="standard-errors-1.html#cb84-11" tabindex="-1"></a></span>
-<span id="cb84-12"><a href="standard-errors-1.html#cb84-12" tabindex="-1"></a></span>
-<span id="cb84-13"><a href="standard-errors-1.html#cb84-13" tabindex="-1"></a><span class="co"># compare it with standard errors from statsmodels</span></span>
-<span id="cb84-14"><a href="standard-errors-1.html#cb84-14" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb84-15"><a href="standard-errors-1.html#cb84-15" tabindex="-1"></a><span class="co"># se from stats model</span></span>
-<span id="cb84-16"><a href="standard-errors-1.html#cb84-16" tabindex="-1"></a>X_sm <span class="op">=</span> sm.add_constant(X)   <span class="co"># add intercept</span></span>
-<span id="cb84-17"><a href="standard-errors-1.html#cb84-17" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X_sm).fit()</span>
-<span id="cb84-18"><a href="standard-errors-1.html#cb84-18" tabindex="-1"></a></span>
-<span id="cb84-19"><a href="standard-errors-1.html#cb84-19" tabindex="-1"></a></span>
-<span id="cb84-20"><a href="standard-errors-1.html#cb84-20" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The estimates from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>params<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)   <span class="co"># coefficients</span></span>
-<span id="cb84-21"><a href="standard-errors-1.html#cb84-21" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from sklearn is: </span><span class="sc">{</span>reg<span class="sc">.</span>coef_<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb84-22"><a href="standard-errors-1.html#cb84-22" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from manual GD is: </span><span class="sc">{</span>theta<span class="sc">.</span>reshape((<span class="dv">1</span>, <span class="dv">3</span>))<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&#39;</span>) </span>
-<span id="cb84-23"><a href="standard-errors-1.html#cb84-23" tabindex="-1"></a></span>
-<span id="cb84-24"><a href="standard-errors-1.html#cb84-24" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors from statmodel under homoskedasticity: </span><span class="sc">{</span>model<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)      <span class="co"># standard errors</span></span>
-<span id="cb84-25"><a href="standard-errors-1.html#cb84-25" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors (manual estimation) under homoskedasticity: </span><span class="sc">{</span>manual_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
-<span id="cb84-26"><a href="standard-errors-1.html#cb84-26" tabindex="-1"></a></span>
-<span id="cb84-27"><a href="standard-errors-1.html#cb84-27" tabindex="-1"></a></span>
-<span id="cb84-28"><a href="standard-errors-1.html#cb84-28" tabindex="-1"></a><span class="co"># %%[markdown]</span></span>
-<span id="cb84-29"><a href="standard-errors-1.html#cb84-29" tabindex="-1"></a><span class="co"># Now that we have estimated standard errors under the homoskedasticity assumption let&#39;s see how we can fix this. Before we move on, I want to reiterate that the origin of heteroskedasicity is due to error terms coming from the distribution of different variance. In that regard, we want to account for this in our estimation of standard errors. </span></span>
-<span id="cb84-30"><a href="standard-errors-1.html#cb84-30" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb84-31"><a href="standard-errors-1.html#cb84-31" tabindex="-1"></a><span class="co"># To do so, we&#39;ll use a sandwich method, which you should&#39;ve heard from you previous classes. So what does it entail? Basically, we&#39;d want to form weights using the size of the error term. </span></span>
-<span id="cb84-32"><a href="standard-errors-1.html#cb84-32" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb84-33"><a href="standard-errors-1.html#cb84-33" tabindex="-1"></a><span class="co"># Let&#39;s just derive the sandwich estimator:</span></span>
-<span id="cb84-34"><a href="standard-errors-1.html#cb84-34" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb84-35"><a href="standard-errors-1.html#cb84-35" tabindex="-1"></a><span class="co"># \begin{align}</span></span>
-<span id="cb84-36"><a href="standard-errors-1.html#cb84-36" tabindex="-1"></a><span class="co"># \hat{\beta} = (X^{T}X)^{-1}X^{T}Y \\</span></span>
-<span id="cb84-37"><a href="standard-errors-1.html#cb84-37" tabindex="-1"></a><span class="co"># \hat{\beta} = (X^{T}X)^{-1}X^{T}(X\beta + \epsilon) \\</span></span>
-<span id="cb84-38"><a href="standard-errors-1.html#cb84-38" tabindex="-1"></a><span class="co"># \hat{\beta} = \beta + (X^{T}X)^{-1}X^{T}\epsilon</span></span>
-<span id="cb84-39"><a href="standard-errors-1.html#cb84-39" tabindex="-1"></a><span class="co"># \end{align}</span></span>
-<span id="cb84-40"><a href="standard-errors-1.html#cb84-40" tabindex="-1"></a></span>
-<span id="cb84-41"><a href="standard-errors-1.html#cb84-41" tabindex="-1"></a><span class="co"># The end line is the starting point. Note that $Var(a)=0$ and $Var(ax) = a^{2}Var(x)$, where $a$ is a constant and $x$ is a random variable. Let&#39;s then take the variance of $\hat{\beta}$:</span></span>
-<span id="cb84-42"><a href="standard-errors-1.html#cb84-42" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb84-43"><a href="standard-errors-1.html#cb84-43" tabindex="-1"></a><span class="co"># \begin{align}</span></span>
-<span id="cb84-44"><a href="standard-errors-1.html#cb84-44" tabindex="-1"></a><span class="co"># Var(\hat{\beta}) = Var((X^{T}X)^{-1}X^{T}\epsilon) \\</span></span>
-<span id="cb84-45"><a href="standard-errors-1.html#cb84-45" tabindex="-1"></a><span class="co"># = (X^{T}X)^{-1}Var(X^{T}\epsilon)(X^{T}X)^{-1} \\</span></span>
-<span id="cb84-46"><a href="standard-errors-1.html#cb84-46" tabindex="-1"></a><span class="co"># = (X^{T}X)^{-1}X^{T}Var(\epsilon)X(X^{T}X)^{-1} \\</span></span>
-<span id="cb84-47"><a href="standard-errors-1.html#cb84-47" tabindex="-1"></a><span class="co"># = (X^{T}X)^{-1}X^{T} \Omega X(X^{T}X)^{-1}</span></span>
-<span id="cb84-48"><a href="standard-errors-1.html#cb84-48" tabindex="-1"></a><span class="co"># \end{align}</span></span>
-<span id="cb84-49"><a href="standard-errors-1.html#cb84-49" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb84-50"><a href="standard-errors-1.html#cb84-50" tabindex="-1"></a><span class="co"># Here, $\Omega$ is the scaling term and it is $\epsilon\epsilon^{T}.I$, which is a $n \times n$ diagonal matrix. We don&#39;t observe this, so replace this with the sample counterpart $\hat{\Omega} = \hat{\epsilon}\hat{\epsilon}^{T}I$. Notice that under the case of homoskedasticity $\Omega = \sigma^2 I$, which collapses $Var{\hat{\beta}}$ to $(X^{T}X)^{-1} \sigma^2$. This is what we used to estimate standard errors under homoskedasticity.</span></span>
-<span id="cb84-51"><a href="standard-errors-1.html#cb84-51" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb84-52"><a href="standard-errors-1.html#cb84-52" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb84-53"><a href="standard-errors-1.html#cb84-53" tabindex="-1"></a><span class="co"># Let&#39;s estimate the standard errors accounting for heteroskedasicity. I&#39;m going to divide this into bun and stuffing part as I write the code.</span></span></code></pre></div>
-<pre><code>standard error of the regression is: [[3001.23166629]] 
+<p>As you can see we’ve got a funnel shaped relationship between education and residual, again signaling heteroskedasticity. This is precisely coming from differing variance of error term based on education. This won’t affect the estimates but will affect the standard errors. Note that there are many tests for homoskedasticity vs heteroskedasticity. But in practice, the case of homoskedasticity almost always fails. The simple way to see it is to plot the residuals with the variable of concern. If you have a funnel looking shape, then you’ve got the case of heteroskedasticity.</p>
+<p>First, let’s do some benchmarking by estimating the standard errors under the homoskedasticity assumption – error terms have the same variance (which is incorrect in this case and in practice).</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="standard-errors-1.html#cb83-1" tabindex="-1"></a><span class="co"># 1. Get the standard error of the regression</span></span>
+<span id="cb83-2"><a href="standard-errors-1.html#cb83-2" tabindex="-1"></a>error <span class="op">=</span> (X <span class="op">@</span> theta <span class="op">-</span> y)</span>
+<span id="cb83-3"><a href="standard-errors-1.html#cb83-3" tabindex="-1"></a>error_sq <span class="op">=</span> error.T <span class="op">@</span> error</span>
+<span id="cb83-4"><a href="standard-errors-1.html#cb83-4" tabindex="-1"></a>sigma_sq <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (X.shape[<span class="dv">0</span>] <span class="op">-</span><span class="dv">3</span>) <span class="op">*</span> error_sq</span>
+<span id="cb83-5"><a href="standard-errors-1.html#cb83-5" tabindex="-1"></a>se_reg <span class="op">=</span> np.sqrt(sigma_sq)</span>
+<span id="cb83-6"><a href="standard-errors-1.html#cb83-6" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard error of the regression is: </span><span class="sc">{</span>se_reg<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span>
+<span id="cb83-7"><a href="standard-errors-1.html#cb83-7" tabindex="-1"></a></span>
+<span id="cb83-8"><a href="standard-errors-1.html#cb83-8" tabindex="-1"></a><span class="co"># 2. get standard errors of the respective coefficients </span></span>
+<span id="cb83-9"><a href="standard-errors-1.html#cb83-9" tabindex="-1"></a>var_cov <span class="op">=</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">*</span> sigma_sq</span>
+<span id="cb83-10"><a href="standard-errors-1.html#cb83-10" tabindex="-1"></a>manual_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
+<span id="cb83-11"><a href="standard-errors-1.html#cb83-11" tabindex="-1"></a></span>
+<span id="cb83-12"><a href="standard-errors-1.html#cb83-12" tabindex="-1"></a></span>
+<span id="cb83-13"><a href="standard-errors-1.html#cb83-13" tabindex="-1"></a><span class="co"># compare it with standard errors from statsmodels</span></span>
+<span id="cb83-14"><a href="standard-errors-1.html#cb83-14" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb83-15"><a href="standard-errors-1.html#cb83-15" tabindex="-1"></a><span class="co"># se from stats model</span></span>
+<span id="cb83-16"><a href="standard-errors-1.html#cb83-16" tabindex="-1"></a>X_sm <span class="op">=</span> sm.add_constant(X)   <span class="co"># add intercept</span></span>
+<span id="cb83-17"><a href="standard-errors-1.html#cb83-17" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X_sm).fit()</span>
+<span id="cb83-18"><a href="standard-errors-1.html#cb83-18" tabindex="-1"></a></span>
+<span id="cb83-19"><a href="standard-errors-1.html#cb83-19" tabindex="-1"></a></span>
+<span id="cb83-20"><a href="standard-errors-1.html#cb83-20" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;The estimates from statmodels: </span><span class="sc">{</span>model<span class="sc">.</span>params<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)   <span class="co"># coefficients</span></span>
+<span id="cb83-21"><a href="standard-errors-1.html#cb83-21" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from sklearn is: </span><span class="sc">{</span>reg<span class="sc">.</span>coef_<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb83-22"><a href="standard-errors-1.html#cb83-22" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;The estimates from manual GD is: </span><span class="sc">{</span>theta<span class="sc">.</span>reshape((<span class="dv">1</span>, <span class="dv">3</span>))<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&#39;</span>) </span>
+<span id="cb83-23"><a href="standard-errors-1.html#cb83-23" tabindex="-1"></a></span>
+<span id="cb83-24"><a href="standard-errors-1.html#cb83-24" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors from statmodel under homoskedasticity: </span><span class="sc">{</span>model<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&quot;</span>)      <span class="co"># standard errors</span></span>
+<span id="cb83-25"><a href="standard-errors-1.html#cb83-25" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;standard errors (manual estimation) under homoskedasticity: </span><span class="sc">{</span>manual_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss"> </span><span class="ch">\n</span><span class="ss"> </span><span class="ch">\n</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>standard error of the regression is: [[3048.97689642]] 
  
 
-The estimates from statmodels: [40015.7547 10015.2551   714.2199]
-The estimates from sklearn is: [[40015.7547 10015.2551   714.2199]]
-The estimates from manual GD is: [[40015.7547 10015.2551   714.2199]] 
+The estimates from statmodels: [39987.2777  9991.4859   695.5676]
+The estimates from sklearn is: [[39987.2777  9991.4859   695.5676]]
+The estimates from manual GD is: [[39987.2777  9991.4859   695.5676]] 
  
 
-standard errors from statmodel under homoskedasticity: [30.0123 33.6297 33.6297]
-standard errors (manual estimation) under homoskedasticity: [30.0123 33.6297 33.6297] 
+standard errors from statmodel under homoskedasticity: [30.4898 33.9277 33.9277]
+standard errors (manual estimation) under homoskedasticity: [30.4898 33.9277 33.9277] 
  </code></pre>
-<div class="sourceCode" id="cb86"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb86-1"><a href="standard-errors-1.html#cb86-1" tabindex="-1"></a>bun <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
-<span id="cb86-2"><a href="standard-errors-1.html#cb86-2" tabindex="-1"></a>omega <span class="op">=</span> np.diag((residual<span class="op">**</span><span class="dv">2</span>).ravel()) <span class="co"># n * n diagonal matrix</span></span>
-<span id="cb86-3"><a href="standard-errors-1.html#cb86-3" tabindex="-1"></a>stuff <span class="op">=</span> X.T <span class="op">@</span> omega <span class="op">@</span> X</span>
-<span id="cb86-4"><a href="standard-errors-1.html#cb86-4" tabindex="-1"></a></span>
-<span id="cb86-5"><a href="standard-errors-1.html#cb86-5" tabindex="-1"></a><span class="co"># get the variance covariance matrix</span></span>
-<span id="cb86-6"><a href="standard-errors-1.html#cb86-6" tabindex="-1"></a>var_cov <span class="op">=</span> bun <span class="op">@</span> stuff <span class="op">@</span> bun</span>
-<span id="cb86-7"><a href="standard-errors-1.html#cb86-7" tabindex="-1"></a>robust_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
-<span id="cb86-8"><a href="standard-errors-1.html#cb86-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;heteroskedasticity robust standard error: </span><span class="sc">{</span>robust_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb86-9"><a href="standard-errors-1.html#cb86-9" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;se under homoskedastic assumption: </span><span class="sc">{</span>manual_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb86-10"><a href="standard-errors-1.html#cb86-10" tabindex="-1"></a></span>
-<span id="cb86-11"><a href="standard-errors-1.html#cb86-11" tabindex="-1"></a><span class="co"># robust se using sm</span></span>
-<span id="cb86-12"><a href="standard-errors-1.html#cb86-12" tabindex="-1"></a>model2 <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">&#39;HC0&#39;</span>)</span>
-<span id="cb86-13"><a href="standard-errors-1.html#cb86-13" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;standard errors from stats model under heteroskedasticity: </span><span class="sc">{</span>model2<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
-<pre><code>heteroskedasticity robust standard error: [30.0078 35.5333 33.4547]
-se under homoskedastic assumption: [30.0123 33.6297 33.6297]
-standard errors from stats model under heteroskedasticity: [30.0078 35.5333 33.4547]</code></pre>
+<p>Now that we have estimated standard errors under the homoskedasticity assumption let’s see how we can fix this. Before we move on, I want to reiterate that the origin of heteroskedasicity is due to error terms coming from the distribution of different variance. In that regard, we want to account for this in our estimation of standard errors.</p>
+<p>To do so, we’ll use a sandwich method, which you should’ve heard from you previous classes. So what does it entail? Basically, we’d want to form weights using the size of the error term.</p>
+<p>Let’s just derive the sandwich estimator:</p>
+<p><span class="math display">\[\begin{align}
+\hat{\beta} = (X^{T}X)^{-1}X^{T}Y \\
+\hat{\beta} = (X^{T}X)^{-1}X^{T}(X\beta + \epsilon) \\
+\hat{\beta} = \beta + (X^{T}X)^{-1}X^{T}\epsilon
+\end{align}\]</span></p>
+<p>The end line is the starting point. Note that <span class="math inline">\(Var(a)=0\)</span> and <span class="math inline">\(Var(ax) = a^{2}Var(x)\)</span>, where <span class="math inline">\(a\)</span> is a constant and <span class="math inline">\(x\)</span> is a random variable. Let’s then take the variance of <span class="math inline">\(\hat{\beta}\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+Var(\hat{\beta}) = Var((X^{T}X)^{-1}X^{T}\epsilon) \\
+= (X^{T}X)^{-1}Var(X^{T}\epsilon)(X^{T}X)^{-1} \\
+= (X^{T}X)^{-1}X^{T}Var(\epsilon)X(X^{T}X)^{-1} \\
+= (X^{T}X)^{-1}X^{T} \Omega X(X^{T}X)^{-1}
+\end{align}\]</span></p>
+<p>Here, <span class="math inline">\(\Omega\)</span> is the scaling term and it is <span class="math inline">\(\epsilon\epsilon^{T}.I\)</span>, which is a <span class="math inline">\(n \times n\)</span> diagonal matrix. We don’t observe this, so replace this with the sample counterpart <span class="math inline">\(\hat{\Omega} = \hat{\epsilon}\hat{\epsilon}^{T}I\)</span>. Notice that under the case of homoskedasticity <span class="math inline">\(\Omega = \sigma^2 I\)</span>, which collapses <span class="math inline">\(Var{\hat{\beta}}\)</span> to <span class="math inline">\((X^{T}X)^{-1} \sigma^2\)</span>. This is what we used to estimate standard errors under homoskedasticity.</p>
+<p>Let’s estimate the standard errors accounting for heteroskedasicity. I’m going to divide this into bun and stuffing part as I write the code.</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb85-1"><a href="standard-errors-1.html#cb85-1" tabindex="-1"></a>bun <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
+<span id="cb85-2"><a href="standard-errors-1.html#cb85-2" tabindex="-1"></a>omega <span class="op">=</span> np.diag((residual<span class="op">**</span><span class="dv">2</span>).ravel()) <span class="co"># n * n diagonal matrix</span></span>
+<span id="cb85-3"><a href="standard-errors-1.html#cb85-3" tabindex="-1"></a>stuff <span class="op">=</span> X.T <span class="op">@</span> omega <span class="op">@</span> X</span>
+<span id="cb85-4"><a href="standard-errors-1.html#cb85-4" tabindex="-1"></a></span>
+<span id="cb85-5"><a href="standard-errors-1.html#cb85-5" tabindex="-1"></a><span class="co"># get the variance covariance matrix</span></span>
+<span id="cb85-6"><a href="standard-errors-1.html#cb85-6" tabindex="-1"></a>var_cov <span class="op">=</span> bun <span class="op">@</span> stuff <span class="op">@</span> bun</span>
+<span id="cb85-7"><a href="standard-errors-1.html#cb85-7" tabindex="-1"></a>robust_se <span class="op">=</span> np.sqrt(np.diag(var_cov))</span>
+<span id="cb85-8"><a href="standard-errors-1.html#cb85-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;heteroskedasticity robust standard error: </span><span class="sc">{</span>robust_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb85-9"><a href="standard-errors-1.html#cb85-9" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;se under homoskedastic assumption: </span><span class="sc">{</span>manual_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb85-10"><a href="standard-errors-1.html#cb85-10" tabindex="-1"></a></span>
+<span id="cb85-11"><a href="standard-errors-1.html#cb85-11" tabindex="-1"></a><span class="co"># robust se using sm</span></span>
+<span id="cb85-12"><a href="standard-errors-1.html#cb85-12" tabindex="-1"></a>model2 <span class="op">=</span> sm.OLS(y, X).fit(cov_type<span class="op">=</span><span class="st">&#39;HC0&#39;</span>)</span>
+<span id="cb85-13"><a href="standard-errors-1.html#cb85-13" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;standard errors from stats model under heteroskedasticity: </span><span class="sc">{</span>model2<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<pre><code>heteroskedasticity robust standard error: [30.4852 36.4511 34.2139]
+se under homoskedastic assumption: [30.4898 33.9277 33.9277]
+standard errors from stats model under heteroskedasticity: [30.4852 36.4511 34.2139]</code></pre>
 <p>If you compare the standard errors under homoskedasticity versus heteroskedasticity, you will see that standard errors under heteroskedasticity are larger, particularly for the education estimate.</p>
 <p>Note that there are various forms of heteroskedasicity robust standard error including “HC1”, “HC2”, and “HC3”. Here, we’ve used the “H0” type – you can dig deeper according to your need.</p>
-<p>Let’s now discuss the case where error terms are not independent and are correlated. One can think of this in a geospatial form – the unexplained portion of income for people living in a particular area can be correlated. For example, if you have people living in Des Moines, Iowa and NYC, you probably will think that income is spatially correlated due to local market conditions, taste, cost of living and other unobserved factors attributing to spatial clustering.</p>
+<p>Let’s now discuss the case where error terms are not independent and are correlated. One can think of this in a geospatial form – the unexplained portion of income for people living in a particular area can be correlated. For example, if you have people living in Des Moines, Iowa and NYC in your sample, you’ll probably think that income is spatially correlated due to local market conditions, taste, cost of living and other unobserved factors attributing to spatial clustering.</p>
 <p>In the following simulation exercise, we’ll incorporate this cluter-type correlation in the error terms. Specifically, we’ll build error as:</p>
 <p><span class="math display">\[\begin{equation}
 \epsilon_{ic} = u_{c} + v_{i}
 \end{equation}\]</span></p>
 <p>Essentially, the error term consists of: i) <span class="math inline">\(u_c\)</span> – the cluster specific shock (all units within a specific cluster gets the same value); and ii) individual specific term. Both <span class="math inline">\(u_c\)</span> and <span class="math inline">\(v_i\)</span> will come from a normal distribution with mean 0 and standard deviation 3,000 and 1,000, respectively.</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb88-1"><a href="standard-errors-1.html#cb88-1" tabindex="-1"></a><span class="co"># number of clusters</span></span>
-<span id="cb88-2"><a href="standard-errors-1.html#cb88-2" tabindex="-1"></a>nc <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb88-3"><a href="standard-errors-1.html#cb88-3" tabindex="-1"></a></span>
-<span id="cb88-4"><a href="standard-errors-1.html#cb88-4" tabindex="-1"></a><span class="co"># number of units within cluster </span></span>
-<span id="cb88-5"><a href="standard-errors-1.html#cb88-5" tabindex="-1"></a>ni <span class="op">=</span> <span class="dv">200</span></span>
-<span id="cb88-6"><a href="standard-errors-1.html#cb88-6" tabindex="-1"></a></span>
-<span id="cb88-7"><a href="standard-errors-1.html#cb88-7" tabindex="-1"></a><span class="co"># total number of units</span></span>
-<span id="cb88-8"><a href="standard-errors-1.html#cb88-8" tabindex="-1"></a>m <span class="op">=</span> nc <span class="op">*</span> ni</span>
-<span id="cb88-9"><a href="standard-errors-1.html#cb88-9" tabindex="-1"></a></span>
-<span id="cb88-10"><a href="standard-errors-1.html#cb88-10" tabindex="-1"></a><span class="co"># get the cluster shock</span></span>
-<span id="cb88-11"><a href="standard-errors-1.html#cb88-11" tabindex="-1"></a>cluster_shock <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">3000</span>, nc)</span>
-<span id="cb88-12"><a href="standard-errors-1.html#cb88-12" tabindex="-1"></a>cluster_index <span class="op">=</span> np.repeat(np.linspace(<span class="dv">1</span>, nc), ni).astype(<span class="st">&#39;int&#39;</span>)</span>
-<span id="cb88-13"><a href="standard-errors-1.html#cb88-13" tabindex="-1"></a>u_shock <span class="op">=</span> cluster_shock[cluster_index<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb88-14"><a href="standard-errors-1.html#cb88-14" tabindex="-1"></a></span>
-<span id="cb88-15"><a href="standard-errors-1.html#cb88-15" tabindex="-1"></a><span class="co"># get the individuals shock</span></span>
-<span id="cb88-16"><a href="standard-errors-1.html#cb88-16" tabindex="-1"></a><span class="co"># in this case cluster shock dominates individual shock</span></span>
-<span id="cb88-17"><a href="standard-errors-1.html#cb88-17" tabindex="-1"></a>v_shock <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1000</span>, m)</span>
-<span id="cb88-18"><a href="standard-errors-1.html#cb88-18" tabindex="-1"></a></span>
-<span id="cb88-19"><a href="standard-errors-1.html#cb88-19" tabindex="-1"></a>error <span class="op">=</span> u_shock <span class="op">+</span> v_shock</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb87-1"><a href="standard-errors-1.html#cb87-1" tabindex="-1"></a><span class="co"># number of clusters</span></span>
+<span id="cb87-2"><a href="standard-errors-1.html#cb87-2" tabindex="-1"></a>nc <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb87-3"><a href="standard-errors-1.html#cb87-3" tabindex="-1"></a></span>
+<span id="cb87-4"><a href="standard-errors-1.html#cb87-4" tabindex="-1"></a><span class="co"># number of units within cluster </span></span>
+<span id="cb87-5"><a href="standard-errors-1.html#cb87-5" tabindex="-1"></a>ni <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb87-6"><a href="standard-errors-1.html#cb87-6" tabindex="-1"></a></span>
+<span id="cb87-7"><a href="standard-errors-1.html#cb87-7" tabindex="-1"></a><span class="co"># total number of units</span></span>
+<span id="cb87-8"><a href="standard-errors-1.html#cb87-8" tabindex="-1"></a>m <span class="op">=</span> nc <span class="op">*</span> ni</span>
+<span id="cb87-9"><a href="standard-errors-1.html#cb87-9" tabindex="-1"></a></span>
+<span id="cb87-10"><a href="standard-errors-1.html#cb87-10" tabindex="-1"></a><span class="co"># get the cluster shock</span></span>
+<span id="cb87-11"><a href="standard-errors-1.html#cb87-11" tabindex="-1"></a>cluster_shock <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">3000</span>, nc)</span>
+<span id="cb87-12"><a href="standard-errors-1.html#cb87-12" tabindex="-1"></a>cluster_index <span class="op">=</span> np.repeat(np.linspace(<span class="dv">1</span>, nc), ni).astype(<span class="st">&#39;int&#39;</span>)</span>
+<span id="cb87-13"><a href="standard-errors-1.html#cb87-13" tabindex="-1"></a>u_shock <span class="op">=</span> cluster_shock[cluster_index<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb87-14"><a href="standard-errors-1.html#cb87-14" tabindex="-1"></a></span>
+<span id="cb87-15"><a href="standard-errors-1.html#cb87-15" tabindex="-1"></a><span class="co"># get the individuals shock</span></span>
+<span id="cb87-16"><a href="standard-errors-1.html#cb87-16" tabindex="-1"></a><span class="co"># in this case cluster shock dominates individual shock</span></span>
+<span id="cb87-17"><a href="standard-errors-1.html#cb87-17" tabindex="-1"></a>v_shock <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1000</span>, m)</span>
+<span id="cb87-18"><a href="standard-errors-1.html#cb87-18" tabindex="-1"></a></span>
+<span id="cb87-19"><a href="standard-errors-1.html#cb87-19" tabindex="-1"></a>error <span class="op">=</span> u_shock <span class="op">+</span> v_shock</span></code></pre></div>
 <p>Let’s estimate the model and plot the relationship between education and residuals by some clusters.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb89-1"><a href="standard-errors-1.html#cb89-1" tabindex="-1"></a>X <span class="op">=</span> np.concatenate((educa_scaled.reshape((m, <span class="dv">1</span>)), ability_scaled.reshape((m,<span class="dv">1</span>))), axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb89-2"><a href="standard-errors-1.html#cb89-2" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X)</span>
-<span id="cb89-3"><a href="standard-errors-1.html#cb89-3" tabindex="-1"></a>y_c <span class="op">=</span> <span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled <span class="op">+</span> error.ravel()</span>
-<span id="cb89-4"><a href="standard-errors-1.html#cb89-4" tabindex="-1"></a>y_c <span class="op">=</span> y_c.reshape((m, <span class="dv">1</span>))</span>
-<span id="cb89-5"><a href="standard-errors-1.html#cb89-5" tabindex="-1"></a></span>
-<span id="cb89-6"><a href="standard-errors-1.html#cb89-6" tabindex="-1"></a><span class="co"># initialize theta</span></span>
-<span id="cb89-7"><a href="standard-errors-1.html#cb89-7" tabindex="-1"></a>theta <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, p).reshape((p, <span class="dv">1</span>))</span>
-<span id="cb89-8"><a href="standard-errors-1.html#cb89-8" tabindex="-1"></a><span class="co"># learning rate</span></span>
-<span id="cb89-9"><a href="standard-errors-1.html#cb89-9" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">1e-2</span></span>
-<span id="cb89-10"><a href="standard-errors-1.html#cb89-10" tabindex="-1"></a><span class="co"># number of iterations</span></span>
-<span id="cb89-11"><a href="standard-errors-1.html#cb89-11" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">20000</span></span>
-<span id="cb89-12"><a href="standard-errors-1.html#cb89-12" tabindex="-1"></a></span>
-<span id="cb89-13"><a href="standard-errors-1.html#cb89-13" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, epochs):</span>
-<span id="cb89-14"><a href="standard-errors-1.html#cb89-14" tabindex="-1"></a>    <span class="co"># get the gradient and adjust theta against the gradient using the learning rate</span></span>
-<span id="cb89-15"><a href="standard-errors-1.html#cb89-15" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> X.T<span class="op">@</span>(y_c <span class="op">-</span> X<span class="op">@</span>theta)</span>
-<span id="cb89-16"><a href="standard-errors-1.html#cb89-16" tabindex="-1"></a>    theta <span class="op">=</span> theta <span class="op">-</span> eta<span class="op">*</span>gradient </span>
-<span id="cb89-17"><a href="standard-errors-1.html#cb89-17" tabindex="-1"></a></span>
-<span id="cb89-18"><a href="standard-errors-1.html#cb89-18" tabindex="-1"></a><span class="bu">print</span>(theta)</span>
-<span id="cb89-19"><a href="standard-errors-1.html#cb89-19" tabindex="-1"></a></span>
-<span id="cb89-20"><a href="standard-errors-1.html#cb89-20" tabindex="-1"></a>resid_clus <span class="op">=</span> y_c <span class="op">-</span> X<span class="op">@</span>theta </span>
-<span id="cb89-21"><a href="standard-errors-1.html#cb89-21" tabindex="-1"></a></span>
-<span id="cb89-22"><a href="standard-errors-1.html#cb89-22" tabindex="-1"></a></span>
-<span id="cb89-23"><a href="standard-errors-1.html#cb89-23" tabindex="-1"></a><span class="co"># then re-generate income </span></span>
-<span id="cb89-24"><a href="standard-errors-1.html#cb89-24" tabindex="-1"></a></span>
-<span id="cb89-25"><a href="standard-errors-1.html#cb89-25" tabindex="-1"></a>error_clus <span class="op">=</span> income <span class="op">-</span> (<span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled)</span>
-<span id="cb89-26"><a href="standard-errors-1.html#cb89-26" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb89-27"><a href="standard-errors-1.html#cb89-27" tabindex="-1"></a>plt.scatter(educa[cluster_index<span class="op">==</span><span class="dv">1</span>], resid_clus[cluster_index<span class="op">==</span><span class="dv">1</span>], color <span class="op">=</span> <span class="st">&#39;red&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, label<span class="op">=</span><span class="st">&#39;Cluster 1&#39;</span>)</span>
-<span id="cb89-28"><a href="standard-errors-1.html#cb89-28" tabindex="-1"></a>plt.scatter(educa[cluster_index<span class="op">==</span><span class="dv">10</span>], resid_clus[cluster_index<span class="op">==</span><span class="dv">10</span>], color <span class="op">=</span> <span class="st">&#39;blue&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, label<span class="op">=</span><span class="st">&#39;Cluster 10&#39;</span>)</span>
-<span id="cb89-29"><a href="standard-errors-1.html#cb89-29" tabindex="-1"></a>plt.scatter(educa[cluster_index<span class="op">==</span><span class="dv">20</span>], resid_clus[cluster_index<span class="op">==</span><span class="dv">20</span>], color <span class="op">=</span> <span class="st">&#39;green&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, label<span class="op">=</span><span class="st">&#39;Cluster 20&#39;</span>)</span>
-<span id="cb89-30"><a href="standard-errors-1.html#cb89-30" tabindex="-1"></a>plt.legend()</span>
-<span id="cb89-31"><a href="standard-errors-1.html#cb89-31" tabindex="-1"></a>plt.title(<span class="st">&#39;Relationship between schooling and residuals </span><span class="ch">\n</span><span class="st"> by some chosen cluster&#39;</span>)</span>
-<span id="cb89-32"><a href="standard-errors-1.html#cb89-32" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;schooling&#39;</span>)</span>
-<span id="cb89-33"><a href="standard-errors-1.html#cb89-33" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;residuals&#39;</span>)</span></code></pre></div>
-<pre><code>[[39649.37831353]
- [10027.34709599]
- [  695.56370296]]
+<div class="sourceCode" id="cb88"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb88-1"><a href="standard-errors-1.html#cb88-1" tabindex="-1"></a>X <span class="op">=</span> np.concatenate((educa_scaled.reshape((m, <span class="dv">1</span>)), ability_scaled.reshape((m,<span class="dv">1</span>))), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb88-2"><a href="standard-errors-1.html#cb88-2" tabindex="-1"></a>X <span class="op">=</span> add_dummy_feature(X)</span>
+<span id="cb88-3"><a href="standard-errors-1.html#cb88-3" tabindex="-1"></a>y_c <span class="op">=</span> <span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled <span class="op">+</span> error.ravel()</span>
+<span id="cb88-4"><a href="standard-errors-1.html#cb88-4" tabindex="-1"></a>y_c <span class="op">=</span> y_c.reshape((m, <span class="dv">1</span>))</span>
+<span id="cb88-5"><a href="standard-errors-1.html#cb88-5" tabindex="-1"></a></span>
+<span id="cb88-6"><a href="standard-errors-1.html#cb88-6" tabindex="-1"></a><span class="co"># initialize theta</span></span>
+<span id="cb88-7"><a href="standard-errors-1.html#cb88-7" tabindex="-1"></a>theta <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, p).reshape((p, <span class="dv">1</span>))</span>
+<span id="cb88-8"><a href="standard-errors-1.html#cb88-8" tabindex="-1"></a><span class="co"># learning rate</span></span>
+<span id="cb88-9"><a href="standard-errors-1.html#cb88-9" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">1e-2</span></span>
+<span id="cb88-10"><a href="standard-errors-1.html#cb88-10" tabindex="-1"></a><span class="co"># number of iterations</span></span>
+<span id="cb88-11"><a href="standard-errors-1.html#cb88-11" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">20000</span></span>
+<span id="cb88-12"><a href="standard-errors-1.html#cb88-12" tabindex="-1"></a></span>
+<span id="cb88-13"><a href="standard-errors-1.html#cb88-13" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, epochs):</span>
+<span id="cb88-14"><a href="standard-errors-1.html#cb88-14" tabindex="-1"></a>    <span class="co"># get the gradient and adjust theta against the gradient using the learning rate</span></span>
+<span id="cb88-15"><a href="standard-errors-1.html#cb88-15" tabindex="-1"></a>    gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>m <span class="op">*</span> X.T<span class="op">@</span>(y_c <span class="op">-</span> X<span class="op">@</span>theta)</span>
+<span id="cb88-16"><a href="standard-errors-1.html#cb88-16" tabindex="-1"></a>    theta <span class="op">=</span> theta <span class="op">-</span> eta<span class="op">*</span>gradient </span>
+<span id="cb88-17"><a href="standard-errors-1.html#cb88-17" tabindex="-1"></a></span>
+<span id="cb88-18"><a href="standard-errors-1.html#cb88-18" tabindex="-1"></a><span class="bu">print</span>(theta)</span>
+<span id="cb88-19"><a href="standard-errors-1.html#cb88-19" tabindex="-1"></a></span>
+<span id="cb88-20"><a href="standard-errors-1.html#cb88-20" tabindex="-1"></a>resid_clus <span class="op">=</span> y_c <span class="op">-</span> X<span class="op">@</span>theta </span>
+<span id="cb88-21"><a href="standard-errors-1.html#cb88-21" tabindex="-1"></a></span>
+<span id="cb88-22"><a href="standard-errors-1.html#cb88-22" tabindex="-1"></a></span>
+<span id="cb88-23"><a href="standard-errors-1.html#cb88-23" tabindex="-1"></a><span class="co"># then re-generate income </span></span>
+<span id="cb88-24"><a href="standard-errors-1.html#cb88-24" tabindex="-1"></a></span>
+<span id="cb88-25"><a href="standard-errors-1.html#cb88-25" tabindex="-1"></a>error_clus <span class="op">=</span> income <span class="op">-</span> (<span class="dv">40000</span> <span class="op">+</span> <span class="dv">10000</span> <span class="op">*</span> educa_scaled <span class="op">+</span> <span class="dv">700</span> <span class="op">*</span> ability_scaled)</span>
+<span id="cb88-26"><a href="standard-errors-1.html#cb88-26" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb88-27"><a href="standard-errors-1.html#cb88-27" tabindex="-1"></a>plt.scatter(educa[cluster_index<span class="op">==</span><span class="dv">1</span>], resid_clus[cluster_index<span class="op">==</span><span class="dv">1</span>], color <span class="op">=</span> <span class="st">&#39;red&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, label<span class="op">=</span><span class="st">&#39;Cluster 1&#39;</span>)</span>
+<span id="cb88-28"><a href="standard-errors-1.html#cb88-28" tabindex="-1"></a>plt.scatter(educa[cluster_index<span class="op">==</span><span class="dv">10</span>], resid_clus[cluster_index<span class="op">==</span><span class="dv">10</span>], color <span class="op">=</span> <span class="st">&#39;blue&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, label<span class="op">=</span><span class="st">&#39;Cluster 10&#39;</span>)</span>
+<span id="cb88-29"><a href="standard-errors-1.html#cb88-29" tabindex="-1"></a>plt.scatter(educa[cluster_index<span class="op">==</span><span class="dv">20</span>], resid_clus[cluster_index<span class="op">==</span><span class="dv">20</span>], color <span class="op">=</span> <span class="st">&#39;green&#39;</span>, alpha <span class="op">=</span> <span class="fl">0.3</span>, label<span class="op">=</span><span class="st">&#39;Cluster 20&#39;</span>)</span>
+<span id="cb88-30"><a href="standard-errors-1.html#cb88-30" tabindex="-1"></a>plt.legend()</span>
+<span id="cb88-31"><a href="standard-errors-1.html#cb88-31" tabindex="-1"></a>plt.title(<span class="st">&#39;Relationship between schooling and residuals </span><span class="ch">\n</span><span class="st"> by some chosen cluster&#39;</span>)</span>
+<span id="cb88-32"><a href="standard-errors-1.html#cb88-32" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;schooling&#39;</span>)</span>
+<span id="cb88-33"><a href="standard-errors-1.html#cb88-33" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;residuals&#39;</span>)</span></code></pre></div>
+<pre><code>[[40216.91715969]
+ [ 9940.69952697]
+ [  754.42493803]]
 
 
 
@@ -630,7 +599,7 @@ standard errors from stats model under heteroskedasticity: [30.0078 35.5333 33.4
 
 Text(0, 0.5, &#39;residuals&#39;)</code></pre>
 <div class="float">
-<img src="standard_errors_files/standard_errors_16_2.png" alt="png" />
+<img src="standard_errors_files/standard_errors_18_2.png" alt="png" />
 <div class="figcaption">png</div>
 </div>
 <p>In the figure above, we see that residuals across different clusters are grouped at certain residual values. This depicts the clustering problem. Now, we need to adjust our the standard errors to account for this kind of clustering. The variance now takes the form:</p>
@@ -638,1074 +607,90 @@ Text(0, 0.5, &#39;residuals&#39;)</code></pre>
 Var(\hat \beta) = (X^{T}X)^{-1} \bigg(\sum_{c=1}^{G} X^{T}_c \epsilon_c \epsilon^{T}_c X_c \bigg) (X^{T}X)^{-1}
 \end{equation}\]</span></p>
 <p>Let’s estimate this!!</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb91-1"><a href="standard-errors-1.html#cb91-1" tabindex="-1"></a>bun <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
-<span id="cb91-2"><a href="standard-errors-1.html#cb91-2" tabindex="-1"></a>stuff <span class="op">=</span> np.zeros(X.shape[<span class="dv">1</span>]<span class="op">*</span>X.shape[<span class="dv">1</span>]).reshape((X.shape[<span class="dv">1</span>], X.shape[<span class="dv">1</span>]))</span>
-<span id="cb91-3"><a href="standard-errors-1.html#cb91-3" tabindex="-1"></a></span>
-<span id="cb91-4"><a href="standard-errors-1.html#cb91-4" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, nc<span class="op">+</span><span class="dv">1</span>):</span>
-<span id="cb91-5"><a href="standard-errors-1.html#cb91-5" tabindex="-1"></a></span>
-<span id="cb91-6"><a href="standard-errors-1.html#cb91-6" tabindex="-1"></a>    X_c <span class="op">=</span> X[cluster_index<span class="op">==</span>i]</span>
-<span id="cb91-7"><a href="standard-errors-1.html#cb91-7" tabindex="-1"></a>    res_c <span class="op">=</span> resid_clus[cluster_index<span class="op">==</span>i]</span>
-<span id="cb91-8"><a href="standard-errors-1.html#cb91-8" tabindex="-1"></a></span>
-<span id="cb91-9"><a href="standard-errors-1.html#cb91-9" tabindex="-1"></a>    mid <span class="op">=</span> X_c.T<span class="op">@</span>res_c<span class="op">@</span>res_c.T<span class="op">@</span>X_c</span>
-<span id="cb91-10"><a href="standard-errors-1.html#cb91-10" tabindex="-1"></a>    stuff <span class="op">+=</span> mid</span>
-<span id="cb91-11"><a href="standard-errors-1.html#cb91-11" tabindex="-1"></a></span>
-<span id="cb91-12"><a href="standard-errors-1.html#cb91-12" tabindex="-1"></a>var_cov_clus <span class="op">=</span> bun<span class="op">@</span>stuff<span class="op">@</span>bun</span>
-<span id="cb91-13"><a href="standard-errors-1.html#cb91-13" tabindex="-1"></a>se_clus <span class="op">=</span> np.sqrt(np.diag(var_cov_clus))</span>
-<span id="cb91-14"><a href="standard-errors-1.html#cb91-14" tabindex="-1"></a></span>
-<span id="cb91-15"><a href="standard-errors-1.html#cb91-15" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Cluster robust standard error is: </span><span class="sc">{</span>se_clus<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb91-16"><a href="standard-errors-1.html#cb91-16" tabindex="-1"></a></span>
-<span id="cb91-17"><a href="standard-errors-1.html#cb91-17" tabindex="-1"></a><span class="co"># small sample correction term</span></span>
-<span id="cb91-18"><a href="standard-errors-1.html#cb91-18" tabindex="-1"></a>correction <span class="op">=</span> ((nc<span class="op">/</span>(nc<span class="op">-</span><span class="dv">1</span>)) <span class="op">*</span> (m<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>(m<span class="op">-</span>p))</span>
-<span id="cb91-19"><a href="standard-errors-1.html#cb91-19" tabindex="-1"></a>var_cov_clust_corr <span class="op">=</span> var_cov_clus <span class="op">*</span> correction</span>
-<span id="cb91-20"><a href="standard-errors-1.html#cb91-20" tabindex="-1"></a>se_clus_correct <span class="op">=</span> np.sqrt(np.diag(var_cov_clust_corr))</span>
-<span id="cb91-21"><a href="standard-errors-1.html#cb91-21" tabindex="-1"></a></span>
-<span id="cb91-22"><a href="standard-errors-1.html#cb91-22" tabindex="-1"></a>model_clus <span class="op">=</span> sm.OLS(y_c, X).fit(cov_type<span class="op">=</span><span class="st">&#39;cluster&#39;</span>, cov_kwds<span class="op">=</span>{<span class="st">&#39;groups&#39;</span>: cluster_index})</span>
-<span id="cb91-23"><a href="standard-errors-1.html#cb91-23" tabindex="-1"></a>model_noclus <span class="op">=</span> sm.OLS(y_c, X).fit()</span>
-<span id="cb91-24"><a href="standard-errors-1.html#cb91-24" tabindex="-1"></a></span>
-<span id="cb91-25"><a href="standard-errors-1.html#cb91-25" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Clustered standard errors (not small sample corrected): </span><span class="sc">{</span>se_clus<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb91-26"><a href="standard-errors-1.html#cb91-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Clustered se corrected for small sample: </span><span class="sc">{</span>se_clus_correct<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb91-27"><a href="standard-errors-1.html#cb91-27" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Clustered standard error from statsmodel: </span><span class="sc">{</span>model_clus<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb91-28"><a href="standard-errors-1.html#cb91-28" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;standard error without clustering from statsmodel: </span><span class="sc">{</span>model_noclus<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
-<pre><code>Cluster robust standard error is: [421.13627575  28.40377396  32.01738254]
-Clustered standard errors (not small sample corrected): [421.1363  28.4038  32.0174]
-Clustered se corrected for small sample: [425.4544  28.695   32.3457]
-Clustered standard error from statsmodel: [425.4544  28.695   32.3457]
-standard error without clustering from statsmodel: [31.4168 35.2034 35.2034]</code></pre>
-<p>We’ve now computed the clustered standard errors and compared it with those from statsmodel. They are very exactly the same. However, clustered standard errors are larger compared to unclustered standard errors.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb90-1"><a href="standard-errors-1.html#cb90-1" tabindex="-1"></a>bun <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
+<span id="cb90-2"><a href="standard-errors-1.html#cb90-2" tabindex="-1"></a>stuff <span class="op">=</span> np.zeros(X.shape[<span class="dv">1</span>]<span class="op">*</span>X.shape[<span class="dv">1</span>]).reshape((X.shape[<span class="dv">1</span>], X.shape[<span class="dv">1</span>]))</span>
+<span id="cb90-3"><a href="standard-errors-1.html#cb90-3" tabindex="-1"></a></span>
+<span id="cb90-4"><a href="standard-errors-1.html#cb90-4" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, nc<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb90-5"><a href="standard-errors-1.html#cb90-5" tabindex="-1"></a></span>
+<span id="cb90-6"><a href="standard-errors-1.html#cb90-6" tabindex="-1"></a>    X_c <span class="op">=</span> X[cluster_index<span class="op">==</span>i]</span>
+<span id="cb90-7"><a href="standard-errors-1.html#cb90-7" tabindex="-1"></a>    res_c <span class="op">=</span> resid_clus[cluster_index<span class="op">==</span>i]</span>
+<span id="cb90-8"><a href="standard-errors-1.html#cb90-8" tabindex="-1"></a></span>
+<span id="cb90-9"><a href="standard-errors-1.html#cb90-9" tabindex="-1"></a>    mid <span class="op">=</span> X_c.T<span class="op">@</span>res_c<span class="op">@</span>res_c.T<span class="op">@</span>X_c</span>
+<span id="cb90-10"><a href="standard-errors-1.html#cb90-10" tabindex="-1"></a>    stuff <span class="op">+=</span> mid</span>
+<span id="cb90-11"><a href="standard-errors-1.html#cb90-11" tabindex="-1"></a></span>
+<span id="cb90-12"><a href="standard-errors-1.html#cb90-12" tabindex="-1"></a>var_cov_clus <span class="op">=</span> bun<span class="op">@</span>stuff<span class="op">@</span>bun</span>
+<span id="cb90-13"><a href="standard-errors-1.html#cb90-13" tabindex="-1"></a>se_clus <span class="op">=</span> np.sqrt(np.diag(var_cov_clus))</span>
+<span id="cb90-14"><a href="standard-errors-1.html#cb90-14" tabindex="-1"></a></span>
+<span id="cb90-15"><a href="standard-errors-1.html#cb90-15" tabindex="-1"></a></span>
+<span id="cb90-16"><a href="standard-errors-1.html#cb90-16" tabindex="-1"></a></span>
+<span id="cb90-17"><a href="standard-errors-1.html#cb90-17" tabindex="-1"></a><span class="co"># small sample correction term</span></span>
+<span id="cb90-18"><a href="standard-errors-1.html#cb90-18" tabindex="-1"></a>correction <span class="op">=</span> ((nc<span class="op">/</span>(nc<span class="op">-</span><span class="dv">1</span>)) <span class="op">*</span> (m<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>(m<span class="op">-</span>p))</span>
+<span id="cb90-19"><a href="standard-errors-1.html#cb90-19" tabindex="-1"></a>var_cov_clust_corr <span class="op">=</span> var_cov_clus <span class="op">*</span> correction</span>
+<span id="cb90-20"><a href="standard-errors-1.html#cb90-20" tabindex="-1"></a>se_clus_correct <span class="op">=</span> np.sqrt(np.diag(var_cov_clust_corr))</span>
+<span id="cb90-21"><a href="standard-errors-1.html#cb90-21" tabindex="-1"></a></span>
+<span id="cb90-22"><a href="standard-errors-1.html#cb90-22" tabindex="-1"></a>model_clus <span class="op">=</span> sm.OLS(y_c, X).fit(cov_type<span class="op">=</span><span class="st">&#39;cluster&#39;</span>, cov_kwds<span class="op">=</span>{<span class="st">&#39;groups&#39;</span>: cluster_index})</span>
+<span id="cb90-23"><a href="standard-errors-1.html#cb90-23" tabindex="-1"></a>model_noclus <span class="op">=</span> sm.OLS(y_c, X).fit()</span>
+<span id="cb90-24"><a href="standard-errors-1.html#cb90-24" tabindex="-1"></a></span>
+<span id="cb90-25"><a href="standard-errors-1.html#cb90-25" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Clustered standard errors (not small sample corrected): </span><span class="sc">{</span>se_clus<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb90-26"><a href="standard-errors-1.html#cb90-26" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Clustered se corrected for small sample: </span><span class="sc">{</span>se_clus_correct<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb90-27"><a href="standard-errors-1.html#cb90-27" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;Clustered standard error from statsmodel: </span><span class="sc">{</span>model_clus<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb90-28"><a href="standard-errors-1.html#cb90-28" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;standard error without clustering from statsmodel: </span><span class="sc">{</span>model_noclus<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<pre><code>Clustered standard errors (not small sample corrected): [452.4901  38.7462  35.9821]
+Clustered se corrected for small sample: [457.1298  39.1435  36.3511]
+Clustered standard error from statsmodel: [457.1298  39.1435  36.3511]
+standard error without clustering from statsmodel: [33.5377 37.3193 37.3193]</code></pre>
+<p>We’ve now computed the clustered standard errors and compared it with those from statsmodel. They are exactly the same. However, clustered standard errors are larger compared to non-clustered standard errors.</p>
 <p><strong>Bootstrapped standard errors</strong></p>
 <p>Bootstapping can lead to a convenient way of obtaining standard errors. The bootstrapping process assumes
-the data as the population and resamples <span class="math inline">\(k\)</span> number of times from the population (with replacement) and re-estimates the coefficients on every sample. You’ll then have <span class="math inline">\(k\)</span> number of estimates. The standard error
+the sample as the population and performs resampling <span class="math inline">\(k\)</span> number of times from the population (with replacement). For each re-sampling we estimates the coefficients. With this process, you’ll then have <span class="math inline">\(k\)</span> number of estimates. Then the standard error
 is simply the standard deviation of the estimates.</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb93-1"><a href="standard-errors-1.html#cb93-1" tabindex="-1"></a><span class="im">import</span> random</span>
-<span id="cb93-2"><a href="standard-errors-1.html#cb93-2" tabindex="-1"></a></span>
-<span id="cb93-3"><a href="standard-errors-1.html#cb93-3" tabindex="-1"></a>rep <span class="op">=</span> <span class="dv">199</span></span>
-<span id="cb93-4"><a href="standard-errors-1.html#cb93-4" tabindex="-1"></a><span class="co"># learning rate</span></span>
-<span id="cb93-5"><a href="standard-errors-1.html#cb93-5" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">1e-2</span></span>
-<span id="cb93-6"><a href="standard-errors-1.html#cb93-6" tabindex="-1"></a><span class="co"># number of iterations</span></span>
-<span id="cb93-7"><a href="standard-errors-1.html#cb93-7" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">20000</span></span>
-<span id="cb93-8"><a href="standard-errors-1.html#cb93-8" tabindex="-1"></a></span>
-<span id="cb93-9"><a href="standard-errors-1.html#cb93-9" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, rep):</span>
-<span id="cb93-10"><a href="standard-errors-1.html#cb93-10" tabindex="-1"></a></span>
-<span id="cb93-11"><a href="standard-errors-1.html#cb93-11" tabindex="-1"></a>    boot_index <span class="op">=</span> np.random.choice(X.shape[<span class="dv">0</span>], size<span class="op">=</span>X.shape[<span class="dv">0</span>], replace<span class="op">=</span><span class="va">True</span>).astype(<span class="st">&#39;int&#39;</span>)</span>
-<span id="cb93-12"><a href="standard-errors-1.html#cb93-12" tabindex="-1"></a>    boot_index <span class="op">=</span> np.array(boot_index) <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb93-13"><a href="standard-errors-1.html#cb93-13" tabindex="-1"></a>    X_boot <span class="op">=</span> X[boot_index] </span>
-<span id="cb93-14"><a href="standard-errors-1.html#cb93-14" tabindex="-1"></a>    y_boot <span class="op">=</span> y_c[boot_index]</span>
-<span id="cb93-15"><a href="standard-errors-1.html#cb93-15" tabindex="-1"></a></span>
-<span id="cb93-16"><a href="standard-errors-1.html#cb93-16" tabindex="-1"></a>    <span class="co"># initialize theta</span></span>
-<span id="cb93-17"><a href="standard-errors-1.html#cb93-17" tabindex="-1"></a>    theta <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, p).reshape((p, <span class="dv">1</span>))</span>
-<span id="cb93-18"><a href="standard-errors-1.html#cb93-18" tabindex="-1"></a></span>
-<span id="cb93-19"><a href="standard-errors-1.html#cb93-19" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, epochs):</span>
-<span id="cb93-20"><a href="standard-errors-1.html#cb93-20" tabindex="-1"></a>    <span class="co"># get the gradient and adjust theta against the gradient using the learning rate</span></span>
-<span id="cb93-21"><a href="standard-errors-1.html#cb93-21" tabindex="-1"></a>        gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>X_boot.shape[<span class="dv">0</span>] <span class="op">*</span> X_boot.T<span class="op">@</span>(y_boot <span class="op">-</span> X_boot<span class="op">@</span>theta)</span>
-<span id="cb93-22"><a href="standard-errors-1.html#cb93-22" tabindex="-1"></a>        theta <span class="op">=</span> theta <span class="op">-</span> eta<span class="op">*</span>gradient </span>
-<span id="cb93-23"><a href="standard-errors-1.html#cb93-23" tabindex="-1"></a></span>
-<span id="cb93-24"><a href="standard-errors-1.html#cb93-24" tabindex="-1"></a>    <span class="cf">if</span> k <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb93-25"><a href="standard-errors-1.html#cb93-25" tabindex="-1"></a>        theta_store <span class="op">=</span> theta.ravel()</span>
-<span id="cb93-26"><a href="standard-errors-1.html#cb93-26" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb93-27"><a href="standard-errors-1.html#cb93-27" tabindex="-1"></a>        theta_new <span class="op">=</span> theta.ravel()</span>
-<span id="cb93-28"><a href="standard-errors-1.html#cb93-28" tabindex="-1"></a>        theta_store <span class="op">=</span> np.vstack((theta_store, theta_new))    </span>
-<span id="cb93-29"><a href="standard-errors-1.html#cb93-29" tabindex="-1"></a></span>
-<span id="cb93-30"><a href="standard-errors-1.html#cb93-30" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&#39;Rep </span><span class="sc">{</span>k<span class="sc">}</span><span class="ss"> estimate: </span><span class="sc">{</span>theta<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb93-31"><a href="standard-errors-1.html#cb93-31" tabindex="-1"></a>    </span>
-<span id="cb93-32"><a href="standard-errors-1.html#cb93-32" tabindex="-1"></a></span>
-<span id="cb93-33"><a href="standard-errors-1.html#cb93-33" tabindex="-1"></a>boot_se <span class="op">=</span> theta_store.std(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb93-34"><a href="standard-errors-1.html#cb93-34" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;bootstrapped non-clustered version of se: </span><span class="sc">{</span>boot_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
-<span id="cb93-35"><a href="standard-errors-1.html#cb93-35" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;standard error without clustering from statsmodel: </span><span class="sc">{</span>model_noclus<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
-<pre><code>Rep 0 estimate: [[39634.20759692]
- [ 9972.15137597]
- [  652.72915823]]
-
-
-Rep 1 estimate: [[39621.9140577 ]
- [10046.57035788]
- [  672.42939652]]
-
-
-Rep 2 estimate: [[39623.08461529]
- [ 9981.58228619]
- [  670.98263527]]
-
-
-Rep 3 estimate: [[39637.55183125]
- [10001.7489246 ]
- [  662.05036779]]
-
-
-Rep 4 estimate: [[39695.44764121]
- [10041.16930021]
- [  647.56837512]]
-
-
-Rep 5 estimate: [[39615.34205097]
- [10017.89522589]
- [  686.87890025]]
-
-
-Rep 6 estimate: [[39678.63656974]
- [10036.74032889]
- [  707.02820496]]
-
-
-Rep 7 estimate: [[39635.53503934]
- [ 9995.33859027]
- [  690.70481666]]
-
-
-Rep 8 estimate: [[39600.00610224]
- [10028.68218574]
- [  702.75449706]]
-
-
-Rep 9 estimate: [[39707.94055818]
- [10059.68129534]
- [  654.26712762]]
-
-
-Rep 10 estimate: [[39612.10414709]
- [ 9981.12202919]
- [  736.70234899]]
-
-
-Rep 11 estimate: [[39681.05918001]
- [ 9975.17250646]
- [  709.55558489]]
-
-
-Rep 12 estimate: [[39647.47856378]
- [ 9981.73243325]
- [  753.13733332]]
-
-
-Rep 13 estimate: [[39667.34485868]
- [10036.61524871]
- [  687.09562445]]
-
-
-Rep 14 estimate: [[39659.16998691]
- [10000.52337148]
- [  710.01139155]]
-
-
-Rep 15 estimate: [[39639.29382108]
- [10082.30415622]
- [  742.44583502]]
-
-
-Rep 16 estimate: [[39625.32899474]
- [ 9987.89864738]
- [  748.9561938 ]]
-
-
-Rep 17 estimate: [[39667.92479251]
- [10000.07091612]
- [  682.58096323]]
-
-
-Rep 18 estimate: [[39647.64304062]
- [10065.09464912]
- [  672.04108689]]
-
-
-Rep 19 estimate: [[39610.70165961]
- [10018.89623775]
- [  729.73636443]]
-
-
-Rep 20 estimate: [[39617.45842608]
- [10069.92475955]
- [  685.70389042]]
-
-
-Rep 21 estimate: [[39588.24995471]
- [10013.35529898]
- [  689.32223213]]
-
-
-Rep 22 estimate: [[39658.37619605]
- [10072.95445493]
- [  696.82674721]]
-
-
-Rep 23 estimate: [[39687.52536611]
- [10040.72734011]
- [  649.30189093]]
-
-
-Rep 24 estimate: [[39666.07008584]
- [10043.61662354]
- [  666.85956965]]
-
-
-Rep 25 estimate: [[39603.38815643]
- [10047.87591532]
- [  632.34129952]]
-
-
-Rep 26 estimate: [[39657.30936341]
- [10031.24586445]
- [  715.40765174]]
-
-
-Rep 27 estimate: [[39615.99259115]
- [ 9957.31296536]
- [  696.13705344]]
-
-
-Rep 28 estimate: [[39643.66488259]
- [10008.39182557]
- [  730.86219762]]
-
-
-Rep 29 estimate: [[39675.34722975]
- [10081.34286247]
- [  676.3526735 ]]
-
-
-Rep 30 estimate: [[39614.46013655]
- [10001.8207831 ]
- [  719.41863241]]
-
-
-Rep 31 estimate: [[39640.25866004]
- [10021.40479851]
- [  704.30228288]]
-
-
-Rep 32 estimate: [[39612.09199402]
- [10033.38174397]
- [  663.34553222]]
-
-
-Rep 33 estimate: [[39683.79571144]
- [ 9973.46820969]
- [  723.40389677]]
-
-
-Rep 34 estimate: [[39686.12970807]
- [ 9956.55977931]
- [  744.53260858]]
-
-
-Rep 35 estimate: [[39632.88902075]
- [10036.84480922]
- [  689.57898674]]
-
-
-Rep 36 estimate: [[39713.00878458]
- [10015.81757479]
- [  715.55775228]]
-
-
-Rep 37 estimate: [[39671.48133869]
- [10107.90762039]
- [  671.13913505]]
-
-
-Rep 38 estimate: [[39643.65792854]
- [10058.90937064]
- [  693.25339089]]
-
-
-Rep 39 estimate: [[39703.82590057]
- [10076.31928723]
- [  654.39904957]]
-
-
-Rep 40 estimate: [[39643.81718312]
- [ 9964.54652872]
- [  698.7648128 ]]
-
-
-Rep 41 estimate: [[39689.97372164]
- [10000.7727396 ]
- [  687.52259812]]
-
-
-Rep 42 estimate: [[39612.87625102]
- [10004.74660384]
- [  709.37496101]]
-
-
-Rep 43 estimate: [[39671.32538866]
- [10028.43288591]
- [  700.32820727]]
-
-
-Rep 44 estimate: [[39630.74865614]
- [10100.3991206 ]
- [  611.18128762]]
-
-
-Rep 45 estimate: [[39622.90791883]
- [10071.05706214]
- [  673.05439047]]
-
-
-Rep 46 estimate: [[39604.76657256]
- [10057.85387121]
- [  628.8394797 ]]
-
-
-Rep 47 estimate: [[39641.07825529]
- [10049.36557045]
- [  730.63707784]]
-
-
-Rep 48 estimate: [[39691.79768444]
- [10002.91419186]
- [  693.30898309]]
-
-
-Rep 49 estimate: [[39662.42792761]
- [10037.23799975]
- [  713.29822611]]
-
-
-Rep 50 estimate: [[39663.69589865]
- [10074.31186539]
- [  645.45476732]]
-
-
-Rep 51 estimate: [[39680.76408045]
- [ 9987.93311561]
- [  760.82821243]]
-
-
-Rep 52 estimate: [[39619.97082001]
- [10037.60657886]
- [  661.40091985]]
-
-
-Rep 53 estimate: [[39624.9279004 ]
- [10024.43239989]
- [  745.91481201]]
-
-
-Rep 54 estimate: [[39586.35708561]
- [10076.95450602]
- [  629.20304524]]
-
-
-Rep 55 estimate: [[39679.83165912]
- [10071.96718542]
- [  644.02298151]]
-
-
-Rep 56 estimate: [[39601.42306921]
- [10091.46830495]
- [  664.50994212]]
-
-
-Rep 57 estimate: [[39738.84348681]
- [10028.95597784]
- [  695.86288615]]
-
-
-Rep 58 estimate: [[39647.87951559]
- [ 9998.21533346]
- [  661.00115565]]
-
-
-Rep 59 estimate: [[39647.8723745 ]
- [10016.47193961]
- [  639.26241395]]
-
-
-Rep 60 estimate: [[39642.84507487]
- [10034.21172881]
- [  653.12708525]]
-
-
-Rep 61 estimate: [[39648.71749172]
- [10053.26102583]
- [  676.84555042]]
-
-
-Rep 62 estimate: [[39654.7967103 ]
- [10045.72267797]
- [  666.79901184]]
-
-
-Rep 63 estimate: [[39612.28274296]
- [10011.06062689]
- [  697.86622241]]
-
-
-Rep 64 estimate: [[39614.60384791]
- [10021.96923194]
- [  722.94352736]]
-
-
-Rep 65 estimate: [[39612.37330471]
- [10064.7123475 ]
- [  669.34877168]]
-
-
-Rep 66 estimate: [[39673.08721685]
- [10012.1679277 ]
- [  745.4580107 ]]
-
-
-Rep 67 estimate: [[39618.32940955]
- [10013.97419028]
- [  668.39873329]]
-
-
-Rep 68 estimate: [[39628.51457672]
- [10011.12953266]
- [  696.81355033]]
-
-
-Rep 69 estimate: [[39658.02181461]
- [10068.86929084]
- [  689.81993823]]
-
-
-Rep 70 estimate: [[39637.89056608]
- [10052.13019266]
- [  715.32750376]]
-
-
-Rep 71 estimate: [[39679.5330422 ]
- [10100.65291174]
- [  677.75745628]]
-
-
-Rep 72 estimate: [[39692.65248798]
- [10000.46060365]
- [  702.46626574]]
-
-
-Rep 73 estimate: [[39658.81539007]
- [10024.15467442]
- [  645.60990573]]
-
-
-Rep 74 estimate: [[39642.66877888]
- [10023.86808413]
- [  723.51478569]]
-
-
-Rep 75 estimate: [[39695.40950835]
- [10019.72084127]
- [  664.74411942]]
-
-
-Rep 76 estimate: [[39637.94858277]
- [10012.92585604]
- [  709.17713849]]
-
-
-Rep 77 estimate: [[39622.50035905]
- [10046.02128644]
- [  675.20862677]]
-
-
-Rep 78 estimate: [[39628.14242031]
- [10080.18874293]
- [  622.71631863]]
-
-
-Rep 79 estimate: [[39682.81735629]
- [10041.9898932 ]
- [  692.45776192]]
-
-
-Rep 80 estimate: [[39675.97498997]
- [10039.89993909]
- [  694.07466724]]
-
-
-Rep 81 estimate: [[39638.87090673]
- [10077.1659821 ]
- [  686.19713262]]
-
-
-Rep 82 estimate: [[39630.96885157]
- [10022.10255276]
- [  726.14058914]]
-
-
-Rep 83 estimate: [[39636.3769543 ]
- [10030.72330636]
- [  705.44437295]]
-
-
-Rep 84 estimate: [[39624.18801433]
- [10010.07055701]
- [  675.1970448 ]]
-
-
-Rep 85 estimate: [[39707.51948677]
- [10071.49412137]
- [  701.92964802]]
-
-
-Rep 86 estimate: [[39615.4515855 ]
- [10017.99562684]
- [  716.18090475]]
-
-
-Rep 87 estimate: [[39608.54965838]
- [10050.41049065]
- [  697.41637554]]
-
-
-Rep 88 estimate: [[39691.98713524]
- [10098.09824757]
- [  713.48827376]]
-
-
-Rep 89 estimate: [[39595.55443741]
- [10047.83576716]
- [  668.21668283]]
-
-
-Rep 90 estimate: [[39731.69916921]
- [10016.69969976]
- [  668.1809089 ]]
-
-
-Rep 91 estimate: [[39652.0587333 ]
- [10013.15558147]
- [  666.57907701]]
-
-
-Rep 92 estimate: [[39625.19746259]
- [10006.67630543]
- [  676.34971174]]
-
-
-Rep 93 estimate: [[39623.1732082 ]
- [10056.00513643]
- [  657.67129513]]
-
-
-Rep 94 estimate: [[39669.56381442]
- [10011.80050511]
- [  755.80095212]]
-
-
-Rep 95 estimate: [[39611.31590999]
- [10039.15137472]
- [  702.07703054]]
-
-
-Rep 96 estimate: [[39612.57842562]
- [10051.82340555]
- [  703.45902349]]
-
-
-Rep 97 estimate: [[39692.78602923]
- [10042.04713415]
- [  677.38841659]]
-
-
-Rep 98 estimate: [[39661.76137101]
- [10059.24880542]
- [  682.59772266]]
-
-
-Rep 99 estimate: [[39606.1170304 ]
- [10060.23053653]
- [  670.5534201 ]]
-
-
-Rep 100 estimate: [[39713.9395932 ]
- [10042.55208298]
- [  716.8405365 ]]
-
-
-Rep 101 estimate: [[39679.54740889]
- [10023.6023723 ]
- [  675.70266313]]
-
-
-Rep 102 estimate: [[39669.29585361]
- [10075.18985606]
- [  670.30338812]]
-
-
-Rep 103 estimate: [[39617.53461811]
- [10025.62430093]
- [  657.2055975 ]]
-
-
-Rep 104 estimate: [[39630.54394129]
- [10016.80633441]
- [  674.27638597]]
-
-
-Rep 105 estimate: [[39675.24635594]
- [10051.38483056]
- [  655.39525373]]
-
-
-Rep 106 estimate: [[39650.47580971]
- [10015.50862261]
- [  744.81596155]]
-
-
-Rep 107 estimate: [[39681.66575401]
- [10009.71142048]
- [  635.38642252]]
-
-
-Rep 108 estimate: [[39646.16404817]
- [10098.75866793]
- [  656.33659447]]
-
-
-Rep 109 estimate: [[39673.45866978]
- [ 9980.98604561]
- [  709.54582486]]
-
-
-Rep 110 estimate: [[39683.01458711]
- [10060.47250086]
- [  659.34579579]]
-
-
-Rep 111 estimate: [[39615.95093122]
- [10085.35188812]
- [  642.85064756]]
-
-
-Rep 112 estimate: [[39685.07117305]
- [10073.87300929]
- [  675.62633986]]
-
-
-Rep 113 estimate: [[39700.80508502]
- [10025.39673853]
- [  723.95671698]]
-
-
-Rep 114 estimate: [[39654.13705739]
- [10062.99956193]
- [  705.49724421]]
-
-
-Rep 115 estimate: [[39642.98033672]
- [10046.23254871]
- [  669.82054311]]
-
-
-Rep 116 estimate: [[39673.93569365]
- [10044.52343701]
- [  730.61526628]]
-
-
-Rep 117 estimate: [[39567.36170446]
- [10079.10737707]
- [  702.04875241]]
-
-
-Rep 118 estimate: [[39640.99781573]
- [10049.8079462 ]
- [  696.77124729]]
-
-
-Rep 119 estimate: [[39652.924091  ]
- [ 9966.1126205 ]
- [  690.08012937]]
-
-
-Rep 120 estimate: [[39640.84772593]
- [10017.88419631]
- [  680.06462807]]
-
-
-Rep 121 estimate: [[39648.81492862]
- [10085.39461703]
- [  631.33819534]]
-
-
-Rep 122 estimate: [[39617.66740925]
- [10001.81992616]
- [  738.36649983]]
-
-
-Rep 123 estimate: [[39663.81801586]
- [10016.87701287]
- [  719.76040622]]
-
-
-Rep 124 estimate: [[39577.83973312]
- [ 9996.32517714]
- [  670.45491691]]
-
-
-Rep 125 estimate: [[39694.78878319]
- [ 9952.60675322]
- [  718.64306284]]
-
-
-Rep 126 estimate: [[39660.56138757]
- [10004.64619447]
- [  656.04524912]]
-
-
-Rep 127 estimate: [[39651.64358692]
- [10048.61973202]
- [  654.07486899]]
-
-
-Rep 128 estimate: [[39689.03339121]
- [10032.29573575]
- [  738.45004651]]
-
-
-Rep 129 estimate: [[39691.52021343]
- [10052.08173475]
- [  659.96646377]]
-
-
-Rep 130 estimate: [[39652.85760954]
- [ 9986.7354964 ]
- [  709.03049442]]
-
-
-Rep 131 estimate: [[39632.99566456]
- [ 9966.98461718]
- [  732.63392343]]
-
-
-Rep 132 estimate: [[39668.93435262]
- [10036.96414159]
- [  649.0258689 ]]
-
-
-Rep 133 estimate: [[39670.47972999]
- [10089.33536851]
- [  644.24850734]]
-
-
-Rep 134 estimate: [[39640.55040963]
- [10053.44319661]
- [  674.20945602]]
-
-
-Rep 135 estimate: [[39623.85153201]
- [ 9994.22996327]
- [  695.09818855]]
-
-
-Rep 136 estimate: [[39645.97319946]
- [ 9971.11629625]
- [  721.15848313]]
-
-
-Rep 137 estimate: [[39658.9619191 ]
- [10019.48005858]
- [  661.48300874]]
-
-
-Rep 138 estimate: [[39642.57914846]
- [ 9997.19070144]
- [  667.73498415]]
-
-
-Rep 139 estimate: [[39637.4290495 ]
- [10034.32711427]
- [  661.76117443]]
-
-
-Rep 140 estimate: [[39628.80713831]
- [10017.68117611]
- [  680.75140228]]
-
-
-Rep 141 estimate: [[39674.93078111]
- [10013.53733556]
- [  721.24820465]]
-
-
-Rep 142 estimate: [[39651.40792942]
- [10025.72045083]
- [  709.04701078]]
-
-
-Rep 143 estimate: [[39639.10392042]
- [10016.2437193 ]
- [  724.07604731]]
-
-
-Rep 144 estimate: [[39646.46862892]
- [10025.67431022]
- [  688.40242255]]
-
-
-Rep 145 estimate: [[39650.14696411]
- [10005.51665637]
- [  712.88464213]]
-
-
-Rep 146 estimate: [[39646.92820979]
- [ 9954.15976451]
- [  776.37739858]]
-
-
-Rep 147 estimate: [[39620.3282916 ]
- [10042.6185706 ]
- [  654.70339839]]
-
-
-Rep 148 estimate: [[39650.55655917]
- [ 9991.17781519]
- [  645.11118853]]
-
-
-Rep 149 estimate: [[39667.55051198]
- [ 9990.73834714]
- [  738.68975989]]
-
-
-Rep 150 estimate: [[39671.71292371]
- [ 9977.57126474]
- [  728.57423806]]
-
-
-Rep 151 estimate: [[39637.46442206]
- [10060.23241637]
- [  663.34468336]]
-
-
-Rep 152 estimate: [[39681.52863218]
- [10054.86696935]
- [  655.32975744]]
-
-
-Rep 153 estimate: [[39647.28083936]
- [10116.25440095]
- [  639.00191274]]
-
-
-Rep 154 estimate: [[39620.82929953]
- [10047.83682386]
- [  717.52890504]]
-
-
-Rep 155 estimate: [[39647.51544097]
- [10036.1348693 ]
- [  759.02598785]]
-
-
-Rep 156 estimate: [[39658.71758628]
- [10057.79740778]
- [  673.53520113]]
-
-
-Rep 157 estimate: [[39652.42180026]
- [10039.6446241 ]
- [  652.37900513]]
-
-
-Rep 158 estimate: [[39622.38554988]
- [ 9991.14210226]
- [  766.88430685]]
-
-
-Rep 159 estimate: [[39651.29699042]
- [10065.91893929]
- [  689.47118359]]
-
-
-Rep 160 estimate: [[39675.69878036]
- [10068.01885768]
- [  687.51871023]]
-
-
-Rep 161 estimate: [[39631.29501096]
- [ 9912.34553365]
- [  767.78971857]]
-
-
-Rep 162 estimate: [[39653.05962809]
- [10024.96701508]
- [  717.29791508]]
-
-
-Rep 163 estimate: [[39666.19510328]
- [10005.02761342]
- [  706.49793799]]
-
-
-Rep 164 estimate: [[39656.32635251]
- [10024.47016931]
- [  695.98769732]]
-
-
-Rep 165 estimate: [[39702.17892756]
- [10052.94497995]
- [  706.22741806]]
-
-
-Rep 166 estimate: [[39606.48521272]
- [10010.67628793]
- [  714.82999807]]
-
-
-Rep 167 estimate: [[39652.91873686]
- [10028.93993568]
- [  672.76873611]]
-
-
-Rep 168 estimate: [[39641.79602234]
- [10000.60435574]
- [  685.80996805]]
-
-
-Rep 169 estimate: [[39696.57476929]
- [ 9945.83651273]
- [  720.77406998]]
-
-
-Rep 170 estimate: [[39607.16983671]
- [10027.29761694]
- [  708.6226797 ]]
-
-
-Rep 171 estimate: [[39589.956391  ]
- [ 9976.67312017]
- [  709.95922716]]
-
-
-Rep 172 estimate: [[39680.0983667 ]
- [10011.88421355]
- [  642.28909189]]
-
-
-Rep 173 estimate: [[39623.31804032]
- [10082.066283  ]
- [  656.84713371]]
-
-
-Rep 174 estimate: [[39726.15662337]
- [ 9963.56427099]
- [  685.90386222]]
-
-
-Rep 175 estimate: [[39678.70850114]
- [10023.98807359]
- [  661.27963856]]
-
-
-Rep 176 estimate: [[39612.72240517]
- [10013.51792832]
- [  701.60793869]]
-
-
-Rep 177 estimate: [[39651.28878098]
- [10032.53114015]
- [  718.29337211]]
-
-
-Rep 178 estimate: [[39651.79886099]
- [10025.78545733]
- [  711.18636276]]
-
-
-Rep 179 estimate: [[39668.81176963]
- [ 9950.64830118]
- [  707.17029946]]
-
-
-Rep 180 estimate: [[39664.55033915]
- [10025.69574577]
- [  682.17967506]]
-
-
-Rep 181 estimate: [[39678.45863918]
- [10000.94471527]
- [  714.3528562 ]]
-
-
-Rep 182 estimate: [[39623.72938936]
- [10009.48496587]
- [  793.69376095]]
-
-
-Rep 183 estimate: [[39638.09616265]
- [10031.80512906]
- [  714.30847955]]
-
-
-Rep 184 estimate: [[39658.07866713]
- [10045.5638743 ]
- [  702.43641255]]
-
-
-Rep 185 estimate: [[39651.57617443]
- [10039.40055719]
- [  696.51313447]]
-
-
-Rep 186 estimate: [[39644.5923245 ]
- [ 9999.10838089]
- [  703.16412766]]
-
-
-Rep 187 estimate: [[39667.01121342]
- [ 9994.92130014]
- [  707.2300142 ]]
-
-
-Rep 188 estimate: [[39655.6793376 ]
- [ 9993.46295671]
- [  667.46454071]]
-
-
-Rep 189 estimate: [[39674.40927094]
- [10038.5271482 ]
- [  689.60601406]]
-
-
-Rep 190 estimate: [[39670.97584095]
- [ 9989.99235183]
- [  689.55471574]]
-
-
-Rep 191 estimate: [[39656.01227867]
- [ 9993.23920429]
- [  763.2792197 ]]
-
-
-Rep 192 estimate: [[39632.08646723]
- [10037.74031865]
- [  709.21037716]]
-
-
-Rep 193 estimate: [[39672.99028294]
- [10050.50258356]
- [  735.72762695]]
-
-
-Rep 194 estimate: [[39725.59632485]
- [ 9997.65628356]
- [  732.66952791]]
-
-
-Rep 195 estimate: [[39684.14531155]
- [10002.98869804]
- [  717.85523503]]
-
-
-Rep 196 estimate: [[39674.37506247]
- [10014.25014105]
- [  720.57318313]]
-
-
-Rep 197 estimate: [[39616.73965371]
- [10013.33283978]
- [  631.645646  ]]
-
-
-Rep 198 estimate: [[39638.25336916]
- [10025.39517299]
- [  707.12836366]]
-bootstrapped non-clustered version of se: [30.7524 34.9706 33.2355]
-standard error without clustering from statsmodel: [31.4168 35.2034 35.2034]</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb92-1"><a href="standard-errors-1.html#cb92-1" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb92-2"><a href="standard-errors-1.html#cb92-2" tabindex="-1"></a></span>
+<span id="cb92-3"><a href="standard-errors-1.html#cb92-3" tabindex="-1"></a>rep <span class="op">=</span> <span class="dv">199</span></span>
+<span id="cb92-4"><a href="standard-errors-1.html#cb92-4" tabindex="-1"></a><span class="co"># learning rate</span></span>
+<span id="cb92-5"><a href="standard-errors-1.html#cb92-5" tabindex="-1"></a>eta <span class="op">=</span> <span class="fl">1e-2</span></span>
+<span id="cb92-6"><a href="standard-errors-1.html#cb92-6" tabindex="-1"></a><span class="co"># number of iterations</span></span>
+<span id="cb92-7"><a href="standard-errors-1.html#cb92-7" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">20000</span></span>
+<span id="cb92-8"><a href="standard-errors-1.html#cb92-8" tabindex="-1"></a></span>
+<span id="cb92-9"><a href="standard-errors-1.html#cb92-9" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, rep):</span>
+<span id="cb92-10"><a href="standard-errors-1.html#cb92-10" tabindex="-1"></a></span>
+<span id="cb92-11"><a href="standard-errors-1.html#cb92-11" tabindex="-1"></a>    boot_index <span class="op">=</span> np.random.choice(X.shape[<span class="dv">0</span>], size<span class="op">=</span>X.shape[<span class="dv">0</span>], replace<span class="op">=</span><span class="va">True</span>).astype(<span class="st">&#39;int&#39;</span>)</span>
+<span id="cb92-12"><a href="standard-errors-1.html#cb92-12" tabindex="-1"></a>    boot_index <span class="op">=</span> np.array(boot_index) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb92-13"><a href="standard-errors-1.html#cb92-13" tabindex="-1"></a>    X_boot <span class="op">=</span> X[boot_index] </span>
+<span id="cb92-14"><a href="standard-errors-1.html#cb92-14" tabindex="-1"></a>    y_boot <span class="op">=</span> y_c[boot_index]</span>
+<span id="cb92-15"><a href="standard-errors-1.html#cb92-15" tabindex="-1"></a></span>
+<span id="cb92-16"><a href="standard-errors-1.html#cb92-16" tabindex="-1"></a>    <span class="co"># initialize theta</span></span>
+<span id="cb92-17"><a href="standard-errors-1.html#cb92-17" tabindex="-1"></a>    theta <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, p).reshape((p, <span class="dv">1</span>))</span>
+<span id="cb92-18"><a href="standard-errors-1.html#cb92-18" tabindex="-1"></a></span>
+<span id="cb92-19"><a href="standard-errors-1.html#cb92-19" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, epochs):</span>
+<span id="cb92-20"><a href="standard-errors-1.html#cb92-20" tabindex="-1"></a>    <span class="co"># get the gradient and adjust theta against the gradient using the learning rate</span></span>
+<span id="cb92-21"><a href="standard-errors-1.html#cb92-21" tabindex="-1"></a>        gradient <span class="op">=</span> <span class="op">-</span><span class="dv">2</span><span class="op">/</span>X_boot.shape[<span class="dv">0</span>] <span class="op">*</span> X_boot.T<span class="op">@</span>(y_boot <span class="op">-</span> X_boot<span class="op">@</span>theta)</span>
+<span id="cb92-22"><a href="standard-errors-1.html#cb92-22" tabindex="-1"></a>        theta <span class="op">=</span> theta <span class="op">-</span> eta<span class="op">*</span>gradient </span>
+<span id="cb92-23"><a href="standard-errors-1.html#cb92-23" tabindex="-1"></a></span>
+<span id="cb92-24"><a href="standard-errors-1.html#cb92-24" tabindex="-1"></a>    <span class="cf">if</span> k <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb92-25"><a href="standard-errors-1.html#cb92-25" tabindex="-1"></a>        theta_store <span class="op">=</span> theta.ravel()</span>
+<span id="cb92-26"><a href="standard-errors-1.html#cb92-26" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb92-27"><a href="standard-errors-1.html#cb92-27" tabindex="-1"></a>        theta_new <span class="op">=</span> theta.ravel()</span>
+<span id="cb92-28"><a href="standard-errors-1.html#cb92-28" tabindex="-1"></a>        theta_store <span class="op">=</span> np.vstack((theta_store, theta_new))    </span>
+<span id="cb92-29"><a href="standard-errors-1.html#cb92-29" tabindex="-1"></a></span>
+<span id="cb92-30"><a href="standard-errors-1.html#cb92-30" tabindex="-1"></a>    <span class="co">#print(f&#39;Rep {k} estimate: {theta}&#39;)</span></span>
+<span id="cb92-31"><a href="standard-errors-1.html#cb92-31" tabindex="-1"></a></span>
+<span id="cb92-32"><a href="standard-errors-1.html#cb92-32" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb92-33"><a href="standard-errors-1.html#cb92-33" tabindex="-1"></a>plt.hist(theta_store[:,<span class="dv">1</span>], bins <span class="op">=</span> <span class="dv">30</span>, color<span class="op">=</span><span class="st">&#39;steelblue&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;black&#39;</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb92-34"><a href="standard-errors-1.html#cb92-34" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Schooling estimates&#39;</span>)</span>
+<span id="cb92-35"><a href="standard-errors-1.html#cb92-35" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Frequency&#39;</span>)</span>
+<span id="cb92-36"><a href="standard-errors-1.html#cb92-36" tabindex="-1"></a>plt.title(<span class="ss">f&#39;Histogram of bootstrapped estimate </span><span class="ch">\n</span><span class="ss"> from </span><span class="sc">{</span>rep<span class="sc">}</span><span class="ss"> replications.&#39;</span>)</span>
+<span id="cb92-37"><a href="standard-errors-1.html#cb92-37" tabindex="-1"></a></span>
+<span id="cb92-38"><a href="standard-errors-1.html#cb92-38" tabindex="-1"></a></span>
+<span id="cb92-39"><a href="standard-errors-1.html#cb92-39" tabindex="-1"></a>boot_se <span class="op">=</span> theta_store.std(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb92-40"><a href="standard-errors-1.html#cb92-40" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;bootstrapped non-clustered version of se: </span><span class="sc">{</span>boot_se<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb92-41"><a href="standard-errors-1.html#cb92-41" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&#39;standard error without clustering from statsmodel: </span><span class="sc">{</span>model_noclus<span class="sc">.</span>bse<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<pre><code>bootstrapped non-clustered version of se: [30.6567 37.8813 38.6351]
+standard error without clustering from statsmodel: [33.5377 37.3193 37.3193]</code></pre>
+<div class="float">
+<img src="standard_errors_files/standard_errors_22_1.png" alt="png" />
+<div class="figcaption">png</div>
+</div>
 <p>There you have it – the bootstrapped version of the standard errors. Note that we’ve not accounted for the clusters and one can do that by sampling clusters (with replacement) rather than units.</p>
 
 </div>

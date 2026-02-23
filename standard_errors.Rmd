@@ -1,11 +1,12 @@
 ```python
 
 ```
+
 # Standard Errors
 
 **Course:** Causal Inference 
 
-**Topic:** Standard Errors
+**Topic:** Estimation of linear regression model and standard errors
 
 <style>
 .jp-Notebook,
@@ -29,18 +30,7 @@
 </style>
 
 
-**Standard Error**
 
-
-```python
-# ----------------------------------------------
-
-
-# Standard errors 
-
-
-# ----------------------------------------------
-```
 
 **Standard Errors** 
 
@@ -48,10 +38,10 @@ As previously mentioned, we start with a specification oriented towards the popu
 the population parameters. The $\hat{\beta}$ are the sample estimates that inform us about the population parameters $\beta$.
 In this sense, sampling variability -- if you were to take say 1,000 samples from the population and re-estimate the parameter --
 will give you different estimates of $\beta$. Just as the sample mean is a random variable with its own distribution,
-so is $\hat{\beta}$. The standard error of $\hat{\beta}$ plays the exact same role as the standard error of the mean,
+so is $\hat{\beta}$. The standard error of $\hat{\beta}$ plays the same role as the standard error of the mean,
 which we motivate below.
 
-Consider the example of mean height. Say the population distribution is normal with mean 175 cm and standard deviation 
+Consider the following example of mean height. Say, the population distribution is normal with mean 175 cm and standard deviation 
 of 7.6 cm. You first take a sample of 1,000 individuals and estimate the mean height; then re-take the next sample, 
 re-estimate the mean, and so on for 1,000 different samples. This will give you a distribution of mean height estimates,
 which will itself be normal with a variance driven entirely by sampling variability.
@@ -104,37 +94,36 @@ plt.legend()
 plt.grid(False)
 
 print(f'average of mean height is {mean_store.mean().round(4)} and std is {mean_store.std().round(4)}')
-
-# %%[markdown]
-# It is clear that the standard deviation of the mean height depends on: i) the standard deviation of the population height; and ii)
-# n -- the number of observations. The standard deviation of the mean height will be lower if the population standard deviation is lower 
-# (meaning that height is relatively more homogeneous). Next, one can lower it by increasing the sample size. 
-# 
-# Just as the sample mean has a measure for deviation due to sampling variability (standard deviation), $\hat{\beta}}$ too has a measure that we know as standard errors. Simply put, the standard errors measure how fluctuating the estimates of $\beta$ can be given different samples. 
-# 
-# Right off the start, it should be mentioned that reported standard errors are mostly incorrect. This could be due to several unknown reasons including the functional form of the specified model. But rather than dwelling on why the reported standard errors are incorrect, I want to discuss some known ways to fix the standard errors.
-# 
-# First, (recall) we start with the assumption on the error term. We discussed the i.i.d. assumtion of the error term. Again, the i.i.d. assumption states that error term are *independent* and *identically* distributed. The former means that errors are not correlated, whereas the latter means that errors are extracted from the same distribution with the same mean and variance. 
-# 
-# Under the i.i.d. assumption, errors are homoskedastic. Estimation of standard errors take the following steps.
-# 
-# 1. First estimate the regression standard error as: $\sigma_{reg}^2 = \frac{1}{n}\epsilon^{T} \epsilon$.
-# 
-# 2. The standard error of estimates then is: $\sqrt{Var(\hat{\beta})} = (X^{T}X)^{-1} \times \sigma_{reg}$, where $X^{T}X$ is the variance-covariance matrix with variance terms in the diagonal. 
-#
-# However, both of these assumptions (identical and independently distributed) will mostly likely fail in practice. This means that we'd need to adjust the standard errors appropriately.      
-# 
-# Let's take a classic example between education and earnings. We'll also consider 'ability' as a control variable in the DGP. Of course, this is only a simulation exercise to clarify the context of standard errors.
-# 
 ```
 
-    average of mean height is 175.0002 and std is 0.2389
+    average of mean height is 174.997 and std is 0.2402
 
 
 
     
-![png](standard_errors_files/standard_errors_5_1.png)
+![png](standard_errors_files/standard_errors_4_1.png)
     
+
+
+It is clear that the standard deviation of the mean height depends on: i) the standard deviation of the population height; and ii)
+n -- the number of observations. The standard deviation of the mean height will be lower if the population standard deviation is lower 
+(meaning that height is relatively more homogeneous). Next, one can lower it by increasing the sample size. 
+
+Just as the sample mean has a measure for deviation due to sampling variability (standard deviation), $\hat{\beta}}$ too has a measure that we know as standard errors. Simply put, the standard errors measure how fluctuating the estimates of $\beta$ can be given different samples. 
+
+Right off the start, it should be mentioned that reported standard errors are mostly incorrect. This could be due to several unknown reasons including the functional form of the specified model. But rather than dwelling on why the reported standard errors are incorrect, I want to discuss some known ways to fix the standard errors.
+
+First, (recall) we start with the assumption on the error term. We discussed the i.i.d. assumtion of the error term. Again, the i.i.d. assumption states that error term are *independent* and *identically* distributed. The former means that errors are not correlated, whereas the latter means that errors are extracted from the same distribution with the same mean and variance. 
+
+Under the i.i.d. assumption, errors are homoskedastic. Estimation of standard errors take the following steps.
+
+1. First estimate the regression standard error as: $\sigma_{reg}^2 = \frac{1}{n}\epsilon^{T} \epsilon$.
+
+2. The standard error of estimates then is: $\sqrt{Var(\hat{\beta})} = (X^{T}X)^{-1} \times \sigma_{reg}$, where $X^{T}X$ is the variance-covariance matrix with variance terms in the diagonal. 
+
+However, both of these assumptions (identical and independently distributed) will mostly likely fail in practice. This means that we'd need to adjust the standard errors appropriately.      
+
+Let's take a classic example between education and earnings. We'll also consider 'ability' as a control variable in the DGP. Of course, this is only a simulation exercise to clarify the context of standard errors.
 
 
 
@@ -204,10 +193,10 @@ plt.grid(True, linestyle='dashed')
     
 
 
-The plot above shows that although there exist a positive correlation between schooling and earnings. However, variation in earnings is higher for greater values of education. Using the true coefficients (we have these since this is a simulated DGP) we extract error and plot the relationship between schooling and errors. Here, we see a funnel shaped scatter plot with the mean of error aligned at 0. 
+The plot above shows that although there exist a positive correlation between schooling and earnings, variation in earnings is higher for greater values of education. Using the true coefficients (we have these since this is a simulated DGP) we extract error and plot the relationship between schooling and errors. Here, we see a funnel shaped scatter plot with the mean of error aligned at 0. 
 This simple example breaks the homoskedasticity assumption. The main point is that the estimation of standard errors need to reflect the fact that error term comes from distribution with different variances. We now have what is known as heteroskedasticity. 
 
-Let's start with estimates using the gradient descent.
+Let's start with regression estimates using the gradient descent.
 
 
 ```python
@@ -239,11 +228,11 @@ print(f'The estimates from sklearn is: {reg.coef_.round(4)}')
 print(f'The estimates from manual GD is: {theta.reshape((1, 3)).round(4)}') 
 ```
 
-    The estimates from sklearn is: [[40015.7547 10015.2551   714.2199]]
-    The estimates from manual GD is: [[40015.7547 10015.2551   714.2199]]
+    The estimates from sklearn is: [[39987.2777  9991.4859   695.5676]]
+    The estimates from manual GD is: [[39987.2777  9991.4859   695.5676]]
 
 
-We area simply running gradient descent in the code above. This should be familiar to you from previous lectures. Now, we'd want to move on to the standard errors to assess precision of these estimates. First, let's explore the graphical relationship between education and residuals. Note that I've distinguised error vs. residuals -- the former is what you get from using true coefficients (you never see this in practice), while the latter use the estimates.  
+We are simply running gradient descent in the code above. This should be familiar to you from previous lectures. Now, we'd want to move on to the standard errors to determine precision of these estimates. First, let's explore the graphical relationship between education and residuals. Note that I've distinguised error vs. residual -- the former is what you get from using true coefficients (you never see this in practice), while the latter uses the estimates.  
 
 
 ```python
@@ -256,11 +245,6 @@ plt.title('Relationship between education and residuals')
 plt.xlabel('education')
 plt.ylabel('residuals')
 plt.grid(True, linestyle='dashed')
-
-# %%[markdown]
-# As you can see we've got a funnel shaped relationship between education and residual, again signaling heteroskedasticity. This is precisely coming from differing variance of error term based on education. This won't affect the estimates but will affect the standard errors. Note that there are many tests for homoskedasticity vs heteroskedasticity. But in practice, the case of homoskedasticity almost always fails. The simple way to see it is to plot the residuals with the variable of concern. If you have a funnel looking shape, then you've got the case of heteroskedasticity.  
-
-# First, let's do some benchmarking by estimating the standard errors under the homoskedasticity assumption -- error terms have the same variance (which is incorrect in this case and in practice).   
 ```
 
 
@@ -268,6 +252,10 @@ plt.grid(True, linestyle='dashed')
 ![png](standard_errors_files/standard_errors_10_0.png)
     
 
+
+As you can see we've got a funnel shaped relationship between education and residual, again signaling heteroskedasticity. This is precisely coming from differing variance of error term based on education. This won't affect the estimates but will affect the standard errors. Note that there are many tests for homoskedasticity vs heteroskedasticity. But in practice, the case of homoskedasticity almost always fails. The simple way to see it is to plot the residuals with the variable of concern. If you have a funnel looking shape, then you've got the case of heteroskedasticity.  
+
+First, let's do some benchmarking by estimating the standard errors under the homoskedasticity assumption -- error terms have the same variance (which is incorrect in this case and in practice).   
 
 
 ```python
@@ -296,49 +284,47 @@ print(f'The estimates from manual GD is: {theta.reshape((1, 3)).round(4)} \n \n'
 
 print(f"standard errors from statmodel under homoskedasticity: {model.bse.round(4)}")      # standard errors
 print(f"standard errors (manual estimation) under homoskedasticity: {manual_se.round(4)} \n \n")
-
-
-# %%[markdown]
-# Now that we have estimated standard errors under the homoskedasticity assumption let's see how we can fix this. Before we move on, I want to reiterate that the origin of heteroskedasicity is due to error terms coming from the distribution of different variance. In that regard, we want to account for this in our estimation of standard errors. 
-#
-# To do so, we'll use a sandwich method, which you should've heard from you previous classes. So what does it entail? Basically, we'd want to form weights using the size of the error term. 
-# 
-# Let's just derive the sandwich estimator:
-# 
-# \begin{align}
-# \hat{\beta} = (X^{T}X)^{-1}X^{T}Y \\
-# \hat{\beta} = (X^{T}X)^{-1}X^{T}(X\beta + \epsilon) \\
-# \hat{\beta} = \beta + (X^{T}X)^{-1}X^{T}\epsilon
-# \end{align}
-
-# The end line is the starting point. Note that $Var(a)=0$ and $Var(ax) = a^{2}Var(x)$, where $a$ is a constant and $x$ is a random variable. Let's then take the variance of $\hat{\beta}$:
-#
-# \begin{align}
-# Var(\hat{\beta}) = Var((X^{T}X)^{-1}X^{T}\epsilon) \\
-# = (X^{T}X)^{-1}Var(X^{T}\epsilon)(X^{T}X)^{-1} \\
-# = (X^{T}X)^{-1}X^{T}Var(\epsilon)X(X^{T}X)^{-1} \\
-# = (X^{T}X)^{-1}X^{T} \Omega X(X^{T}X)^{-1}
-# \end{align}
-#
-# Here, $\Omega$ is the scaling term and it is $\epsilon\epsilon^{T}.I$, which is a $n \times n$ diagonal matrix. We don't observe this, so replace this with the sample counterpart $\hat{\Omega} = \hat{\epsilon}\hat{\epsilon}^{T}I$. Notice that under the case of homoskedasticity $\Omega = \sigma^2 I$, which collapses $Var{\hat{\beta}}$ to $(X^{T}X)^{-1} \sigma^2$. This is what we used to estimate standard errors under homoskedasticity.
-#
-#
-# Let's estimate the standard errors accounting for heteroskedasicity. I'm going to divide this into bun and stuffing part as I write the code.
 ```
 
-    standard error of the regression is: [[3001.23166629]] 
+    standard error of the regression is: [[3048.97689642]] 
      
     
-    The estimates from statmodels: [40015.7547 10015.2551   714.2199]
-    The estimates from sklearn is: [[40015.7547 10015.2551   714.2199]]
-    The estimates from manual GD is: [[40015.7547 10015.2551   714.2199]] 
+    The estimates from statmodels: [39987.2777  9991.4859   695.5676]
+    The estimates from sklearn is: [[39987.2777  9991.4859   695.5676]]
+    The estimates from manual GD is: [[39987.2777  9991.4859   695.5676]] 
      
     
-    standard errors from statmodel under homoskedasticity: [30.0123 33.6297 33.6297]
-    standard errors (manual estimation) under homoskedasticity: [30.0123 33.6297 33.6297] 
+    standard errors from statmodel under homoskedasticity: [30.4898 33.9277 33.9277]
+    standard errors (manual estimation) under homoskedasticity: [30.4898 33.9277 33.9277] 
      
     
 
+
+Now that we have estimated standard errors under the homoskedasticity assumption let's see how we can fix this. Before we move on, I want to reiterate that the origin of heteroskedasicity is due to error terms coming from the distribution of different variance. In that regard, we want to account for this in our estimation of standard errors. 
+
+To do so, we'll use a sandwich method, which you should've heard from you previous classes. So what does it entail? Basically, we'd want to form weights using the size of the error term. 
+
+Let's just derive the sandwich estimator:
+
+\begin{align}
+\hat{\beta} = (X^{T}X)^{-1}X^{T}Y \\
+\hat{\beta} = (X^{T}X)^{-1}X^{T}(X\beta + \epsilon) \\
+\hat{\beta} = \beta + (X^{T}X)^{-1}X^{T}\epsilon
+\end{align}
+
+The end line is the starting point. Note that $Var(a)=0$ and $Var(ax) = a^{2}Var(x)$, where $a$ is a constant and $x$ is a random variable. Let's then take the variance of $\hat{\beta}$:
+
+\begin{align}
+Var(\hat{\beta}) = Var((X^{T}X)^{-1}X^{T}\epsilon) \\
+= (X^{T}X)^{-1}Var(X^{T}\epsilon)(X^{T}X)^{-1} \\
+= (X^{T}X)^{-1}X^{T}Var(\epsilon)X(X^{T}X)^{-1} \\
+= (X^{T}X)^{-1}X^{T} \Omega X(X^{T}X)^{-1}
+\end{align}
+
+Here, $\Omega$ is the scaling term and it is $\epsilon\epsilon^{T}.I$, which is a $n \times n$ diagonal matrix. We don't observe this, so replace this with the sample counterpart $\hat{\Omega} = \hat{\epsilon}\hat{\epsilon}^{T}I$. Notice that under the case of homoskedasticity $\Omega = \sigma^2 I$, which collapses $Var{\hat{\beta}}$ to $(X^{T}X)^{-1} \sigma^2$. This is what we used to estimate standard errors under homoskedasticity.
+
+
+Let's estimate the standard errors accounting for heteroskedasicity. I'm going to divide this into bun and stuffing part as I write the code.
 
 
 ```python
@@ -357,16 +343,16 @@ model2 = sm.OLS(y, X).fit(cov_type='HC0')
 print(f'standard errors from stats model under heteroskedasticity: {model2.bse.round(4)}')
 ```
 
-    heteroskedasticity robust standard error: [30.0078 35.5333 33.4547]
-    se under homoskedastic assumption: [30.0123 33.6297 33.6297]
-    standard errors from stats model under heteroskedasticity: [30.0078 35.5333 33.4547]
+    heteroskedasticity robust standard error: [30.4852 36.4511 34.2139]
+    se under homoskedastic assumption: [30.4898 33.9277 33.9277]
+    standard errors from stats model under heteroskedasticity: [30.4852 36.4511 34.2139]
 
 
 If you compare the standard errors under homoskedasticity versus heteroskedasticity, you will see that standard errors under heteroskedasticity are larger, particularly for the education estimate. 
  
 Note that there are various forms of heteroskedasicity robust standard error including "HC1", "HC2", and "HC3". Here, we've used the "H0" type -- you can dig deeper according to your need.
 
-Let's now discuss the case where error terms are not independent and are correlated. One can think of this in a geospatial form -- the unexplained portion of income for people living in a particular area can be correlated. For example, if you have people living in Des Moines, Iowa and NYC, you probably will think that income is spatially correlated due to local market conditions, taste, cost of living and other unobserved factors attributing to spatial clustering.   
+Let's now discuss the case where error terms are not independent and are correlated. One can think of this in a geospatial form -- the unexplained portion of income for people living in a particular area can be correlated. For example, if you have people living in Des Moines, Iowa and NYC in your sample, you'll probably think that income is spatially correlated due to local market conditions, taste, cost of living and other unobserved factors attributing to spatial clustering.   
 
 In the following simulation exercise, we'll incorporate this cluter-type correlation in the error terms. Specifically, we'll build error as:
 
@@ -438,9 +424,9 @@ plt.xlabel('schooling')
 plt.ylabel('residuals')
 ```
 
-    [[39649.37831353]
-     [10027.34709599]
-     [  695.56370296]]
+    [[40216.91715969]
+     [ 9940.69952697]
+     [  754.42493803]]
 
 
 
@@ -452,7 +438,7 @@ plt.ylabel('residuals')
 
 
     
-![png](standard_errors_files/standard_errors_16_2.png)
+![png](standard_errors_files/standard_errors_18_2.png)
     
 
 
@@ -481,7 +467,7 @@ for i in range(1, nc+1):
 var_cov_clus = bun@stuff@bun
 se_clus = np.sqrt(np.diag(var_cov_clus))
 
-print(f'Cluster robust standard error is: {se_clus}')
+
 
 # small sample correction term
 correction = ((nc/(nc-1)) * (m-1)/(m-p))
@@ -497,20 +483,19 @@ print(f'Clustered standard error from statsmodel: {model_clus.bse.round(4)}')
 print(f'standard error without clustering from statsmodel: {model_noclus.bse.round(4)}')
 ```
 
-    Cluster robust standard error is: [421.13627575  28.40377396  32.01738254]
-    Clustered standard errors (not small sample corrected): [421.1363  28.4038  32.0174]
-    Clustered se corrected for small sample: [425.4544  28.695   32.3457]
-    Clustered standard error from statsmodel: [425.4544  28.695   32.3457]
-    standard error without clustering from statsmodel: [31.4168 35.2034 35.2034]
+    Clustered standard errors (not small sample corrected): [452.4901  38.7462  35.9821]
+    Clustered se corrected for small sample: [457.1298  39.1435  36.3511]
+    Clustered standard error from statsmodel: [457.1298  39.1435  36.3511]
+    standard error without clustering from statsmodel: [33.5377 37.3193 37.3193]
 
 
-We've now computed the clustered standard errors and compared it with those from statsmodel. They are very exactly the same. However, clustered standard errors are larger compared to unclustered standard errors.  
+We've now computed the clustered standard errors and compared it with those from statsmodel. They are exactly the same. However, clustered standard errors are larger compared to non-clustered standard errors.  
 
 
 **Bootstrapped standard errors**
 
 Bootstapping can lead to a convenient way of obtaining standard errors. The bootstrapping process assumes
-the data as the population and resamples $k$ number of times from the population (with replacement) and re-estimates the coefficients on every sample. You'll then have $k$ number of estimates. The standard error 
+the sample as the population and performs resampling $k$ number of times from the population (with replacement). For each re-sampling we estimates the coefficients. With this process, you'll then have $k$ number of estimates. Then the standard error 
 is simply the standard deviation of the estimates.
 
 
@@ -546,1009 +531,28 @@ for k in range(0, rep):
         theta_new = theta.ravel()
         theta_store = np.vstack((theta_store, theta_new))    
 
-    print(f'Rep {k} estimate: {theta}')
-    
+    #print(f'Rep {k} estimate: {theta}')
+
+plt.figure(figsize=(8,5))
+plt.hist(theta_store[:,1], bins = 30, color='steelblue', edgecolor='black', alpha=0.3)
+plt.xlabel('Schooling estimates')
+plt.ylabel('Frequency')
+plt.title(f'Histogram of bootstrapped estimate \n from {rep} replications.')
+
 
 boot_se = theta_store.std(axis=0)
 print(f'bootstrapped non-clustered version of se: {boot_se.round(4)}')
 print(f'standard error without clustering from statsmodel: {model_noclus.bse.round(4)}')
 ```
 
-    Rep 0 estimate: [[39634.20759692]
-     [ 9972.15137597]
-     [  652.72915823]]
+    bootstrapped non-clustered version of se: [30.6567 37.8813 38.6351]
+    standard error without clustering from statsmodel: [33.5377 37.3193 37.3193]
 
 
-    Rep 1 estimate: [[39621.9140577 ]
-     [10046.57035788]
-     [  672.42939652]]
 
-
-    Rep 2 estimate: [[39623.08461529]
-     [ 9981.58228619]
-     [  670.98263527]]
-
-
-    Rep 3 estimate: [[39637.55183125]
-     [10001.7489246 ]
-     [  662.05036779]]
-
-
-    Rep 4 estimate: [[39695.44764121]
-     [10041.16930021]
-     [  647.56837512]]
-
-
-    Rep 5 estimate: [[39615.34205097]
-     [10017.89522589]
-     [  686.87890025]]
-
-
-    Rep 6 estimate: [[39678.63656974]
-     [10036.74032889]
-     [  707.02820496]]
-
-
-    Rep 7 estimate: [[39635.53503934]
-     [ 9995.33859027]
-     [  690.70481666]]
-
-
-    Rep 8 estimate: [[39600.00610224]
-     [10028.68218574]
-     [  702.75449706]]
-
-
-    Rep 9 estimate: [[39707.94055818]
-     [10059.68129534]
-     [  654.26712762]]
-
-
-    Rep 10 estimate: [[39612.10414709]
-     [ 9981.12202919]
-     [  736.70234899]]
-
-
-    Rep 11 estimate: [[39681.05918001]
-     [ 9975.17250646]
-     [  709.55558489]]
-
-
-    Rep 12 estimate: [[39647.47856378]
-     [ 9981.73243325]
-     [  753.13733332]]
-
-
-    Rep 13 estimate: [[39667.34485868]
-     [10036.61524871]
-     [  687.09562445]]
-
-
-    Rep 14 estimate: [[39659.16998691]
-     [10000.52337148]
-     [  710.01139155]]
-
-
-    Rep 15 estimate: [[39639.29382108]
-     [10082.30415622]
-     [  742.44583502]]
-
-
-    Rep 16 estimate: [[39625.32899474]
-     [ 9987.89864738]
-     [  748.9561938 ]]
-
-
-    Rep 17 estimate: [[39667.92479251]
-     [10000.07091612]
-     [  682.58096323]]
-
-
-    Rep 18 estimate: [[39647.64304062]
-     [10065.09464912]
-     [  672.04108689]]
-
-
-    Rep 19 estimate: [[39610.70165961]
-     [10018.89623775]
-     [  729.73636443]]
-
-
-    Rep 20 estimate: [[39617.45842608]
-     [10069.92475955]
-     [  685.70389042]]
-
-
-    Rep 21 estimate: [[39588.24995471]
-     [10013.35529898]
-     [  689.32223213]]
-
-
-    Rep 22 estimate: [[39658.37619605]
-     [10072.95445493]
-     [  696.82674721]]
-
-
-    Rep 23 estimate: [[39687.52536611]
-     [10040.72734011]
-     [  649.30189093]]
-
-
-    Rep 24 estimate: [[39666.07008584]
-     [10043.61662354]
-     [  666.85956965]]
-
-
-    Rep 25 estimate: [[39603.38815643]
-     [10047.87591532]
-     [  632.34129952]]
-
-
-    Rep 26 estimate: [[39657.30936341]
-     [10031.24586445]
-     [  715.40765174]]
-
-
-    Rep 27 estimate: [[39615.99259115]
-     [ 9957.31296536]
-     [  696.13705344]]
-
-
-    Rep 28 estimate: [[39643.66488259]
-     [10008.39182557]
-     [  730.86219762]]
-
-
-    Rep 29 estimate: [[39675.34722975]
-     [10081.34286247]
-     [  676.3526735 ]]
-
-
-    Rep 30 estimate: [[39614.46013655]
-     [10001.8207831 ]
-     [  719.41863241]]
-
-
-    Rep 31 estimate: [[39640.25866004]
-     [10021.40479851]
-     [  704.30228288]]
-
-
-    Rep 32 estimate: [[39612.09199402]
-     [10033.38174397]
-     [  663.34553222]]
-
-
-    Rep 33 estimate: [[39683.79571144]
-     [ 9973.46820969]
-     [  723.40389677]]
-
-
-    Rep 34 estimate: [[39686.12970807]
-     [ 9956.55977931]
-     [  744.53260858]]
-
-
-    Rep 35 estimate: [[39632.88902075]
-     [10036.84480922]
-     [  689.57898674]]
-
-
-    Rep 36 estimate: [[39713.00878458]
-     [10015.81757479]
-     [  715.55775228]]
-
-
-    Rep 37 estimate: [[39671.48133869]
-     [10107.90762039]
-     [  671.13913505]]
-
-
-    Rep 38 estimate: [[39643.65792854]
-     [10058.90937064]
-     [  693.25339089]]
-
-
-    Rep 39 estimate: [[39703.82590057]
-     [10076.31928723]
-     [  654.39904957]]
-
-
-    Rep 40 estimate: [[39643.81718312]
-     [ 9964.54652872]
-     [  698.7648128 ]]
-
-
-    Rep 41 estimate: [[39689.97372164]
-     [10000.7727396 ]
-     [  687.52259812]]
-
-
-    Rep 42 estimate: [[39612.87625102]
-     [10004.74660384]
-     [  709.37496101]]
-
-
-    Rep 43 estimate: [[39671.32538866]
-     [10028.43288591]
-     [  700.32820727]]
-
-
-    Rep 44 estimate: [[39630.74865614]
-     [10100.3991206 ]
-     [  611.18128762]]
-
-
-    Rep 45 estimate: [[39622.90791883]
-     [10071.05706214]
-     [  673.05439047]]
-
-
-    Rep 46 estimate: [[39604.76657256]
-     [10057.85387121]
-     [  628.8394797 ]]
-
-
-    Rep 47 estimate: [[39641.07825529]
-     [10049.36557045]
-     [  730.63707784]]
-
-
-    Rep 48 estimate: [[39691.79768444]
-     [10002.91419186]
-     [  693.30898309]]
-
-
-    Rep 49 estimate: [[39662.42792761]
-     [10037.23799975]
-     [  713.29822611]]
-
-
-    Rep 50 estimate: [[39663.69589865]
-     [10074.31186539]
-     [  645.45476732]]
-
-
-    Rep 51 estimate: [[39680.76408045]
-     [ 9987.93311561]
-     [  760.82821243]]
-
-
-    Rep 52 estimate: [[39619.97082001]
-     [10037.60657886]
-     [  661.40091985]]
-
-
-    Rep 53 estimate: [[39624.9279004 ]
-     [10024.43239989]
-     [  745.91481201]]
-
-
-    Rep 54 estimate: [[39586.35708561]
-     [10076.95450602]
-     [  629.20304524]]
-
-
-    Rep 55 estimate: [[39679.83165912]
-     [10071.96718542]
-     [  644.02298151]]
-
-
-    Rep 56 estimate: [[39601.42306921]
-     [10091.46830495]
-     [  664.50994212]]
-
-
-    Rep 57 estimate: [[39738.84348681]
-     [10028.95597784]
-     [  695.86288615]]
-
-
-    Rep 58 estimate: [[39647.87951559]
-     [ 9998.21533346]
-     [  661.00115565]]
-
-
-    Rep 59 estimate: [[39647.8723745 ]
-     [10016.47193961]
-     [  639.26241395]]
-
-
-    Rep 60 estimate: [[39642.84507487]
-     [10034.21172881]
-     [  653.12708525]]
-
-
-    Rep 61 estimate: [[39648.71749172]
-     [10053.26102583]
-     [  676.84555042]]
-
-
-    Rep 62 estimate: [[39654.7967103 ]
-     [10045.72267797]
-     [  666.79901184]]
-
-
-    Rep 63 estimate: [[39612.28274296]
-     [10011.06062689]
-     [  697.86622241]]
-
-
-    Rep 64 estimate: [[39614.60384791]
-     [10021.96923194]
-     [  722.94352736]]
-
-
-    Rep 65 estimate: [[39612.37330471]
-     [10064.7123475 ]
-     [  669.34877168]]
-
-
-    Rep 66 estimate: [[39673.08721685]
-     [10012.1679277 ]
-     [  745.4580107 ]]
-
-
-    Rep 67 estimate: [[39618.32940955]
-     [10013.97419028]
-     [  668.39873329]]
-
-
-    Rep 68 estimate: [[39628.51457672]
-     [10011.12953266]
-     [  696.81355033]]
-
-
-    Rep 69 estimate: [[39658.02181461]
-     [10068.86929084]
-     [  689.81993823]]
-
-
-    Rep 70 estimate: [[39637.89056608]
-     [10052.13019266]
-     [  715.32750376]]
-
-
-    Rep 71 estimate: [[39679.5330422 ]
-     [10100.65291174]
-     [  677.75745628]]
-
-
-    Rep 72 estimate: [[39692.65248798]
-     [10000.46060365]
-     [  702.46626574]]
-
-
-    Rep 73 estimate: [[39658.81539007]
-     [10024.15467442]
-     [  645.60990573]]
-
-
-    Rep 74 estimate: [[39642.66877888]
-     [10023.86808413]
-     [  723.51478569]]
-
-
-    Rep 75 estimate: [[39695.40950835]
-     [10019.72084127]
-     [  664.74411942]]
-
-
-    Rep 76 estimate: [[39637.94858277]
-     [10012.92585604]
-     [  709.17713849]]
-
-
-    Rep 77 estimate: [[39622.50035905]
-     [10046.02128644]
-     [  675.20862677]]
-
-
-    Rep 78 estimate: [[39628.14242031]
-     [10080.18874293]
-     [  622.71631863]]
-
-
-    Rep 79 estimate: [[39682.81735629]
-     [10041.9898932 ]
-     [  692.45776192]]
-
-
-    Rep 80 estimate: [[39675.97498997]
-     [10039.89993909]
-     [  694.07466724]]
-
-
-    Rep 81 estimate: [[39638.87090673]
-     [10077.1659821 ]
-     [  686.19713262]]
-
-
-    Rep 82 estimate: [[39630.96885157]
-     [10022.10255276]
-     [  726.14058914]]
-
-
-    Rep 83 estimate: [[39636.3769543 ]
-     [10030.72330636]
-     [  705.44437295]]
-
-
-    Rep 84 estimate: [[39624.18801433]
-     [10010.07055701]
-     [  675.1970448 ]]
-
-
-    Rep 85 estimate: [[39707.51948677]
-     [10071.49412137]
-     [  701.92964802]]
-
-
-    Rep 86 estimate: [[39615.4515855 ]
-     [10017.99562684]
-     [  716.18090475]]
-
-
-    Rep 87 estimate: [[39608.54965838]
-     [10050.41049065]
-     [  697.41637554]]
-
-
-    Rep 88 estimate: [[39691.98713524]
-     [10098.09824757]
-     [  713.48827376]]
-
-
-    Rep 89 estimate: [[39595.55443741]
-     [10047.83576716]
-     [  668.21668283]]
-
-
-    Rep 90 estimate: [[39731.69916921]
-     [10016.69969976]
-     [  668.1809089 ]]
-
-
-    Rep 91 estimate: [[39652.0587333 ]
-     [10013.15558147]
-     [  666.57907701]]
-
-
-    Rep 92 estimate: [[39625.19746259]
-     [10006.67630543]
-     [  676.34971174]]
-
-
-    Rep 93 estimate: [[39623.1732082 ]
-     [10056.00513643]
-     [  657.67129513]]
-
-
-    Rep 94 estimate: [[39669.56381442]
-     [10011.80050511]
-     [  755.80095212]]
-
-
-    Rep 95 estimate: [[39611.31590999]
-     [10039.15137472]
-     [  702.07703054]]
-
-
-    Rep 96 estimate: [[39612.57842562]
-     [10051.82340555]
-     [  703.45902349]]
-
-
-    Rep 97 estimate: [[39692.78602923]
-     [10042.04713415]
-     [  677.38841659]]
-
-
-    Rep 98 estimate: [[39661.76137101]
-     [10059.24880542]
-     [  682.59772266]]
-
-
-    Rep 99 estimate: [[39606.1170304 ]
-     [10060.23053653]
-     [  670.5534201 ]]
-
-
-    Rep 100 estimate: [[39713.9395932 ]
-     [10042.55208298]
-     [  716.8405365 ]]
-
-
-    Rep 101 estimate: [[39679.54740889]
-     [10023.6023723 ]
-     [  675.70266313]]
-
-
-    Rep 102 estimate: [[39669.29585361]
-     [10075.18985606]
-     [  670.30338812]]
-
-
-    Rep 103 estimate: [[39617.53461811]
-     [10025.62430093]
-     [  657.2055975 ]]
-
-
-    Rep 104 estimate: [[39630.54394129]
-     [10016.80633441]
-     [  674.27638597]]
-
-
-    Rep 105 estimate: [[39675.24635594]
-     [10051.38483056]
-     [  655.39525373]]
-
-
-    Rep 106 estimate: [[39650.47580971]
-     [10015.50862261]
-     [  744.81596155]]
-
-
-    Rep 107 estimate: [[39681.66575401]
-     [10009.71142048]
-     [  635.38642252]]
-
-
-    Rep 108 estimate: [[39646.16404817]
-     [10098.75866793]
-     [  656.33659447]]
-
-
-    Rep 109 estimate: [[39673.45866978]
-     [ 9980.98604561]
-     [  709.54582486]]
-
-
-    Rep 110 estimate: [[39683.01458711]
-     [10060.47250086]
-     [  659.34579579]]
-
-
-    Rep 111 estimate: [[39615.95093122]
-     [10085.35188812]
-     [  642.85064756]]
-
-
-    Rep 112 estimate: [[39685.07117305]
-     [10073.87300929]
-     [  675.62633986]]
-
-
-    Rep 113 estimate: [[39700.80508502]
-     [10025.39673853]
-     [  723.95671698]]
-
-
-    Rep 114 estimate: [[39654.13705739]
-     [10062.99956193]
-     [  705.49724421]]
-
-
-    Rep 115 estimate: [[39642.98033672]
-     [10046.23254871]
-     [  669.82054311]]
-
-
-    Rep 116 estimate: [[39673.93569365]
-     [10044.52343701]
-     [  730.61526628]]
-
-
-    Rep 117 estimate: [[39567.36170446]
-     [10079.10737707]
-     [  702.04875241]]
-
-
-    Rep 118 estimate: [[39640.99781573]
-     [10049.8079462 ]
-     [  696.77124729]]
-
-
-    Rep 119 estimate: [[39652.924091  ]
-     [ 9966.1126205 ]
-     [  690.08012937]]
-
-
-    Rep 120 estimate: [[39640.84772593]
-     [10017.88419631]
-     [  680.06462807]]
-
-
-    Rep 121 estimate: [[39648.81492862]
-     [10085.39461703]
-     [  631.33819534]]
-
-
-    Rep 122 estimate: [[39617.66740925]
-     [10001.81992616]
-     [  738.36649983]]
-
-
-    Rep 123 estimate: [[39663.81801586]
-     [10016.87701287]
-     [  719.76040622]]
-
-
-    Rep 124 estimate: [[39577.83973312]
-     [ 9996.32517714]
-     [  670.45491691]]
-
-
-    Rep 125 estimate: [[39694.78878319]
-     [ 9952.60675322]
-     [  718.64306284]]
-
-
-    Rep 126 estimate: [[39660.56138757]
-     [10004.64619447]
-     [  656.04524912]]
-
-
-    Rep 127 estimate: [[39651.64358692]
-     [10048.61973202]
-     [  654.07486899]]
-
-
-    Rep 128 estimate: [[39689.03339121]
-     [10032.29573575]
-     [  738.45004651]]
-
-
-    Rep 129 estimate: [[39691.52021343]
-     [10052.08173475]
-     [  659.96646377]]
-
-
-    Rep 130 estimate: [[39652.85760954]
-     [ 9986.7354964 ]
-     [  709.03049442]]
-
-
-    Rep 131 estimate: [[39632.99566456]
-     [ 9966.98461718]
-     [  732.63392343]]
-
-
-    Rep 132 estimate: [[39668.93435262]
-     [10036.96414159]
-     [  649.0258689 ]]
-
-
-    Rep 133 estimate: [[39670.47972999]
-     [10089.33536851]
-     [  644.24850734]]
-
-
-    Rep 134 estimate: [[39640.55040963]
-     [10053.44319661]
-     [  674.20945602]]
-
-
-    Rep 135 estimate: [[39623.85153201]
-     [ 9994.22996327]
-     [  695.09818855]]
-
-
-    Rep 136 estimate: [[39645.97319946]
-     [ 9971.11629625]
-     [  721.15848313]]
-
-
-    Rep 137 estimate: [[39658.9619191 ]
-     [10019.48005858]
-     [  661.48300874]]
-
-
-    Rep 138 estimate: [[39642.57914846]
-     [ 9997.19070144]
-     [  667.73498415]]
-
-
-    Rep 139 estimate: [[39637.4290495 ]
-     [10034.32711427]
-     [  661.76117443]]
-
-
-    Rep 140 estimate: [[39628.80713831]
-     [10017.68117611]
-     [  680.75140228]]
-
-
-    Rep 141 estimate: [[39674.93078111]
-     [10013.53733556]
-     [  721.24820465]]
-
-
-    Rep 142 estimate: [[39651.40792942]
-     [10025.72045083]
-     [  709.04701078]]
-
-
-    Rep 143 estimate: [[39639.10392042]
-     [10016.2437193 ]
-     [  724.07604731]]
-
-
-    Rep 144 estimate: [[39646.46862892]
-     [10025.67431022]
-     [  688.40242255]]
-
-
-    Rep 145 estimate: [[39650.14696411]
-     [10005.51665637]
-     [  712.88464213]]
-
-
-    Rep 146 estimate: [[39646.92820979]
-     [ 9954.15976451]
-     [  776.37739858]]
-
-
-    Rep 147 estimate: [[39620.3282916 ]
-     [10042.6185706 ]
-     [  654.70339839]]
-
-
-    Rep 148 estimate: [[39650.55655917]
-     [ 9991.17781519]
-     [  645.11118853]]
-
-
-    Rep 149 estimate: [[39667.55051198]
-     [ 9990.73834714]
-     [  738.68975989]]
-
-
-    Rep 150 estimate: [[39671.71292371]
-     [ 9977.57126474]
-     [  728.57423806]]
-
-
-    Rep 151 estimate: [[39637.46442206]
-     [10060.23241637]
-     [  663.34468336]]
-
-
-    Rep 152 estimate: [[39681.52863218]
-     [10054.86696935]
-     [  655.32975744]]
-
-
-    Rep 153 estimate: [[39647.28083936]
-     [10116.25440095]
-     [  639.00191274]]
-
-
-    Rep 154 estimate: [[39620.82929953]
-     [10047.83682386]
-     [  717.52890504]]
-
-
-    Rep 155 estimate: [[39647.51544097]
-     [10036.1348693 ]
-     [  759.02598785]]
-
-
-    Rep 156 estimate: [[39658.71758628]
-     [10057.79740778]
-     [  673.53520113]]
-
-
-    Rep 157 estimate: [[39652.42180026]
-     [10039.6446241 ]
-     [  652.37900513]]
-
-
-    Rep 158 estimate: [[39622.38554988]
-     [ 9991.14210226]
-     [  766.88430685]]
-
-
-    Rep 159 estimate: [[39651.29699042]
-     [10065.91893929]
-     [  689.47118359]]
-
-
-    Rep 160 estimate: [[39675.69878036]
-     [10068.01885768]
-     [  687.51871023]]
-
-
-    Rep 161 estimate: [[39631.29501096]
-     [ 9912.34553365]
-     [  767.78971857]]
-
-
-    Rep 162 estimate: [[39653.05962809]
-     [10024.96701508]
-     [  717.29791508]]
-
-
-    Rep 163 estimate: [[39666.19510328]
-     [10005.02761342]
-     [  706.49793799]]
-
-
-    Rep 164 estimate: [[39656.32635251]
-     [10024.47016931]
-     [  695.98769732]]
-
-
-    Rep 165 estimate: [[39702.17892756]
-     [10052.94497995]
-     [  706.22741806]]
-
-
-    Rep 166 estimate: [[39606.48521272]
-     [10010.67628793]
-     [  714.82999807]]
-
-
-    Rep 167 estimate: [[39652.91873686]
-     [10028.93993568]
-     [  672.76873611]]
-
-
-    Rep 168 estimate: [[39641.79602234]
-     [10000.60435574]
-     [  685.80996805]]
-
-
-    Rep 169 estimate: [[39696.57476929]
-     [ 9945.83651273]
-     [  720.77406998]]
-
-
-    Rep 170 estimate: [[39607.16983671]
-     [10027.29761694]
-     [  708.6226797 ]]
-
-
-    Rep 171 estimate: [[39589.956391  ]
-     [ 9976.67312017]
-     [  709.95922716]]
-
-
-    Rep 172 estimate: [[39680.0983667 ]
-     [10011.88421355]
-     [  642.28909189]]
-
-
-    Rep 173 estimate: [[39623.31804032]
-     [10082.066283  ]
-     [  656.84713371]]
-
-
-    Rep 174 estimate: [[39726.15662337]
-     [ 9963.56427099]
-     [  685.90386222]]
-
-
-    Rep 175 estimate: [[39678.70850114]
-     [10023.98807359]
-     [  661.27963856]]
-
-
-    Rep 176 estimate: [[39612.72240517]
-     [10013.51792832]
-     [  701.60793869]]
-
-
-    Rep 177 estimate: [[39651.28878098]
-     [10032.53114015]
-     [  718.29337211]]
-
-
-    Rep 178 estimate: [[39651.79886099]
-     [10025.78545733]
-     [  711.18636276]]
-
-
-    Rep 179 estimate: [[39668.81176963]
-     [ 9950.64830118]
-     [  707.17029946]]
-
-
-    Rep 180 estimate: [[39664.55033915]
-     [10025.69574577]
-     [  682.17967506]]
-
-
-    Rep 181 estimate: [[39678.45863918]
-     [10000.94471527]
-     [  714.3528562 ]]
-
-
-    Rep 182 estimate: [[39623.72938936]
-     [10009.48496587]
-     [  793.69376095]]
-
-
-    Rep 183 estimate: [[39638.09616265]
-     [10031.80512906]
-     [  714.30847955]]
-
-
-    Rep 184 estimate: [[39658.07866713]
-     [10045.5638743 ]
-     [  702.43641255]]
-
-
-    Rep 185 estimate: [[39651.57617443]
-     [10039.40055719]
-     [  696.51313447]]
-
-
-    Rep 186 estimate: [[39644.5923245 ]
-     [ 9999.10838089]
-     [  703.16412766]]
-
-
-    Rep 187 estimate: [[39667.01121342]
-     [ 9994.92130014]
-     [  707.2300142 ]]
-
-
-    Rep 188 estimate: [[39655.6793376 ]
-     [ 9993.46295671]
-     [  667.46454071]]
-
-
-    Rep 189 estimate: [[39674.40927094]
-     [10038.5271482 ]
-     [  689.60601406]]
-
-
-    Rep 190 estimate: [[39670.97584095]
-     [ 9989.99235183]
-     [  689.55471574]]
-
-
-    Rep 191 estimate: [[39656.01227867]
-     [ 9993.23920429]
-     [  763.2792197 ]]
-
-
-    Rep 192 estimate: [[39632.08646723]
-     [10037.74031865]
-     [  709.21037716]]
-
-
-    Rep 193 estimate: [[39672.99028294]
-     [10050.50258356]
-     [  735.72762695]]
-
-
-    Rep 194 estimate: [[39725.59632485]
-     [ 9997.65628356]
-     [  732.66952791]]
-
-
-    Rep 195 estimate: [[39684.14531155]
-     [10002.98869804]
-     [  717.85523503]]
-
-
-    Rep 196 estimate: [[39674.37506247]
-     [10014.25014105]
-     [  720.57318313]]
-
-
-    Rep 197 estimate: [[39616.73965371]
-     [10013.33283978]
-     [  631.645646  ]]
-
-
-    Rep 198 estimate: [[39638.25336916]
-     [10025.39517299]
-     [  707.12836366]]
-    bootstrapped non-clustered version of se: [30.7524 34.9706 33.2355]
-    standard error without clustering from statsmodel: [31.4168 35.2034 35.2034]
+    
+![png](standard_errors_files/standard_errors_22_1.png)
+    
 
 
 There you have it -- the bootstrapped version of the standard errors. Note that we've not accounted for the clusters and one can do that by sampling clusters (with replacement) rather than units.
